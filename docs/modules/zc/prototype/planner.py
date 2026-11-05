@@ -14,6 +14,8 @@ OFFSETS = tuple(p for p in product((-1, 0, 1), repeat=3) if p != (0, 0, 0))
 
 
 def instant(value):
+    if not isinstance(value, str):
+        raise ValueError("invalid_time_value")
     t = datetime.fromisoformat(value.replace("Z", "+00:00"))
     if t.tzinfo is None:
         raise ValueError("timezone_required")
@@ -160,6 +162,18 @@ def assess_segment(snapshot, query, a, b):
     """Auditable segment helper, not a complete region-query service."""
     s, q = deepcopy(snapshot), deepcopy(query)
     error = preflight(s, q)
+    if not error:
+        valid_points = all(
+            isinstance(p, (list, tuple)) and len(p) == 3
+            and all(type(v) in (int, float) and isfinite(v) for v in p)
+            for p in (a, b)
+        )
+        if not valid_points:
+            error = "invalid_segment_endpoint"
+        elif any(not all(lo <= v <= hi for lo, v, hi in
+                         zip(s['scene']['bounds'][0], p, s['scene']['bounds'][1]))
+                 for p in (a, b)):
+            error = "segment_outside_search_domain"
     result = {"state": "unknown", "reason": error} if error else edge_info(s, q, a, b)
     return {**result, "versions": s.get("versions", {}), "window": q.get("window")}
 

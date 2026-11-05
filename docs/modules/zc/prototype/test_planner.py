@@ -34,6 +34,26 @@ class PlannerTests(unittest.TestCase):
         bind(self.s, self.q)
         return plan(self.s, self.q)
 
+    def test_q2_invalid_segment_returns_unknown(self):
+        for point in ([0, 0], [float('nan'), 0, 20], [float('inf'), 0, 20],
+                      [False, 0, 20], ['0', 0, 20], None):
+            with self.subTest(point=point):
+                r = assess_segment(self.s, self.q, point, [10, 0, 20])
+                self.assertEqual(r['state'], 'unknown')
+                self.assertEqual(r['reason'], 'invalid_segment_endpoint')
+                self.assertEqual(r['versions'], self.s['versions'])
+
+    def test_q2_outside_domain_returns_unknown(self):
+        r = assess_segment(self.s, self.q, [-10, 0, 20], [10, 0, 20])
+        self.assertEqual(r['state'], 'unknown')
+        self.assertEqual(r['reason'], 'segment_outside_search_domain')
+
+    def test_invalid_time_value_returns_unknown(self):
+        for value in (None, 123, True):
+            with self.subTest(value=value):
+                self.q['planned_at'] = value
+                self.assertEqual(plan(self.s, self.q)['status'], 'unknown')
+
     def test_open_analytical_solution(self):
         self.s["scene"]["obstacles"] = []
         self.s["risk_data"]["zones"] = []

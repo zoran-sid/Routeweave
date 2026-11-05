@@ -1,5 +1,7 @@
 # 验证结果与设计取舍
 
+本页保留首次三模块实验基线。2026-11-05新增的ZQO-01修复、126项回归和11项五模块链路验证见[独立集成证据](../../integration/zqo-evidence.md)，原JSON及PPT未覆盖。
+
 ## 执行条件
 
 本次采用Python标准库SQLite文件数据库，启用WAL，使用多个独立连接和线程屏障控制读写交错。场景复用ZC的100×100米合成城市、10米网格和三维建筑，风险采用LQ的时段编译。任务窗固定为2026年11月4日00:00至00:10 UTC，运行时间、Python与SQLite版本、源码摘要保存在 [evaluation.json](results/evaluation.json)。

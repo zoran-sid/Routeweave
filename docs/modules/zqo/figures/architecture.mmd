@@ -1,13 +1,13 @@
 flowchart LR
-  A[三维环境与来源<br/>YHT] --> D[源数据存储与质量检查<br/>YHT]
-  B[禁飞与限高事件<br/>ZQO] --> D
-  C[地面暴露时段与风险规则<br/>LQ] --> D
-  D --> E[候选发布包<br/>版本兼容与独立复核]
-  E --> F[事务发布目录<br/>不可变对象与当前指针<br/>ZQO]
-  F --> G[固定发布与任务时间窗]
-  G --> H[风险窗口校验<br/>LQ与ZQO适配]
-  H --> I[完整航段检查与3D A*<br/>ZC]
-  I --> J[Q1航线与Q2状态解释<br/>版本与来源]
-  F --> K[审计与待发送事件]
-  K --> L[监控与恢复验收<br/>LJ]
-  J --> L
+  A[三维场景/空域/暴露与源清单<br/>YHT scene + seal] --> B[质量门禁与导出<br/>YHT check_scene + adapters]
+  B --> C[风险时段编译<br/>LQ compile_profiles]
+  C --> D[窗口绑定与两组版本映射<br/>ZQO prepare_source]
+  D --> E[原子发布目录<br/>完整来源 + 不可变快照 + 当前指针]
+  E --> F[固定发布与任务窗口校验<br/>ZQO pin / query / status]
+  F --> G[Q1规划 / Q2完整航段检查<br/>ZC plan / assess_segment]
+  G --> H[当前推荐或历史查看验收<br/>LJ validate_result]
+  E --> I[成功审计 + 待发送事件<br/>同一事务]
+  E --> J[失败尝试记录<br/>回滚后独立写入]
+  I --> K[运行记录与恢复检查]
+  J --> K
+  E --> L[历史重开与源清单核对]

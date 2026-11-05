@@ -1,0 +1,40 @@
+{
+  "baseline": "508ca3eae185065d7edfec35628244f85f1caef6",
+  "cases": [
+    {
+      "id": "ZQO-01",
+      "owner": "ZQO",
+      "passed": false,
+      "expected": "已知发布的Q2失败结果保留五类版本",
+      "observed": {
+        "state": "unknown",
+        "reason": "risk_window_mismatch",
+        "release_id": 1
+      }
+    }
+  ],
+  "failed_cases": 1,
+  "source_sha256": {
+    "docs/modules/lj/prototype/acceptance.py": "559d0612a74d096280bd290c38e8bed1153d0c95cfa1bad5eb6a2f4e6163c42e",
+    "docs/modules/lj/prototype/test_acceptance.py": "0bb7f306fe04604c6e67d9f5536bd83b422f805ff36aea8b8b9fb5e6ef05d068",
+    "docs/modules/lq/prototype/evaluate.py": "4873d2c2d917fe47e5f687265cc155b15832f11a6ae15cc2dd04b7ed382617d3",
+    "docs/modules/lq/prototype/risk.py": "22ab69531cbfb992482a11ab0ae9811613745ab6a895728806f3db988852737f",
+    "docs/modules/lq/prototype/test_risk.py": "242c53a07cfe0f36d99e60499da2058ec89e8d2e5b52d3e15f1d25c295d63f8c",
+    "docs/modules/yht/prototype/cache.py": "59535d50c41b4f9f17b798ee54f7226f3b31ff7728b47fe02d15537272f08d78",
+    "docs/modules/yht/prototype/evaluate.py": "03e5319bea62901fb4516b95d595bf1a06e28c6dd8004f992f435862b1fe2d2b",
+    "docs/modules/yht/prototype/export_lq.py": "31ad13f839fb4ce125e5e179328023760f513aead984a4340dddd95c068d6526",
+    "docs/modules/yht/prototype/export_zc.py": "911ebe62c9dcc94504e0c91a8bf3aeeb8ec3aa37530aa80b844918b7b8488b31",
+    "docs/modules/yht/prototype/quality.py": "c5f6128911555a01025e7913a014795787512690faf98cbbc852b08e2e5dff1f",
+    "docs/modules/yht/prototype/query.py": "9c4eb5f38ebdbe0266437a8b2e5e410a5869f0e6ee7e7857f129c470839a59ec",
+    "docs/modules/yht/prototype/store.py": "59ba4613fe9112524d0dbd31716e07a4c27f5979e6c7b59a2681ec97dc95b647",
+    "docs/modules/yht/prototype/test_yht.py": "cd0885026ff378d4dd3f4e2017df1e81294c93ddf67de266c6d1944b2948ba0a",
+    "docs/modules/yht/prototype/yht_model.py": "36bd3b87e5ca0a1f28534f981f3c6046060faade2e58a16d1517dcf34f54b6c6",
+    "docs/modules/zc/prototype/evaluate.py": "d3e4d92ee670b0d44b1f1b025b77ae95b6e1ee8e8d532868b110bf93e2917c54",
+    "docs/modules/zc/prototype/planner.py": "ddd425e4d5a8b58d293cfb5681554ac4d63476b210d892be302f964233c178d5",
+    "docs/modules/zc/prototype/scenarios.py": "fe5332bef2482827958738064ae55ba5650b267ca0fa0b372d1d252a96266ffe",
+    "docs/modules/zc/prototype/test_planner.py": "36bf0dcbeb067046263a80f5450df5b248f4d739502014f9a1b0b2c72fb1c67a",
+    "docs/modules/zqo/prototype/evaluate.py": "8d7c6a87dd716dd25f72b04e196ff060f052600bbdbd1768c5ccca69e861e089",
+    "docs/modules/zqo/prototype/publication.py": "124f045129568864da64920ef196ca60b0ffc9d0c2a9bcbfbd129614e80eabc4",
+    "docs/modules/zqo/prototype/test_publication.py": "be054d5ecaed7d038b4a0c06deb5b4ec526e4ca18ff106c5922528b8043ae421"
+  }
+}

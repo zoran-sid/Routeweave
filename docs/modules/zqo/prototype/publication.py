@@ -32,6 +32,24 @@ def prepare_risk(snapshot, query, profiles):
 
 
 def validate(s, q):
+    lineage = s.get("lineage")
+    if lineage is not None:
+        if lineage["query_versions"] != s["versions"]:
+            raise ValueError("lineage_version_mismatch")
+        if lineage["compiled_window"] != s["risk_data"].get("compiled_window"):
+            raise ValueError("lineage_window_mismatch")
+        if digest(lineage["source_snapshot"]) != lineage["source_sha256"]:
+            raise ValueError("lineage_source_digest_mismatch")
+        source = lineage['source_snapshot']
+        if lineage['source_release'] != {'versions': source['versions'], 'manifest': source['manifest']}:
+            raise ValueError('lineage_source_release_mismatch')
+        mapping = lineage['version_mapping']
+        if set(mapping) != set(VERSION_KEYS) or any(
+                mapping[k]['query_version'] != s['versions'][k]
+                or any(source['versions'].get(dep) != value
+                       for dep, value in mapping[k]['source_versions'].items())
+                for k in VERSION_KEYS):
+            raise ValueError('lineage_mapping_mismatch')
     error = preflight(s, q)
     if error:
         raise ValueError(error)
@@ -59,6 +77,13 @@ class Catalog:
         INSERT OR IGNORE INTO head VALUES(1,NULL);
         CREATE TABLE IF NOT EXISTS audit(release_id INTEGER PRIMARY KEY REFERENCES releases(id),
             actor TEXT NOT NULL, action TEXT NOT NULL);
+        CREATE TABLE IF NOT EXISTS failed_attempts(id INTEGER PRIMARY KEY AUTOINCREMENT,
+            request_id TEXT, expected_parent INTEGER, actor TEXT, attempted_at TEXT NOT NULL,
+            snapshot_sha TEXT, error_type TEXT NOT NULL, error TEXT NOT NULL);
+        CREATE TRIGGER IF NOT EXISTS failed_attempts_no_update BEFORE UPDATE ON failed_attempts
+            BEGIN SELECT RAISE(ABORT,'immutable_failure_audit'); END;
+        CREATE TRIGGER IF NOT EXISTS failed_attempts_no_delete BEFORE DELETE ON failed_attempts
+            BEGIN SELECT RAISE(ABORT,'retained_failure_audit'); END;
         CREATE TABLE IF NOT EXISTS outbox(release_id INTEGER PRIMARY KEY REFERENCES releases(id),
             delivered INTEGER NOT NULL DEFAULT 0);
         CREATE TRIGGER IF NOT EXISTS releases_no_update BEFORE UPDATE ON releases
@@ -85,7 +110,47 @@ class Catalog:
         finally:
             c.close()
 
-    def publish(self, snapshot, query, *, expected, request_id,
+    def publish(self, snapshot, query, *, expected, request_id, **options):
+        """Commit a release or persist its failed attempt after rollback.
+
+        A failed-attempt row is not a committed release/audit/outbox row. If this
+        independent write also fails, expose both failures to the caller.
+        """
+        try:
+            return self._publish(snapshot, query, expected=expected,
+                                 request_id=request_id, **options)
+        except Exception as exc:
+            try:
+                self._record_failure(snapshot, expected, request_id,
+                                     options.get('actor', 'reviewer-demo'), exc)
+            except Exception as audit_error:
+                raise RuntimeError('publication_failed_and_failure_audit_unavailable:'
+                                   + str(exc) + '; audit:' + str(audit_error)) from exc
+            raise
+
+    def _record_failure(self, snapshot, expected, request_id, actor, error):
+        try:
+            snapshot_sha = digest(snapshot)
+        except (TypeError, ValueError):
+            snapshot_sha = None  # Invalid JSON has no canonical payload digest.
+        c = self.connect()
+        try:
+            c.execute("""INSERT INTO failed_attempts(request_id,expected_parent,actor,
+                attempted_at,snapshot_sha,error_type,error) VALUES(?,?,?,?,?,?,?)""",
+                (request_id, expected, actor, datetime.now(timezone.utc).isoformat(),
+                 snapshot_sha, type(error).__name__, str(error)))
+        finally:
+            c.close()
+
+    def failures(self):
+        c = self.connect()
+        c.row_factory = sqlite3.Row
+        try:
+            return [dict(row) for row in c.execute('SELECT * FROM failed_attempts ORDER BY id')]
+        finally:
+            c.close()
+
+    def _publish(self, snapshot, query, *, expected, request_id,
                 actor='reviewer-demo', author='author-demo', role='safety_reviewer',
                 received_at='2026-11-04T00:00:00Z', reason='synthetic publication',
                 fail_at=None, hook=None):
@@ -166,6 +231,23 @@ class Catalog:
         finally:
             c.close()
 
+    @staticmethod
+    def trace(p):
+        """Snapshot provenance is available even when the task is invalid."""
+        if p is None:
+            return {'versions': {}, 'provenance_state': 'unavailable',
+                    'component_sources': {}, 'source_release': None,
+                    'version_mapping': None, 'compiled_window': None,
+                    'source_sha256': None, 'published_at': None, 'received_at': None}
+        s = p['snapshot']; lineage = s.get('lineage', {})
+        return deepcopy({'versions': s['versions'], 'provenance_state': 'available',
+                         'published_at': p['published_at'], 'received_at': p['received_at'],
+                         'component_sources': {k: s[k].get('source') for k in VERSION_KEYS},
+                         'source_release': lineage.get('source_release'),
+                         'version_mapping': lineage.get('version_mapping'),
+                         'source_sha256': lineage.get('source_sha256'),
+                         'compiled_window': s['risk_data'].get('compiled_window')})
+
     def query(self, query, pinned=None):
         p = None
         try:
@@ -175,6 +257,7 @@ class Catalog:
             validate(p['snapshot'], q)
             result = plan(p['snapshot'], q)
             observed = self.current()  # fresh read after search, not the pinned transaction
+            result.update(self.trace(p))
             result.update(release_id=p['release_id'], observed_head=observed,
                           freshness='current_at_check' if observed == p['release_id'] else 'stale',
                           checked_at=datetime.now(timezone.utc).isoformat())
@@ -183,19 +266,21 @@ class Catalog:
             return {'query_id':query.get('id'), 'status':'unknown', 'reason':str(exc),
                     'metrics':None, 'freshness':'unavailable',
                     'release_id':p['release_id'] if p else None,
-                    'versions':p['snapshot']['versions'] if p else {}}
+                    **self.trace(p)}
 
     def status(self, query, a, b, release_id=None):
         try:
             p = self.pin(release_id)
         except ValueError as exc:
-            return {'state':'unknown','reason':str(exc),'release_id':release_id,'versions':{}}
+            return {'state':'unknown','reason':str(exc),'release_id':release_id, **self.trace(None)}
         q = deepcopy(query); q['versions'] = dict(p['snapshot']['versions'])
         try:
             validate(p['snapshot'], q)
         except ValueError as exc:
-            return {'state':'unknown','reason':str(exc),'release_id':p['release_id']}
+            return {'state':'unknown','reason':str(exc),'release_id':p['release_id'], **self.trace(p),
+                    'restrictions':deepcopy(p['snapshot']['airspace']['restrictions'])}
         r = assess_segment(p['snapshot'], q, a, b)
+        r.update(self.trace(p))
         r.update(release_id=p['release_id'], published_at=p['published_at'],
                  received_at=p['received_at'], restrictions=p['snapshot']['airspace']['restrictions'])
         return r

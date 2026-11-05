@@ -42,6 +42,65 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(state['state'],'allowed')
         self.assertEqual(state['release_id'],self.v1)
 
+    def test_q2_normal_keeps_snapshot_provenance(self):
+        r = self.db.status(self.q, self.q['start'], self.q['start'], self.v1)
+        self.assertEqual(r['state'], 'allowed')
+        self.assertEqual(r['versions'], self.s['versions'])
+        self.assertEqual(r['provenance_state'], 'available')
+        self.assertEqual(r['component_sources']['risk_data'], self.s['risk_data']['source'])
+        self.assertEqual(r['compiled_window'], self.q['window'])
+        self.assertTrue(r['published_at'])
+
+    def test_q2_window_failure_keeps_old_release_versions(self):
+        s, q = self.changed()
+        self.db.publish(s, q, expected=self.v1, request_id='second')
+        wrong = deepcopy(self.q); wrong['window'][1] = '2026-11-04T00:20:00Z'
+        r = self.db.status(wrong, wrong['start'], wrong['goal'], self.v1)
+        self.assertEqual((r['state'], r['reason']), ('unknown', 'risk_window_mismatch'))
+        self.assertEqual(r['versions'], self.s['versions'])
+        self.assertNotEqual(r['versions'], s['versions'])
+        self.assertEqual(r['release_id'], self.v1)
+        self.assertEqual(r['compiled_window'], self.q['window'])
+        self.assertEqual(r['restrictions'], self.s['airspace']['restrictions'])
+        self.assertEqual(r['component_sources']['scene'], self.s['scene']['source'])
+
+    def test_q2_missing_release_marks_provenance_unavailable(self):
+        r = self.db.status(self.q, self.q['start'], self.q['goal'], 999)
+        self.assertEqual(r['reason'], 'release_unavailable')
+        self.assertEqual(r['release_id'], 999)
+        self.assertEqual(r['versions'], {})
+        self.assertEqual(r['provenance_state'], 'unavailable')
+        self.assertIsNone(r['source_release'])
+        self.assertIsNone(r['published_at'])
+        self.assertEqual(r['component_sources'], {})
+
+    def test_failed_attempt_audit_survives_rollback_and_reopen(self):
+        s, q = self.changed(); before = self.db.counts()
+        with self.assertRaisesRegex(RuntimeError, 'injected_before_commit'):
+            self.db.publish(s, q, expected=self.v1, request_id='failed', fail_at='before_commit')
+        reopened = Catalog(self.db.path)
+        self.assertEqual(reopened.counts(), before)
+        self.assertEqual(reopened.current(), self.v1)
+        failure = reopened.failures()[0]
+        self.assertEqual(failure['request_id'], 'failed')
+        self.assertEqual(failure['expected_parent'], self.v1)
+        self.assertEqual(failure['error'], 'injected_before_commit')
+        self.assertTrue(failure['snapshot_sha'])
+        c = reopened.connect()
+        try:
+            with self.assertRaises(sqlite3.IntegrityError):
+                c.execute('DELETE FROM failed_attempts')
+        finally:
+            c.close()
+
+    def test_failure_audit_unavailable_is_explicit(self):
+        c = self.db.connect()
+        c.execute("CREATE TRIGGER fail_failure_audit BEFORE INSERT ON failed_attempts BEGIN SELECT RAISE(ABORT,'sink_down'); END")
+        c.close(); s, q = self.changed()
+        with self.assertRaisesRegex(RuntimeError, 'failure_audit_unavailable.*injected.*sink_down'):
+            self.db.publish(s, q, expected=self.v1, request_id='failed', fail_at='before_commit')
+        self.assertEqual(self.db.current(), self.v1)
+
     def test_reader_pins_old_release_across_commit(self):
         pin=self.db.pin(); s,q=self.changed()
         v2=self.db.publish(s,q,expected=self.v1,request_id='second')

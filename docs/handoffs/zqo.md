@@ -7,12 +7,12 @@
 | 成员 | ZQO，成员2 |
 | 负责方向 | 空域更新、版本一致性与架构整合 |
 | 技术成果 | 模块可交付 |
-| 展示 | 第1–2页PPT与讲稿已完成 |
-| 集成 | 已实际接入LQ与ZC；YHT、LJ以模拟输入及接入约定衔接 |
+| 展示 | 已有历史PPT与讲稿；最终展示待整体复核后定稿 |
+| 集成 | 五模块实际链路11项通过；完整问题审查7项通过，详见本轮记录 |
 
-交付分支：[codex/zqo-publication-architecture](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-publication-architecture)。技术成果提交为 `130f7b0`，本次将该分支合入共享 `main`，同时保留主线新增的YHT与LJ交付。
+首次交付分支：[codex/zqo-publication-architecture](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-publication-architecture)。技术成果提交为 `130f7b0`，本次将该分支合入共享 `main`，同时保留主线新增的YHT与LJ交付。
 
-## 本轮读取与技术决定
+## 首次交付读取与技术决定
 
 读取共享主线 `de2033a0b13296dcadd991e101a3bee3c1df4596`，涵盖课程要求、共同场景、协作规则、五人交接，以及LQ/ZC的设计、接口、代码与评估。提交前再次检查远程，基线未变化。
 
@@ -43,10 +43,20 @@ YHT可复用发布清单与字段含义，替换合成源输入后核对坐标�
 
 ## 后续衔接
 
-下一步对YHT/LJ的源存储和运行接口进行实际接入验证。若需要多任务窗服务，从固定原始时段重新生成匹配的风险输入；总体报告汇总时统一参考文献、AI使用声明、贡献说明及课堂通知。当前成果入口为[ZQO模块](../modules/zqo/README.md)。
+YHT/LJ实际接入已在下方本轮记录完成。若需要多任务窗服务，从固定原始时段重新生成匹配的风险输入；总体报告汇总时统一参考文献、AI使用声明、贡献说明及课堂通知。当前成果入口为[ZQO模块](../modules/zqo/README.md)。
 
 ## 合入共享主线
 
 合并前读取远程 `main` 的 `d84a565`，包括YHT的 `4fd2351` 与LJ的 `d84a565`。保留两位成员的代码、文档、结果和展示材料，合并首页及任务表的进度说明。此次操作合并交付与回归验证，未新增YHT/LJ到ZQO的运行适配；既有实验基线和结果继续按原记录解释。
 
 合并后分别运行五个模块的 `unittest discover`：ZQO 20项、YHT 31项、LQ 19项、ZC 21项、LJ 8项，共99项全部通过。未重新生成历史实验结果或修改其他成员的原型。
+
+## 2026-11-05：发布追溯修复与五模块集成
+
+- 分支：`codex/zqo-traceability-integration`。开工工作区干净，从 `cc20db8` 快进至 `508ca3e`；读取AGENTS、课程要求、共同场景、五人交接、集成README/issues以及相关代码。复用YHT `81bd270`、LJ `508ca3e` 和ZC `0c2cb23` 的修复。
+- ZQO-01：Q2正常及已知发布校验失败均保留原五类版本与可用来源；缺失发布返回来源不可用。补充正常、历史发布窗口错误及缺失发布测试。
+- I-01：新增 `source_adapter.py` 和 `docs/integration/five_module.py`，实际消费YHT质量/导出、LQ编译、ZQO目录、ZC Q1/Q2与LJ当前/历史验收。保存源清单、源快照SHA-256、两组版本映射与编译窗口。
+- 发布失败：独立 `failed_attempts` 表记录回滚后的失败请求，成功事务及指针保持不变；失败审计也不可用时明确抛错。没有修改其他成员实现，也没有覆盖历史实验结果。
+- 验证：ZQO31、YHT37、LQ19、ZC24、LJ15，共126项回归通过；`audit.py --owner ZQO`通过，完整7项审查通过；整链路11项判据通过。正常/更新/撤销均为612.5483米，更新改变实际路径及风险代理，撤销恢复原路径。
+- 证据及复现：[本轮集成说明](../integration/zqo-evidence.md)、[整链路结果](../integration/results/five-module-zqo.json)、[完整审查](../integration/results/audit-after-zqo.json)、[模块日志](../integration/results/regression-zqo.json)。JSON记录开工基线与实际源码摘要。
+- 当前没有仍需其他成员修复的已登记阻塞代码项；各成员可引用本轮证据补充自己的最新集成记录。最终报告、PPT、参考资料整合及成员确认在整体内容复核后处理。

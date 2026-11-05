@@ -12,7 +12,7 @@ SkyRoute 研究模拟城市片区中的三维空间数据、动态空域限制�
 
 ## 项目文档
 
-- [最终集成复核与成员修复清单](docs/integration/README.md)：102 项回归通过；新增 7 项问题待 YHT、LJ、ZQO 分别修复，最终合稿待复核后定稿。
+- [最终集成复核与成员修复清单](docs/integration/README.md)：126项回归、7项问题审查及11项整链路判据通过，最终报告与PPT待统一定稿。
 - [完整项目说明](docs/project-brief.md)：背景、目标、用户、功能、技术方向和研究范围。
 - [共同场景与查询约定](docs/scenario-contract.md)：三维空间、时间有效性、风险约束和一致性口径。
 - [五人任务安排](docs/team-tasks.md)：各人主要责任与协作关系。
@@ -43,4 +43,4 @@ SkyRoute 研究模拟城市片区中的三维空间数据、动态空域限制�
 | ZC | [三维航线算法与评估](docs/modules/zc/README.md) | 算法设计、合成场景验证、原型及第7–8页PPT |
 | LJ | [运维保障与验收支持](docs/modules/lj/README.md) | 运行规则、异常恢复、验收原型及第9–10页展示材料 |
 
-已实测的衔接包括YHT与ZC/LQ的导出接口、LQ与ZC的风险接口，以及ZQO与LQ/ZC的事务发布与查询。ZQO与YHT/LJ的实际接入及部署联调仍待完成，具体边界见各模块的集成说明。
+已实测的衔接包括YHT与ZC/LQ的导出接口、LQ与ZC的风险接口，以及ZQO与LQ/ZC的事务发布与查询。五模块实际链路与来源映射已完成验证，证据见[最新集成记录](docs/integration/zqo-evidence.md)；生产部署联调仍属后续设计。

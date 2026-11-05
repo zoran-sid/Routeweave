@@ -1,0 +1,1691 @@
+{
+  "executed_at_utc": "2026-11-05T00:49:30.710208+00:00",
+  "fixture": "zc-synthetic-v1",
+  "python": "3.15.0",
+  "os": "Darwin",
+  "machine": "arm64",
+  "grid_nodes_before_filtering": 847,
+  "repeat_count": 7,
+  "source_sha256": {
+    "evaluate.py": "d3e4d92ee670b0d44b1f1b025b77ae95b6e1ee8e8d532868b110bf93e2917c54",
+    "planner.py": "8749533a4b0c662f3d0dab78c4c404d9b7c3b6b20b647177f7cc5d4db7ebc64e",
+    "scenario.json": "8f72b335853dd0e3babc1adce7241009e1079e3eae7cd1b825b1bc7f23a334a8",
+    "scenarios.py": "fe5332bef2482827958738064ae55ba5650b267ca0fa0b372d1d252a96266ffe",
+    "test_planner.py": "b0ef458f34a3b0c45d4346ad658b1e76d08a1375741c88fef62be3323c9c77b1"
+  },
+  "timing_scope": "deepcopy + validation + search + route recheck, in-memory only; no database/network",
+  "rows": [
+    {
+      "case": "open",
+      "algorithm": "dijkstra",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 661,
+      "edge_checks": 14069,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 100.0,
+        "time_s": 10.0,
+        "risk_proxy": 0.05000000000000001,
+        "cost": 1.0
+      },
+      "versions": {
+        "scene": "mock-zc-scene-565177a9cfc4",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-b0a598470551",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          50,
+          20
+        ],
+        [
+          20,
+          50,
+          20
+        ],
+        [
+          30,
+          50,
+          20
+        ],
+        [
+          40,
+          50,
+          20
+        ],
+        [
+          50,
+          50,
+          20
+        ],
+        [
+          60,
+          50,
+          20
+        ],
+        [
+          70,
+          50,
+          20
+        ],
+        [
+          80,
+          50,
+          20
+        ],
+        [
+          90,
+          50,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        26.20712504722178,
+        26.31362504325807,
+        26.42787480726838,
+        26.32129192352295,
+        26.19454194791615,
+        26.218042010441422,
+        26.32800000719726
+      ],
+      "median_ms": 26.31362504325807,
+      "p95_ms": 26.42787480726838
+    },
+    {
+      "case": "open",
+      "algorithm": "astar",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 11,
+      "edge_checks": 251,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 100.0,
+        "time_s": 10.0,
+        "risk_proxy": 0.05000000000000001,
+        "cost": 1.0
+      },
+      "versions": {
+        "scene": "mock-zc-scene-565177a9cfc4",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-b0a598470551",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          50,
+          20
+        ],
+        [
+          20,
+          50,
+          20
+        ],
+        [
+          30,
+          50,
+          20
+        ],
+        [
+          40,
+          50,
+          20
+        ],
+        [
+          50,
+          50,
+          20
+        ],
+        [
+          60,
+          50,
+          20
+        ],
+        [
+          70,
+          50,
+          20
+        ],
+        [
+          80,
+          50,
+          20
+        ],
+        [
+          90,
+          50,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        0.4857501480728388,
+        0.5000000819563866,
+        0.5124579183757305,
+        0.5095410160720348,
+        0.5192079115658998,
+        0.5067919846624136,
+        0.521291047334671
+      ],
+      "median_ms": 0.5095410160720348,
+      "p95_ms": 0.521291047334671
+    },
+    {
+      "case": "building",
+      "algorithm": "dijkstra",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 699,
+      "edge_checks": 14715,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 116.5685424949238,
+        "time_s": 11.65685424949238,
+        "risk_proxy": 0.05828427124746191,
+        "cost": 1.165685424949238
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-b0a598470551",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          50,
+          20
+        ],
+        [
+          20,
+          50,
+          30
+        ],
+        [
+          30,
+          50,
+          40
+        ],
+        [
+          40,
+          50,
+          40
+        ],
+        [
+          50,
+          50,
+          40
+        ],
+        [
+          60,
+          50,
+          40
+        ],
+        [
+          70,
+          50,
+          40
+        ],
+        [
+          80,
+          50,
+          40
+        ],
+        [
+          90,
+          50,
+          30
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        31.523792073130608,
+        31.552917091175914,
+        31.403166009113193,
+        31.612624879926443,
+        31.713000033050776,
+        31.555833062157035,
+        31.44924994558096
+      ],
+      "median_ms": 31.552917091175914,
+      "p95_ms": 31.713000033050776
+    },
+    {
+      "case": "building",
+      "algorithm": "astar",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 72,
+      "edge_checks": 1630,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 116.5685424949238,
+        "time_s": 11.65685424949238,
+        "risk_proxy": 0.05828427124746191,
+        "cost": 1.165685424949238
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-b0a598470551",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          50,
+          20
+        ],
+        [
+          20,
+          50,
+          30
+        ],
+        [
+          30,
+          50,
+          40
+        ],
+        [
+          40,
+          50,
+          40
+        ],
+        [
+          50,
+          50,
+          40
+        ],
+        [
+          60,
+          50,
+          40
+        ],
+        [
+          70,
+          50,
+          40
+        ],
+        [
+          80,
+          50,
+          30
+        ],
+        [
+          90,
+          50,
+          30
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        3.4249168820679188,
+        3.44137498177588,
+        3.3892090432345867,
+        3.4240419045090675,
+        3.4594158641994,
+        3.4200840163975954,
+        3.453583922237158
+      ],
+      "median_ms": 3.4249168820679188,
+      "p95_ms": 3.4594158641994
+    },
+    {
+      "case": "risk_0",
+      "algorithm": "dijkstra",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 699,
+      "edge_checks": 14715,
+      "lambda_risk": 0.0,
+      "metrics": {
+        "length_m": 116.5685424949238,
+        "time_s": 11.65685424949238,
+        "risk_proxy": 0.475208152801713,
+        "cost": 1.165685424949238
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-e184fcabbaa8"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          50,
+          20
+        ],
+        [
+          20,
+          50,
+          30
+        ],
+        [
+          30,
+          50,
+          40
+        ],
+        [
+          40,
+          50,
+          40
+        ],
+        [
+          50,
+          50,
+          40
+        ],
+        [
+          60,
+          50,
+          40
+        ],
+        [
+          70,
+          50,
+          40
+        ],
+        [
+          80,
+          50,
+          40
+        ],
+        [
+          90,
+          50,
+          30
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        37.99383295699954,
+        37.6736659090966,
+        37.98633301630616,
+        37.67233295366168,
+        37.96066716313362,
+        37.764374865219,
+        37.983834045007825
+      ],
+      "median_ms": 37.96066716313362,
+      "p95_ms": 37.99383295699954
+    },
+    {
+      "case": "risk_0",
+      "algorithm": "astar",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 72,
+      "edge_checks": 1630,
+      "lambda_risk": 0.0,
+      "metrics": {
+        "length_m": 116.5685424949238,
+        "time_s": 11.65685424949238,
+        "risk_proxy": 0.5021320343559642,
+        "cost": 1.165685424949238
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-e184fcabbaa8"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          50,
+          20
+        ],
+        [
+          20,
+          50,
+          30
+        ],
+        [
+          30,
+          50,
+          40
+        ],
+        [
+          40,
+          50,
+          40
+        ],
+        [
+          50,
+          50,
+          40
+        ],
+        [
+          60,
+          50,
+          40
+        ],
+        [
+          70,
+          50,
+          40
+        ],
+        [
+          80,
+          50,
+          30
+        ],
+        [
+          90,
+          50,
+          30
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        4.143666010349989,
+        4.049709066748619,
+        4.031791118904948,
+        4.169041058048606,
+        4.145334009081125,
+        3.9848750457167625,
+        4.015666898339987
+      ],
+      "median_ms": 4.049709066748619,
+      "p95_ms": 4.169041058048606
+    },
+    {
+      "case": "risk_2",
+      "algorithm": "dijkstra",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 743,
+      "edge_checks": 15194,
+      "lambda_risk": 2.0,
+      "metrics": {
+        "length_m": 133.1370849898476,
+        "time_s": 13.313708498984761,
+        "risk_proxy": 0.0665685424949238,
+        "cost": 1.4645079348883236
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-7f358625bc1e"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          40,
+          20
+        ],
+        [
+          20,
+          30,
+          20
+        ],
+        [
+          30,
+          20,
+          20
+        ],
+        [
+          40,
+          10,
+          20
+        ],
+        [
+          50,
+          10,
+          20
+        ],
+        [
+          60,
+          10,
+          20
+        ],
+        [
+          70,
+          20,
+          20
+        ],
+        [
+          80,
+          30,
+          20
+        ],
+        [
+          90,
+          40,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        39.39654119312763,
+        39.54679216258228,
+        39.25941581837833,
+        39.2540420871228,
+        39.921458112075925,
+        39.39537494443357,
+        39.47299998253584
+      ],
+      "median_ms": 39.39654119312763,
+      "p95_ms": 39.921458112075925
+    },
+    {
+      "case": "risk_2",
+      "algorithm": "astar",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 183,
+      "edge_checks": 4168,
+      "lambda_risk": 2.0,
+      "metrics": {
+        "length_m": 133.1370849898476,
+        "time_s": 13.313708498984761,
+        "risk_proxy": 0.0665685424949238,
+        "cost": 1.4645079348883236
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-7f358625bc1e"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          40,
+          20
+        ],
+        [
+          20,
+          30,
+          20
+        ],
+        [
+          30,
+          20,
+          20
+        ],
+        [
+          40,
+          10,
+          20
+        ],
+        [
+          50,
+          10,
+          20
+        ],
+        [
+          60,
+          10,
+          20
+        ],
+        [
+          70,
+          20,
+          20
+        ],
+        [
+          80,
+          30,
+          20
+        ],
+        [
+          90,
+          40,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        10.424959007650614,
+        10.54079202003777,
+        10.391333140432835,
+        10.489375097677112,
+        10.920958127826452,
+        10.633833007887006,
+        10.5385419446975
+      ],
+      "median_ms": 10.5385419446975,
+      "p95_ms": 10.920958127826452
+    },
+    {
+      "case": "risk_8",
+      "algorithm": "dijkstra",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 693,
+      "edge_checks": 14020,
+      "lambda_risk": 8.0,
+      "metrics": {
+        "length_m": 133.1370849898476,
+        "time_s": 13.313708498984761,
+        "risk_proxy": 0.0665685424949238,
+        "cost": 1.8639191898578664
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-ca7ec6f177e0"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          40,
+          20
+        ],
+        [
+          20,
+          30,
+          20
+        ],
+        [
+          30,
+          20,
+          20
+        ],
+        [
+          40,
+          10,
+          20
+        ],
+        [
+          50,
+          10,
+          20
+        ],
+        [
+          60,
+          10,
+          20
+        ],
+        [
+          70,
+          20,
+          20
+        ],
+        [
+          80,
+          30,
+          20
+        ],
+        [
+          90,
+          40,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        36.26649989746511,
+        36.00324993021786,
+        35.89570801705122,
+        36.254625068977475,
+        35.926332930102944,
+        36.14358394406736,
+        35.864041885361075
+      ],
+      "median_ms": 36.00324993021786,
+      "p95_ms": 36.26649989746511
+    },
+    {
+      "case": "risk_8",
+      "algorithm": "astar",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 352,
+      "edge_checks": 7650,
+      "lambda_risk": 8.0,
+      "metrics": {
+        "length_m": 133.1370849898476,
+        "time_s": 13.313708498984761,
+        "risk_proxy": 0.0665685424949238,
+        "cost": 1.8639191898578664
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-ca7ec6f177e0"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          40,
+          20
+        ],
+        [
+          20,
+          30,
+          20
+        ],
+        [
+          30,
+          20,
+          20
+        ],
+        [
+          40,
+          10,
+          20
+        ],
+        [
+          50,
+          10,
+          20
+        ],
+        [
+          60,
+          10,
+          20
+        ],
+        [
+          70,
+          20,
+          20
+        ],
+        [
+          80,
+          30,
+          20
+        ],
+        [
+          90,
+          40,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        19.48833419010043,
+        19.481208873912692,
+        19.237291999161243,
+        19.467500038444996,
+        19.441291922703385,
+        19.214084139093757,
+        19.147624960169196
+      ],
+      "median_ms": 19.441291922703385,
+      "p95_ms": 19.48833419010043
+    },
+    {
+      "case": "risk_hard",
+      "algorithm": "dijkstra",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 634,
+      "edge_checks": 12612,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 133.1370849898476,
+        "time_s": 13.313708498984761,
+        "risk_proxy": 0.0665685424949238,
+        "cost": 1.331370849898476
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-2506ef9f7960",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          40,
+          20
+        ],
+        [
+          20,
+          30,
+          20
+        ],
+        [
+          30,
+          20,
+          20
+        ],
+        [
+          40,
+          10,
+          20
+        ],
+        [
+          50,
+          10,
+          20
+        ],
+        [
+          60,
+          10,
+          20
+        ],
+        [
+          70,
+          20,
+          20
+        ],
+        [
+          80,
+          30,
+          20
+        ],
+        [
+          90,
+          40,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        31.937666004523635,
+        32.11104194633663,
+        31.962000066414475,
+        32.13825006969273,
+        31.894417013972998,
+        32.086624996736646,
+        31.9927919190377
+      ],
+      "median_ms": 31.9927919190377,
+      "p95_ms": 32.13825006969273
+    },
+    {
+      "case": "risk_hard",
+      "algorithm": "astar",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 112,
+      "edge_checks": 2514,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 133.1370849898476,
+        "time_s": 13.313708498984761,
+        "risk_proxy": 0.0665685424949238,
+        "cost": 1.331370849898476
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-2506ef9f7960",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          40,
+          20
+        ],
+        [
+          20,
+          30,
+          20
+        ],
+        [
+          30,
+          20,
+          20
+        ],
+        [
+          40,
+          10,
+          20
+        ],
+        [
+          50,
+          10,
+          20
+        ],
+        [
+          60,
+          10,
+          20
+        ],
+        [
+          70,
+          20,
+          20
+        ],
+        [
+          80,
+          30,
+          20
+        ],
+        [
+          90,
+          40,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        6.226124940440059,
+        6.154957925900817,
+        6.132042035460472,
+        6.230958038941026,
+        6.129249930381775,
+        6.247791927307844,
+        6.256042048335075
+      ],
+      "median_ms": 6.226124940440059,
+      "p95_ms": 6.256042048335075
+    },
+    {
+      "case": "no_fly",
+      "algorithm": "dijkstra",
+      "status": "infeasible",
+      "reason": "no_path_in_declared_grid",
+      "expanded": 364,
+      "edge_checks": 7378,
+      "lambda_risk": 0,
+      "metrics": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-a7e5be7a08ce",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [],
+      "elapsed_ms_samples": [
+        24.86516605131328,
+        24.705624906346202,
+        24.89174995571375,
+        24.980749934911728,
+        24.77854094468057,
+        24.775583064183593,
+        24.69908306375146
+      ],
+      "median_ms": 24.77854094468057,
+      "p95_ms": 24.980749934911728
+    },
+    {
+      "case": "no_fly",
+      "algorithm": "astar",
+      "status": "infeasible",
+      "reason": "no_path_in_declared_grid",
+      "expanded": 364,
+      "edge_checks": 7378,
+      "lambda_risk": 0,
+      "metrics": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-a7e5be7a08ce",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [],
+      "elapsed_ms_samples": [
+        25.106916902586818,
+        24.961833143606782,
+        24.93612514808774,
+        24.832417024299502,
+        24.7549160849303,
+        24.836582830175757,
+        24.800749961286783
+      ],
+      "median_ms": 24.836582830175757,
+      "p95_ms": 25.106916902586818
+    },
+    {
+      "case": "expired",
+      "algorithm": "dijkstra",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 699,
+      "edge_checks": 14715,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 116.5685424949238,
+        "time_s": 11.65685424949238,
+        "risk_proxy": 0.475208152801713,
+        "cost": 1.165685424949238
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-951020302678",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          50,
+          20
+        ],
+        [
+          20,
+          50,
+          30
+        ],
+        [
+          30,
+          50,
+          40
+        ],
+        [
+          40,
+          50,
+          40
+        ],
+        [
+          50,
+          50,
+          40
+        ],
+        [
+          60,
+          50,
+          40
+        ],
+        [
+          70,
+          50,
+          40
+        ],
+        [
+          80,
+          50,
+          40
+        ],
+        [
+          90,
+          50,
+          30
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        47.258791979402304,
+        47.0444168895483,
+        47.68774984404445,
+        47.06858401186764,
+        46.86129209585488,
+        46.9289580360055,
+        46.97945807129145
+      ],
+      "median_ms": 47.0444168895483,
+      "p95_ms": 47.68774984404445
+    },
+    {
+      "case": "expired",
+      "algorithm": "astar",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 72,
+      "edge_checks": 1630,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 116.5685424949238,
+        "time_s": 11.65685424949238,
+        "risk_proxy": 0.5021320343559642,
+        "cost": 1.165685424949238
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-951020302678",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          50,
+          20
+        ],
+        [
+          20,
+          50,
+          30
+        ],
+        [
+          30,
+          50,
+          40
+        ],
+        [
+          40,
+          50,
+          40
+        ],
+        [
+          50,
+          50,
+          40
+        ],
+        [
+          60,
+          50,
+          40
+        ],
+        [
+          70,
+          50,
+          40
+        ],
+        [
+          80,
+          50,
+          30
+        ],
+        [
+          90,
+          50,
+          30
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        5.172333214432001,
+        5.11441589333117,
+        5.173667101189494,
+        5.153333069756627,
+        5.150709068402648,
+        5.116416839882731,
+        5.090458784252405
+      ],
+      "median_ms": 5.150709068402648,
+      "p95_ms": 5.173667101189494
+    },
+    {
+      "case": "ceiling",
+      "algorithm": "dijkstra",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 199,
+      "edge_checks": 3632,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 133.1370849898476,
+        "time_s": 13.313708498984761,
+        "risk_proxy": 0.0665685424949238,
+        "cost": 1.331370849898476
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-9bff4918c374",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          40,
+          20
+        ],
+        [
+          20,
+          30,
+          20
+        ],
+        [
+          30,
+          20,
+          20
+        ],
+        [
+          40,
+          10,
+          20
+        ],
+        [
+          50,
+          10,
+          20
+        ],
+        [
+          60,
+          10,
+          20
+        ],
+        [
+          70,
+          20,
+          20
+        ],
+        [
+          80,
+          30,
+          20
+        ],
+        [
+          90,
+          40,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        14.068207936361432,
+        14.196999836713076,
+        13.985541881993413,
+        14.172542141750455,
+        14.000165974721313,
+        14.136374928057194,
+        14.109832933172584
+      ],
+      "median_ms": 14.109832933172584,
+      "p95_ms": 14.196999836713076
+    },
+    {
+      "case": "ceiling",
+      "algorithm": "astar",
+      "status": "feasible",
+      "reason": "optimal_on_known_allowed_grid",
+      "expanded": 66,
+      "edge_checks": 1363,
+      "lambda_risk": 0,
+      "metrics": {
+        "length_m": 133.1370849898476,
+        "time_s": 13.313708498984761,
+        "risk_proxy": 0.0665685424949238,
+        "cost": 1.331370849898476
+      },
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-9bff4918c374",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [
+        [
+          0,
+          50,
+          20
+        ],
+        [
+          10,
+          40,
+          20
+        ],
+        [
+          20,
+          30,
+          20
+        ],
+        [
+          30,
+          20,
+          20
+        ],
+        [
+          40,
+          10,
+          20
+        ],
+        [
+          50,
+          10,
+          20
+        ],
+        [
+          60,
+          10,
+          20
+        ],
+        [
+          70,
+          20,
+          20
+        ],
+        [
+          80,
+          30,
+          20
+        ],
+        [
+          90,
+          40,
+          20
+        ],
+        [
+          100,
+          50,
+          20
+        ]
+      ],
+      "elapsed_ms_samples": [
+        5.209707887843251,
+        5.132958060130477,
+        5.15012489631772,
+        5.1094170194119215,
+        5.0975000485777855,
+        5.15904207713902,
+        5.044833989813924
+      ],
+      "median_ms": 5.132958060130477,
+      "p95_ms": 5.209707887843251
+    },
+    {
+      "case": "missing",
+      "algorithm": "dijkstra",
+      "status": "unknown",
+      "reason": "incomplete:risk_data",
+      "expanded": 0,
+      "edge_checks": 0,
+      "lambda_risk": 0,
+      "metrics": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-399e73b193b3",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [],
+      "elapsed_ms_samples": [
+        0.01879199407994747,
+        0.015042023733258247,
+        0.014667166396975517,
+        0.017583835870027542,
+        0.014750054106116295,
+        0.014750054106116295,
+        0.014582881703972816
+      ],
+      "median_ms": 0.014750054106116295,
+      "p95_ms": 0.01879199407994747
+    },
+    {
+      "case": "missing",
+      "algorithm": "astar",
+      "status": "unknown",
+      "reason": "incomplete:risk_data",
+      "expanded": 0,
+      "edge_checks": 0,
+      "lambda_risk": 0,
+      "metrics": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-399e73b193b3",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [],
+      "elapsed_ms_samples": [
+        0.01558312214910984,
+        0.014999881386756897,
+        0.014584045857191086,
+        0.014624791219830513,
+        0.014750054106116295,
+        0.015166820958256721,
+        0.014874851331114769
+      ],
+      "median_ms": 0.014874851331114769,
+      "p95_ms": 0.01558312214910984
+    },
+    {
+      "case": "mixed",
+      "algorithm": "dijkstra",
+      "status": "unknown",
+      "reason": "version_mismatch:airspace",
+      "expanded": 0,
+      "edge_checks": 0,
+      "lambda_risk": 0,
+      "metrics": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [],
+      "elapsed_ms_samples": [
+        0.013499986380338669,
+        0.01337495632469654,
+        0.013958895578980446,
+        0.012834090739488602,
+        0.013082986697554588,
+        0.01291697844862938,
+        0.01654215157032013
+      ],
+      "median_ms": 0.01337495632469654,
+      "p95_ms": 0.01654215157032013
+    },
+    {
+      "case": "mixed",
+      "algorithm": "astar",
+      "status": "unknown",
+      "reason": "version_mismatch:airspace",
+      "expanded": 0,
+      "edge_checks": 0,
+      "lambda_risk": 0,
+      "metrics": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [],
+      "elapsed_ms_samples": [
+        0.013459008187055588,
+        0.013499986380338669,
+        0.013166805729269981,
+        0.013082986697554588,
+        0.012625008821487427,
+        0.013167038559913635,
+        0.017290934920310974
+      ],
+      "median_ms": 0.013167038559913635,
+      "p95_ms": 0.017290934920310974
+    },
+    {
+      "case": "unknown_wall",
+      "algorithm": "dijkstra",
+      "status": "unknown",
+      "reason": "unknown_edges_prevent_proof",
+      "expanded": 308,
+      "edge_checks": 6171,
+      "lambda_risk": 0,
+      "metrics": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-7240a2cae046",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [],
+      "elapsed_ms_samples": [
+        15.232667094096541,
+        15.096375020220876,
+        15.223124995827675,
+        15.268791001290083,
+        15.07187495008111,
+        15.215707942843437,
+        15.162207884714007
+      ],
+      "median_ms": 15.215707942843437,
+      "p95_ms": 15.268791001290083
+    },
+    {
+      "case": "unknown_wall",
+      "algorithm": "astar",
+      "status": "unknown",
+      "reason": "unknown_edges_prevent_proof",
+      "expanded": 308,
+      "edge_checks": 6171,
+      "lambda_risk": 0,
+      "metrics": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-7240a2cae046",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "path": [],
+      "elapsed_ms_samples": [
+        15.078499913215637,
+        15.370541950687766,
+        15.2793750166893,
+        15.308625064790249,
+        15.150834107771516,
+        15.277958009392023,
+        15.29791601933539
+      ],
+      "median_ms": 15.2793750166893,
+      "p95_ms": 15.370541950687766
+    }
+  ]
+}

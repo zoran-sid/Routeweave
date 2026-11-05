@@ -1,0 +1,132 @@
+{
+  "baseline": "starter-v0",
+  "fixture": "zc-synthetic-v1",
+  "snapshot": {
+    "scene": {
+      "crs": "starter-v0-local-m",
+      "terrain_z": 0,
+      "bounds": [
+        [
+          0,
+          0,
+          10
+        ],
+        [
+          100,
+          100,
+          70
+        ]
+      ],
+      "obstacles": [
+        {
+          "id": "B-1",
+          "box": [
+            [
+              40,
+              20,
+              0
+            ],
+            [
+              60,
+              80,
+              35
+            ]
+          ]
+        }
+      ],
+      "complete": true,
+      "valid": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T01:00:00Z"
+      ],
+      "source": "synthetic-zc-v1",
+      "version": "mock-zc-scene-7400e7d5b4d8"
+    },
+    "airspace": {
+      "restrictions": [],
+      "complete": true,
+      "valid": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T01:00:00Z"
+      ],
+      "source": "synthetic-zc-v1",
+      "version": "mock-zc-airspace-aae542499e2d"
+    },
+    "risk_data": {
+      "background_q": 0.05,
+      "zones": [
+        {
+          "id": "commercial",
+          "box": [
+            [
+              30,
+              35,
+              0
+            ],
+            [
+              70,
+              65,
+              100
+            ]
+          ],
+          "q": 0.7
+        }
+      ],
+      "complete": true,
+      "valid": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T01:00:00Z"
+      ],
+      "source": "synthetic-zc-v1",
+      "version": "mock-zc-risk_data-21c2448d006a"
+    },
+    "risk_model": {
+      "hard_threshold": 0.9,
+      "footprint_m": 5,
+      "aggregation": "edge_max_times_length",
+      "source": "mock consequence-weighted exposure, see design.md",
+      "version": "mock-zc-risk_model-f2b2eeb7a761"
+    },
+    "planner_config": {
+      "step_m": 10,
+      "buffer_m": 2,
+      "speed_mps": 10,
+      "lambda_risk": 0,
+      "length_scale_m": 100,
+      "version": "mock-zc-planner_config-d9e44530e5c3"
+    },
+    "versions": {
+      "scene": "mock-zc-scene-7400e7d5b4d8",
+      "airspace": "mock-zc-airspace-aae542499e2d",
+      "risk_data": "mock-zc-risk_data-21c2448d006a",
+      "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+      "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+    }
+  },
+  "query": {
+    "id": "zc-baseline",
+    "start": [
+      0,
+      50,
+      20
+    ],
+    "goal": [
+      100,
+      50,
+      20
+    ],
+    "planned_at": "2026-11-04T00:00:00Z",
+    "departure": "2026-11-04T00:00:00Z",
+    "window": [
+      "2026-11-04T00:00:00Z",
+      "2026-11-04T00:10:00Z"
+    ],
+    "versions": {
+      "scene": "mock-zc-scene-7400e7d5b4d8",
+      "airspace": "mock-zc-airspace-aae542499e2d",
+      "risk_data": "mock-zc-risk_data-21c2448d006a",
+      "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+      "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+    }
+  }
+}

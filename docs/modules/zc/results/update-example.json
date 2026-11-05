@@ -1,0 +1,1007 @@
+{
+  "new_snapshot": {
+    "scene": {
+      "crs": "starter-v0-local-m",
+      "terrain_z": 0,
+      "bounds": [
+        [
+          0,
+          0,
+          10
+        ],
+        [
+          100,
+          100,
+          70
+        ]
+      ],
+      "obstacles": [
+        {
+          "id": "B-1",
+          "box": [
+            [
+              40,
+              20,
+              0
+            ],
+            [
+              60,
+              80,
+              35
+            ]
+          ]
+        }
+      ],
+      "complete": true,
+      "valid": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T01:00:00Z"
+      ],
+      "source": "synthetic-zc-v1",
+      "version": "mock-zc-scene-7400e7d5b4d8"
+    },
+    "airspace": {
+      "restrictions": [
+        {
+          "id": "NF-1",
+          "kind": "no_fly",
+          "box": [
+            [
+              45,
+              35,
+              0
+            ],
+            [
+              55,
+              65,
+              100
+            ]
+          ],
+          "valid": [
+            "2026-11-04T00:00:00Z",
+            "2026-11-04T00:10:00Z"
+          ],
+          "state": "published",
+          "source": "synthetic-zc-v1",
+          "ceiling_m": 30
+        }
+      ],
+      "complete": true,
+      "valid": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T01:00:00Z"
+      ],
+      "source": "synthetic-zc-v1",
+      "version": "mock-zc-airspace-7e6d3c204ba6"
+    },
+    "risk_data": {
+      "background_q": 0.05,
+      "zones": [
+        {
+          "id": "commercial",
+          "box": [
+            [
+              30,
+              35,
+              0
+            ],
+            [
+              70,
+              65,
+              100
+            ]
+          ],
+          "q": 0.7
+        }
+      ],
+      "complete": true,
+      "valid": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T01:00:00Z"
+      ],
+      "source": "synthetic-zc-v1",
+      "version": "mock-zc-risk_data-21c2448d006a"
+    },
+    "risk_model": {
+      "hard_threshold": 0.9,
+      "footprint_m": 5,
+      "aggregation": "edge_max_times_length",
+      "source": "mock consequence-weighted exposure, see design.md",
+      "version": "mock-zc-risk_model-f2b2eeb7a761"
+    },
+    "planner_config": {
+      "step_m": 10,
+      "buffer_m": 2,
+      "speed_mps": 10,
+      "lambda_risk": 0,
+      "length_scale_m": 100,
+      "version": "mock-zc-planner_config-d9e44530e5c3"
+    },
+    "versions": {
+      "scene": "mock-zc-scene-7400e7d5b4d8",
+      "airspace": "mock-zc-airspace-7e6d3c204ba6",
+      "risk_data": "mock-zc-risk_data-21c2448d006a",
+      "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+      "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+    }
+  },
+  "new_query": {
+    "id": "zc-baseline",
+    "start": [
+      0,
+      50,
+      20
+    ],
+    "goal": [
+      100,
+      50,
+      20
+    ],
+    "planned_at": "2026-11-04T00:00:00Z",
+    "departure": "2026-11-04T00:00:00Z",
+    "window": [
+      "2026-11-04T00:00:00Z",
+      "2026-11-04T00:10:00Z"
+    ],
+    "versions": {
+      "scene": "mock-zc-scene-7400e7d5b4d8",
+      "airspace": "mock-zc-airspace-7e6d3c204ba6",
+      "risk_data": "mock-zc-risk_data-21c2448d006a",
+      "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+      "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+    }
+  },
+  "before": {
+    "query_id": "zc-baseline",
+    "status": "feasible",
+    "reason": "optimal_on_known_allowed_grid",
+    "algorithm": "astar",
+    "versions": {
+      "scene": "mock-zc-scene-7400e7d5b4d8",
+      "airspace": "mock-zc-airspace-aae542499e2d",
+      "risk_data": "mock-zc-risk_data-21c2448d006a",
+      "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+      "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+    },
+    "planned_at": "2026-11-04T00:00:00Z",
+    "departure": "2026-11-04T00:00:00Z",
+    "window": [
+      "2026-11-04T00:00:00Z",
+      "2026-11-04T00:10:00Z"
+    ],
+    "time_policy": "whole_window_conservative",
+    "search_scope": "finite_26_neighbor_grid",
+    "path": [
+      [
+        0,
+        50,
+        20
+      ],
+      [
+        10,
+        50,
+        20
+      ],
+      [
+        20,
+        50,
+        30
+      ],
+      [
+        30,
+        50,
+        40
+      ],
+      [
+        40,
+        50,
+        40
+      ],
+      [
+        50,
+        50,
+        40
+      ],
+      [
+        60,
+        50,
+        40
+      ],
+      [
+        70,
+        50,
+        40
+      ],
+      [
+        80,
+        50,
+        30
+      ],
+      [
+        90,
+        50,
+        30
+      ],
+      [
+        100,
+        50,
+        20
+      ]
+    ],
+    "segments": [
+      {
+        "from": [
+          0,
+          50,
+          20
+        ],
+        "to": [
+          10,
+          50,
+          20
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.005000000000000001,
+        "q_max": 0.05,
+        "sources": [
+          "background"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          10,
+          50,
+          20
+        ],
+        "to": [
+          20,
+          50,
+          30
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 14.142135623730951,
+        "time_s": 1.4142135623730951,
+        "risk_proxy": 0.007071067811865475,
+        "q_max": 0.05,
+        "sources": [
+          "background"
+        ],
+        "cost": 0.1414213562373095
+      },
+      {
+        "from": [
+          20,
+          50,
+          30
+        ],
+        "to": [
+          30,
+          50,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 14.142135623730951,
+        "time_s": 1.4142135623730951,
+        "risk_proxy": 0.09899494936611665,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1414213562373095
+      },
+      {
+        "from": [
+          30,
+          50,
+          40
+        ],
+        "to": [
+          40,
+          50,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.06999999999999999,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          40,
+          50,
+          40
+        ],
+        "to": [
+          50,
+          50,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.06999999999999999,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          50,
+          50,
+          40
+        ],
+        "to": [
+          60,
+          50,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.06999999999999999,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          60,
+          50,
+          40
+        ],
+        "to": [
+          70,
+          50,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.06999999999999999,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          70,
+          50,
+          40
+        ],
+        "to": [
+          80,
+          50,
+          30
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 14.142135623730951,
+        "time_s": 1.4142135623730951,
+        "risk_proxy": 0.09899494936611665,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1414213562373095
+      },
+      {
+        "from": [
+          80,
+          50,
+          30
+        ],
+        "to": [
+          90,
+          50,
+          30
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.005000000000000001,
+        "q_max": 0.05,
+        "sources": [
+          "background"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          90,
+          50,
+          30
+        ],
+        "to": [
+          100,
+          50,
+          20
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 14.142135623730951,
+        "time_s": 1.4142135623730951,
+        "risk_proxy": 0.007071067811865475,
+        "q_max": 0.05,
+        "sources": [
+          "background"
+        ],
+        "cost": 0.1414213562373095
+      }
+    ],
+    "metrics": {
+      "length_m": 116.5685424949238,
+      "time_s": 11.65685424949238,
+      "risk_proxy": 0.5021320343559642,
+      "cost": 1.165685424949238
+    },
+    "arrival": "2026-11-04T00:00:11.656854+00:00",
+    "expanded": 72,
+    "edge_checks": 1630,
+    "elapsed_ms": 4.211541963741183
+  },
+  "recheck": [
+    {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 10.0,
+      "time_s": 1.0,
+      "risk_proxy": 0.005000000000000001,
+      "q_max": 0.05,
+      "sources": [
+        "background"
+      ],
+      "cost": 0.1,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 14.142135623730951,
+      "time_s": 1.4142135623730951,
+      "risk_proxy": 0.007071067811865475,
+      "q_max": 0.05,
+      "sources": [
+        "background"
+      ],
+      "cost": 0.1414213562373095,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 14.142135623730951,
+      "time_s": 1.4142135623730951,
+      "risk_proxy": 0.09899494936611665,
+      "q_max": 0.7,
+      "sources": [
+        "background",
+        "commercial"
+      ],
+      "cost": 0.1414213562373095,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 10.0,
+      "time_s": 1.0,
+      "risk_proxy": 0.06999999999999999,
+      "q_max": 0.7,
+      "sources": [
+        "background",
+        "commercial"
+      ],
+      "cost": 0.1,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "forbidden",
+      "reason": "airspace:NF-1",
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "forbidden",
+      "reason": "airspace:NF-1",
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 10.0,
+      "time_s": 1.0,
+      "risk_proxy": 0.06999999999999999,
+      "q_max": 0.7,
+      "sources": [
+        "background",
+        "commercial"
+      ],
+      "cost": 0.1,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 14.142135623730951,
+      "time_s": 1.4142135623730951,
+      "risk_proxy": 0.09899494936611665,
+      "q_max": 0.7,
+      "sources": [
+        "background",
+        "commercial"
+      ],
+      "cost": 0.1414213562373095,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 10.0,
+      "time_s": 1.0,
+      "risk_proxy": 0.005000000000000001,
+      "q_max": 0.05,
+      "sources": [
+        "background"
+      ],
+      "cost": 0.1,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 14.142135623730951,
+      "time_s": 1.4142135623730951,
+      "risk_proxy": 0.007071067811865475,
+      "q_max": 0.05,
+      "sources": [
+        "background"
+      ],
+      "cost": 0.1414213562373095,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-7e6d3c204ba6",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    }
+  ],
+  "recheck_ms": 0.3177907783538103,
+  "after": {
+    "query_id": "zc-baseline",
+    "status": "feasible",
+    "reason": "optimal_on_known_allowed_grid",
+    "algorithm": "astar",
+    "versions": {
+      "scene": "mock-zc-scene-7400e7d5b4d8",
+      "airspace": "mock-zc-airspace-7e6d3c204ba6",
+      "risk_data": "mock-zc-risk_data-21c2448d006a",
+      "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+      "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+    },
+    "planned_at": "2026-11-04T00:00:00Z",
+    "departure": "2026-11-04T00:00:00Z",
+    "window": [
+      "2026-11-04T00:00:00Z",
+      "2026-11-04T00:10:00Z"
+    ],
+    "time_policy": "whole_window_conservative",
+    "search_scope": "finite_26_neighbor_grid",
+    "path": [
+      [
+        0,
+        50,
+        20
+      ],
+      [
+        10,
+        50,
+        20
+      ],
+      [
+        20,
+        50,
+        20
+      ],
+      [
+        30,
+        40,
+        30
+      ],
+      [
+        40,
+        30,
+        40
+      ],
+      [
+        50,
+        30,
+        40
+      ],
+      [
+        60,
+        30,
+        40
+      ],
+      [
+        70,
+        30,
+        40
+      ],
+      [
+        80,
+        30,
+        40
+      ],
+      [
+        90,
+        40,
+        30
+      ],
+      [
+        100,
+        50,
+        20
+      ]
+    ],
+    "segments": [
+      {
+        "from": [
+          0,
+          50,
+          20
+        ],
+        "to": [
+          10,
+          50,
+          20
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.005000000000000001,
+        "q_max": 0.05,
+        "sources": [
+          "background"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          10,
+          50,
+          20
+        ],
+        "to": [
+          20,
+          50,
+          20
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.005000000000000001,
+        "q_max": 0.05,
+        "sources": [
+          "background"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          20,
+          50,
+          20
+        ],
+        "to": [
+          30,
+          40,
+          30
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 17.320508075688775,
+        "time_s": 1.7320508075688774,
+        "risk_proxy": 0.12124355652982143,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.17320508075688776
+      },
+      {
+        "from": [
+          30,
+          40,
+          30
+        ],
+        "to": [
+          40,
+          30,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 17.320508075688775,
+        "time_s": 1.7320508075688774,
+        "risk_proxy": 0.12124355652982143,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.17320508075688776
+      },
+      {
+        "from": [
+          40,
+          30,
+          40
+        ],
+        "to": [
+          50,
+          30,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.06999999999999999,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          50,
+          30,
+          40
+        ],
+        "to": [
+          60,
+          30,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.06999999999999999,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          60,
+          30,
+          40
+        ],
+        "to": [
+          70,
+          30,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.06999999999999999,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          70,
+          30,
+          40
+        ],
+        "to": [
+          80,
+          30,
+          40
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 10.0,
+        "time_s": 1.0,
+        "risk_proxy": 0.06999999999999999,
+        "q_max": 0.7,
+        "sources": [
+          "background",
+          "commercial"
+        ],
+        "cost": 0.1
+      },
+      {
+        "from": [
+          80,
+          30,
+          40
+        ],
+        "to": [
+          90,
+          40,
+          30
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 17.320508075688775,
+        "time_s": 1.7320508075688774,
+        "risk_proxy": 0.008660254037844388,
+        "q_max": 0.05,
+        "sources": [
+          "background"
+        ],
+        "cost": 0.17320508075688776
+      },
+      {
+        "from": [
+          90,
+          40,
+          30
+        ],
+        "to": [
+          100,
+          50,
+          20
+        ],
+        "state": "allowed",
+        "reason": "checked",
+        "length_m": 17.320508075688775,
+        "time_s": 1.7320508075688774,
+        "risk_proxy": 0.008660254037844388,
+        "q_max": 0.05,
+        "sources": [
+          "background"
+        ],
+        "cost": 0.17320508075688776
+      }
+    ],
+    "metrics": {
+      "length_m": 129.2820323027551,
+      "time_s": 12.92820323027551,
+      "risk_proxy": 0.5498076211353315,
+      "cost": 1.292820323027551
+    },
+    "arrival": "2026-11-04T00:00:12.928203+00:00",
+    "expanded": 142,
+    "edge_checks": 3303,
+    "elapsed_ms": 10.92937495559454
+  }
+}

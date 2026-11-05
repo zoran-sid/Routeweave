@@ -43,3 +43,7 @@
 ## ZC 当前覆盖证据（2026-11-05）
 
 已交付[算法与图投影设计](modules/zc/design.md)、[评估结果](modules/zc/evaluation.md)、[模块接口](modules/zc/integration.md)和[第7–8页PPT](modules/zc/slides/zc-routing-evaluation.pptx)。内容覆盖搜索与数据访问选型、固定版本的Q1及Q2航段检查、精度／风险／重规划取舍、12情境对照和21项测试。图投影提供本模块对图数据管理的机制论证；整体架构、源存储与治理等要求仍由相应模块成果共同覆盖。
+
+## LQ当前覆盖证据（2026-11-05）
+
+已交付[风险设计](modules/lq/design.md)、[治理方案](modules/lq/governance.md)、[验证](modules/lq/evaluation.md)、[模块接口](modules/lq/integration.md)和[第5–6页PPT](modules/lq/slides/lq-risk-governance.pptx)。覆盖风险定义、质量与血缘、权限、审计、隐私与伦理，以及效率/风险权衡。19项风险测试与21项ZC回归通过；实际数据库鉴权、审计落库和总体发布事务未部署，不计作已验证。

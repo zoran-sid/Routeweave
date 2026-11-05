@@ -1,0 +1,2018 @@
+{
+  "executed_at": "2026-11-05T02:48:15.232571+00:00",
+  "scenario": "synthetic-lq-v1",
+  "baseline": "starter-v0",
+  "comparisons": [
+    {
+      "lambda": 0,
+      "astar": {
+        "query_id": "zc-baseline",
+        "status": "feasible",
+        "reason": "optimal_on_known_allowed_grid",
+        "algorithm": "astar",
+        "versions": {
+          "scene": "mock-zc-scene-7400e7d5b4d8",
+          "airspace": "mock-zc-airspace-aae542499e2d",
+          "risk_data": "mock-zc-risk_data-e8fbf9b55b72",
+          "risk_model": "mock-zc-risk_model-9885a50c0862",
+          "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+        },
+        "planned_at": "2026-11-04T00:00:00Z",
+        "departure": "2026-11-04T00:00:00Z",
+        "window": [
+          "2026-11-04T00:00:00Z",
+          "2026-11-04T00:10:00Z"
+        ],
+        "time_policy": "whole_window_conservative",
+        "search_scope": "finite_26_neighbor_grid",
+        "path": [
+          [
+            0,
+            50,
+            20
+          ],
+          [
+            10,
+            50,
+            20
+          ],
+          [
+            20,
+            50,
+            30
+          ],
+          [
+            30,
+            50,
+            40
+          ],
+          [
+            40,
+            50,
+            40
+          ],
+          [
+            50,
+            50,
+            40
+          ],
+          [
+            60,
+            50,
+            40
+          ],
+          [
+            70,
+            50,
+            40
+          ],
+          [
+            80,
+            50,
+            30
+          ],
+          [
+            90,
+            50,
+            30
+          ],
+          [
+            100,
+            50,
+            20
+          ]
+        ],
+        "segments": [
+          {
+            "from": [
+              0,
+              50,
+              20
+            ],
+            "to": [
+              10,
+              50,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              10,
+              50,
+              20
+            ],
+            "to": [
+              20,
+              50,
+              30
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1414213562373095
+          },
+          {
+            "from": [
+              20,
+              50,
+              30
+            ],
+            "to": [
+              30,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.09899494936611666,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1414213562373095
+          },
+          {
+            "from": [
+              30,
+              50,
+              40
+            ],
+            "to": [
+              40,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              40,
+              50,
+              40
+            ],
+            "to": [
+              50,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              50,
+              50,
+              40
+            ],
+            "to": [
+              60,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              60,
+              50,
+              40
+            ],
+            "to": [
+              70,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              70,
+              50,
+              40
+            ],
+            "to": [
+              80,
+              50,
+              30
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.09899494936611666,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1414213562373095
+          },
+          {
+            "from": [
+              80,
+              50,
+              30
+            ],
+            "to": [
+              90,
+              50,
+              30
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              90,
+              50,
+              30
+            ],
+            "to": [
+              100,
+              50,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1414213562373095
+          }
+        ],
+        "metrics": {
+          "length_m": 116.5685424949238,
+          "time_s": 11.65685424949238,
+          "risk_proxy": 0.5021320343559643,
+          "cost": 1.165685424949238
+        },
+        "arrival": "2026-11-04T00:00:11.656854+00:00",
+        "expanded": 72,
+        "edge_checks": 1630,
+        "elapsed_ms": 4.51558400027352
+      },
+      "dijkstra": {
+        "query_id": "zc-baseline",
+        "status": "feasible",
+        "reason": "optimal_on_known_allowed_grid",
+        "algorithm": "dijkstra",
+        "versions": {
+          "scene": "mock-zc-scene-7400e7d5b4d8",
+          "airspace": "mock-zc-airspace-aae542499e2d",
+          "risk_data": "mock-zc-risk_data-e8fbf9b55b72",
+          "risk_model": "mock-zc-risk_model-9885a50c0862",
+          "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+        },
+        "planned_at": "2026-11-04T00:00:00Z",
+        "departure": "2026-11-04T00:00:00Z",
+        "window": [
+          "2026-11-04T00:00:00Z",
+          "2026-11-04T00:10:00Z"
+        ],
+        "time_policy": "whole_window_conservative",
+        "search_scope": "finite_26_neighbor_grid",
+        "path": [
+          [
+            0,
+            50,
+            20
+          ],
+          [
+            10,
+            50,
+            20
+          ],
+          [
+            20,
+            50,
+            30
+          ],
+          [
+            30,
+            50,
+            40
+          ],
+          [
+            40,
+            50,
+            40
+          ],
+          [
+            50,
+            50,
+            40
+          ],
+          [
+            60,
+            50,
+            40
+          ],
+          [
+            70,
+            50,
+            40
+          ],
+          [
+            80,
+            50,
+            40
+          ],
+          [
+            90,
+            50,
+            30
+          ],
+          [
+            100,
+            50,
+            20
+          ]
+        ],
+        "segments": [
+          {
+            "from": [
+              0,
+              50,
+              20
+            ],
+            "to": [
+              10,
+              50,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              10,
+              50,
+              20
+            ],
+            "to": [
+              20,
+              50,
+              30
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1414213562373095
+          },
+          {
+            "from": [
+              20,
+              50,
+              30
+            ],
+            "to": [
+              30,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.09899494936611666,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1414213562373095
+          },
+          {
+            "from": [
+              30,
+              50,
+              40
+            ],
+            "to": [
+              40,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              40,
+              50,
+              40
+            ],
+            "to": [
+              50,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              50,
+              50,
+              40
+            ],
+            "to": [
+              60,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              60,
+              50,
+              40
+            ],
+            "to": [
+              70,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              70,
+              50,
+              40
+            ],
+            "to": [
+              80,
+              50,
+              40
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.07,
+            "q_max": 0.7000000000000001,
+            "sources": [
+              "background",
+              "commercial"
+            ],
+            "cost": 0.1
+          },
+          {
+            "from": [
+              80,
+              50,
+              40
+            ],
+            "to": [
+              90,
+              50,
+              30
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1414213562373095
+          },
+          {
+            "from": [
+              90,
+              50,
+              30
+            ],
+            "to": [
+              100,
+              50,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1414213562373095
+          }
+        ],
+        "metrics": {
+          "length_m": 116.5685424949238,
+          "time_s": 11.65685424949238,
+          "risk_proxy": 0.47520815280171314,
+          "cost": 1.165685424949238
+        },
+        "arrival": "2026-11-04T00:00:11.656854+00:00",
+        "expanded": 699,
+        "edge_checks": 14715,
+        "elapsed_ms": 40.97870799978409
+      }
+    },
+    {
+      "lambda": 2,
+      "astar": {
+        "query_id": "zc-baseline",
+        "status": "feasible",
+        "reason": "optimal_on_known_allowed_grid",
+        "algorithm": "astar",
+        "versions": {
+          "scene": "mock-zc-scene-7400e7d5b4d8",
+          "airspace": "mock-zc-airspace-aae542499e2d",
+          "risk_data": "mock-zc-risk_data-e8fbf9b55b72",
+          "risk_model": "mock-zc-risk_model-9885a50c0862",
+          "planner_config": "mock-zc-planner_config-63c5a68cca6a"
+        },
+        "planned_at": "2026-11-04T00:00:00Z",
+        "departure": "2026-11-04T00:00:00Z",
+        "window": [
+          "2026-11-04T00:00:00Z",
+          "2026-11-04T00:10:00Z"
+        ],
+        "time_policy": "whole_window_conservative",
+        "search_scope": "finite_26_neighbor_grid",
+        "path": [
+          [
+            0,
+            50,
+            20
+          ],
+          [
+            10,
+            40,
+            20
+          ],
+          [
+            20,
+            30,
+            20
+          ],
+          [
+            30,
+            20,
+            20
+          ],
+          [
+            40,
+            10,
+            20
+          ],
+          [
+            50,
+            10,
+            20
+          ],
+          [
+            60,
+            10,
+            20
+          ],
+          [
+            70,
+            20,
+            20
+          ],
+          [
+            80,
+            30,
+            20
+          ],
+          [
+            90,
+            40,
+            20
+          ],
+          [
+            100,
+            50,
+            20
+          ]
+        ],
+        "segments": [
+          {
+            "from": [
+              0,
+              50,
+              20
+            ],
+            "to": [
+              10,
+              40,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              10,
+              40,
+              20
+            ],
+            "to": [
+              20,
+              30,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              20,
+              30,
+              20
+            ],
+            "to": [
+              30,
+              20,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              30,
+              20,
+              20
+            ],
+            "to": [
+              40,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              40,
+              10,
+              20
+            ],
+            "to": [
+              50,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.11000000000000001
+          },
+          {
+            "from": [
+              50,
+              10,
+              20
+            ],
+            "to": [
+              60,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.11000000000000001
+          },
+          {
+            "from": [
+              60,
+              10,
+              20
+            ],
+            "to": [
+              70,
+              20,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              70,
+              20,
+              20
+            ],
+            "to": [
+              80,
+              30,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              80,
+              30,
+              20
+            ],
+            "to": [
+              90,
+              40,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              90,
+              40,
+              20
+            ],
+            "to": [
+              100,
+              50,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          }
+        ],
+        "metrics": {
+          "length_m": 133.1370849898476,
+          "time_s": 13.313708498984761,
+          "risk_proxy": 0.0665685424949238,
+          "cost": 1.4645079348883236
+        },
+        "arrival": "2026-11-04T00:00:13.313708+00:00",
+        "expanded": 183,
+        "edge_checks": 4168,
+        "elapsed_ms": 11.339749999933701
+      },
+      "dijkstra": {
+        "query_id": "zc-baseline",
+        "status": "feasible",
+        "reason": "optimal_on_known_allowed_grid",
+        "algorithm": "dijkstra",
+        "versions": {
+          "scene": "mock-zc-scene-7400e7d5b4d8",
+          "airspace": "mock-zc-airspace-aae542499e2d",
+          "risk_data": "mock-zc-risk_data-e8fbf9b55b72",
+          "risk_model": "mock-zc-risk_model-9885a50c0862",
+          "planner_config": "mock-zc-planner_config-63c5a68cca6a"
+        },
+        "planned_at": "2026-11-04T00:00:00Z",
+        "departure": "2026-11-04T00:00:00Z",
+        "window": [
+          "2026-11-04T00:00:00Z",
+          "2026-11-04T00:10:00Z"
+        ],
+        "time_policy": "whole_window_conservative",
+        "search_scope": "finite_26_neighbor_grid",
+        "path": [
+          [
+            0,
+            50,
+            20
+          ],
+          [
+            10,
+            40,
+            20
+          ],
+          [
+            20,
+            30,
+            20
+          ],
+          [
+            30,
+            20,
+            20
+          ],
+          [
+            40,
+            10,
+            20
+          ],
+          [
+            50,
+            10,
+            20
+          ],
+          [
+            60,
+            10,
+            20
+          ],
+          [
+            70,
+            20,
+            20
+          ],
+          [
+            80,
+            30,
+            20
+          ],
+          [
+            90,
+            40,
+            20
+          ],
+          [
+            100,
+            50,
+            20
+          ]
+        ],
+        "segments": [
+          {
+            "from": [
+              0,
+              50,
+              20
+            ],
+            "to": [
+              10,
+              40,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              10,
+              40,
+              20
+            ],
+            "to": [
+              20,
+              30,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              20,
+              30,
+              20
+            ],
+            "to": [
+              30,
+              20,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              30,
+              20,
+              20
+            ],
+            "to": [
+              40,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              40,
+              10,
+              20
+            ],
+            "to": [
+              50,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.11000000000000001
+          },
+          {
+            "from": [
+              50,
+              10,
+              20
+            ],
+            "to": [
+              60,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.11000000000000001
+          },
+          {
+            "from": [
+              60,
+              10,
+              20
+            ],
+            "to": [
+              70,
+              20,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              70,
+              20,
+              20
+            ],
+            "to": [
+              80,
+              30,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              80,
+              30,
+              20
+            ],
+            "to": [
+              90,
+              40,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          },
+          {
+            "from": [
+              90,
+              40,
+              20
+            ],
+            "to": [
+              100,
+              50,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.15556349186104046
+          }
+        ],
+        "metrics": {
+          "length_m": 133.1370849898476,
+          "time_s": 13.313708498984761,
+          "risk_proxy": 0.0665685424949238,
+          "cost": 1.4645079348883236
+        },
+        "arrival": "2026-11-04T00:00:13.313708+00:00",
+        "expanded": 743,
+        "edge_checks": 15194,
+        "elapsed_ms": 42.59941700001946
+      }
+    },
+    {
+      "lambda": 8,
+      "astar": {
+        "query_id": "zc-baseline",
+        "status": "feasible",
+        "reason": "optimal_on_known_allowed_grid",
+        "algorithm": "astar",
+        "versions": {
+          "scene": "mock-zc-scene-7400e7d5b4d8",
+          "airspace": "mock-zc-airspace-aae542499e2d",
+          "risk_data": "mock-zc-risk_data-e8fbf9b55b72",
+          "risk_model": "mock-zc-risk_model-9885a50c0862",
+          "planner_config": "mock-zc-planner_config-029d241c7617"
+        },
+        "planned_at": "2026-11-04T00:00:00Z",
+        "departure": "2026-11-04T00:00:00Z",
+        "window": [
+          "2026-11-04T00:00:00Z",
+          "2026-11-04T00:10:00Z"
+        ],
+        "time_policy": "whole_window_conservative",
+        "search_scope": "finite_26_neighbor_grid",
+        "path": [
+          [
+            0,
+            50,
+            20
+          ],
+          [
+            10,
+            40,
+            20
+          ],
+          [
+            20,
+            30,
+            20
+          ],
+          [
+            30,
+            20,
+            20
+          ],
+          [
+            40,
+            10,
+            20
+          ],
+          [
+            50,
+            10,
+            20
+          ],
+          [
+            60,
+            10,
+            20
+          ],
+          [
+            70,
+            20,
+            20
+          ],
+          [
+            80,
+            30,
+            20
+          ],
+          [
+            90,
+            40,
+            20
+          ],
+          [
+            100,
+            50,
+            20
+          ]
+        ],
+        "segments": [
+          {
+            "from": [
+              0,
+              50,
+              20
+            ],
+            "to": [
+              10,
+              40,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              10,
+              40,
+              20
+            ],
+            "to": [
+              20,
+              30,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              20,
+              30,
+              20
+            ],
+            "to": [
+              30,
+              20,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              30,
+              20,
+              20
+            ],
+            "to": [
+              40,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              40,
+              10,
+              20
+            ],
+            "to": [
+              50,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.14
+          },
+          {
+            "from": [
+              50,
+              10,
+              20
+            ],
+            "to": [
+              60,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.14
+          },
+          {
+            "from": [
+              60,
+              10,
+              20
+            ],
+            "to": [
+              70,
+              20,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              70,
+              20,
+              20
+            ],
+            "to": [
+              80,
+              30,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              80,
+              30,
+              20
+            ],
+            "to": [
+              90,
+              40,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              90,
+              40,
+              20
+            ],
+            "to": [
+              100,
+              50,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          }
+        ],
+        "metrics": {
+          "length_m": 133.1370849898476,
+          "time_s": 13.313708498984761,
+          "risk_proxy": 0.0665685424949238,
+          "cost": 1.8639191898578664
+        },
+        "arrival": "2026-11-04T00:00:13.313708+00:00",
+        "expanded": 352,
+        "edge_checks": 7650,
+        "elapsed_ms": 21.181832999900507
+      },
+      "dijkstra": {
+        "query_id": "zc-baseline",
+        "status": "feasible",
+        "reason": "optimal_on_known_allowed_grid",
+        "algorithm": "dijkstra",
+        "versions": {
+          "scene": "mock-zc-scene-7400e7d5b4d8",
+          "airspace": "mock-zc-airspace-aae542499e2d",
+          "risk_data": "mock-zc-risk_data-e8fbf9b55b72",
+          "risk_model": "mock-zc-risk_model-9885a50c0862",
+          "planner_config": "mock-zc-planner_config-029d241c7617"
+        },
+        "planned_at": "2026-11-04T00:00:00Z",
+        "departure": "2026-11-04T00:00:00Z",
+        "window": [
+          "2026-11-04T00:00:00Z",
+          "2026-11-04T00:10:00Z"
+        ],
+        "time_policy": "whole_window_conservative",
+        "search_scope": "finite_26_neighbor_grid",
+        "path": [
+          [
+            0,
+            50,
+            20
+          ],
+          [
+            10,
+            40,
+            20
+          ],
+          [
+            20,
+            30,
+            20
+          ],
+          [
+            30,
+            20,
+            20
+          ],
+          [
+            40,
+            10,
+            20
+          ],
+          [
+            50,
+            10,
+            20
+          ],
+          [
+            60,
+            10,
+            20
+          ],
+          [
+            70,
+            20,
+            20
+          ],
+          [
+            80,
+            30,
+            20
+          ],
+          [
+            90,
+            40,
+            20
+          ],
+          [
+            100,
+            50,
+            20
+          ]
+        ],
+        "segments": [
+          {
+            "from": [
+              0,
+              50,
+              20
+            ],
+            "to": [
+              10,
+              40,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              10,
+              40,
+              20
+            ],
+            "to": [
+              20,
+              30,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              20,
+              30,
+              20
+            ],
+            "to": [
+              30,
+              20,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              30,
+              20,
+              20
+            ],
+            "to": [
+              40,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              40,
+              10,
+              20
+            ],
+            "to": [
+              50,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.14
+          },
+          {
+            "from": [
+              50,
+              10,
+              20
+            ],
+            "to": [
+              60,
+              10,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 10.0,
+            "time_s": 1.0,
+            "risk_proxy": 0.005000000000000001,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.14
+          },
+          {
+            "from": [
+              60,
+              10,
+              20
+            ],
+            "to": [
+              70,
+              20,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              70,
+              20,
+              20
+            ],
+            "to": [
+              80,
+              30,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              80,
+              30,
+              20
+            ],
+            "to": [
+              90,
+              40,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          },
+          {
+            "from": [
+              90,
+              40,
+              20
+            ],
+            "to": [
+              100,
+              50,
+              20
+            ],
+            "state": "allowed",
+            "reason": "checked",
+            "length_m": 14.142135623730951,
+            "time_s": 1.4142135623730951,
+            "risk_proxy": 0.007071067811865475,
+            "q_max": 0.05,
+            "sources": [
+              "background"
+            ],
+            "cost": 0.1979898987322333
+          }
+        ],
+        "metrics": {
+          "length_m": 133.1370849898476,
+          "time_s": 13.313708498984761,
+          "risk_proxy": 0.0665685424949238,
+          "cost": 1.8639191898578664
+        },
+        "arrival": "2026-11-04T00:00:13.313708+00:00",
+        "expanded": 693,
+        "edge_checks": 14020,
+        "elapsed_ms": 39.52087500010748
+      }
+    }
+  ],
+  "segment_checks": {
+    "commercial": {
+      "state": "allowed",
+      "reason": "checked",
+      "length_m": 40.0,
+      "time_s": 4.0,
+      "risk_proxy": 0.28,
+      "q_max": 0.7000000000000001,
+      "sources": [
+        "background",
+        "commercial"
+      ],
+      "cost": 0.4,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-e8fbf9b55b72",
+        "risk_model": "mock-zc-risk_model-9885a50c0862",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    "hard": {
+      "state": "forbidden",
+      "reason": "risk_threshold",
+      "sources": [
+        "background",
+        "commercial"
+      ],
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-b815e7cef15f",
+        "risk_model": "mock-zc-risk_model-9885a50c0862",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    "unknown": {
+      "state": "unknown",
+      "reason": "unknown_risk",
+      "sources": [
+        "background",
+        "commercial",
+        "commercial:unknown"
+      ],
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-637e69e86f8c",
+        "risk_model": "mock-zc-risk_model-9885a50c0862",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    "missing": {
+      "state": "unknown",
+      "reason": "lq_invalid_input:missing_profiles",
+      "risk_proxy": null,
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-21c2448d006a",
+        "risk_model": "mock-zc-risk_model-f2b2eeb7a761",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      }
+    },
+    "time_gap": {
+      "state": "unknown",
+      "reason": "unknown_risk",
+      "sources": [
+        "background",
+        "commercial",
+        "commercial:unknown"
+      ],
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-ec5f22120b5d",
+        "risk_model": "mock-zc-risk_model-9885a50c0862",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ]
+    },
+    "hard_wall": {
+      "query_id": "zc-baseline",
+      "status": "infeasible",
+      "reason": "no_path_in_declared_grid",
+      "algorithm": "astar",
+      "versions": {
+        "scene": "mock-zc-scene-7400e7d5b4d8",
+        "airspace": "mock-zc-airspace-aae542499e2d",
+        "risk_data": "mock-zc-risk_data-aff4bf402916",
+        "risk_model": "mock-zc-risk_model-9885a50c0862",
+        "planner_config": "mock-zc-planner_config-d9e44530e5c3"
+      },
+      "planned_at": "2026-11-04T00:00:00Z",
+      "departure": "2026-11-04T00:00:00Z",
+      "window": [
+        "2026-11-04T00:00:00Z",
+        "2026-11-04T00:10:00Z"
+      ],
+      "time_policy": "whole_window_conservative",
+      "search_scope": "finite_26_neighbor_grid",
+      "path": [],
+      "segments": [],
+      "metrics": null,
+      "arrival": null,
+      "expanded": 308,
+      "edge_checks": 6171,
+      "elapsed_ms": 16.42325000011624
+    }
+  },
+  "governance_policy_simulation": {
+    "self_publish_denied": true,
+    "dispatcher_publish_denied": true,
+    "independent_review_allowed": true
+  }
+}

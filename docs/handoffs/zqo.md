@@ -61,4 +61,4 @@ YHT/LJ实际接入已在下方本轮记录完成。若需要多任务窗服务�
 - 证据及复现：[本轮集成说明](../integration/zqo-evidence.md)、[整链路结果](../integration/results/five-module-zqo.json)、[完整审查](../integration/results/audit-after-zqo.json)、[模块日志](../integration/results/regression-zqo.json)。JSON记录开工基线与实际源码摘要。
 - 当前没有仍需其他成员修复的已登记阻塞代码项；各成员可引用本轮证据补充自己的最新集成记录。最终报告、PPT、参考资料整合及成员确认在整体内容复核后处理。
 
-本轮实质修复提交：`1630c27`（`fix(integration): preserve provenance and verify five-module releases`）。分支入口：[codex/zqo-traceability-integration](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-traceability-integration)。提交前再次fetch，远程仍为 `508ca3e`；本轮以分支交付，尚未合入 `main`。
+本轮实质修复提交：`1630c27`（`fix(integration): preserve provenance and verify five-module releases`）。分支入口：[codex/zqo-traceability-integration](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-traceability-integration)。提交前再次fetch，远程仍为 `508ca3e`；随后按用户要求快进合入共享 `main`，包含修复 `1630c27` 和交付索引 `0571aa5`。合入前远程仍为 `508ca3e`，没有新增冲突；代码与已验证版本一致。

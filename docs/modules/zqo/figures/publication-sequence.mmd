@@ -1,0 +1,17 @@
+sequenceDiagram
+  participant U as 空域维护与评审
+  participant D as 发布目录
+  participant Q as 航线查询
+  participant P as 规划与风险检查
+  U->>D: 提交候选发布和预期基线v1
+  Q->>D: 固定已提交发布v1
+  D-->>Q: 五类不可变输入
+  Q->>P: 按v1与任务窗计算
+  U->>D: 事务写入v2 审计 待发送事件
+  Note over D: 提交时原子切换当前指针
+  P-->>Q: v1结果
+  Q->>D: 用新读取核对当前发布
+  D-->>Q: 当前为v2
+  Note over Q: v1结果标记过时并保留历史
+  Q->>P: 用v2复核并重新规划
+  P-->>Q: v2结果和版本来源

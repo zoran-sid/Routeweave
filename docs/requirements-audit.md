@@ -51,3 +51,7 @@
 ## LQ当前覆盖证据（2026-11-05）
 
 已交付[风险设计](modules/lq/design.md)、[治理方案](modules/lq/governance.md)、[验证](modules/lq/evaluation.md)、[模块接口](modules/lq/integration.md)和[第5–6页PPT](modules/lq/slides/lq-risk-governance.pptx)。覆盖风险定义、质量与血缘、权限、审计、隐私与伦理，以及效率/风险权衡。19项风险测试与21项ZC回归通过；实际数据库鉴权、审计落库和总体发布事务未部署，不计作已验证。
+
+## ZQO当前覆盖证据（2026-11-05）
+
+已交付[发布与一致性设计](modules/zqo/design.md)、[总体架构及数据流](modules/zqo/architecture.md)、[评估](modules/zqo/evaluation.md)、[集成说明](modules/zqo/integration.md)和[第1–2页PPT](modules/zqo/slides/zqo-publication-architecture.pptx)。覆盖数据生命周期、更新一致性、发布审计、恢复取舍及端到端架构衔接。20项本地事务测试和LQ/ZC共40项回归通过；实际源存储、身份服务、消息投递与跨机恢复仍按部署设计验收。

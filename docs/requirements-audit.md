@@ -42,7 +42,7 @@
 
 ## YHT 当前覆盖证据（2026-11-05）
 
-已交付[场景与三维数据模型](modules/yht/design.md)、[存储与索引选型](modules/yht/storage.md)、[治理](modules/yht/governance.md)、[评估](modules/yht/evaluation.md)、[集成](modules/yht/integration.md)和[第3–4页PPT](modules/yht/slides/yht-data-model.pptx)。覆盖四类用户与 Q1/Q2 需求、五层三维数据模型、坐标/高度/时间/来源/质量口径、SQLite 3D R\*Tree 与全扫/2D/网格对照、12 类质量缺陷、动态更新、版本键缓存与 WAL 小实验、ZC/LQ 导出。31 项测试、三规模基准和跨模块检查已执行；PostGIS 实库、真实数据和生产级并发未执行，不计作已验证。
+已交付[场景与三维数据模型](modules/yht/design.md)、[存储与索引选型](modules/yht/storage.md)、[治理](modules/yht/governance.md)、[评估](modules/yht/evaluation.md)、[集成](modules/yht/integration.md)和[第3–4页PPT](modules/yht/slides/yht-data-model.pptx)。覆盖四类用户与 Q1/Q2 需求、五层三维数据模型、坐标/高度/时间/来源/质量口径、SQLite 3D R\*Tree 与全扫/2D/网格对照、12 类质量缺陷、动态更新、版本键缓存与 WAL 小实验、ZC/LQ 导出。37 项测试、三规模基准和跨模块检查已执行；PostGIS 实库、真实数据和生产级并发未执行，不计作已验证。最终集成复核的 YHT-01/02/03 已在 `42948c0` 上修复并通过 owner 审计，问题状态见 `docs/integration/issues.md`。
 
 ## ZC 当前覆盖证据（2026-11-05）
 

@@ -1,4 +1,4 @@
-﻿"""Export YHT exposure polygons as LQ profiles and run LQ's adapter.
+"""Export YHT exposure polygons as LQ profiles and run LQ's adapter.
 
 YHT owns geometry and provenance; LQ owns E, C and the whole-window maximum.
 The adapter keeps the mapping explicit: a zone's q must equal E*C, and the
@@ -7,6 +7,7 @@ a claim that the synthetic numbers are real risk probabilities.
 """
 from copy import deepcopy
 import json
+from math import isfinite
 from pathlib import Path
 import sys
 
@@ -19,12 +20,20 @@ import export_zc  # noqa: E402
 import yht_model  # noqa: E402
 
 
+def _unit_number(value):
+    return (isinstance(value, (int, float)) and not isinstance(value, bool)
+            and isfinite(value) and 0.0 <= value <= 1.0)
+
+
 def profiles_from_scene(s, z_top=120.0):
+    export_zc.require_exportable(s)
     profiles = []
     for zone in s["ground_zones"]:
         e, c, q = zone.get("exposure_e"), zone.get("consequence_c"), zone.get("q")
-        if None in (e, c, q):
-            continue
+        if not (_unit_number(e) and _unit_number(c) and _unit_number(q)):
+            raise ValueError("unknown_or_invalid_exposure:" + zone.get("id", "?"))
+        if abs(q - e * c) > 1e-9:
+            raise ValueError("inconsistent_exposure:" + zone.get("id", "?"))
         xs = [p[0] for p in zone["polygon"]]
         ys = [p[1] for p in zone["polygon"]]
         profiles.append({

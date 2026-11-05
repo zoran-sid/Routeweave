@@ -120,6 +120,20 @@ class QueryTest(unittest.TestCase):
         self.assertIn("building:B-010", low["blocked_by"])
         self.assertNotIn("building:B-010", high["blocked_by"])
 
+    def test_q1_height_limit_counts_vertical_buffer(self):
+        # HL-001 caps this area at 60 m; the 5 m corridor radius is part of
+        # the clearance, and contact at exactly 60 m remains clear.
+        s = m.scene()
+        s["buildings"] = []  # isolate the height cap from B-013
+        s = m.seal(s)
+        for z, expected in ((54.0, "clear"), (55.0, "clear"),
+                            (55.1, "blocked")):
+            r = q.query_corridor(s, [350, 120, z], [400, 120, z], 5.0,
+                                 WINDOW, s["versions"])
+            self.assertEqual(r["status"], expected, (z, r["blocked_by"]))
+            if expected == "blocked":
+                self.assertIn("airspace:HL-001", r["blocked_by"])
+
 
 class StoreTest(unittest.TestCase):
     def setUp(self):
@@ -230,6 +244,58 @@ class QualityTest(unittest.TestCase):
 
 
 class ExportTest(unittest.TestCase):
+    def test_zc_export_rejects_unknown_risk(self):
+        s = m.scene()
+        s["ground_zones"][0].update(q=None, exposure_e=None, consequence_c=None)
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError,
+                                    "unknown_or_invalid_exposure:G-001"):
+            export_zc.export_snapshot(
+                s, WINDOW, ((0, 0, 10), (450, 450, 120)),
+                (20, 20, 70), (420, 420, 70))
+
+    def test_lq_profiles_reject_unknown_risk(self):
+        s = m.scene()
+        s["ground_zones"][0].update(q=None, exposure_e=None, consequence_c=None)
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError,
+                                    "unknown_or_invalid_exposure:G-001"):
+            export_lq.profiles_from_scene(s)
+
+    def test_zc_export_rejects_incomplete_coverage(self):
+        s = m.scene()
+        s["coverage"][0]["complete"] = False
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError, "incomplete_coverage:T-00-00"):
+            export_zc.export_snapshot(
+                s, WINDOW, ((0, 0, 10), (450, 450, 120)),
+                (20, 20, 70), (420, 420, 70))
+
+    def test_zc_export_rejects_nonflat_terrain(self):
+        s = m.scene()
+        s["terrain"]["flat"] = False
+        s["terrain"]["z"] = 20.0
+        for post in s["terrain"]["posts"]:
+            post["z"] = 20.0
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError,
+                                    "unsupported_terrain:only_flat_supported"):
+            export_zc.export_snapshot(
+                s, WINDOW, ((0, 0, 10), (450, 450, 120)),
+                (20, 20, 70), (420, 420, 70))
+
+    def test_zc_export_rejects_nonzero_flat_base(self):
+        s = m.scene()
+        s["terrain"]["z"] = 20.0
+        for post in s["terrain"]["posts"]:
+            post["z"] = 20.0
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError,
+                                    "unsupported_terrain:zero_base_required"):
+            export_zc.export_snapshot(
+                s, WINDOW, ((0, 0, 10), (450, 450, 120)),
+                (20, 20, 70), (420, 420, 70))
+
     def test_export_binds_with_zc(self):
         s = m.seal(m.scene())
         with tempfile.TemporaryDirectory() as tmp:

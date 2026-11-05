@@ -9,9 +9,46 @@ ZC's preflight does not define. The ZC modules are imported only by
 from copy import deepcopy
 import importlib.util
 import json
+from math import isfinite
 from pathlib import Path
 
 ZC_KEYS = ("scene", "airspace", "risk_data", "risk_model", "planner_config")
+
+
+def _unit_number(value):
+    return (isinstance(value, (int, float)) and not isinstance(value, bool)
+            and isfinite(value) and 0.0 <= value <= 1.0)
+
+
+def require_exportable(s):
+    """Reject inputs the flat, complete ZC projection cannot represent.
+
+    Dropping an unknown zone would turn it into ``background_q``, and
+    claiming a complete/zero-terrain scene would hide a quality gap.  This
+    adapter has no unknown-zone channel, so it refuses instead.
+    """
+    terrain = s.get("terrain") or {}
+    if terrain.get("flat") is not True:
+        raise ValueError("unsupported_terrain:only_flat_supported")
+    z = terrain.get("z")
+    if not (isinstance(z, (int, float)) and not isinstance(z, bool)
+            and isfinite(z) and abs(z) <= 1e-9):
+        raise ValueError("unsupported_terrain:zero_base_required")
+    for post in terrain.get("posts", []):
+        post_z = post.get("z")
+        if not (isinstance(post_z, (int, float))
+                and not isinstance(post_z, bool)
+                and isfinite(post_z) and abs(post_z - z) <= 1e-9):
+            raise ValueError("unsupported_terrain:inconsistent_posts")
+    tiles = s.get("coverage") or []
+    if not tiles:
+        raise ValueError("incomplete_coverage:no_tiles")
+    incomplete = [t.get("id", "?") for t in tiles if t.get("complete") is not True]
+    if incomplete:
+        raise ValueError("incomplete_coverage:" + ",".join(incomplete))
+    for zone in s.get("ground_zones", []):
+        if not _unit_number(zone.get("q")):
+            raise ValueError("unknown_or_invalid_exposure:" + zone.get("id", "?"))
 
 
 def _clip_box(box, lo, hi):
@@ -30,6 +67,7 @@ def _polygon_box(poly, z0, z1):
 
 def export_snapshot(s, window, search_bounds, start, goal, query_id="yht-zc-1"):
     """Build a ZC-shaped snapshot and query; versions are placeholders."""
+    require_exportable(s)
     lo, hi = search_bounds
     obstacles = []
     for bld in s["buildings"]:

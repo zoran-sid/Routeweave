@@ -2,11 +2,11 @@
 
 ## 1. 已检查基线
 
-- 检查提交：`de2033a0b13296dcadd991e101a3bee3c1df4596`（LQ 模块交付），2026-11-05。
-- 已读：共同口径 `docs/scenario-contract.md`、课程要求、协作规则，以及五人交接记录。ZC、LQ 模块已交付；ZQO、LJ 仍为待开始，没有可供字段核对的共享内容实现或服务。
+- 检查提交：`42948c0f6d62a8746ba5ba30be2fb80130f0ca20`（最终集成复核记录，2026-11-05）；复核基线 `cc20db8` 叠加 ZC 输入校验修复，本模块在 `42948c0` 上完成 YHT-01/02/03 修复。
+- 已读：共同口径 `docs/scenario-contract.md`、课程要求、协作规则、五人交接记录，以及 `docs/integration/README.md`、`issues.md`、`audit.py`。五个模块均已交付；本模块与 ZC/LQ 的导出接口已实测，ZQO 发布与 LJ 验收的整链路联调仍由集成方推进。
 - 本模块所有场景、来源、暴露值均为合成数据，五类版本用 `mock-yht-*` 标识；没有把模拟值写成实测值。
 
-**模块可交付；与 ZC、LQ 的导出接口已实测，ZQO/LJ 接入待检查。** 已做的检查是：ZC 导出快照通过 ZC `preflight` 并得到可行航线；LQ profiles 通过 `compile_profiles` 编译后仍得到同一条航线；本模块 Q1/Q2 与索引/全扫结果一致；版本不一致返回 unknown。尚未与 ZQO 的发布服务和 LJ 的验收脚本做端到端联调。
+**模块可交付；YHT-01/02/03 已修复并通过 owner 审计，待复核。** 已做的检查是：ZC 导出快照通过 ZC `preflight` 并得到可行航线；LQ profiles 通过 `compile_profiles` 编译后仍得到同一条航线；本模块 Q1/Q2 与索引/全扫结果一致；未知风险、覆盖不完整和非法地形被导出层明确拒绝；限高走廊把垂直半径计入判定。尚未与 ZQO 的发布服务和 LJ 的验收脚本做端到端联调。
 
 ## 2. 可直接复用的输入输出
 
@@ -59,7 +59,8 @@ query_corridor(s, a, b, radius, window, versions, building_candidates=None, veri
 
 - 建筑 → ZC `obstacles[].box`，只保留与搜索域相交者；L 形 B-023 取轴对齐包围盒，保守。
 - 活动空域 → `airspace.restrictions[]`，裁剪到搜索域；`no_fly` 不带 `ceiling_m`，`height_limit` 带 `ceiling_m`。
-- 地面分区 → `risk_data.zones[]`，`q` 原样传递，背景 `0.02`；这是代理值，不是 LQ 的最终风险模型。
+- 地面分区 → `risk_data.zones[]`，`q` 原样传递，背景 `0.02`；这是代理值，不是 LQ 的最终风险模型。任一分区 `q` 不是 [0,1] 内的有限数时，导出抛 `ValueError`，不会跳过该分区变成背景低风险。
+- 覆盖不完整、地形非 `flat`、基面 `z != 0` 或地形点不一致时，导出抛 `ValueError`；只接受完整、零基面平地，不把输入改写成 `complete=True`/`terrain_z=0`。
 - `planner_config` 为 step 20/buffer 5/speed 10/lambda 0/length_scale 100，属于导出适配参数，不是 ZC 的默认值。
 - 源发布五版写入 `source_release`，ZC 五版由 `scenarios.bind` 生成，二者分开，便于追溯"从哪版 YHT 数据导出"。
 
@@ -68,8 +69,8 @@ query_corridor(s, a, b, radius, window, versions, building_candidates=None, veri
 `prototype/export_lq.py` 生成 `results/lq-export.json`：
 
 - 每个暴露分区 → 一个 LQ profile：`box` 为分区包围盒（z 0–120 m），`periods[0].valid` 取 YHT 发布有效期，`E`/`C` 原样传递。
+- `E`/`C`/`q` 缺失、越界或 `q != E×C` 时，`profiles_from_scene` 抛 `ValueError`。不跳过该分区，因为 LQ 会把未覆盖区域当作背景风险。
 - profile 的 `source` 使用分区 `source_id`；LQ 用它保留来源，不把来源合并成匿名值。
-- `q=E×C` 在 `yht_model` 中已是约束，`quality.check_scene` 会拒绝不满足的分区。
 - 调 `compile_profiles(snapshot, query, profiles)` 后重新绑定 ZC 五版，再跑 `preflight`/`plan`/`assess_segment`；输出同时保留 LQ 编译后的五版和原 YHT 五版。
 
 这层适配只证明字段、时段和版本能对齐；`E`/`C` 仍是合成假设，不能当成 LQ 的实测风险模型。
@@ -95,7 +96,7 @@ query_corridor(s, a, b, radius, window, versions, building_candidates=None, veri
 
 - 保留 `q=E×C` 的分解，用 LQ 自己的失效概率、影响范围和后果模型替换 `E`/`C` 的假设值，再按 LQ 的聚合方式重算；
 - 保持分区互斥且覆盖全域，否则查询返回 unknown；
-- 若 `q` 或 `E`/`C` 变为 null，本模块查询按 unknown 处理，不默认安全；
+- 若 `q` 或 `E`/`C` 变为 null，本模块查询按 unknown 处理，导出层直接 `ValueError`；两条路径都不默认安全；
 - 不把 YHT 的 `quality=derived` 当成 LQ 模型的可信度评级；
 - LQ profile 的 `box` 用分区包围盒，不是精确多边形；若 LQ 改为精确几何，应重跑边界反例。
 
@@ -114,7 +115,11 @@ query_corridor(s, a, b, radius, window, versions, building_candidates=None, veri
 
 | 检查 | 命令/位置 | 结果 |
 | --- | --- | --- |
-| 本模块 31 项测试 | `python3 -m unittest discover -s docs/modules/yht/prototype -v` | 全部通过 |
+| 本模块 37 项测试 | `python3 -m unittest discover -s docs/modules/yht/prototype -v` | 全部通过 |
+| 未知风险导出拒绝 | `audit.py --owner YHT` 的 YHT-01 | ZC/LQ 两个入口分别抛 `ValueError:unknown_or_invalid_exposure:G-001` |
+| 不完整覆盖导出拒绝 | 同上，YHT-02 | `ValueError:incomplete_coverage:T-00-00` |
+| 非平地导出拒绝 | 同上，YHT-02 | `ValueError:unsupported_terrain:only_flat_supported` |
+| 限高缓冲 | 同上，YHT-03 | YHT `blocked`，ZC `forbidden`；58 m + 5 m > 60 m |
 | 索引与全扫一致 | `evaluate.py` 的 `signature_mismatches` | 200/800/2,400 规模均为 0 |
 | ZC preflight | `export_zc.bind_and_check` | 返回 None |
 | ZC 规划 | 同上 | feasible，612.5483 m |
@@ -138,7 +143,7 @@ query_corridor(s, a, b, radius, window, versions, building_candidates=None, veri
 ## 6. 已知缺口
 
 - 没有与 ZQO 的实际发布服务、LJ 的验收脚本联调；LQ 只做了 `compile_profiles` 的进程内适配检查，没有调用其真实风险服务或审批流程。
-- 没有实现缓存、并发、认证和审计落盘；接口只返回审计所需字段。
+- 缓存是单进程版本键 LRU，WAL 只验证读写并发；没有跨进程缓存一致性、认证和审计落盘。查询接口只返回审计所需字段。
 - 地形只有平地变体；起伏地形、真实坐标系转换和高度基准修正未验证。
 - L 形/凹多边形在 ZC 导出中退化为包围盒；精确三维布尔运算未实现。
 - 数据许可只覆盖合成数据；接入真实数据前需逐源核对。

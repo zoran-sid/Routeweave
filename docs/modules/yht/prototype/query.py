@@ -193,7 +193,12 @@ def query_segment(s, a, b, window, versions, building_candidates=None,
 
 def query_corridor(s, a, b, radius, window, versions, building_candidates=None,
                    verify=True):
-    """Q1: clearance of a straight 3D corridor with horizontal/vertical radius."""
+    """Q1: clearance of a straight 3D corridor with horizontal/vertical radius.
+
+    A height cap applies to the horizontal area at any altitude; the check
+    compares the highest centerline point plus the vertical radius against the
+    cap, matching ZC's ``buffer_m`` semantics.
+    """
     if not (isfinite(radius) and radius >= 0):
         raise ValueError("radius must be finite and non-negative")
     try:
@@ -250,9 +255,15 @@ def query_corridor(s, a, b, radius, window, versions, building_candidates=None,
             if not _active(vol, window):
                 continue
             d2 = segment_polygon_distance_2d(a, b, vol["footprint"])
-            vertical_gap = max(vol["floor_z"] - zhi, zlo - vol["ceiling_z"], 0.0)
-            if d2 > radius + 1e-9 or vertical_gap > radius + 1e-9:
+            if d2 > radius + 1e-9:
                 continue
+            if vol["kind"] == "no_fly":
+                # The volume is three-dimensional, so the corridor must also
+                # overlap its vertical range.
+                vertical_gap = max(vol["floor_z"] - zhi,
+                                   zlo - vol["ceiling_z"], 0.0)
+                if vertical_gap > radius + 1e-9:
+                    continue
             effect = "clearance_hit"
             close = False
             if vol["kind"] == "no_fly":
@@ -261,7 +272,9 @@ def query_corridor(s, a, b, radius, window, versions, building_candidates=None,
                 if vol.get("ceiling_m") is None:
                     unknown.append("unknown_ceiling:" + vol["id"])
                     effect = "unknown"
-                elif zhi > vol["ceiling_m"] + EPS:
+                elif zhi + radius > vol["ceiling_m"] + EPS:
+                    # Match ZC: the height cap is checked against the highest
+                    # point plus the full safety envelope; equality is clear.
                     close = True
             if close:
                 blocked.append("airspace:" + vol["id"])

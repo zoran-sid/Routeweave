@@ -18,18 +18,18 @@ python3 docs/modules/yht/prototype/evaluate.py
 
 ## 2. 功能正确性
 
-31 项单元测试全部通过（`exit=0`）。分组如下：
+37 项单元测试全部通过（`exit=0`）。分组如下：
 
 | 组 | 数量 | 覆盖 |
 | --- | ---: | --- |
 | 几何 | 5 | 平地格网、版本/清单、环闭合与自交、线段–盒距离、缺高度建筑命中 |
 | Q2 | 6 | 允许、建筑命中、限高、限高以下、禁飞激活、版本不一致 |
-| Q1 | 3 | 净空、命中、垂直净空差异 |
+| Q1 | 4 | 净空、命中、垂直净空差异、限高垂直半径边界 |
 | 存储 | 5 | 统计与 R\*Tree 查询计划、Q2/Q1 与全扫一致、2D 候选保守性、WAL 读写 |
 | 质量 | 5 | 基线干净、12 类故障、缺高度、覆盖不完整、变异后查询 |
 | 网格 | 1 | 网格索引与全扫一致 |
 | 缓存 | 3 | 命中/深拷贝、版本失效、LRU 淘汰 |
-| 跨模块 | 3 | 导出快照通过 ZC preflight 并得到可行航线；LQ profiles 的 E/C 形状；LQ 适配器规划 |
+| 跨模块 | 8 | ZC 快照 preflight/规划、LQ profile 形状、LQ 适配器规划；未知风险/覆盖不完整/非平地/非零基面拒绝（ZC 与 LQ 分别验证） |
 
 各查询示例的实测状态（窗口 08:05–08:15Z）：
 
@@ -44,6 +44,18 @@ python3 docs/modules/yht/prototype/evaluate.py
 | Q1 阻断 | `[20,20,80]`→`[240,220,80]`，r=20 m | `blocked` | `building:B-001`、`airspace:NF-002` |
 
 这些例子证明三维避障（建筑）、限高（HL-001）、禁飞（NF-002）、不可行/阻断、版本不一致五类语义都按设计返回。原始响应见 [results/query-examples.json](results/query-examples.json)。
+
+### 2.1 最终集成回归（YHT-01/02/03）
+
+在 `42948c0` 的复核基线上修复并复测三项，命令为 `python3 -B docs/integration/audit.py --owner YHT`，三项均通过：
+
+| 编号 | 修复前实际 | 修复后实际 |
+| --- | --- | --- |
+| YHT-01 | 未知 q 的分区被丢掉，下游返回 `allowed`、背景 `q_max=0.02` | ZC 与 LQ 两个入口都抛 `ValueError:unknown_or_invalid_exposure:G-001`，不默认背景 |
+| YHT-02 | 不完整覆盖/非平地被写成 `complete=True`、`terrain_z=0.0`，preflight 通过 | 分别抛 `ValueError:incomplete_coverage:T-00-00` 与 `unsupported_terrain:only_flat_supported` |
+| YHT-03 | 58 m 中心线、5 m 半径、60 m 限高被判 `clear` | YHT `blocked`，ZC `forbidden`；54/55 m 仍为 `clear`，55.1 m 起阻断，接触边界与 ZC 一致 |
+
+`test_yht.py` 增加了上述正常、异常和边界用例；完整平地、已知 q 的基线导出仍通过 ZC `preflight`、A\* 和 LQ 编译。
 
 ## 3. 索引基准
 

@@ -10,6 +10,8 @@
 | 展示 | 第1–2页PPT与讲稿已完成 |
 | 集成 | 已实际接入LQ与ZC；YHT、LJ以模拟输入及接入约定衔接 |
 
+交付分支：[codex/zqo-publication-architecture](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-publication-architecture)。技术成果提交为 `130f7b0`，已推送，尚未合入共享 `main`。
+
 ## 本轮读取与技术决定
 
 读取共享主线 `de2033a0b13296dcadd991e101a3bee3c1df4596`，涵盖课程要求、共同场景、协作规则、五人交接，以及LQ/ZC的设计、接口、代码与评估。提交前再次检查远程，基线未变化。

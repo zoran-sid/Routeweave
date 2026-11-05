@@ -2,6 +2,8 @@
 
 日期：2026-11-05（Asia/Shanghai）。起始工作区干净，从 `cc20db8` 快进至远程 `508ca3e`，在 `codex/zqo-traceability-integration` 完成修复。已读取课程要求、共同约定、五人交接、集成问题和对应实现；本轮复用 YHT `81bd270`、ZC `0c2cb23` 与 LJ `508ca3e` 的修复。结果中的 `baseline` 是开工提交，`source_sha256` 标识实际运行的源码；历史 JSON、性能实验和 PPT 保留原基线。
 
+修复与整链路提交：[`1630c27`](https://github.com/zoran-sid/Routeweave/commit/1630c27)。分支为 `codex/zqo-traceability-integration`，尚未合入 `main`。
+
 ## 1. 发布追溯修复
 
 | 情境 | 当前结果 | 证据 |

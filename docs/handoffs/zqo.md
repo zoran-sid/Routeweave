@@ -60,3 +60,5 @@ YHT/LJ实际接入已在下方本轮记录完成。若需要多任务窗服务�
 - 验证：ZQO31、YHT37、LQ19、ZC24、LJ15，共126项回归通过；`audit.py --owner ZQO`通过，完整7项审查通过；整链路11项判据通过。正常/更新/撤销均为612.5483米，更新改变实际路径及风险代理，撤销恢复原路径。
 - 证据及复现：[本轮集成说明](../integration/zqo-evidence.md)、[整链路结果](../integration/results/five-module-zqo.json)、[完整审查](../integration/results/audit-after-zqo.json)、[模块日志](../integration/results/regression-zqo.json)。JSON记录开工基线与实际源码摘要。
 - 当前没有仍需其他成员修复的已登记阻塞代码项；各成员可引用本轮证据补充自己的最新集成记录。最终报告、PPT、参考资料整合及成员确认在整体内容复核后处理。
+
+本轮实质修复提交：`1630c27`（`fix(integration): preserve provenance and verify five-module releases`）。分支入口：[codex/zqo-traceability-integration](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-traceability-integration)。提交前再次fetch，远程仍为 `508ca3e`；本轮以分支交付，尚未合入 `main`。

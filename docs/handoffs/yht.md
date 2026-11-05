@@ -1,48 +1,51 @@
 # YHT 的工作记录
 
-项目：SkyRoute。最后更新：2026-11-04（Asia/Hong_Kong）。
+项目：SkyRoute。最后更新：2026-11-05（Asia/Shanghai）。
 
-| 项目 | 当前安排 |
+| 项目 | 当前状态 |
 | --- | --- |
 | 成员 | YHT，成员4 |
 | 负责方向 | 场景需求与三维数据建模 |
-| 展示安排 | PPT 第3–4页 |
-| 技术成果状态 | 待开始 |
+| 展示安排 | PPT 第3–4页，已提供两页可编辑PPT及讲稿 |
+| 技术成果状态 | 模块可交付 |
+| 集成状态 | 与 ZC、LQ 的导出接口已实测；ZQO/LJ 实际成果待接入检查 |
 
-## 主要职责
+## 已完成成果
 
-- 梳理配送场景、目标用户和核心查询需求，明确模拟城市片区的研究范围。
-- 组织建筑、地形、空域和地面暴露数据，说明坐标、高度、时间、来源与质量问题。
-- 自主形成三维数据模型和合成样例，研究并选择适用的空间存储、索引和访问方式，验证典型查询与质量处理。
+- [模块入口](../modules/yht/README.md)：需求、数据模型、存储选型、评估、PPT 与复现方式。
+- [设计](../modules/yht/design.md)：用户与 Q1/Q2 需求、合成片区、坐标/高度/时间口径、五层数据模型、对象约束、版本与质量规则、YHT-D1..D11。
+- [存储与索引](../modules/yht/storage.md)：PostGIS/MongoDB/Neo4j/Elasticsearch/SQLite R\*Tree/网格的候选比较，SQLite 三维 R\*Tree 实现，2,400 栋基准与生产演进路径。
+- [治理](../modules/yht/governance.md)：数据分类、生命周期、来源与血缘、质量门禁、隐私伦理、访问控制、保留与缺口。
+- [评估](../modules/yht/evaluation.md)：31 项测试、200 条查询的三规模基准、缓存/WAL 小实验、12 类故障注入、更新实例、ZC/LQ 导出实测与未执行评估。
+- [集成](../modules/yht/integration.md)：字段映射、五版与清单、Q1/Q2 接口、ZC/LQ 导出约束、ZQO/LJ 接入检查及发布走查。
+- [两页PPT](../modules/yht/slides/yht-data-model.pptx)与[讲稿](../modules/yht/slides/notes.md)：对应第3–4页。
+- [原型](../modules/yht/prototype/)（`yht_model.py`、`query.py`、`store.py`、`cache.py`、`quality.py`、`export_zc.py`、`export_lq.py`、`evaluate.py`、`test_yht.py`）与[原始结果](../modules/yht/results/)；原生合成场景样例见[scene.json](../modules/yht/results/scene.json)。
+- [参考文献](../modules/yht/references.md)。
 
-## 交付与协作
+## 已执行验证
 
-主要交付：需求与数据模型、存储/索引选型、模拟样例及验证说明，配套2页 PPT。
+在仓库根目录运行：
 
-协作关系：向 LQ 提供风险输入与质量说明，向 ZC 提供空间表示和样例，与 ZQO 对齐数据组织及版本字段。
+    python3 -m unittest discover -s docs/modules/yht/prototype -v
+    python3 docs/modules/yht/prototype/evaluate.py
 
-独立起点：从项目说明提取需求和三类数据，依据 starter-v0 创建概念/逻辑模型与合成场景，自行比较并选择存储和索引方案，形成验证说明。
+31 项测试通过。200/800/2,400 栋三个规模、120 条 Q1 + 80 条 Q2 上，索引与全扫的状态/命中完全一致；Q2 中位耗时 0.985/3.680/10.390 ms 降至 0.0767/0.0768/0.0794 ms，Q1 为 7.690/39.540/122.936 ms 降至 0.148/0.159/0.155 ms。12 类故障全部检出；缺高度、覆盖不完整、版本不一致均返回 unknown。查询缓存热命中中位 17.5 µs（冷 602.1 µs），版本换代后 1 次 miss；SQLite WAL 下读事务可在写事务期间继续读。ZC 导出通过 preflight，A\* 得到 612.5483 m、61.2548 s 的可行航线，同快照直线航段被 B-001 阻断。LQ 适配器把 6 个分区编译成 profile 后，仍得到同一条 612.5483 m 航线、risk_proxy 4.2120；q 最大 0.82，未触发 0.9 硬阈值。以上均为单机合成数据结果，未测真实数据、PostGIS 实库和生产级并发。
 
-成果入口：首次工作时创建 `docs/modules/yht/README.md`，图表、样例和验证材料放在同目录。
+PPT 共 2 页，含可编辑表格和图表，逐页渲染检查；未代填成员认可、贡献比例或课程签字。
 
-后续对齐：读取 ZQO 的版本发布与更新需求、LQ 的风险输入、ZC 的空间访问需求，按实际差异修订本模块。
+## 本轮协作记录
 
-## AI 自主完成范围
+- 已检查提交：`de2033a0b13296dcadd991e101a3bee3c1df4596`（LQ 模块交付）。ZC、LQ 已交付并读取其设计与原型；ZQO、LJ 交接仍为待开始，无共享实现可核对。
+- 已复用：`starter-v0`、五类版本键、Q1/Q2 状态语义、ZC 的 snapshot 与 preflight 约束、LQ 的 `compile_profiles`/`q=E×C` 口径、课程报告与 PPT 要求。
+- 技术决定：YHT-D1..D11 见[决策表](../modules/yht/design.md#9-设计决策)，覆盖内部格式、几何表示、版本/质量、查询语义、覆盖/地形、存储索引与 ZC/LQ 导出。
+- 跨模块影响：向 ZC 提供可直接加载的快照与 `source_release`；向 LQ 提供带 `E`/`C` 的暴露 profile；向 ZQO 提供五版/清单字段；向 LJ 提供 `status/reasons/versions/coverage` 审计字段。未修改其他成员的工作记录和共同口径。
+- 未做：真实数据接入、地形起伏、PostGIS 实库对照、生产级并发/跨进程缓存一致性、LQ 最终风险模型替换。均列入评估“未执行”表。
 
-自行研究、比较并决定：需求与数据模型、合成场景、存储和索引方案、数据质量规则；用典型查询或规则走查验证。
+## 可供其他成员使用
 
-即使其他成员尚未提交，也应补齐最小模拟输入，完成本模块的方案、决定依据与验证说明。读取新成果后主动检查和修订，记录核对的版本；无需等待 ZQO 或其他成员批准。详细规则见 [AI 自主研究与协作](../agent-collaboration.md)。
-
-## 本轮协作状态
-
-- 已检查提交：尚未开始技术工作；首次工作时记录读取的提交号。
-- 已复用的其他模块成果：暂无。
-- 技术决定与假设：尚未开展研究；后续记录选择、证据、适用范围与状态。
-- 集成检查：尚未开始；后续由执行检查的 AI 记录所读版本、差异、修订及剩余问题。
-- 可供其他 agent 使用的输出：暂无，完成初稿后补充相对链接与适用条件。
-
-## 成果记录
-
-暂无技术成果记录。完成后补充成果路径、依据、验证结果及下一步，可参考 [记录模板](TEMPLATE.md)。
+- ZC：`results/zc-export.json` 可直接绑定；L 形建筑取包围盒，搜索域外建筑不导出。
+- LQ：`results/lq-export.json` 含 6 个 profile（`box/periods/E/C`）和 LQ 编译后的规划结果；`q=E×C` 是暴露代理，不是事故概率；替换时应保持分区互斥覆盖，缺 q 返回 unknown。
+- ZQO：`versions/manifest` 是内容身份，不是签名；发布审批和清单原子切换需在 ZQO 侧实现。
+- LJ：Q1/Q2 返回 `status/reasons/versions/coverage/candidates/checked`，可作验收与审计输入。
 
 任务依据：[项目说明](../project-brief.md)、[共同场景约定](../scenario-contract.md)、[五人分工](../team-tasks.md)、[课程要求全文](../course-requirements.md)、[异步协作](../agent-collaboration.md)、[AI 协作指南](../../AGENTS.md)。

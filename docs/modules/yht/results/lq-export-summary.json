@@ -1,0 +1,38 @@
+{
+  "edge_checks": 8745,
+  "elapsed_ms": 124.8672999208793,
+  "error": null,
+  "expanded": 355,
+  "metrics": {
+    "cost": 6.125483399593904,
+    "length_m": 612.5483399593904,
+    "risk_proxy": 4.212039389842509,
+    "time_s": 61.254833995939045
+  },
+  "plan_status": "feasible",
+  "preflight": null,
+  "profiles": 6,
+  "q2_assess": {
+    "reason": "obstacle:B-001",
+    "state": "forbidden",
+    "versions": {
+      "airspace": "mock-zc-airspace-cb07bb0ce00a",
+      "planner_config": "mock-zc-planner_config-7a5401d99a47",
+      "risk_data": "mock-zc-risk_data-ad7b18ac21a5",
+      "risk_model": "mock-zc-risk_model-49d12dce7e6e",
+      "scene": "mock-zc-scene-2007a8f82b6c"
+    },
+    "window": [
+      "2026-11-05T08:05:00Z",
+      "2026-11-05T08:15:00Z"
+    ]
+  },
+  "reason": "optimal_on_known_allowed_grid",
+  "versions": {
+    "airspace": "mock-zc-airspace-cb07bb0ce00a",
+    "planner_config": "mock-zc-planner_config-7a5401d99a47",
+    "risk_data": "mock-zc-risk_data-ad7b18ac21a5",
+    "risk_model": "mock-zc-risk_model-49d12dce7e6e",
+    "scene": "mock-zc-scene-2007a8f82b6c"
+  }
+}

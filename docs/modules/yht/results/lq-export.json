@@ -1,0 +1,963 @@
+{
+  "profiles": [
+    {
+      "box": [
+        [
+          0,
+          0,
+          0.0
+        ],
+        [
+          300,
+          300,
+          120.0
+        ]
+      ],
+      "id": "G-001",
+      "periods": [
+        {
+          "C": 0.8,
+          "E": 0.975,
+          "valid": [
+            "2026-11-05T08:00:00Z",
+            "2026-11-05T09:00:00Z"
+          ]
+        }
+      ],
+      "source": "SRC-EXPOSURE"
+    },
+    {
+      "box": [
+        [
+          300,
+          0,
+          0.0
+        ],
+        [
+          600,
+          300,
+          120.0
+        ]
+      ],
+      "id": "G-002",
+      "periods": [
+        {
+          "C": 0.6,
+          "E": 0.75,
+          "valid": [
+            "2026-11-05T08:00:00Z",
+            "2026-11-05T09:00:00Z"
+          ]
+        }
+      ],
+      "source": "SRC-EXPOSURE"
+    },
+    {
+      "box": [
+        [
+          0,
+          300,
+          0.0
+        ],
+        [
+          300,
+          450,
+          120.0
+        ]
+      ],
+      "id": "G-003",
+      "periods": [
+        {
+          "C": 0.2,
+          "E": 0.3,
+          "valid": [
+            "2026-11-05T08:00:00Z",
+            "2026-11-05T09:00:00Z"
+          ]
+        }
+      ],
+      "source": "SRC-EXPOSURE"
+    },
+    {
+      "box": [
+        [
+          300,
+          300,
+          0.0
+        ],
+        [
+          600,
+          450,
+          120.0
+        ]
+      ],
+      "id": "G-004",
+      "periods": [
+        {
+          "C": 0.8,
+          "E": 0.6875,
+          "valid": [
+            "2026-11-05T08:00:00Z",
+            "2026-11-05T09:00:00Z"
+          ]
+        }
+      ],
+      "source": "SRC-EXPOSURE"
+    },
+    {
+      "box": [
+        [
+          0,
+          450,
+          0.0
+        ],
+        [
+          300,
+          600,
+          120.0
+        ]
+      ],
+      "id": "G-005",
+      "periods": [
+        {
+          "C": 0.9,
+          "E": 0.9111111111111111,
+          "valid": [
+            "2026-11-05T08:00:00Z",
+            "2026-11-05T09:00:00Z"
+          ]
+        }
+      ],
+      "source": "SRC-EXPOSURE"
+    },
+    {
+      "box": [
+        [
+          300,
+          450,
+          0.0
+        ],
+        [
+          600,
+          600,
+          120.0
+        ]
+      ],
+      "id": "G-006",
+      "periods": [
+        {
+          "C": 0.8,
+          "E": 0.4,
+          "valid": [
+            "2026-11-05T08:00:00Z",
+            "2026-11-05T09:00:00Z"
+          ]
+        }
+      ],
+      "source": "SRC-EXPOSURE"
+    }
+  ],
+  "query": {
+    "departure": "2026-11-05T08:05:00Z",
+    "goal": [
+      420.0,
+      420.0,
+      70.0
+    ],
+    "id": "yht-lq-1",
+    "planned_at": "2026-11-05T08:05:00Z",
+    "start": [
+      20.0,
+      20.0,
+      70.0
+    ],
+    "versions": {},
+    "window": [
+      "2026-11-05T08:05:00Z",
+      "2026-11-05T08:15:00Z"
+    ]
+  },
+  "report": {
+    "adapter": "LQ compile_profiles",
+    "lq_versions": {
+      "airspace": "mock-zc-airspace-cb07bb0ce00a",
+      "planner_config": "mock-zc-planner_config-7a5401d99a47",
+      "risk_data": "mock-zc-risk_data-ad7b18ac21a5",
+      "risk_model": "mock-zc-risk_model-49d12dce7e6e",
+      "scene": "mock-zc-scene-2007a8f82b6c"
+    },
+    "plan": {
+      "algorithm": "astar",
+      "arrival": "2026-11-05T08:06:01.254834+00:00",
+      "departure": "2026-11-05T08:05:00Z",
+      "edge_checks": 8745,
+      "elapsed_ms": 124.8672999208793,
+      "expanded": 355,
+      "metrics": {
+        "cost": 6.125483399593904,
+        "length_m": 612.5483399593904,
+        "risk_proxy": 4.212039389842509,
+        "time_s": 61.254833995939045
+      },
+      "path": [
+        [
+          20.0,
+          20.0,
+          70.0
+        ],
+        [
+          40.0,
+          20.0,
+          70.0
+        ],
+        [
+          60.0,
+          20.0,
+          70.0
+        ],
+        [
+          80.0,
+          20.0,
+          70.0
+        ],
+        [
+          100.0,
+          20.0,
+          70.0
+        ],
+        [
+          120.0,
+          40.0,
+          70.0
+        ],
+        [
+          140.0,
+          60.0,
+          70.0
+        ],
+        [
+          160.0,
+          80.0,
+          70.0
+        ],
+        [
+          180.0,
+          100.0,
+          70.0
+        ],
+        [
+          200.0,
+          120.0,
+          70.0
+        ],
+        [
+          220.0,
+          140.0,
+          70.0
+        ],
+        [
+          240.0,
+          160.0,
+          70.0
+        ],
+        [
+          260.0,
+          180.0,
+          70.0
+        ],
+        [
+          280.0,
+          200.0,
+          70.0
+        ],
+        [
+          300.0,
+          220.0,
+          70.0
+        ],
+        [
+          320.0,
+          240.0,
+          70.0
+        ],
+        [
+          340.0,
+          260.0,
+          70.0
+        ],
+        [
+          360.0,
+          280.0,
+          70.0
+        ],
+        [
+          360.0,
+          300.0,
+          70.0
+        ],
+        [
+          380.0,
+          320.0,
+          70.0
+        ],
+        [
+          380.0,
+          340.0,
+          70.0
+        ],
+        [
+          400.0,
+          360.0,
+          70.0
+        ],
+        [
+          400.0,
+          380.0,
+          70.0
+        ],
+        [
+          400.0,
+          400.0,
+          70.0
+        ],
+        [
+          420.0,
+          420.0,
+          70.0
+        ]
+      ],
+      "planned_at": "2026-11-05T08:05:00Z",
+      "query_id": "yht-lq-1",
+      "reason": "optimal_on_known_allowed_grid",
+      "search_scope": "finite_26_neighbor_grid",
+      "segments": [
+        {
+          "cost": 0.2,
+          "from": [
+            20.0,
+            20.0,
+            70.0
+          ],
+          "length_m": 20.0,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.15600000000000003,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.0,
+          "to": [
+            40.0,
+            20.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.2,
+          "from": [
+            40.0,
+            20.0,
+            70.0
+          ],
+          "length_m": 20.0,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.15600000000000003,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.0,
+          "to": [
+            60.0,
+            20.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.2,
+          "from": [
+            60.0,
+            20.0,
+            70.0
+          ],
+          "length_m": 20.0,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.15600000000000003,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.0,
+          "to": [
+            80.0,
+            20.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.2,
+          "from": [
+            80.0,
+            20.0,
+            70.0
+          ],
+          "length_m": 20.0,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.15600000000000003,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.0,
+          "to": [
+            100.0,
+            20.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            100.0,
+            20.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            120.0,
+            40.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            120.0,
+            40.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            140.0,
+            60.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            140.0,
+            60.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            160.0,
+            80.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            160.0,
+            80.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            180.0,
+            100.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            180.0,
+            100.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            200.0,
+            120.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            200.0,
+            120.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            220.0,
+            140.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            220.0,
+            140.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            240.0,
+            160.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            240.0,
+            160.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            260.0,
+            180.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            260.0,
+            180.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            280.0,
+            200.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            280.0,
+            200.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001",
+            "G-002"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            300.0,
+            220.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            300.0,
+            220.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.78,
+          "reason": "checked",
+          "risk_proxy": 0.22061731573020282,
+          "sources": [
+            "background",
+            "G-001",
+            "G-002"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            320.0,
+            240.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            320.0,
+            240.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.44999999999999996,
+          "reason": "checked",
+          "risk_proxy": 0.12727922061357855,
+          "sources": [
+            "background",
+            "G-002"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            340.0,
+            260.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            340.0,
+            260.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.44999999999999996,
+          "reason": "checked",
+          "risk_proxy": 0.12727922061357855,
+          "sources": [
+            "background",
+            "G-002"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            360.0,
+            280.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.2,
+          "from": [
+            360.0,
+            280.0,
+            70.0
+          ],
+          "length_m": 20.0,
+          "q_max": 0.55,
+          "reason": "checked",
+          "risk_proxy": 0.11000000000000001,
+          "sources": [
+            "background",
+            "G-002",
+            "G-004"
+          ],
+          "state": "allowed",
+          "time_s": 2.0,
+          "to": [
+            360.0,
+            300.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            360.0,
+            300.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.55,
+          "reason": "checked",
+          "risk_proxy": 0.15556349186104046,
+          "sources": [
+            "background",
+            "G-002",
+            "G-004"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            380.0,
+            320.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.2,
+          "from": [
+            380.0,
+            320.0,
+            70.0
+          ],
+          "length_m": 20.0,
+          "q_max": 0.55,
+          "reason": "checked",
+          "risk_proxy": 0.11000000000000001,
+          "sources": [
+            "background",
+            "G-004"
+          ],
+          "state": "allowed",
+          "time_s": 2.0,
+          "to": [
+            380.0,
+            340.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            380.0,
+            340.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.55,
+          "reason": "checked",
+          "risk_proxy": 0.15556349186104046,
+          "sources": [
+            "background",
+            "G-004"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            400.0,
+            360.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.2,
+          "from": [
+            400.0,
+            360.0,
+            70.0
+          ],
+          "length_m": 20.0,
+          "q_max": 0.55,
+          "reason": "checked",
+          "risk_proxy": 0.11000000000000001,
+          "sources": [
+            "background",
+            "G-004"
+          ],
+          "state": "allowed",
+          "time_s": 2.0,
+          "to": [
+            400.0,
+            380.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.2,
+          "from": [
+            400.0,
+            380.0,
+            70.0
+          ],
+          "length_m": 20.0,
+          "q_max": 0.55,
+          "reason": "checked",
+          "risk_proxy": 0.11000000000000001,
+          "sources": [
+            "background",
+            "G-004"
+          ],
+          "state": "allowed",
+          "time_s": 2.0,
+          "to": [
+            400.0,
+            400.0,
+            70.0
+          ]
+        },
+        {
+          "cost": 0.282842712474619,
+          "from": [
+            400.0,
+            400.0,
+            70.0
+          ],
+          "length_m": 28.284271247461902,
+          "q_max": 0.55,
+          "reason": "checked",
+          "risk_proxy": 0.15556349186104046,
+          "sources": [
+            "background",
+            "G-004"
+          ],
+          "state": "allowed",
+          "time_s": 2.8284271247461903,
+          "to": [
+            420.0,
+            420.0,
+            70.0
+          ]
+        }
+      ],
+      "status": "feasible",
+      "time_policy": "whole_window_conservative",
+      "versions": {
+        "airspace": "mock-zc-airspace-cb07bb0ce00a",
+        "planner_config": "mock-zc-planner_config-7a5401d99a47",
+        "risk_data": "mock-zc-risk_data-ad7b18ac21a5",
+        "risk_model": "mock-zc-risk_model-49d12dce7e6e",
+        "scene": "mock-zc-scene-2007a8f82b6c"
+      },
+      "window": [
+        "2026-11-05T08:05:00Z",
+        "2026-11-05T08:15:00Z"
+      ]
+    },
+    "preflight": null,
+    "profiles": 6,
+    "q2_assess": {
+      "reason": "obstacle:B-001",
+      "state": "forbidden",
+      "versions": {
+        "airspace": "mock-zc-airspace-cb07bb0ce00a",
+        "planner_config": "mock-zc-planner_config-7a5401d99a47",
+        "risk_data": "mock-zc-risk_data-ad7b18ac21a5",
+        "risk_model": "mock-zc-risk_model-49d12dce7e6e",
+        "scene": "mock-zc-scene-2007a8f82b6c"
+      },
+      "window": [
+        "2026-11-05T08:05:00Z",
+        "2026-11-05T08:15:00Z"
+      ]
+    }
+  },
+  "schema": "yht-lq-export-0.1",
+  "search_bounds": [
+    [
+      0.0,
+      0.0,
+      10.0
+    ],
+    [
+      450.0,
+      450.0,
+      120.0
+    ]
+  ],
+  "source_release": {
+    "manifest": {
+      "content_hash": "da02139a98b6",
+      "counts": {
+        "airspace": 3,
+        "buildings": 25,
+        "coverage_tiles": 36,
+        "ground_zones": 6,
+        "terrain_posts": 961
+      },
+      "created_at": "2026-11-05T08:00:00Z",
+      "owner": "YHT",
+      "scene_id": "yht-synthetic-district-v1",
+      "schema": "yht-scene-0.1"
+    },
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    }
+  },
+  "window": {
+    "end": "2026-11-05T08:15:00Z",
+    "start": "2026-11-05T08:05:00Z"
+  }
+}

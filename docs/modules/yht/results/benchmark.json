@@ -1,0 +1,414 @@
+{
+  "meta": {
+    "environment": {
+      "platform": "Windows-11-10.0.26300-SP0",
+      "processes": 1,
+      "python": "3.12.14",
+      "sqlite": "3.53.1"
+    },
+    "generated_at": "2026-11-05T04:32:57.428434+00:00",
+    "methods": [
+      "bruteforce",
+      "sqlite_2d_z",
+      "sqlite_3d",
+      "grid_3d"
+    ],
+    "note": "in-process wall clock; release integrity is verified once per scene load and query timing excludes re-hashing; includes Python geometry re-check; not a DB server benchmark",
+    "queries": {
+      "corridor": 120,
+      "radius_m": 15.0,
+      "repeats": 5,
+      "segment": 80
+    },
+    "scales": [
+      200,
+      800,
+      2400
+    ],
+    "window": {
+      "end": "2026-11-05T08:15:00Z",
+      "start": "2026-11-05T08:05:00Z"
+    }
+  },
+  "results": [
+    {
+      "buildings": 200,
+      "methods": {
+        "bruteforce": {
+          "avg_candidates": 200.0,
+          "build_s": 0.0,
+          "candidate_ratio": 1.0,
+          "method": "bruteforce",
+          "q1": {
+            "mean_us": 8732.241,
+            "median_us": 7690.1,
+            "p95_us": 11280.5
+          },
+          "q2": {
+            "mean_us": 1010.338,
+            "median_us": 984.9,
+            "p95_us": 1024.9
+          }
+        },
+        "grid_3d": {
+          "avg_candidates": 3.1,
+          "build_s": 0.0004,
+          "candidate_ratio": 0.0153,
+          "method": "grid_3d",
+          "q1": {
+            "mean_us": 375.368,
+            "median_us": 211.3,
+            "p95_us": 1283.4
+          },
+          "q2": {
+            "mean_us": 86.193,
+            "median_us": 79.55,
+            "p95_us": 112.0
+          }
+        },
+        "sqlite_2d_z": {
+          "avg_candidates": 0.9,
+          "build_s": 0.0048,
+          "candidate_ratio": 0.0044,
+          "method": "sqlite_2d_z",
+          "q1": {
+            "mean_us": 204.799,
+            "median_us": 146.05,
+            "p95_us": 392.4
+          },
+          "q2": {
+            "mean_us": 82.57,
+            "median_us": 77.8,
+            "p95_us": 104.4
+          },
+          "storage": {
+            "airspace": 3,
+            "buildings": 200,
+            "coverage_tiles": 36,
+            "ground_zones": 6,
+            "size_bytes": 184320
+          }
+        },
+        "sqlite_3d": {
+          "avg_candidates": 0.9,
+          "build_s": 0.0041,
+          "candidate_ratio": 0.0044,
+          "method": "sqlite_3d",
+          "q1": {
+            "mean_us": 224.468,
+            "median_us": 148.05,
+            "p95_us": 440.8
+          },
+          "q2": {
+            "mean_us": 82.013,
+            "median_us": 76.65,
+            "p95_us": 105.0
+          },
+          "storage": {
+            "airspace": 3,
+            "buildings": 200,
+            "coverage_tiles": 36,
+            "ground_zones": 6,
+            "size_bytes": 184320
+          }
+        }
+      },
+      "quality": {
+        "errors": 0,
+        "features": 209,
+        "warnings": 0
+      },
+      "release_bytes": 112381,
+      "scene": {
+        "airspace": 3,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            600.0,
+            600.0,
+            160.0
+          ]
+        ],
+        "building_footprint_m2": 87132.0,
+        "buildings": 200,
+        "coverage_complete": true,
+        "coverage_tiles": 36,
+        "exposure_area_m2": 360000.0,
+        "ground_zones": 6,
+        "max_building_top_m": 120.0,
+        "scene_id": "yht-synthetic-district-v1",
+        "sources": 5,
+        "terrain_posts": 961,
+        "versions": {
+          "airspace": "mock-yht-airspace-136de8579acd",
+          "exposure": "mock-yht-exposure-44731b8225fe",
+          "scene": "mock-yht-scene-0bc2ae3efde4",
+          "sources": "mock-yht-sources-8bf9df0dbb60",
+          "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+        }
+      },
+      "signature_mismatches": {
+        "grid_3d": 0,
+        "sqlite_2d_z": 0,
+        "sqlite_3d": 0
+      }
+    },
+    {
+      "buildings": 800,
+      "methods": {
+        "bruteforce": {
+          "avg_candidates": 800.0,
+          "build_s": 0.0,
+          "candidate_ratio": 1.0,
+          "method": "bruteforce",
+          "q1": {
+            "mean_us": 40497.406,
+            "median_us": 39539.8,
+            "p95_us": 51192.3
+          },
+          "q2": {
+            "mean_us": 3847.707,
+            "median_us": 3680.35,
+            "p95_us": 5896.6
+          }
+        },
+        "grid_3d": {
+          "avg_candidates": 14.2,
+          "build_s": 0.0014,
+          "candidate_ratio": 0.0177,
+          "method": "grid_3d",
+          "q1": {
+            "mean_us": 1068.266,
+            "median_us": 218.4,
+            "p95_us": 7033.0
+          },
+          "q2": {
+            "mean_us": 147.007,
+            "median_us": 88.3,
+            "p95_us": 572.5
+          }
+        },
+        "sqlite_2d_z": {
+          "avg_candidates": 3.1,
+          "build_s": 0.0133,
+          "candidate_ratio": 0.0039,
+          "method": "sqlite_2d_z",
+          "q1": {
+            "mean_us": 330.861,
+            "median_us": 145.1,
+            "p95_us": 1715.0
+          },
+          "q2": {
+            "mean_us": 121.627,
+            "median_us": 90.85,
+            "p95_us": 262.8
+          },
+          "storage": {
+            "airspace": 3,
+            "buildings": 800,
+            "coverage_tiles": 36,
+            "ground_zones": 6,
+            "size_bytes": 425984
+          }
+        },
+        "sqlite_3d": {
+          "avg_candidates": 3.1,
+          "build_s": 0.013,
+          "candidate_ratio": 0.0039,
+          "method": "sqlite_3d",
+          "q1": {
+            "mean_us": 424.271,
+            "median_us": 158.55,
+            "p95_us": 2211.6
+          },
+          "q2": {
+            "mean_us": 93.2,
+            "median_us": 76.85,
+            "p95_us": 169.5
+          },
+          "storage": {
+            "airspace": 3,
+            "buildings": 800,
+            "coverage_tiles": 36,
+            "ground_zones": 6,
+            "size_bytes": 425984
+          }
+        }
+      },
+      "quality": {
+        "errors": 0,
+        "features": 809,
+        "warnings": 0
+      },
+      "release_bytes": 321269,
+      "scene": {
+        "airspace": 3,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            600.0,
+            600.0,
+            160.0
+          ]
+        ],
+        "building_footprint_m2": 105300.0,
+        "buildings": 800,
+        "coverage_complete": true,
+        "coverage_tiles": 36,
+        "exposure_area_m2": 360000.0,
+        "ground_zones": 6,
+        "max_building_top_m": 120.0,
+        "scene_id": "yht-synthetic-district-v1",
+        "sources": 5,
+        "terrain_posts": 961,
+        "versions": {
+          "airspace": "mock-yht-airspace-136de8579acd",
+          "exposure": "mock-yht-exposure-44731b8225fe",
+          "scene": "mock-yht-scene-50afca85f64c",
+          "sources": "mock-yht-sources-8bf9df0dbb60",
+          "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+        }
+      },
+      "signature_mismatches": {
+        "grid_3d": 0,
+        "sqlite_2d_z": 0,
+        "sqlite_3d": 0
+      }
+    },
+    {
+      "buildings": 2400,
+      "methods": {
+        "bruteforce": {
+          "avg_candidates": 2400.0,
+          "build_s": 0.0,
+          "candidate_ratio": 1.0,
+          "method": "bruteforce",
+          "q1": {
+            "mean_us": 123799.602,
+            "median_us": 122936.4,
+            "p95_us": 144967.0
+          },
+          "q2": {
+            "mean_us": 10125.262,
+            "median_us": 10389.85,
+            "p95_us": 15731.8
+          }
+        },
+        "grid_3d": {
+          "avg_candidates": 49.7,
+          "build_s": 0.0042,
+          "candidate_ratio": 0.0207,
+          "method": "grid_3d",
+          "q1": {
+            "mean_us": 3476.558,
+            "median_us": 583.35,
+            "p95_us": 17518.7
+          },
+          "q2": {
+            "mean_us": 262.073,
+            "median_us": 120.1,
+            "p95_us": 1083.5
+          }
+        },
+        "sqlite_2d_z": {
+          "avg_candidates": 13.9,
+          "build_s": 0.0379,
+          "candidate_ratio": 0.0058,
+          "method": "sqlite_2d_z",
+          "q1": {
+            "mean_us": 1296.668,
+            "median_us": 208.35,
+            "p95_us": 7342.1
+          },
+          "q2": {
+            "mean_us": 178.784,
+            "median_us": 92.15,
+            "p95_us": 529.0
+          },
+          "storage": {
+            "airspace": 3,
+            "buildings": 2400,
+            "coverage_tiles": 36,
+            "ground_zones": 6,
+            "size_bytes": 1073152
+          }
+        },
+        "sqlite_3d": {
+          "avg_candidates": 13.9,
+          "build_s": 0.037,
+          "candidate_ratio": 0.0058,
+          "method": "sqlite_3d",
+          "q1": {
+            "mean_us": 1227.673,
+            "median_us": 155.25,
+            "p95_us": 7342.8
+          },
+          "q2": {
+            "mean_us": 138.951,
+            "median_us": 79.35,
+            "p95_us": 486.2
+          },
+          "storage": {
+            "airspace": 3,
+            "buildings": 2400,
+            "coverage_tiles": 36,
+            "ground_zones": 6,
+            "size_bytes": 1073152
+          }
+        }
+      },
+      "quality": {
+        "errors": 0,
+        "features": 2409,
+        "warnings": 0
+      },
+      "release_bytes": 884536,
+      "scene": {
+        "airspace": 3,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            600.0,
+            600.0,
+            160.0
+          ]
+        ],
+        "building_footprint_m2": 154012.0,
+        "buildings": 2400,
+        "coverage_complete": true,
+        "coverage_tiles": 36,
+        "exposure_area_m2": 360000.0,
+        "ground_zones": 6,
+        "max_building_top_m": 120.0,
+        "scene_id": "yht-synthetic-district-v1",
+        "sources": 5,
+        "terrain_posts": 961,
+        "versions": {
+          "airspace": "mock-yht-airspace-136de8579acd",
+          "exposure": "mock-yht-exposure-44731b8225fe",
+          "scene": "mock-yht-scene-358a8e6d6237",
+          "sources": "mock-yht-sources-8bf9df0dbb60",
+          "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+        }
+      },
+      "signature_mismatches": {
+        "grid_3d": 0,
+        "sqlite_2d_z": 0,
+        "sqlite_3d": 0
+      },
+      "sqlite_file_bytes": 1073152
+    }
+  ]
+}

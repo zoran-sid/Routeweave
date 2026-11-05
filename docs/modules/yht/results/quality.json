@@ -1,0 +1,112 @@
+{
+  "baseline": {
+    "counts": {
+      "errors": 0,
+      "features": 34,
+      "warnings": 0
+    },
+    "errors": [],
+    "ok": true,
+    "warnings": []
+  },
+  "faults": [
+    {
+      "case": "duplicate_id",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "STR-003",
+      "warnings": 0
+    },
+    {
+      "case": "self_intersecting_footprint",
+      "detected": true,
+      "errors": 2,
+      "expected_rule": "GEO-002",
+      "warnings": 0
+    },
+    {
+      "case": "unclosed_ring",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "GEO-001",
+      "warnings": 0
+    },
+    {
+      "case": "top_below_base",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "GEO-005",
+      "warnings": 0
+    },
+    {
+      "case": "missing_height",
+      "detected": true,
+      "errors": 0,
+      "expected_rule": "ATTR-002",
+      "warnings": 1
+    },
+    {
+      "case": "unknown_source",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "ATTR-001",
+      "warnings": 0
+    },
+    {
+      "case": "bad_exposure_q",
+      "detected": true,
+      "errors": 2,
+      "expected_rule": "ATTR-003",
+      "warnings": 0
+    },
+    {
+      "case": "incomplete_tile",
+      "detected": true,
+      "errors": 0,
+      "expected_rule": "COV-001",
+      "warnings": 1
+    },
+    {
+      "case": "bad_airspace_kind",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "AIR-001",
+      "warnings": 0
+    },
+    {
+      "case": "missing_ceiling",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "AIR-001",
+      "warnings": 0
+    },
+    {
+      "case": "outside_bounds",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "GEO-004",
+      "warnings": 0
+    },
+    {
+      "case": "stale_version",
+      "detected": true,
+      "errors": 2,
+      "expected_rule": "VER-001",
+      "warnings": 0
+    }
+  ],
+  "mutation_queries": {
+    "incomplete_coverage": {
+      "reasons": [
+        "incomplete_coverage"
+      ],
+      "status": "unknown"
+    },
+    "missing_height": {
+      "reasons": [
+        "unknown_height:B-006"
+      ],
+      "status": "unknown"
+    }
+  }
+}

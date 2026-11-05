@@ -1,0 +1,6689 @@
+{
+  "airspace": [
+    {
+      "authority": "mock-airspace-office",
+      "ceiling_m": null,
+      "ceiling_z": 120,
+      "floor_z": 0,
+      "footprint": [
+        [
+          470,
+          470
+        ],
+        [
+          570,
+          470
+        ],
+        [
+          570,
+          570
+        ],
+        [
+          470,
+          570
+        ],
+        [
+          470,
+          470
+        ]
+      ],
+      "id": "NF-001",
+      "kind": "no_fly",
+      "name": "政务中心临时禁飞区",
+      "quality": "assumed",
+      "source_id": "SRC-AIRSPACE",
+      "state": "published",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "authority": "mock-airspace-office",
+      "ceiling_m": null,
+      "ceiling_z": 120,
+      "floor_z": 0,
+      "footprint": [
+        [
+          130,
+          130
+        ],
+        [
+          170,
+          130
+        ],
+        [
+          170,
+          170
+        ],
+        [
+          130,
+          170
+        ],
+        [
+          130,
+          130
+        ]
+      ],
+      "id": "NF-002",
+      "kind": "no_fly",
+      "name": "城市活动临时禁飞区",
+      "quality": "assumed",
+      "source_id": "SRC-AIRSPACE",
+      "state": "published",
+      "valid": [
+        "2026-11-05T07:00:00Z",
+        "2026-11-05T11:00:00Z"
+      ]
+    },
+    {
+      "authority": "mock-airspace-office",
+      "ceiling_m": 60,
+      "ceiling_z": 160,
+      "floor_z": 0,
+      "footprint": [
+        [
+          330,
+          100
+        ],
+        [
+          430,
+          100
+        ],
+        [
+          430,
+          170
+        ],
+        [
+          330,
+          170
+        ],
+        [
+          330,
+          100
+        ]
+      ],
+      "id": "HL-001",
+      "kind": "height_limit",
+      "name": "医院进近限高",
+      "quality": "assumed",
+      "source_id": "SRC-AIRSPACE",
+      "state": "published",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    }
+  ],
+  "bounds": [
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      600.0,
+      600.0,
+      160.0
+    ]
+  ],
+  "buildings": [
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          30,
+          30
+        ],
+        [
+          90,
+          30
+        ],
+        [
+          90,
+          90
+        ],
+        [
+          30,
+          90
+        ],
+        [
+          30,
+          30
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 120,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-001",
+      "kind": "building",
+      "name": "云塔一号",
+      "quality": "observed",
+      "top_z": 120.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          30,
+          110
+        ],
+        [
+          80,
+          110
+        ],
+        [
+          80,
+          140
+        ],
+        [
+          30,
+          140
+        ],
+        [
+          30,
+          110
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 80,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-002",
+      "kind": "building",
+      "name": "云塔二号",
+      "quality": "observed",
+      "top_z": 80.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          100,
+          30
+        ],
+        [
+          140,
+          30
+        ],
+        [
+          140,
+          80
+        ],
+        [
+          100,
+          80
+        ],
+        [
+          100,
+          30
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 45,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-003",
+      "kind": "building",
+      "name": "商务中庭",
+      "quality": "derived",
+      "top_z": 45.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          100,
+          100
+        ],
+        [
+          140,
+          100
+        ],
+        [
+          140,
+          140
+        ],
+        [
+          100,
+          140
+        ],
+        [
+          100,
+          100
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 35,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-004",
+      "kind": "building",
+      "name": "商务西座",
+      "quality": "derived",
+      "top_z": 35.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          10,
+          180
+        ],
+        [
+          60,
+          180
+        ],
+        [
+          60,
+          230
+        ],
+        [
+          10,
+          230
+        ],
+        [
+          10,
+          180
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 18,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-005",
+      "kind": "building",
+      "name": "街角低层",
+      "quality": "observed",
+      "top_z": 18.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          80,
+          180
+        ],
+        [
+          140,
+          180
+        ],
+        [
+          140,
+          230
+        ],
+        [
+          80,
+          230
+        ],
+        [
+          80,
+          180
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 30,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-006",
+      "kind": "building",
+      "name": "社区中心",
+      "quality": "derived",
+      "top_z": 30.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          180,
+          20
+        ],
+        [
+          240,
+          20
+        ],
+        [
+          240,
+          70
+        ],
+        [
+          180,
+          70
+        ],
+        [
+          180,
+          20
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 60,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-007",
+      "kind": "building",
+      "name": "滨河酒店",
+      "quality": "observed",
+      "top_z": 60.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          180,
+          90
+        ],
+        [
+          260,
+          90
+        ],
+        [
+          260,
+          140
+        ],
+        [
+          180,
+          140
+        ],
+        [
+          180,
+          90
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 25,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-008",
+      "kind": "building",
+      "name": "商业综合体",
+      "quality": "derived",
+      "top_z": 25.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          180,
+          180
+        ],
+        [
+          230,
+          180
+        ],
+        [
+          230,
+          240
+        ],
+        [
+          180,
+          240
+        ],
+        [
+          180,
+          180
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 55,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-009",
+      "kind": "building",
+      "name": "办公楼九号",
+      "quality": "derived",
+      "top_z": 55.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          250,
+          20
+        ],
+        [
+          290,
+          20
+        ],
+        [
+          290,
+          70
+        ],
+        [
+          250,
+          70
+        ],
+        [
+          250,
+          20
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 40,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-010",
+      "kind": "building",
+      "name": "住宅十号",
+      "quality": "derived",
+      "top_z": 40.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          250,
+          90
+        ],
+        [
+          290,
+          90
+        ],
+        [
+          290,
+          140
+        ],
+        [
+          250,
+          140
+        ],
+        [
+          250,
+          90
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 40,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-011",
+      "kind": "building",
+      "name": "住宅十一号",
+      "quality": "derived",
+      "top_z": 40.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          340,
+          30
+        ],
+        [
+          420,
+          30
+        ],
+        [
+          420,
+          90
+        ],
+        [
+          340,
+          90
+        ],
+        [
+          340,
+          30
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 15,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-012",
+      "kind": "building",
+      "name": "实验小学",
+      "quality": "observed",
+      "top_z": 15.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          340,
+          110
+        ],
+        [
+          420,
+          110
+        ],
+        [
+          420,
+          160
+        ],
+        [
+          340,
+          160
+        ],
+        [
+          340,
+          110
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 70,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-013",
+      "kind": "building",
+      "name": "市立医院",
+      "quality": "observed",
+      "top_z": 70.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          500,
+          30
+        ],
+        [
+          560,
+          30
+        ],
+        [
+          560,
+          90
+        ],
+        [
+          500,
+          90
+        ],
+        [
+          500,
+          30
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 100,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-014",
+      "kind": "building",
+      "name": "东塔十四",
+      "quality": "derived",
+      "top_z": 100.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          500,
+          110
+        ],
+        [
+          560,
+          110
+        ],
+        [
+          560,
+          150
+        ],
+        [
+          500,
+          150
+        ],
+        [
+          500,
+          110
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 75,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-015",
+      "kind": "building",
+      "name": "东塔十五",
+      "quality": "derived",
+      "top_z": 75.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          480,
+          180
+        ],
+        [
+          540,
+          180
+        ],
+        [
+          540,
+          240
+        ],
+        [
+          480,
+          240
+        ],
+        [
+          480,
+          180
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 22,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-016",
+      "kind": "building",
+      "name": "东侧低层",
+      "quality": "derived",
+      "top_z": 22.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          480,
+          260
+        ],
+        [
+          540,
+          260
+        ],
+        [
+          540,
+          320
+        ],
+        [
+          480,
+          320
+        ],
+        [
+          480,
+          260
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 48,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-017",
+      "kind": "building",
+      "name": "东侧中座",
+      "quality": "derived",
+      "top_z": 48.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          480,
+          480
+        ],
+        [
+          560,
+          480
+        ],
+        [
+          560,
+          560
+        ],
+        [
+          480,
+          560
+        ],
+        [
+          480,
+          480
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 45,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-018",
+      "kind": "building",
+      "name": "政务中心",
+      "quality": "observed",
+      "top_z": 45.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          40,
+          480
+        ],
+        [
+          120,
+          480
+        ],
+        [
+          120,
+          540
+        ],
+        [
+          40,
+          540
+        ],
+        [
+          40,
+          480
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 20,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-019",
+      "kind": "building",
+      "name": "综合交通站",
+      "quality": "observed",
+      "top_z": 20.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          150,
+          480
+        ],
+        [
+          200,
+          480
+        ],
+        [
+          200,
+          540
+        ],
+        [
+          150,
+          540
+        ],
+        [
+          150,
+          480
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 50,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-020",
+      "kind": "building",
+      "name": "南区中座",
+      "quality": "derived",
+      "top_z": 50.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          340,
+          470
+        ],
+        [
+          400,
+          470
+        ],
+        [
+          400,
+          530
+        ],
+        [
+          340,
+          530
+        ],
+        [
+          340,
+          470
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 35,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-021",
+      "kind": "building",
+      "name": "南区住宅甲",
+      "quality": "derived",
+      "top_z": 35.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          340,
+          545
+        ],
+        [
+          400,
+          545
+        ],
+        [
+          400,
+          590
+        ],
+        [
+          340,
+          590
+        ],
+        [
+          340,
+          545
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 35,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-022",
+      "kind": "building",
+      "name": "南区住宅乙",
+      "quality": "derived",
+      "top_z": 35.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          330,
+          330
+        ],
+        [
+          410,
+          330
+        ],
+        [
+          410,
+          360
+        ],
+        [
+          360,
+          360
+        ],
+        [
+          360,
+          410
+        ],
+        [
+          330,
+          410
+        ],
+        [
+          330,
+          330
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 26,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-023",
+      "kind": "building",
+      "name": "创意园区 L 座",
+      "quality": "derived",
+      "top_z": 26.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          480,
+          340
+        ],
+        [
+          540,
+          340
+        ],
+        [
+          540,
+          400
+        ],
+        [
+          480,
+          400
+        ],
+        [
+          480,
+          340
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 60,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-024",
+      "kind": "building",
+      "name": "东南中座",
+      "quality": "derived",
+      "top_z": 60.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "base_z": 0.0,
+      "footprint": [
+        [
+          180,
+          340
+        ],
+        [
+          240,
+          340
+        ],
+        [
+          240,
+          400
+        ],
+        [
+          180,
+          400
+        ],
+        [
+          180,
+          340
+        ]
+      ],
+      "footprint_source": "SRC-FOOTPRINT",
+      "height_m": 16,
+      "height_source": "SRC-HEIGHT",
+      "id": "B-025",
+      "kind": "building",
+      "name": "公园服务楼",
+      "quality": "assumed",
+      "top_z": 16.0,
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    }
+  ],
+  "coverage": [
+    {
+      "complete": true,
+      "id": "T-00-00",
+      "max": [
+        100.0,
+        100.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-00-01",
+      "max": [
+        100.0,
+        200.0
+      ],
+      "min": [
+        0.0,
+        100.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-00-02",
+      "max": [
+        100.0,
+        300.0
+      ],
+      "min": [
+        0.0,
+        200.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-00-03",
+      "max": [
+        100.0,
+        400.0
+      ],
+      "min": [
+        0.0,
+        300.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-00-04",
+      "max": [
+        100.0,
+        500.0
+      ],
+      "min": [
+        0.0,
+        400.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-00-05",
+      "max": [
+        100.0,
+        600.0
+      ],
+      "min": [
+        0.0,
+        500.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-01-00",
+      "max": [
+        200.0,
+        100.0
+      ],
+      "min": [
+        100.0,
+        0.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-01-01",
+      "max": [
+        200.0,
+        200.0
+      ],
+      "min": [
+        100.0,
+        100.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-01-02",
+      "max": [
+        200.0,
+        300.0
+      ],
+      "min": [
+        100.0,
+        200.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-01-03",
+      "max": [
+        200.0,
+        400.0
+      ],
+      "min": [
+        100.0,
+        300.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-01-04",
+      "max": [
+        200.0,
+        500.0
+      ],
+      "min": [
+        100.0,
+        400.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-01-05",
+      "max": [
+        200.0,
+        600.0
+      ],
+      "min": [
+        100.0,
+        500.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-02-00",
+      "max": [
+        300.0,
+        100.0
+      ],
+      "min": [
+        200.0,
+        0.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-02-01",
+      "max": [
+        300.0,
+        200.0
+      ],
+      "min": [
+        200.0,
+        100.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-02-02",
+      "max": [
+        300.0,
+        300.0
+      ],
+      "min": [
+        200.0,
+        200.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-02-03",
+      "max": [
+        300.0,
+        400.0
+      ],
+      "min": [
+        200.0,
+        300.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-02-04",
+      "max": [
+        300.0,
+        500.0
+      ],
+      "min": [
+        200.0,
+        400.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-02-05",
+      "max": [
+        300.0,
+        600.0
+      ],
+      "min": [
+        200.0,
+        500.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-03-00",
+      "max": [
+        400.0,
+        100.0
+      ],
+      "min": [
+        300.0,
+        0.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-03-01",
+      "max": [
+        400.0,
+        200.0
+      ],
+      "min": [
+        300.0,
+        100.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-03-02",
+      "max": [
+        400.0,
+        300.0
+      ],
+      "min": [
+        300.0,
+        200.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-03-03",
+      "max": [
+        400.0,
+        400.0
+      ],
+      "min": [
+        300.0,
+        300.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-03-04",
+      "max": [
+        400.0,
+        500.0
+      ],
+      "min": [
+        300.0,
+        400.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-03-05",
+      "max": [
+        400.0,
+        600.0
+      ],
+      "min": [
+        300.0,
+        500.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-04-00",
+      "max": [
+        500.0,
+        100.0
+      ],
+      "min": [
+        400.0,
+        0.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-04-01",
+      "max": [
+        500.0,
+        200.0
+      ],
+      "min": [
+        400.0,
+        100.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-04-02",
+      "max": [
+        500.0,
+        300.0
+      ],
+      "min": [
+        400.0,
+        200.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-04-03",
+      "max": [
+        500.0,
+        400.0
+      ],
+      "min": [
+        400.0,
+        300.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-04-04",
+      "max": [
+        500.0,
+        500.0
+      ],
+      "min": [
+        400.0,
+        400.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-04-05",
+      "max": [
+        500.0,
+        600.0
+      ],
+      "min": [
+        400.0,
+        500.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-05-00",
+      "max": [
+        600.0,
+        100.0
+      ],
+      "min": [
+        500.0,
+        0.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-05-01",
+      "max": [
+        600.0,
+        200.0
+      ],
+      "min": [
+        500.0,
+        100.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-05-02",
+      "max": [
+        600.0,
+        300.0
+      ],
+      "min": [
+        500.0,
+        200.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-05-03",
+      "max": [
+        600.0,
+        400.0
+      ],
+      "min": [
+        500.0,
+        300.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-05-04",
+      "max": [
+        600.0,
+        500.0
+      ],
+      "min": [
+        500.0,
+        400.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    },
+    {
+      "complete": true,
+      "id": "T-05-05",
+      "max": [
+        600.0,
+        600.0
+      ],
+      "min": [
+        500.0,
+        500.0
+      ],
+      "source_id": "SRC-FOOTPRINT"
+    }
+  ],
+  "crs": "starter-v0-local-m",
+  "ground_zones": [
+    {
+      "consequence_c": 0.8,
+      "exposure_class": "commercial",
+      "exposure_e": 0.975,
+      "id": "G-001",
+      "kind": "ground_zone",
+      "name": "商业步行区",
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          300,
+          0
+        ],
+        [
+          300,
+          300
+        ],
+        [
+          0,
+          300
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "q": 0.78,
+      "quality": "derived",
+      "source_id": "SRC-EXPOSURE",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "consequence_c": 0.6,
+      "exposure_class": "residential",
+      "exposure_e": 0.75,
+      "id": "G-002",
+      "kind": "ground_zone",
+      "name": "东侧住宅区",
+      "polygon": [
+        [
+          300,
+          0
+        ],
+        [
+          600,
+          0
+        ],
+        [
+          600,
+          300
+        ],
+        [
+          300,
+          300
+        ],
+        [
+          300,
+          0
+        ]
+      ],
+      "q": 0.45,
+      "quality": "derived",
+      "source_id": "SRC-EXPOSURE",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "consequence_c": 0.2,
+      "exposure_class": "park",
+      "exposure_e": 0.3,
+      "id": "G-003",
+      "kind": "ground_zone",
+      "name": "滨水公园",
+      "polygon": [
+        [
+          0,
+          300
+        ],
+        [
+          300,
+          300
+        ],
+        [
+          300,
+          450
+        ],
+        [
+          0,
+          450
+        ],
+        [
+          0,
+          300
+        ]
+      ],
+      "q": 0.06,
+      "quality": "derived",
+      "source_id": "SRC-EXPOSURE",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "consequence_c": 0.8,
+      "exposure_class": "civic",
+      "exposure_e": 0.6875,
+      "id": "G-004",
+      "kind": "ground_zone",
+      "name": "公共服务区",
+      "polygon": [
+        [
+          300,
+          300
+        ],
+        [
+          600,
+          300
+        ],
+        [
+          600,
+          450
+        ],
+        [
+          300,
+          450
+        ],
+        [
+          300,
+          300
+        ]
+      ],
+      "q": 0.55,
+      "quality": "derived",
+      "source_id": "SRC-EXPOSURE",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "consequence_c": 0.9,
+      "exposure_class": "transit",
+      "exposure_e": 0.9111111111111111,
+      "id": "G-005",
+      "kind": "ground_zone",
+      "name": "综合交通枢纽",
+      "polygon": [
+        [
+          0,
+          450
+        ],
+        [
+          300,
+          450
+        ],
+        [
+          300,
+          600
+        ],
+        [
+          0,
+          600
+        ],
+        [
+          0,
+          450
+        ]
+      ],
+      "q": 0.82,
+      "quality": "derived",
+      "source_id": "SRC-EXPOSURE",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "consequence_c": 0.8,
+      "exposure_class": "government",
+      "exposure_e": 0.4,
+      "id": "G-006",
+      "kind": "ground_zone",
+      "name": "政务与办公区",
+      "polygon": [
+        [
+          300,
+          450
+        ],
+        [
+          600,
+          450
+        ],
+        [
+          600,
+          600
+        ],
+        [
+          300,
+          600
+        ],
+        [
+          300,
+          450
+        ]
+      ],
+      "q": 0.32,
+      "quality": "derived",
+      "source_id": "SRC-EXPOSURE",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    }
+  ],
+  "manifest": {
+    "content_hash": "da02139a98b6",
+    "counts": {
+      "airspace": 3,
+      "buildings": 25,
+      "coverage_tiles": 36,
+      "ground_zones": 6,
+      "terrain_posts": 961
+    },
+    "created_at": "2026-11-05T08:00:00Z",
+    "owner": "YHT",
+    "scene_id": "yht-synthetic-district-v1",
+    "schema": "yht-scene-0.1"
+  },
+  "quality": {
+    "coverage_complete": true,
+    "missing_height_ids": []
+  },
+  "scene_id": "yht-synthetic-district-v1",
+  "schema": "yht-scene-0.1",
+  "sources": [
+    {
+      "accuracy_xy_m": 2.0,
+      "accuracy_z_m": null,
+      "acquired_at": "2026-11-01T00:00:00Z",
+      "id": "SRC-FOOTPRINT",
+      "kind": "vector",
+      "license": "CC0-1.0 (synthetic)",
+      "method": "hand-authored blocks and street grid",
+      "name": "合成建筑轮廓（OSM 结构类比）",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "accuracy_xy_m": 1.0,
+      "accuracy_z_m": 1.5,
+      "acquired_at": "2026-11-01T00:00:00Z",
+      "id": "SRC-HEIGHT",
+      "kind": "lidar-derived",
+      "license": "CC0-1.0 (synthetic)",
+      "method": "roof DSM minus flat reference plane",
+      "name": "合成激光雷达建筑高度",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "accuracy_xy_m": 10.0,
+      "accuracy_z_m": 0.3,
+      "acquired_at": "2026-11-01T00:00:00Z",
+      "id": "SRC-TERRAIN",
+      "kind": "grid-dem",
+      "license": "CC0-1.0 (synthetic)",
+      "method": "flat reference variant for ZC integration",
+      "name": "合成地形格网",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "accuracy_xy_m": 100.0,
+      "accuracy_z_m": null,
+      "acquired_at": "2026-11-01T00:00:00Z",
+      "id": "SRC-EXPOSURE",
+      "kind": "polygon-derived",
+      "license": "CC0-1.0 (synthetic)",
+      "method": "land-use class assigned q; not a population count",
+      "name": "合成地面暴露代理",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    },
+    {
+      "accuracy_xy_m": 5.0,
+      "accuracy_z_m": 2.0,
+      "acquired_at": "2026-11-01T00:00:00Z",
+      "id": "SRC-AIRSPACE",
+      "kind": "vector",
+      "license": "CC0-1.0 (synthetic)",
+      "method": "ZQO-owned reference fixtures, not published NOTAMs",
+      "name": "模拟空域参考与临时限制",
+      "valid": [
+        "2026-11-05T08:00:00Z",
+        "2026-11-05T09:00:00Z"
+      ]
+    }
+  ],
+  "terrain": {
+    "flat": true,
+    "kind": "grid-dem",
+    "origin": [
+      0.0,
+      0.0
+    ],
+    "posts": [
+      {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 0.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 20.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 40.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 60.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 80.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 100.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 120.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 140.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 160.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 180.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 200.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 220.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 240.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 260.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 280.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 300.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 320.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 340.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 360.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 380.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 400.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 420.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 440.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 460.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 480.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 500.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 520.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 540.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 560.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 580.0,
+        "y": 600.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 20.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 40.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 60.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 80.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 120.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 140.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 160.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 220.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 240.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 260.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 280.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 300.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 320.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 340.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 360.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 380.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 400.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 420.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 440.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 460.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 480.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 500.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 520.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 540.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 560.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 580.0,
+        "z": 0.0
+      },
+      {
+        "x": 600.0,
+        "y": 600.0,
+        "z": 0.0
+      }
+    ],
+    "size": [
+      31,
+      31
+    ],
+    "source_id": "SRC-TERRAIN",
+    "spacing_m": 20.0,
+    "valid": [
+      "2026-11-05T08:00:00Z",
+      "2026-11-05T09:00:00Z"
+    ],
+    "z": 0.0
+  },
+  "valid": [
+    "2026-11-05T08:00:00Z",
+    "2026-11-05T09:00:00Z"
+  ],
+  "versions": {
+    "airspace": "mock-yht-airspace-136de8579acd",
+    "exposure": "mock-yht-exposure-44731b8225fe",
+    "scene": "mock-yht-scene-cf320300ff15",
+    "sources": "mock-yht-sources-8bf9df0dbb60",
+    "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+  }
+}

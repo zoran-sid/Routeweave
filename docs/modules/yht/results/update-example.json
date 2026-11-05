@@ -1,0 +1,37 @@
+{
+  "after": {
+    "blocked_by": [
+      "airspace:NF-003"
+    ],
+    "status": "forbidden",
+    "versions": {
+      "airspace": "mock-yht-airspace-e9ebb1965853",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    }
+  },
+  "before": {
+    "status": "allowed",
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    }
+  },
+  "changed_versions": {
+    "airspace": [
+      "mock-yht-airspace-136de8579acd",
+      "mock-yht-airspace-e9ebb1965853"
+    ]
+  },
+  "old_versions_against_new_release": {
+    "reasons": [
+      "version_mismatch:airspace"
+    ],
+    "status": "unknown"
+  }
+}

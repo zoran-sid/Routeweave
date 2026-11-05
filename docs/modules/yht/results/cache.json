@@ -1,0 +1,12 @@
+{
+  "cold_median_us": 602.1,
+  "entries": 1,
+  "hit_rate": 0.9836,
+  "invalidations": 1,
+  "note": "single-process in-memory cache; hit includes deep copy; not a distributed cache or a production QPS measurement",
+  "queries": 20,
+  "speedup": 34.41,
+  "warm_hits": 60,
+  "warm_median_us": 17.5,
+  "warm_misses": 1
+}

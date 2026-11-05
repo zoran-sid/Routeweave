@@ -1,0 +1,525 @@
+{
+  "mutation_queries": {
+    "incomplete_coverage": {
+      "reasons": [
+        "incomplete_coverage"
+      ],
+      "status": "unknown"
+    },
+    "missing_height": {
+      "reasons": [
+        "unknown_height:B-006"
+      ],
+      "status": "unknown"
+    }
+  },
+  "q1_blocked": {
+    "airspace": [
+      {
+        "effect": "blocked",
+        "horizontal_distance_m": 0.0,
+        "id": "NF-002",
+        "kind": "no_fly",
+        "name": "城市活动临时禁飞区",
+        "source_id": "SRC-AIRSPACE"
+      }
+    ],
+    "blocked_by": [
+      "building:B-001",
+      "airspace:NF-002"
+    ],
+    "candidates": 25,
+    "checked": 25,
+    "coverage": [
+      "T-00-00",
+      "T-00-01",
+      "T-00-02",
+      "T-01-00",
+      "T-01-01",
+      "T-01-02",
+      "T-02-00",
+      "T-02-01",
+      "T-02-02"
+    ],
+    "ground": [
+      {
+        "exposure_class": "commercial",
+        "id": "G-001",
+        "name": "商业步行区",
+        "q": 0.78,
+        "source_id": "SRC-EXPOSURE"
+      }
+    ],
+    "nearby": [
+      {
+        "distance_m": 0.0,
+        "effect": "blocked",
+        "height_m": 120,
+        "id": "B-001",
+        "name": "云塔一号"
+      }
+    ],
+    "radius_m": 20.0,
+    "reasons": [],
+    "segment": {
+      "a": [
+        20,
+        20,
+        80
+      ],
+      "b": [
+        240,
+        220,
+        80
+      ]
+    },
+    "service": "Q1",
+    "status": "blocked",
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    },
+    "window": {
+      "end": "2026-11-05T08:15:00Z",
+      "start": "2026-11-05T08:05:00Z"
+    }
+  },
+  "q1_clear": {
+    "airspace": [],
+    "blocked_by": [],
+    "candidates": 25,
+    "checked": 25,
+    "coverage": [
+      "T-00-00",
+      "T-00-01",
+      "T-00-02",
+      "T-01-00",
+      "T-01-01",
+      "T-01-02",
+      "T-02-00",
+      "T-02-01",
+      "T-02-02"
+    ],
+    "ground": [
+      {
+        "exposure_class": "commercial",
+        "id": "G-001",
+        "name": "商业步行区",
+        "q": 0.78,
+        "source_id": "SRC-EXPOSURE"
+      }
+    ],
+    "nearby": [],
+    "radius_m": 15.0,
+    "reasons": [],
+    "segment": {
+      "a": [
+        20,
+        20,
+        140
+      ],
+      "b": [
+        240,
+        220,
+        140
+      ]
+    },
+    "service": "Q1",
+    "status": "clear",
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    },
+    "window": {
+      "end": "2026-11-05T08:15:00Z",
+      "start": "2026-11-05T08:05:00Z"
+    }
+  },
+  "q2_allowed": {
+    "airspace": [],
+    "blocked_by": [],
+    "buildings": [],
+    "candidates": 25,
+    "checked": 25,
+    "coverage": [
+      "T-00-02",
+      "T-00-03",
+      "T-01-02",
+      "T-01-03"
+    ],
+    "ground": [
+      {
+        "exposure_class": "commercial",
+        "id": "G-001",
+        "name": "商业步行区",
+        "q": 0.78,
+        "source_id": "SRC-EXPOSURE"
+      },
+      {
+        "exposure_class": "park",
+        "id": "G-003",
+        "name": "滨水公园",
+        "q": 0.06,
+        "source_id": "SRC-EXPOSURE"
+      }
+    ],
+    "reasons": [],
+    "segment": {
+      "a": [
+        20,
+        300,
+        80
+      ],
+      "b": [
+        120,
+        300,
+        80
+      ]
+    },
+    "service": "Q2",
+    "status": "allowed",
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    },
+    "window": {
+      "end": "2026-11-05T08:15:00Z",
+      "start": "2026-11-05T08:05:00Z"
+    }
+  },
+  "q2_building": {
+    "airspace": [],
+    "blocked_by": [
+      "building:B-010"
+    ],
+    "buildings": [
+      {
+        "base_z": 0.0,
+        "effect": "blocked",
+        "height_m": 40,
+        "height_source": "SRC-HEIGHT",
+        "id": "B-010",
+        "name": "住宅十号",
+        "top_z": 40.0
+      }
+    ],
+    "candidates": 25,
+    "checked": 25,
+    "coverage": [
+      "T-02-00",
+      "T-03-00"
+    ],
+    "ground": [
+      {
+        "exposure_class": "commercial",
+        "id": "G-001",
+        "name": "商业步行区",
+        "q": 0.78,
+        "source_id": "SRC-EXPOSURE"
+      },
+      {
+        "exposure_class": "residential",
+        "id": "G-002",
+        "name": "东侧住宅区",
+        "q": 0.45,
+        "source_id": "SRC-EXPOSURE"
+      }
+    ],
+    "reasons": [],
+    "segment": {
+      "a": [
+        240,
+        40,
+        20
+      ],
+      "b": [
+        300,
+        40,
+        20
+      ]
+    },
+    "service": "Q2",
+    "status": "forbidden",
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    },
+    "window": {
+      "end": "2026-11-05T08:15:00Z",
+      "start": "2026-11-05T08:05:00Z"
+    }
+  },
+  "q2_ceiling": {
+    "airspace": [
+      {
+        "ceiling_m": 60,
+        "effect": "blocked",
+        "id": "HL-001",
+        "kind": "height_limit",
+        "name": "医院进近限高",
+        "source_id": "SRC-AIRSPACE",
+        "valid": [
+          "2026-11-05T08:00:00Z",
+          "2026-11-05T09:00:00Z"
+        ]
+      }
+    ],
+    "blocked_by": [
+      "ceiling:HL-001"
+    ],
+    "buildings": [],
+    "candidates": 25,
+    "checked": 25,
+    "coverage": [
+      "T-03-01"
+    ],
+    "ground": [
+      {
+        "exposure_class": "residential",
+        "id": "G-002",
+        "name": "东侧住宅区",
+        "q": 0.45,
+        "source_id": "SRC-EXPOSURE"
+      }
+    ],
+    "reasons": [],
+    "segment": {
+      "a": [
+        325,
+        105,
+        65
+      ],
+      "b": [
+        335,
+        105,
+        65
+      ]
+    },
+    "service": "Q2",
+    "status": "forbidden",
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    },
+    "window": {
+      "end": "2026-11-05T08:15:00Z",
+      "start": "2026-11-05T08:05:00Z"
+    }
+  },
+  "q2_no_fly": {
+    "airspace": [
+      {
+        "effect": "blocked",
+        "id": "NF-002",
+        "kind": "no_fly",
+        "name": "城市活动临时禁飞区",
+        "source_id": "SRC-AIRSPACE",
+        "valid": [
+          "2026-11-05T07:00:00Z",
+          "2026-11-05T11:00:00Z"
+        ]
+      }
+    ],
+    "blocked_by": [
+      "airspace:NF-002"
+    ],
+    "buildings": [],
+    "candidates": 25,
+    "checked": 25,
+    "coverage": [
+      "T-01-01"
+    ],
+    "ground": [
+      {
+        "exposure_class": "commercial",
+        "id": "G-001",
+        "name": "商业步行区",
+        "q": 0.78,
+        "source_id": "SRC-EXPOSURE"
+      }
+    ],
+    "reasons": [],
+    "segment": {
+      "a": [
+        140,
+        150,
+        80
+      ],
+      "b": [
+        160,
+        150,
+        80
+      ]
+    },
+    "service": "Q2",
+    "status": "forbidden",
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    },
+    "window": {
+      "end": "2026-11-05T08:15:00Z",
+      "start": "2026-11-05T08:05:00Z"
+    }
+  },
+  "q2_version_mismatch": {
+    "airspace": [],
+    "blocked_by": [],
+    "buildings": [],
+    "candidates": 25,
+    "checked": 0,
+    "coverage": [
+      "T-02-01",
+      "T-03-01"
+    ],
+    "ground": [],
+    "reasons": [
+      "version_mismatch:scene"
+    ],
+    "segment": {
+      "a": [
+        280,
+        120,
+        70
+      ],
+      "b": [
+        370,
+        120,
+        70
+      ]
+    },
+    "service": "Q2",
+    "status": "unknown",
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    },
+    "window": {
+      "end": "2026-11-05T08:15:00Z",
+      "start": "2026-11-05T08:05:00Z"
+    }
+  },
+  "quality": {
+    "errors": 0,
+    "features": 34,
+    "warnings": 0
+  },
+  "quality_faults": [
+    {
+      "case": "duplicate_id",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "STR-003",
+      "warnings": 0
+    },
+    {
+      "case": "self_intersecting_footprint",
+      "detected": true,
+      "errors": 2,
+      "expected_rule": "GEO-002",
+      "warnings": 0
+    },
+    {
+      "case": "unclosed_ring",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "GEO-001",
+      "warnings": 0
+    },
+    {
+      "case": "top_below_base",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "GEO-005",
+      "warnings": 0
+    },
+    {
+      "case": "missing_height",
+      "detected": true,
+      "errors": 0,
+      "expected_rule": "ATTR-002",
+      "warnings": 1
+    },
+    {
+      "case": "unknown_source",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "ATTR-001",
+      "warnings": 0
+    },
+    {
+      "case": "bad_exposure_q",
+      "detected": true,
+      "errors": 2,
+      "expected_rule": "ATTR-003",
+      "warnings": 0
+    },
+    {
+      "case": "incomplete_tile",
+      "detected": true,
+      "errors": 0,
+      "expected_rule": "COV-001",
+      "warnings": 1
+    },
+    {
+      "case": "bad_airspace_kind",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "AIR-001",
+      "warnings": 0
+    },
+    {
+      "case": "missing_ceiling",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "AIR-001",
+      "warnings": 0
+    },
+    {
+      "case": "outside_bounds",
+      "detected": true,
+      "errors": 1,
+      "expected_rule": "GEO-004",
+      "warnings": 0
+    },
+    {
+      "case": "stale_version",
+      "detected": true,
+      "errors": 2,
+      "expected_rule": "VER-001",
+      "warnings": 0
+    }
+  ],
+  "versions": {
+    "airspace": "mock-yht-airspace-136de8579acd",
+    "exposure": "mock-yht-exposure-44731b8225fe",
+    "scene": "mock-yht-scene-cf320300ff15",
+    "sources": "mock-yht-sources-8bf9df0dbb60",
+    "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+  },
+  "window": {
+    "end": "2026-11-05T08:15:00Z",
+    "start": "2026-11-05T08:05:00Z"
+  }
+}

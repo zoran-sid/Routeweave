@@ -1,0 +1,56 @@
+{
+  "layer_versions": {
+    "airspace": "mock-yht-airspace-136de8579acd",
+    "exposure": "mock-yht-exposure-44731b8225fe",
+    "scene": "mock-yht-scene-cf320300ff15",
+    "sources": "mock-yht-sources-8bf9df0dbb60",
+    "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+  },
+  "manifest": {
+    "content_hash": "da02139a98b6",
+    "counts": {
+      "airspace": 3,
+      "buildings": 25,
+      "coverage_tiles": 36,
+      "ground_zones": 6,
+      "terrain_posts": 961
+    },
+    "created_at": "2026-11-05T08:00:00Z",
+    "owner": "YHT",
+    "scene_id": "yht-synthetic-district-v1",
+    "schema": "yht-scene-0.1"
+  },
+  "release_bytes": 52302,
+  "stats": {
+    "airspace": 3,
+    "bounds": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        600.0,
+        600.0,
+        160.0
+      ]
+    ],
+    "building_footprint_m2": 81800.0,
+    "buildings": 25,
+    "coverage_complete": true,
+    "coverage_tiles": 36,
+    "exposure_area_m2": 360000.0,
+    "ground_zones": 6,
+    "max_building_top_m": 120.0,
+    "scene_id": "yht-synthetic-district-v1",
+    "sources": 5,
+    "terrain_posts": 961,
+    "versions": {
+      "airspace": "mock-yht-airspace-136de8579acd",
+      "exposure": "mock-yht-exposure-44731b8225fe",
+      "scene": "mock-yht-scene-cf320300ff15",
+      "sources": "mock-yht-sources-8bf9df0dbb60",
+      "terrain": "mock-yht-terrain-53a9f6dfd8cb"
+    }
+  }
+}

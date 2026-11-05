@@ -24,3 +24,7 @@ python3 -m unittest discover -s docs/modules/lj/prototype -v
 ```
 
 原型只验证运行规则和接口语义，不代表已经部署身份服务、数据库审计或生产监控。
+
+`validate_result` 默认验收当前推荐；带有 ZQO `freshness=stale` 的结果只能显式使用
+`purpose="history"` 查看，`freshness=unavailable` 始终失败。版本字段必须完整有效，
+指标和耗时必须是有限、非负且非布尔数值。

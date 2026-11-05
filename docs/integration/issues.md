@@ -10,14 +10,14 @@ P1：影响约束、未知数据或当前推荐验收，合稿采用相关原型
 
 | 编号 | 负责人 | 优先级 | 问题 | 状态 |
 | --- | --- | --- | --- | --- |
-| YHT-01 | YHT | P1 | 未知风险区域在两种导出中被丢弃，变成背景低风险 | 已修复待复核 |
-| YHT-02 | YHT | P1 | 导出忽略不完整覆盖及不支持的非平地输入 | 已修复待复核 |
-| YHT-03 | YHT | P1 | 走廊限高检查未计入垂直安全缓冲 | 已修复待复核 |
-| LJ-01 | LJ | P1 | 双方缺失版本字段仍可验收通过 | 待修复 |
-| LJ-02 | LJ | P1 | 已标记 stale 的旧发布结果仍可通过当前推荐验收 | 待修复 |
-| LJ-03 | LJ | P2 | NaN、Infinity、布尔指标及 NaN 耗时未被拒绝 | 待修复 |
+| YHT-01 | YHT | P1 | 未知风险区域在两种导出中被丢弃，变成背景低风险 | 待修复 |
+| YHT-02 | YHT | P1 | 导出忽略不完整覆盖及不支持的非平地输入 | 待修复 |
+| YHT-03 | YHT | P1 | 走廊限高检查未计入垂直安全缓冲 | 待修复 |
+| LJ-01 | LJ | P1 | 双方缺失版本字段仍可验收通过 | 已修复待复核 |
+| LJ-02 | LJ | P1 | 已标记 stale 的旧发布结果仍可通过当前推荐验收 | 已修复待复核 |
+| LJ-03 | LJ | P2 | NaN、Infinity、布尔指标及 NaN 耗时未被拒绝 | 已修复待复核 |
 | ZQO-01 | ZQO | P2 | Q2 已知发布的校验失败分支丢失五类版本 | 待修复 |
-| D-01 | LJ | 文档 | 交接仍为待开始，与已提交成果不符 | 待更新 |
+| D-01 | LJ | 文档 | 交接仍为待开始，与已提交成果不符 | 已修复待复核 |
 | I-01 | ZQO 主责整合，各模块配合 | 集成 | 五模块整链路和两组版本的来源映射待验证 | 待验证 |
 
 LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射及未知语义复核。ZC 已完成的修复见本页末尾。
@@ -35,7 +35,6 @@ LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射�
 - **影响**：源数据明确未知，下游却把区域作为已知背景低风险处理。
 - **修复要求**：保留未知区域及来源，让下游返回 `unknown`；或在导出时明确拒绝该输入。缺失源数据不能由默认背景覆盖。
 - **验收**：两个导出入口分别测试，不能用一个入口的提前拒绝掩盖另一个入口丢失数据。补充局部缺失与正常已知输入回归，核对 LQ 编译后及 ZC Q2 的状态和来源。
-- **修复**：`81bd270`。`export_zc.require_exportable` 在 `export_snapshot` 入口拒绝非法 `q`；`export_lq.profiles_from_scene` 独立校验 `E`/`C`/`q` 与 `q=E×C`，不跳过。新增 YHT-01 正常/异常回归；`audit.py --owner YHT` 中两个入口分别得到 `ValueError:unknown_or_invalid_exposure:G-001`，正常输入仍导出。
 
 ### YHT-02：导出必须继承覆盖与地形质量约束
 
@@ -46,7 +45,6 @@ LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射�
 - **影响**：覆盖质量被提升为完整，不支持的地形被默认为零高程，破坏避障输入假设。
 - **修复要求**：校验源数据质量和当前导出能力；不完整覆盖保留未知语义，不支持的地形明确拒绝。项目可以继续采用平地原型，无需为本项扩展地形算法。
 - **验收**：两个故障输入分别被明确拒绝或导致 `unknown`；原有完整平地输入保持可用。记录支持的地形类型和高程约束。
-- **修复**：`81bd270`。导出前检查全部覆盖瓦片 `complete`、`terrain.flat` 为真、基面 `z=0` 且所有地形点一致；不支持则抛 `ValueError`，只保留完整平地可用路径。`audit.py --owner YHT` 分别得到 `incomplete_coverage:T-00-00` 与 `unsupported_terrain:only_flat_supported`；完整平地导出仍通过 ZC preflight。
 
 ### YHT-03：限高判定计入走廊安全包络
 
@@ -56,13 +54,15 @@ LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射�
 - **实际**：YHT 返回 `clear`；相同场景和 5 米缓冲下 ZC 返回 `forbidden`。58 米中心线加 5 米包络已超过 60 米上限。
 - **修复要求**：按共同约定对完整航段及其安全包络检查限高，统一碰触边界的含义。若中心线查询另有用途，在接口中明确区别。
 - **验收**：新增包络低于、接触、超过限高的案例，核对 YHT 走廊结果与 ZC 对应航段判定；保留禁飞和建筑几何回归。
-- **修复**：`81bd270`。`query_corridor` 对 `height_limit` 用 `zhi + radius > ceiling_m` 判定，接触（相等）不阻断；禁飞体仍同时检查水平和垂直间隙。新增 54 m/55 m/55.1 m 边界回归，覆盖低于、接触、超过；`audit.py --owner YHT` 中 58 m + 5 m 对 60 m 返回 YHT `blocked`、ZC `forbidden`。
 
 ## LJ：运行验收
 
 复现：`python3 -B docs/integration/audit.py --owner LJ`。
 
 ### LJ-01：五类版本需完整有效
+
+状态：**已修复待复核**。证据：`python3 -B -m unittest discover -s docs/modules/lj/prototype -v`
+（15 项通过）及 `python3 -B docs/integration/audit.py --owner LJ`（LJ-01 PASS）。
 
 位置：[acceptance.py](../modules/lj/prototype/acceptance.py) 的 `validate_result`。
 
@@ -73,6 +73,10 @@ LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射�
 
 ### LJ-02：区分当前推荐与历史结果
 
+状态：**已修复待复核**。证据：同一组件版本的 release 1/2 场景由
+`python3 -B docs/integration/audit.py --owner LJ` 实测为 LJ-02 PASS；回归测试明确要求
+`freshness=stale` 只有 `purpose="history"` 可查看，不能作为当前推荐通过。
+
 位置：[acceptance.py](../modules/lj/prototype/acceptance.py) 的 `validate_result`，与 ZQO 的发布查询结果衔接。
 
 - **触发**：用 ZQO `Catalog` 连续发布相同组件快照为 release 1 和 2，再用固定的 release 1 查询。组件五类版本相同，但发布编号已更新。
@@ -81,6 +85,9 @@ LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射�
 - **验收**：同组件版本的新发布也使旧推荐需要重验；当前发布通过；stale/unavailable 不能作为当前推荐通过。若调整验收接口，同步说明独立 ZC 原型结果与已发布结果的适用方式。
 
 ### LJ-03：指标与耗时必须为有限有效数值
+
+状态：**已修复待复核**。证据：覆盖三个指标和耗时的 NaN、正负无穷、布尔值、
+负数及预算超限回归；`python3 -B docs/integration/audit.py --owner LJ` 中 LJ-03 PASS。
 
 位置：[acceptance.py](../modules/lj/prototype/acceptance.py) 的 `validate_result`。
 

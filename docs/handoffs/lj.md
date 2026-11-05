@@ -1,13 +1,13 @@
 # LJ 的工作记录
 
-项目：SkyRoute。最后更新：2026-11-04（Asia/Hong_Kong）。
+项目：SkyRoute。最后更新：2026-11-05（Asia/Hong_Kong）。
 
 | 项目 | 当前安排 |
 | --- | --- |
 | 成员 | LJ，成员1 |
 | 负责方向 | 运维保障与验收支持 |
 | 展示安排 | PPT 第9–10页 |
-| 技术成果状态 | 待开始 |
+| 技术成果状态 | 模块可交付，LJ-01/02/03 已修复待复核 |
 
 ## 主要职责
 
@@ -23,7 +23,7 @@
 
 独立起点：先依据 Q1/Q2 与版本定义整理正常查询、数据缺失和更新失败的监控及验收说明，部署方式暂以假设表示。
 
-成果入口：首次工作时创建 `docs/modules/lj/README.md`，图表、样例和验证材料放在同目录。
+成果入口：[LJ 模块](../modules/lj/README.md)，图表、样例和验证材料在同目录。
 
 后续对齐：读取 ZQO 的发布与恢复流程、LQ 的审计要求、ZC 的结果状态与验证方法，按实际差异修订本模块。
 
@@ -35,14 +35,38 @@
 
 ## 本轮协作状态
 
-- 已检查提交：尚未开始技术工作；首次工作时记录读取的提交号。
-- 已复用的其他模块成果：暂无。
-- 技术决定与假设：尚未开展研究；后续记录选择、证据、适用范围与状态。
-- 集成检查：尚未开始；后续由执行检查的 AI 记录所读版本、差异、修订及剩余问题。
-- 可供其他 agent 使用的输出：暂无，完成初稿后补充相对链接与适用条件。
+- 已检查提交：共享 `main` 最新提交 `42948c0f6d62a8746ba5ba30be2fb80130f0ca20`；
+  集成问题基线 `cc20db8a6c3d2c92f030c8322cdf067ece249f91`，并读取 ZQO 发布提交
+  `130f7b03bda513baaac306f6666904f0dc05009c`、ZC 输入修复 `0c2cb23852c7e075660c0e717c939d60afb8d846`
+  及五人交接。当前副本无 `.git` 元数据，未执行本地合并或推送。
+- 已复用的其他模块成果：ZQO `Catalog.query` 的 `freshness`、`release_id`、
+  `observed_head` 字段；ZC 的五类版本与 Q1 状态；共同约定的当前/历史及
+  `unknown` 语义。
+- 技术决定与假设：验收默认 `purpose="current"`；仅 `freshness="stale"` 的已知发布
+  可用 `purpose="history"` 查看，`unavailable` 始终失败。五类版本必须为非空字符串；
+  指标和耗时必须为有限、非负且排除布尔值的数值。
+- 集成检查：LJ-01、LJ-02、LJ-03 已修复待复核；审查脚本三项均 PASS。YHT-01/02/03
+  和 ZQO-01 仍交由所属成员处理，I-01 仍待 ZQO 主责整链路验证。
+- 可供其他 agent 使用的输出：[验收原型](../modules/lj/prototype/acceptance.py)、
+  [回归测试](../modules/lj/prototype/test_acceptance.py)、[集成说明](../modules/lj/integration.md)
+  及本记录中的复核证据。
 
 ## 成果记录
 
-暂无技术成果记录。完成后补充成果路径、依据、验证结果及下一步，可参考 [记录模板](TEMPLATE.md)。
+| 成果 | 路径 | 本轮验证 |
+| --- | --- | --- |
+| 运行与验收设计 | [design.md](../modules/lj/design.md) | 状态、版本、异常恢复和预算判据 |
+| 验收原型与测试 | [acceptance.py](../modules/lj/prototype/acceptance.py)、[test_acceptance.py](../modules/lj/prototype/test_acceptance.py) | 15 项 `unittest` 通过；LJ 专项审查 3 项 PASS |
+| 集成衔接 | [integration.md](../modules/lj/integration.md) | ZQO freshness 与历史查看语义已接入；其他成员问题未代修 |
+
+### 2026-11-05：最终集成复核修复
+
+- LJ-01：验收前严格检查双方五类版本字段及非空字符串值，空字典、缺字段、
+  单边缺字段、空值和错误类型均失败。
+- LJ-02：当前推荐拒绝 `stale`/`unavailable` 发布结果；已知 stale 结果仅在显式
+  `purpose="history"` 下保留历史查看语义。
+- LJ-03：三个指标和耗时拒绝负数、布尔值、NaN、正负无穷，并按有限耗时执行预算。
+- 实际命令：`python3 -B -m unittest discover -s docs/modules/lj/prototype -v`；
+  `python3 -B docs/integration/audit.py --owner LJ`。两者均通过。
 
 任务依据：[项目说明](../project-brief.md)、[共同场景约定](../scenario-contract.md)、[五人分工](../team-tasks.md)、[课程要求全文](../course-requirements.md)、[异步协作](../agent-collaboration.md)、[AI 协作指南](../../AGENTS.md)。

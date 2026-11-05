@@ -8,10 +8,10 @@
 
 | 来源 | 复用字段 | LJ 检查 |
 | --- | --- | --- |
-| ZC Q1 | `query_id`、`status/reason`、`versions`、`path/segments`、`metrics`、`elapsed_ms` | 状态与指标互相一致；失败不填零指标；版本与当前快照完全相等 |
+| ZC Q1 | `query_id`、`status/reason`、`versions`、`path/segments`、`metrics`、`elapsed_ms` | 状态与指标互相一致；失败不填零指标；版本与当前快照完全相等；有限耗时不超预算 |
 | ZC Q2 | 航段状态、原因、风险和来源 | `forbidden/unknown` 不得被展示为可执行；更新后重新检查整条旧路线 |
 | LQ | `unknown` 优先级、风险来源、审计与最小权限 | 风险未知不得默认零；敏感读取、发布和导出需要审计 |
-| ZQO | 不可变五类版本、发布/撤销/回滚 | 只接受已切换清单；发布失败不产生“新版本成功”标签 |
+| ZQO | 不可变五类版本、发布/撤销/回滚、`freshness`、`release_id` | 当前推荐只接受 `freshness=current_at_check`；`stale` 结果仅以 `purpose="history"` 查看，`unavailable` 不通过 |
 | YHT | 坐标、质量、来源和覆盖范围 | 单位/基准或覆盖不明时阻止发布并标记未知 |
 
 ## 当前兼容性结论

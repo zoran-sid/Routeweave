@@ -1,0 +1,138 @@
+# 最终集成问题清单
+
+日期：2026-11-05。检查基线：`cc20db8a6c3d2c92f030c8322cdf067ece249f91`，叠加 ZC 输入校验修复。记录中的“实际”均来自 [审查脚本](audit.py) 与 [原始输出](results/audit.json)。源码 SHA-256 随结果保存，便于核对修复前后版本。
+
+按本轮用户要求，复核方修复 ZC；其他成员的问题交由所属成员修复。本清单不代表成员已确认或已完成修复。各项可以并行处理，整链路复测使用随后提交的修复版本。
+
+## 分派总表
+
+P1：影响约束、未知数据或当前推荐验收，合稿采用相关原型结论前处理。P2：影响追溯或异常结果校验，同轮完成。
+
+| 编号 | 负责人 | 优先级 | 问题 | 状态 |
+| --- | --- | --- | --- | --- |
+| YHT-01 | YHT | P1 | 未知风险区域在两种导出中被丢弃，变成背景低风险 | 待修复 |
+| YHT-02 | YHT | P1 | 导出忽略不完整覆盖及不支持的非平地输入 | 待修复 |
+| YHT-03 | YHT | P1 | 走廊限高检查未计入垂直安全缓冲 | 待修复 |
+| LJ-01 | LJ | P1 | 双方缺失版本字段仍可验收通过 | 待修复 |
+| LJ-02 | LJ | P1 | 已标记 stale 的旧发布结果仍可通过当前推荐验收 | 待修复 |
+| LJ-03 | LJ | P2 | NaN、Infinity、布尔指标及 NaN 耗时未被拒绝 | 待修复 |
+| ZQO-01 | ZQO | P2 | Q2 已知发布的校验失败分支丢失五类版本 | 待修复 |
+| D-01 | LJ | 文档 | 交接仍为待开始，与已提交成果不符 | 待更新 |
+| I-01 | ZQO 主责整合，各模块配合 | 集成 | 五模块整链路和两组版本的来源映射待验证 | 待验证 |
+
+LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射及未知语义复核。ZC 已完成的修复见本页末尾。
+
+## YHT：数据与导出
+
+复现：`python3 -B docs/integration/audit.py --owner YHT`。
+
+### YHT-01：保留未知风险的空间范围
+
+位置：[export_zc.py](../modules/yht/prototype/export_zc.py) 的 `export_snapshot`、[export_lq.py](../modules/yht/prototype/export_lq.py) 的 `profiles_from_scene`。
+
+- **触发**：将合成场景 G-001 的 `q/exposure_e/consequence_c` 设为 `None`，重新 seal；移除建筑和空域以隔离风险条件。检查该区域上方 `[20,20,70] → [40,20,70]` 航段。
+- **实际**：`export_zc` 跳过 `q=None` 区域；`export_lq` 跳过缺 E/C/q 的 profile。两条路径都返回 `allowed`、`q_max=0.02`、来源仅有 `background`。
+- **影响**：源数据明确未知，下游却把区域作为已知背景低风险处理。
+- **修复要求**：保留未知区域及来源，让下游返回 `unknown`；或在导出时明确拒绝该输入。缺失源数据不能由默认背景覆盖。
+- **验收**：两个导出入口分别测试，不能用一个入口的提前拒绝掩盖另一个入口丢失数据。补充局部缺失与正常已知输入回归，核对 LQ 编译后及 ZC Q2 的状态和来源。
+
+### YHT-02：导出必须继承覆盖与地形质量约束
+
+位置：[export_zc.py](../modules/yht/prototype/export_zc.py) 的 `export_snapshot`，尤其 `scene.complete=True` 与 `terrain_z=0.0`。
+
+- **触发**：分别把 `coverage[0].complete` 设为 `False`；或将 `terrain.flat=False`、`terrain.z=20` 且所有地形点高度设为 20。每次修改后重新 seal，再导出和运行 ZC `preflight`。
+- **实际**：两个输入均导出为 `complete=True`、`terrain_z=0.0`，`preflight` 返回 `None`，即通过校验。
+- **影响**：覆盖质量被提升为完整，不支持的地形被默认为零高程，破坏避障输入假设。
+- **修复要求**：校验源数据质量和当前导出能力；不完整覆盖保留未知语义，不支持的地形明确拒绝。项目可以继续采用平地原型，无需为本项扩展地形算法。
+- **验收**：两个故障输入分别被明确拒绝或导致 `unknown`；原有完整平地输入保持可用。记录支持的地形类型和高程约束。
+
+### YHT-03：限高判定计入走廊安全包络
+
+位置：[query.py](../modules/yht/prototype/query.py) 的 `query_corridor`，`height_limit` 分支目前比较 `zhi > ceiling_m`。
+
+- **触发**：无建筑干扰，使用既有限高区 HL-001；航段 `[350,120,58] → [400,120,58]`，半径 5 米，限高 60 米，时间窗 `2026-11-05T08:05:00Z` 至 `08:15:00Z`。
+- **实际**：YHT 返回 `clear`；相同场景和 5 米缓冲下 ZC 返回 `forbidden`。58 米中心线加 5 米包络已超过 60 米上限。
+- **修复要求**：按共同约定对完整航段及其安全包络检查限高，统一碰触边界的含义。若中心线查询另有用途，在接口中明确区别。
+- **验收**：新增包络低于、接触、超过限高的案例，核对 YHT 走廊结果与 ZC 对应航段判定；保留禁飞和建筑几何回归。
+
+## LJ：运行验收
+
+复现：`python3 -B docs/integration/audit.py --owner LJ`。
+
+### LJ-01：五类版本需完整有效
+
+位置：[acceptance.py](../modules/lj/prototype/acceptance.py) 的 `validate_result`。
+
+- **触发**：使用真实 ZC 可行结果，将 `result.versions` 与 `current_versions` 都设为 `{}`。
+- **实际**：逐项 `.get()` 比较得到 `None == None`，返回 `pass`。
+- **修复要求**：双方均为有效字典，五个必需键齐全，值为有效非空版本字符串，再比较内容；无效输入返回明确失败。
+- **验收**：双方为空、缺同一键、单边缺键、空值及错误类型均失败；五类有效版本一致通过、任一不同失败。
+
+### LJ-02：区分当前推荐与历史结果
+
+位置：[acceptance.py](../modules/lj/prototype/acceptance.py) 的 `validate_result`，与 ZQO 的发布查询结果衔接。
+
+- **触发**：用 ZQO `Catalog` 连续发布相同组件快照为 release 1 和 2，再用固定的 release 1 查询。组件五类版本相同，但发布编号已更新。
+- **实际**：ZQO 明确返回 `freshness=stale`、`release_id=1`、`observed_head=2`，LJ 仍返回 `pass`。
+- **修复要求**：当前推荐验收检查发布新鲜度及发布身份；组件版本相同不能覆盖已知的 stale 状态。历史结果可以保留用于追溯，但应使用明确的历史查看语义。
+- **验收**：同组件版本的新发布也使旧推荐需要重验；当前发布通过；stale/unavailable 不能作为当前推荐通过。若调整验收接口，同步说明独立 ZC 原型结果与已发布结果的适用方式。
+
+### LJ-03：指标与耗时必须为有限有效数值
+
+位置：[acceptance.py](../modules/lj/prototype/acceptance.py) 的 `validate_result`。
+
+- **触发**：在正常可行结果中分别将 `metrics.risk_proxy` 改成 `NaN`、`Infinity`、`True`，或将 `elapsed_ms` 改成 `NaN`。
+- **实际**：四种情况全部返回 `pass`。现有类型和小于零判断不能拒绝这些值。
+- **修复要求**：数值指标为有限、非负的实数，排除布尔值；耗时检查使用相同的有效数值规则并遵守执行预算。
+- **验收**：覆盖各项指标及耗时的 NaN、正负无穷、布尔值、负数和正常值；正常值与超预算值按既定语义判断。
+
+### D-01：更新交接为实际成果状态
+
+位置：[LJ 交接](../handoffs/lj.md)。
+
+`d84a565` 已提交 LJ 模块、8 项测试和展示材料，但交接仍写“待开始”“暂无成果”。请 LJ 补充真实成果链接、已读取版本、测试结果、当前集成问题及下一步，便于其他 agent 正确读取状态。只填写本人的实际工作和已验证结果。
+
+## ZQO：发布与整合
+
+复现：`python3 -B docs/integration/audit.py --owner ZQO`。
+
+### ZQO-01：Q2 校验失败仍需保留已知版本
+
+位置：[publication.py](../modules/zqo/prototype/publication.py) 的 `Catalog.status`，成功 `pin` 后 `validate` 的异常分支。
+
+- **触发**：通过 `prepare_risk` 编译固定时间窗并发布；将 Q2 的查询结束时间延长，再查询同一已知发布。
+- **实际**：返回 `state=unknown`、`reason=risk_window_mismatch`、`release_id=1`，缺少已知快照的 `versions`。
+- **影响**：异常结果无法按统一 Q2 字段直接追溯五类输入，正常与失败分支输出不一致。
+- **修复要求**：已读取快照时保留其五类版本及可用来源字段；发布不存在时明确区分无法获得的版本。
+- **验收**：正常、风险窗口不匹配及发布不存在分别测试；已知发布的失败结果仍绑定其原版本，不改写为当前新版本。
+
+### I-01：补齐五模块整链路与来源映射
+
+这是集成完成项，当前证据为各模块测试和部分成对接入；本轮不将其记作额外已复现代码缺陷。ZQO 负责总体数据流，YHT、LQ、ZC、LJ 按接口配合，成员修复可并行开展。
+
+完整链路：YHT 合成源及质量门禁 → LQ 时间窗风险编译 → ZQO 原子发布 → ZC Q1/Q2 → LJ 当前结果验收。
+
+重点保留两组不同含义的版本及映射：
+
+- YHT 源版本：`scene / terrain / airspace / exposure / sources`。
+- 查询快照版本：`scene / airspace / risk_data / risk_model / planner_config`。
+
+源清单应随发布保存或有不可变引用，使查询版本可追溯至源版本和风险编译窗口。已有导出中的 `source_release` 等元数据应贯通，不能仅给字段改名或假定两组版本相等。
+
+完成判据：
+
+1. 正常链路实际消费各模块输出，保存输入、来源、发布编号、Q1/Q2 和 LJ 验收结果。
+2. 空域更新后旧路线失效，新路线按新发布生成；撤销限制后重新优化。
+3. 发布失败有审计且当前指针不被错误切换；重新打开数据库后可读取历史发布。
+4. 覆盖 YHT-01/02 的质量故障、LJ-02 的 stale 结果和 ZQO-01 的窗口错误。
+5. 各自更新当前集成状态；历史实验基线保留。若接口调整，记录字段映射及受影响测试。
+
+## ZC：本轮已修复
+
+位置：[planner.py](../modules/zc/prototype/planner.py)、[test_planner.py](../modules/zc/prototype/test_planner.py)。
+
+- Q2 现在校验实际传入的 `a/b` 航段端点。维度错误、非数值、布尔值及非有限数值返回 `unknown / invalid_segment_endpoint`，域外端点返回 `unknown / segment_outside_search_domain`，保留版本与时间窗。
+- 时间解析拒绝非字符串输入，交由既有预检返回 `unknown`，避免 `None` 等值触发未处理异常。
+- 新增 3 项回归测试，ZC 共 24 项通过；五模块共 102 项通过。原有 12 情境性能结果保留其原始源码摘要与实验基线。
+
+交接与证据见 [ZC 工作记录](../handoffs/zc.md) 和 [回归原始日志](results/regression.json)。

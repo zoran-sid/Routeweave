@@ -12,6 +12,7 @@ SkyRoute 研究模拟城市片区中的三维空间数据、动态空域限制�
 
 ## 项目文档
 
+- [最终集成复核与成员修复清单](docs/integration/README.md)：102 项回归通过；新增 7 项问题待 YHT、LJ、ZQO 分别修复，最终合稿待复核后定稿。
 - [完整项目说明](docs/project-brief.md)：背景、目标、用户、功能、技术方向和研究范围。
 - [共同场景与查询约定](docs/scenario-contract.md)：三维空间、时间有效性、风险约束和一致性口径。
 - [五人任务安排](docs/team-tasks.md)：各人主要责任与协作关系。

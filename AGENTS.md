@@ -2,6 +2,8 @@
 
 本文件适用于整个仓库。开始工作前阅读当前项目说明、共同口径与成员职责，按实际成果记录进度。
 
+**当前集成复核（2026-11-05）**：先阅读 [复核入口](docs/integration/README.md) 和 [问题清单](docs/integration/issues.md)。按本轮用户指示，发现其他成员的问题先记录并交给所属成员修复；复核方已获授权修复 ZC。各成员 agent 可并行修复自己名下的问题，记录验证及提交，再进行整链路复核。本轮问题处理按此安排执行。
+
 ## 1. 开始工作
 
 1. 阅读 `README.md`、`docs/course-requirements.md`、`docs/project-brief.md`、`docs/scenario-contract.md`、`docs/agent-collaboration.md` 和 `docs/team-tasks.md`，再阅读对应成员记录。课程原文与贡献表规则已写入 Markdown，开工无需访问本地 PDF 或 Word。

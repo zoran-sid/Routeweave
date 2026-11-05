@@ -1,0 +1,113 @@
+{
+  "base_commit": "cc20db8a6c3d2c92f030c8322cdf067ece249f91",
+  "working_changes": "ZC input validation fix and three regression tests; other member sources unchanged",
+  "python": "3.15.0 (main, Oct  9 2026, 11:16:41) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "suites": [
+    {
+      "owner": "YHT",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "docs/modules/yht/prototype",
+        "-v"
+      ],
+      "tests": 31,
+      "returncode": 0,
+      "output": "test_hit_returns_a_copy (test_yht.CacheTest.test_hit_returns_a_copy) ... ok\ntest_lru_eviction (test_yht.CacheTest.test_lru_eviction) ... ok\ntest_version_change_invalidates (test_yht.CacheTest.test_version_change_invalidates) ... ok\ntest_export_binds_with_zc (test_yht.ExportTest.test_export_binds_with_zc) ... ok\ntest_lq_adapter_plans_on_exported_profiles (test_yht.ExportTest.test_lq_adapter_plans_on_exported_profiles) ... ok\ntest_lq_profiles_keep_q_equal_e_times_c (test_yht.ExportTest.test_lq_profiles_keep_q_equal_e_times_c) ... ok\ntest_flat_terrain (test_yht.GeometryTest.test_flat_terrain) ... ok\ntest_polygon_rules (test_yht.GeometryTest.test_polygon_rules) ... ok\ntest_release_versions_and_manifest (test_yht.GeometryTest.test_release_versions_and_manifest) ... ok\ntest_segment_box_distance (test_yht.GeometryTest.test_segment_box_distance) ... ok\ntest_segment_hits_building_unknown_top (test_yht.GeometryTest.test_segment_hits_building_unknown_top) ... ok\ntest_grid_matches_bruteforce (test_yht.GridTest.test_grid_matches_bruteforce) ... ok\ntest_baseline_is_clean (test_yht.QualityTest.test_baseline_is_clean) ... ok\ntest_fault_injection (test_yht.QualityTest.test_fault_injection) ... ok\ntest_incomplete_coverage_is_unknown (test_yht.QualityTest.test_incomplete_coverage_is_unknown) ... ok\ntest_mutation_queries (test_yht.QualityTest.test_mutation_queries) ... ok\ntest_unknown_height_blocks_clearance (test_yht.QualityTest.test_unknown_height_blocks_clearance) ... ok\ntest_q1_blocked (test_yht.QueryTest.test_q1_blocked) ... ok\ntest_q1_clear (test_yht.QueryTest.test_q1_clear) ... ok\ntest_q1_vertical_clearance (test_yht.QueryTest.test_q1_vertical_clearance) ... ok\ntest_q2_allowed (test_yht.QueryTest.test_q2_allowed) ... ok\ntest_q2_below_ceiling_is_allowed (test_yht.QueryTest.test_q2_below_ceiling_is_allowed) ... ok\ntest_q2_building (test_yht.QueryTest.test_q2_building) ... ok\ntest_q2_hospital_ceiling (test_yht.QueryTest.test_q2_hospital_ceiling) ... ok\ntest_q2_no_fly_activation (test_yht.QueryTest.test_q2_no_fly_activation) ... ok\ntest_q2_version_mismatch (test_yht.QueryTest.test_q2_version_mismatch) ... ok\ntest_2d_index_is_conservative (test_yht.StoreTest.test_2d_index_is_conservative) ... ok\ntest_corridor_parity_with_bruteforce (test_yht.StoreTest.test_corridor_parity_with_bruteforce) ... ok\ntest_segment_parity_with_bruteforce (test_yht.StoreTest.test_segment_parity_with_bruteforce) ... ok\ntest_stats_and_rtree (test_yht.StoreTest.test_stats_and_rtree) ... ok\ntest_wal_reader_during_writer (test_yht.StoreTest.test_wal_reader_during_writer) ... ok\n\n----------------------------------------------------------------------\nRan 31 tests in 0.299s\n\nOK\n"
+    },
+    {
+      "owner": "LQ",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "docs/modules/lq/prototype",
+        "-v"
+      ],
+      "tests": 19,
+      "returncode": 0,
+      "output": "test_background_outside_unknown_region (test_risk.RiskTests.test_background_outside_unknown_region) ... ok\ntest_below_threshold (test_risk.RiskTests.test_below_threshold) ... ok\ntest_buffer_contact (test_risk.RiskTests.test_buffer_contact) ... ok\ntest_equal_population_different_consequence (test_risk.RiskTests.test_equal_population_different_consequence) ... ok\ntest_flying_higher_does_not_remove_ground_risk (test_risk.RiskTests.test_flying_higher_does_not_remove_ground_risk) ... ok\ntest_future_peak (test_risk.RiskTests.test_future_peak) ... ok\ntest_gap_unknown (test_risk.RiskTests.test_gap_unknown) ... ok\ntest_half_open_end (test_risk.RiskTests.test_half_open_end) ... ok\ntest_hard_threshold_inclusive (test_risk.RiskTests.test_hard_threshold_inclusive) ... ok\ntest_invalid_numeric_inputs (test_risk.RiskTests.test_invalid_numeric_inputs) ... ok\ntest_known_hazard_overrides_gap (test_risk.RiskTests.test_known_hazard_overrides_gap) ... ok\ntest_missing_profiles (test_risk.RiskTests.test_missing_profiles) ... ok\ntest_model_and_data_rebound_without_mutation (test_risk.RiskTests.test_model_and_data_rebound_without_mutation) ... ok\ntest_nonnegative_additive_and_search_agreement (test_risk.RiskTests.test_nonnegative_additive_and_search_agreement) ... ok\ntest_outside_footprint (test_risk.RiskTests.test_outside_footprint) ... ok\ntest_product (test_risk.RiskTests.test_product) ... ok\ntest_publication_separation (test_risk.RiskTests.test_publication_separation) ... ok\ntest_unknown (test_risk.RiskTests.test_unknown) ... ok\ntest_version_mismatch_rejected (test_risk.RiskTests.test_version_mismatch_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 19 tests in 0.050s\n\nOK\n"
+    },
+    {
+      "owner": "ZC",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "docs/modules/zc/prototype",
+        "-v"
+      ],
+      "tests": 24,
+      "returncode": 0,
+      "output": "test_buffer_and_corner_cut (test_planner.GeometryTests.test_buffer_and_corner_cut) ... ok\ntest_interior_crossing_and_tangent (test_planner.GeometryTests.test_interior_crossing_and_tangent) ... ok\ntest_time_half_open_and_future_activation (test_planner.GeometryTests.test_time_half_open_and_future_activation) ... ok\ntest_all_cases_match_dijkstra (test_planner.PlannerTests.test_all_cases_match_dijkstra) ... ok\ntest_blocked_and_zero_length_endpoints (test_planner.PlannerTests.test_blocked_and_zero_length_endpoints) ... ok\ntest_building_forces_vertical_detour (test_planner.PlannerTests.test_building_forces_vertical_detour) ... ok\ntest_ceiling_checks_segment_interior (test_planner.PlannerTests.test_ceiling_checks_segment_interior) ... ok\ntest_expired_and_revoked_restrictions (test_planner.PlannerTests.test_expired_and_revoked_restrictions) ... ok\ntest_hard_risk_cannot_be_bought_off (test_planner.PlannerTests.test_hard_risk_cannot_be_bought_off) ... ok\ntest_heuristic_consistency_on_all_allowed_edges (test_planner.PlannerTests.test_heuristic_consistency_on_all_allowed_edges) ... ok\ntest_invalid_and_off_grid_inputs (test_planner.PlannerTests.test_invalid_and_off_grid_inputs) ... ok\ntest_invalid_time_value_returns_unknown (test_planner.PlannerTests.test_invalid_time_value_returns_unknown) ... ok\ntest_known_detour_around_unknown_is_feasible (test_planner.PlannerTests.test_known_detour_around_unknown_is_feasible) ... ok\ntest_missing_stale_and_mixed_are_unknown (test_planner.PlannerTests.test_missing_stale_and_mixed_are_unknown) ... ok\ntest_open_analytical_solution (test_planner.PlannerTests.test_open_analytical_solution) ... ok\ntest_q2_invalid_segment_returns_unknown (test_planner.PlannerTests.test_q2_invalid_segment_returns_unknown) ... ok\ntest_q2_outside_domain_returns_unknown (test_planner.PlannerTests.test_q2_outside_domain_returns_unknown) ... ok\ntest_query_version_mismatch (test_planner.PlannerTests.test_query_version_mismatch) ... ok\ntest_search_budget_and_deadline (test_planner.PlannerTests.test_search_budget_and_deadline) ... ok\ntest_snapshot_not_mutated (test_planner.PlannerTests.test_snapshot_not_mutated) ... ok\ntest_unknown_risk_wall_does_not_prove_infeasible (test_planner.PlannerTests.test_unknown_risk_wall_does_not_prove_infeasible) ... ok\ntest_update_invalidates_old_route_and_replans (test_planner.PlannerTests.test_update_invalidates_old_route_and_replans) ... ok\ntest_weight_sweep_reduces_proxy (test_planner.PlannerTests.test_weight_sweep_reduces_proxy) ... ok\ntest_window_active_no_fly_blocks_all_levels (test_planner.PlannerTests.test_window_active_no_fly_blocks_all_levels) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 0.532s\n\nOK\n"
+    },
+    {
+      "owner": "ZQO",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "docs/modules/zqo/prototype",
+        "-v"
+      ],
+      "tests": 20,
+      "returncode": 0,
+      "output": "test_actual_audit_write_error_aborts_publication (test_publication.PublicationTests.test_actual_audit_write_error_aborts_publication) ... ok\ntest_concurrent_publishers_only_one_parent_wins (test_publication.PublicationTests.test_concurrent_publishers_only_one_parent_wins) ... ok\ntest_each_failure_rolls_back_release_audit_outbox_and_head (test_publication.PublicationTests.test_each_failure_rolls_back_release_audit_outbox_and_head) ... ok\ntest_history_reopens_after_restart (test_publication.PublicationTests.test_history_reopens_after_restart) ... ok\ntest_idempotent_retry_returns_original_after_later_publish (test_publication.PublicationTests.test_idempotent_retry_returns_original_after_later_publish) ... ok\ntest_missing_data_does_not_publish (test_publication.PublicationTests.test_missing_data_does_not_publish) ... ok\ntest_mixed_versions_rejected (test_publication.PublicationTests.test_mixed_versions_rejected) ... ok\ntest_notification_absence_does_not_hide_new_head (test_publication.PublicationTests.test_notification_absence_does_not_hide_new_head) ... ok\ntest_notifications_reconcile_duplicates_reordering_and_loss (test_publication.PublicationTests.test_notifications_reconcile_duplicates_reordering_and_loss) ... ok\ntest_reader_pins_old_release_across_commit (test_publication.PublicationTests.test_reader_pins_old_release_across_commit) ... ok\ntest_real_lq_zc_query_and_q2 (test_publication.PublicationTests.test_real_lq_zc_query_and_q2) ... ok\ntest_release_and_components_immutable (test_publication.PublicationTests.test_release_and_components_immutable) ... ok\ntest_republish_rollback_has_new_release_identity (test_publication.PublicationTests.test_republish_rollback_has_new_release_identity) ... ok\ntest_reviewer_policy (test_publication.PublicationTests.test_reviewer_policy) ... ok\ntest_revoke_and_expiry_are_distinct_from_publish_time (test_publication.PublicationTests.test_revoke_and_expiry_are_distinct_from_publish_time) ... ok\ntest_risk_compiled_window_cannot_be_reused (test_publication.PublicationTests.test_risk_compiled_window_cannot_be_reused) ... ok\ntest_same_component_version_cannot_change_content (test_publication.PublicationTests.test_same_component_version_cannot_change_content) ... ok\ntest_same_request_id_different_payload_rejected (test_publication.PublicationTests.test_same_request_id_different_payload_rejected) ... ok\ntest_uncommitted_head_not_visible_to_other_connection (test_publication.PublicationTests.test_uncommitted_head_not_visible_to_other_connection) ... ok\ntest_unknown_when_no_release_or_uncovered_time (test_publication.PublicationTests.test_unknown_when_no_release_or_uncovered_time) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.130s\n\nOK\n"
+    },
+    {
+      "owner": "LJ",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "docs/modules/lj/prototype",
+        "-v"
+      ],
+      "tests": 8,
+      "returncode": 0,
+      "output": "test_affected_update_requires_revalidation (test_acceptance.AcceptanceTests.test_affected_update_requires_revalidation) ... ok\ntest_budget_overrun (test_acceptance.AcceptanceTests.test_budget_overrun) ... ok\ntest_failed_publish_keeps_previous_snapshot (test_acceptance.AcceptanceTests.test_failed_publish_keeps_previous_snapshot) ... ok\ntest_feasible_result (test_acceptance.AcceptanceTests.test_feasible_result) ... ok\ntest_infeasible_result_has_no_success_metrics (test_acceptance.AcceptanceTests.test_infeasible_result_has_no_success_metrics) ... ok\ntest_recovery_digest_mismatch (test_acceptance.AcceptanceTests.test_recovery_digest_mismatch) ... ok\ntest_unknown_requires_reason (test_acceptance.AcceptanceTests.test_unknown_requires_reason) ... ok\ntest_version_mismatch (test_acceptance.AcceptanceTests.test_version_mismatch) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.000s\n\nOK\n"
+    }
+  ],
+  "total_tests": 102,
+  "all_passed": true,
+  "source_sha256": {
+    "docs/modules/lj/prototype/acceptance.py": "b6cc7b040626a7a9930ddaf8175487c89f686d9eecf042683c011f036fad03f5",
+    "docs/modules/lj/prototype/test_acceptance.py": "79a2692e2b652d4924dde454c6778d653048f5d4569f505e4ad823aca506c63b",
+    "docs/modules/lq/prototype/evaluate.py": "4873d2c2d917fe47e5f687265cc155b15832f11a6ae15cc2dd04b7ed382617d3",
+    "docs/modules/lq/prototype/risk.py": "22ab69531cbfb992482a11ab0ae9811613745ab6a895728806f3db988852737f",
+    "docs/modules/lq/prototype/test_risk.py": "242c53a07cfe0f36d99e60499da2058ec89e8d2e5b52d3e15f1d25c295d63f8c",
+    "docs/modules/yht/prototype/cache.py": "59535d50c41b4f9f17b798ee54f7226f3b31ff7728b47fe02d15537272f08d78",
+    "docs/modules/yht/prototype/evaluate.py": "03e5319bea62901fb4516b95d595bf1a06e28c6dd8004f992f435862b1fe2d2b",
+    "docs/modules/yht/prototype/export_lq.py": "2757e0c92bcbc49373600e36629ebef3466d982ec5090346747de3af7b2af93a",
+    "docs/modules/yht/prototype/export_zc.py": "d482baf2edf32cb764c02011501638b290595580f88edc6ca96d6382e65abde5",
+    "docs/modules/yht/prototype/quality.py": "c5f6128911555a01025e7913a014795787512690faf98cbbc852b08e2e5dff1f",
+    "docs/modules/yht/prototype/query.py": "fbb46dde7c4c71183d397c8b1c9ee83b142b2ed3949acf0c41cfeaa0068a9ef1",
+    "docs/modules/yht/prototype/store.py": "59ba4613fe9112524d0dbd31716e07a4c27f5979e6c7b59a2681ec97dc95b647",
+    "docs/modules/yht/prototype/test_yht.py": "de7e4645a9b3b68f620a812752b71953e610d6ad79a360a2f2d806aae55b60aa",
+    "docs/modules/yht/prototype/yht_model.py": "36bd3b87e5ca0a1f28534f981f3c6046060faade2e58a16d1517dcf34f54b6c6",
+    "docs/modules/zc/prototype/evaluate.py": "d3e4d92ee670b0d44b1f1b025b77ae95b6e1ee8e8d532868b110bf93e2917c54",
+    "docs/modules/zc/prototype/planner.py": "ddd425e4d5a8b58d293cfb5681554ac4d63476b210d892be302f964233c178d5",
+    "docs/modules/zc/prototype/scenarios.py": "fe5332bef2482827958738064ae55ba5650b267ca0fa0b372d1d252a96266ffe",
+    "docs/modules/zc/prototype/test_planner.py": "36bf0dcbeb067046263a80f5450df5b248f4d739502014f9a1b0b2c72fb1c67a",
+    "docs/modules/zqo/prototype/evaluate.py": "8d7c6a87dd716dd25f72b04e196ff060f052600bbdbd1768c5ccca69e861e089",
+    "docs/modules/zqo/prototype/publication.py": "124f045129568864da64920ef196ca60b0ffc9d0c2a9bcbfbd129614e80eabc4",
+    "docs/modules/zqo/prototype/test_publication.py": "be054d5ecaed7d038b4a0c06deb5b4ec526e4ca18ff106c5922528b8043ae421"
+  }
+}

@@ -8,7 +8,7 @@
 YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 ```
 
-上一棒 PR 合入 `develop` 并在群里通知后，下一棒才开始。YHT 已按早期版本开工，使用第1段“补充提示词”在原会话中继续。
+上一棒 PR 合入 `develop` 并在群里通知后，下一棒才开始。PPT 不限定每人2页：提示词中的页码是建议主题与顺序，页数按内容复杂度增减，ZC 整合时按汇报时长统一编排。YHT 已按早期版本开工，使用第1段“补充提示词”在原会话中继续。
 
 ---
 
@@ -53,7 +53,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 【第一步：审阅 YHT】运行 python3 -B -m unittest discover -s docs/v2/schema -v 和 YHT 的实验脚本；核对数据字典、schema.sql、第4章是否一致，发布相关实体能否承载你的事务设计。问题记入 docs/integration/issues.md（编号 YHT-V2-xx），交给 YHT 修，不改 YHT 的结论。
 兜底：若 docs/v2/schema/ 不存在或无法加载，按 YHT 数据字典自行生成最小 schema.sql 与 test_schema.py（只保证你需要的表和外键能加载），在 issues.md 记录并说明由 YHT 后续接管。
 
-【你的任务】报告：摘要初稿、第1章、第3.1–3.2节、第5章；PPT 第1–2页。
+【你的任务】报告：摘要初稿、第1章、第3.1–3.2节、第5章；PPT 建议约第1–2页，页数可按内容增减。
 1. 发布与版本表组：把 v1 发布目录（components/releases/head/audit/failed_attempts/outbox）映射到统一模式的 release、release_layer、airspace_event、audit_event 等实体，补齐当前指针、失败尝试、待发送事件等缺少的表；在 schema.sql 的 ZQO 分节修改，同步数据字典变更记录。
 2. 操作 B"发布或撤销限制"：事务边界图；SQL 与事务时序图。
 3. 基于统一模式重跑并扩展 v1 实验，放 docs/modules/zqo/v2/experiments/：双发布者冲突、读写交错的更新可见性、失败回滚（多个注入点）、幂等重试、历史快照查询。
@@ -61,7 +61,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 5. 新兴技术主讨论（第5章一节）：数据血缘与版本化派生数据管理——来源依赖、更新后的失效定位、派生数据重建成本、存储取舍；与 Apache Iceberg 快照/时间旅行、PostgreSQL 时态表比较，说明本场景为何选当前方案、什么条件下会换。
 6. 第1章与摘要初稿：以核心研究问题开篇，四类用户的价值，范围与假设。第3.1–3.2节：接入→存储→处理→服务→消费的架构图与数据流图，写清数据库为准的数据与可重建 JSON 快照的边界。
 7. 权衡一项：一致性 vs 可用性（发布期间读旧快照还是阻塞），或全量快照 vs 增量存储。
-8. PPT 第1页：问题、用户与价值（面向管理者）；第2页：事务与版本的机制和实验证据。
+8. PPT（页数按内容确定，以下为建议主题）第1页：问题、用户与价值（面向管理者）；第2页：事务与版本的机制和实验证据。
 
 【交付】docs/modules/zqo/v2/：section.md（约1,600中文字）、slides.md、references.md（IEEE）、experiments/（脚本+结果 JSON，记录 Python/SQLite 版本、平台、规模、源码 SHA-256）。
 
@@ -87,7 +87,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 
 【第一步：审阅 ZQO】运行 schema 测试和 ZQO 的实验脚本，核对事务与版本结论是否有证据支撑、发布表能否承载血缘与审计。问题记入 docs/integration/issues.md（ZQO-V2-xx），交给 ZQO 修。
 
-【你的任务】报告：第7章；PPT 第5–6页。
+【你的任务】报告：第7章；PPT 建议约第5–6页，页数可按内容增减。
 1. 风险派生、质量与访问表组：在 schema.sql 的 LQ 分节细化 risk_model、exposure_zone、actor、access_policy、lineage_edge、audit_event，补派生风险层与质量检查结果表；同步数据字典变更记录。
 2. 质量约束落到数据库：CHECK、触发器或入库门禁；实验证明缺失 E/C、q≠E×C、时段缺口等非法数据被拒绝（复用 v1 门禁）。
 3. 权限矩阵：四类用户（调度员、运营人员、空域及安全管理员、系统管理员）× 表/视图 × 读/写/发布/审批；用受限视图或行级过滤实现示例，实验证明越权查询被拒绝或被过滤；职责分离（作者不能审批自己的发布）。审计表记录什么、保留多久。
@@ -96,7 +96,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 6. 隐私与合规：暴露数据的聚合粒度与去标识化；伦理：风险规避造成的负担转移；AI 辅助治理（源数据异常检测、敏感字段分类）简述适用条件、误报漏报与人工复核。人口密度不直接等同于安全性。
 7. 风险模型压缩为"带模型版本的派生数据集"，公式放附录。
 8. 权衡一项：数据共享价值 vs 隐私保护（暴露数据的空间粒度）。
-9. PPT 第5页：血缘与来源追溯；第6页：访问控制、审计与隐私。
+9. PPT（页数按内容确定，以下为建议主题）第5页：血缘与来源追溯；第6页：访问控制、审计与隐私。
 
 【交付】docs/modules/lq/v2/：section.md（约1,200中文字，含权限矩阵与血缘图）、slides.md、references.md（IEEE）、experiments/（脚本+结果 JSON，记录环境与源码 SHA-256）。
 
@@ -122,7 +122,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 
 【第一步：审阅 LQ】运行 schema 测试和 LQ 的实验脚本，核对约束、权限与追溯结论是否有证据；检查 LQ 在 issues.md 中对查询结果表的字段需求。问题记入 issues.md（LQ-V2-xx）。
 
-【你的任务】报告：第6章、第8.1节（实验汇总）；PPT 第7–8页。
+【你的任务】报告：第6章、第8.1节（实验汇总）；PPT 建议约第7–8页，页数可按内容增减。
 1. 查询与结果追溯表组：在 schema.sql 的 ZC 分节加入查询运行、航线结果、航段来源映射、派生图缓存（以发布版本为键），满足 LQ 提出的操作 C 字段需求；让 LQ 的追溯 SQL 能在真实表上运行。
 2. 定义规划查询负载：Q1 读取哪些表、过滤条件、每次任务的数据量。
 3. 主实验（docs/modules/zc/v2/experiments/）：固定 A* 和同一批任务，比较
@@ -133,7 +133,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 6. A*/Dijkstra 对照压缩为一段，细节放附录。
 7. 第8.1节：汇总 YHT、ZQO、LQ 和你的实验（指标、条件、结果）为一张总表。
 8. 权衡一项：预计算/物化派生图 vs 数据新鲜度。
-9. PPT 第7页：规划查询的耗时分解；第8页：缓存失效、派生图重建与选型（算法不超过半页）。
+9. PPT（页数按内容确定，以下为建议主题）第7页：规划查询的耗时分解；第8页：缓存失效、派生图重建与选型（算法不超过半页）。
 
 【交付】docs/modules/zc/v2/：section.md（约1,300中文字）、slides.md、references.md（IEEE）、experiments/（脚本+结果 JSON，记录 Python/SQLite 版本、平台、规模、源码 SHA-256）。
 
@@ -159,7 +159,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 
 【第一步：审阅 ZC】运行 schema 测试和 ZC 的实验脚本，核对耗时分解与缓存失效结论是否有证据。问题记入 docs/integration/issues.md（ZC-V2-xx）。
 
-【你的任务】报告：第3.3节、第8.2–8.3节；PPT 第9–10页。
+【你的任务】报告：第3.3节、第8.2–8.3节；PPT 建议约第9–10页，页数可按内容增减。
 1. 备份与恢复流程：SQLite 在线备份 API 或 WAL 检查点后复制；RPO/RTO 设计依据。
 2. 恢复后一致性核验实验（docs/modules/lj/v2/experiments/）：在统一模式数据库上执行备份→制造故障（中途中断、文件截断或删除 WAL）→恢复；核验 PRAGMA integrity_check、PRAGMA foreign_key_check、发布链完整性（父版本与 content_hash）、用恢复后的数据重放一次历史查询并与保存结果比对；证明损坏能被发现、正常恢复能通过。
 3. 保留策略：历史版本、审计、待发送事件、查询结果的保留期与归档方式（与 LQ 的审计保留期一致）。
@@ -167,7 +167,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 5. 第3.3节：部署方式（本地/云/边）、复制与故障切换设计（设计论证，不推定未测性能）。第8.2节：恢复验收结果与按 YHT 规模估算的成本，单价引用公开价目并注明日期。
 6. 第8.3节：汇总五人权衡（YHT 灵活模式 vs 数据质量、ZQO 一致性 vs 可用性或存储、LQ 共享 vs 隐私、ZC 物化 vs 新鲜度、LJ 恢复目标 vs 成本），写风险、局限与改进方向。
 7. 你本人的权衡：恢复目标（RPO/RTO）vs 成本。
-8. PPT 第9页：备份恢复与一致性核验；第10页：权衡、局限与结论（整场收尾，面向决策者）。
+8. PPT（页数按内容确定，以下为建议主题）第9页：备份恢复与一致性核验；第10页：权衡、局限与结论（整场收尾，面向决策者）。
 
 【交付】docs/modules/lj/v2/：section.md（约1,100中文字）、slides.md、references.md（IEEE）、experiments/（脚本+结果 JSON，记录环境与源码 SHA-256）。
 
@@ -191,7 +191,7 @@ YHT → ZQO → LQ → ZC → LJ → ZC（整合）→ main
 
 【任务】
 1. 按 team-tasks.md 第6节结构，将五人 section.md 组装为 docs/final/report.md（v2）：统一术语、图号、引用编号（IEEE），删除重复，摘要定稿，第8.1节实验总表与各章一致；第9章小组分工只写实际成果，比例与签字留给成员本人；附录放 v1 原型、算法细节与复现命令。
-2. 按第9节组装10页 docs/final/slides.md，重新生成 Word 报告与可编辑 PPT（构建方式见 docs/final/source/README.md），检查排版。
+2. 按第9节组装 docs/final/slides.md（页数按内容与汇报时长确定），重新生成 Word 报告与可编辑 PPT（构建方式见 docs/final/source/README.md），检查排版。
 3. 重写 docs/final/course-coverage.md 与 docs/requirements-audit.md：课程要求（PDF 页码）→ 报告章节 → PPT 页码 → 证据文件。
 4. 更新 docs/final/README.md、docs/final/evidence/（本轮验证命令、日志、环境、源码摘要）、README.md 的版本说明；统计正文汉字数（不含参考文献与附录）。
 5. v1 的 docs/final 内容保留在标签 v1.0-algorithm-baseline，不需要另存副本。

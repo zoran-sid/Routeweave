@@ -17,6 +17,7 @@ P1：影响约束、未知数据或当前推荐验收，合稿采用相关原型
 | YHT-01 | YHT | P1 | 未知风险区域在两种导出中被丢弃，变成背景低风险 | 本轮复核通过 |
 | YHT-02 | YHT | P1 | 导出忽略不完整覆盖及不支持的非平地输入 | 本轮复核通过 |
 | YHT-03 | YHT | P1 | 走廊限高检查未计入垂直安全缓冲 | 本轮复核通过 |
+| YHT-04 | YHT | P1 | 单独E/C缺失但q保留时，直接ZC导出绕过源质量门禁 | 2026-11-06 LQ新发现，待负责人确认/修复 |
 | LJ-01 | LJ | P1 | 双方缺失版本字段仍可验收通过 | 本轮复核通过 |
 | LJ-02 | LJ | P1 | 已标记 stale 的旧发布结果仍可通过当前推荐验收 | 本轮复核通过 |
 | LJ-03 | LJ | P2 | NaN、Infinity、布尔指标及 NaN 耗时未被拒绝 | 本轮复核通过 |
@@ -150,3 +151,17 @@ LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射�
 - 新增 3 项回归测试，ZC 共 24 项通过；五模块共 102 项通过。原有 12 情境性能结果保留其原始源码摘要与实验基线。
 
 交接与证据见 [ZC 工作记录](../handoffs/zc.md) 和 [回归原始日志](results/regression.json)。
+
+## 2026-11-06 LQ风险接口复核新增：YHT-04
+
+检查基线`6567a583969d8131e850c34222ea8005a65c66ef`。上述7项既有问题与I-01整链路复跑通过；本节为新增的部分缺失输入，不覆盖历史通过记录。
+
+- **负责人**：YHT。LQ仅新增复现、证据与交接，不修改YHT实现。
+- **位置**：`export_zc.require_exportable/export_snapshot`。当前只检查q有限且在范围内，没有检查源E/C是否缺失；`profiles_from_scene`和ZQO的`prepare_source`分别会拒绝。
+- **触发**：创建YHT场景，去除建筑及空域以隔离风险。分别将G-001的`exposure_e`或`consequence_c`单独设为None，保留q=0.78，重新seal；直接export_snapshot后交给ZC assess_segment检查`[20,20,70]`至`[40,20,70]`。
+- **实际**：两种输入均为`allowed / checked`、q_max=0.78、risk_proxy=0.156，sources为background和G-001。源的E/C缺失已被quality判为错误，但调用直接导出不经过该门禁。同样输入经LQ导出抛ValueError，经ZQO prepare_source在quality阶段拒绝。
+- **影响与范围**：默认五模块完整链路已有质量门禁，不受此旁路影响；独立YHT→ZC导出仍接受无法按当前q=E×C来源核验的输入。不能用完整链路拒绝来证明独立入口也拒绝。
+- **负责人处理与验收**：在直接入口拒绝单独缺失E/C，或保留未知区域与来源交给ZC返回unknown；分别测试E缺失、C缺失、q缺失、全部缺失及正常已知输入。LQ导出入口必须独立执行，不能被另一个入口的拒绝掩盖。
+- **复现**：`python3 -B docs/modules/lq/prototype/review_integration.py --output /tmp/lq-risk-review.json`，25项中23项通过，`unknown_E_export_zc`和`unknown_C_export_zc`失败，退出码1。原始[专项证据](../modules/lq/results/integration-review-20261106.json)包含输入空间范围、source_id、源版本、响应和代码摘要；[本人记录](../handoffs/lq.md)与[集成说明](../modules/lq/integration.md)注明实际状态。
+
+待YHT提交后由LQ读取修复版本再复测；此处不代写YHT认可，也未关闭新项。

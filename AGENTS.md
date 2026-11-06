@@ -99,7 +99,8 @@ git switch develop && git pull --ff-only
 git switch -c <缩写>/<主题>
 ```
 
-- 不直接向 `main` 或 `develop` 推送提交，不 force push 这两个分支。
+- GitHub 分支保护（2026-11-06 起）：`main` 必须经 PR 合并且 `checks` 通过，禁止 force push 和删除；`develop` 禁止 force push 和删除，允许直接推送。PR 不强制审批人数。
+- 常规工作不直接推送 `main` 或 `develop`；`develop` 上的小修（错字、链接）可直接推送，推送后确认 `checks` 通过。
 - PR 标题沿用下方提交命名格式；正文写明改动、验证命令与结果、受影响的其他成员。合并方式使用 merge commit，保留成员提交和作者记录。
 - 合并前分支须基于最新 `develop`，GitHub Actions 的 `checks` 通过；跨成员内容至少由一名其他成员（或其 agent）审阅。
 - `develop` → `main` 的发布 PR 附课程覆盖表与验证证据，合并后打标签。

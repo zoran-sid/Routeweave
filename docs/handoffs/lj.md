@@ -9,17 +9,19 @@
 | 展示安排 | PPT 第9–10页 |
 | 技术成果状态 | 模块可交付，LJ-01/02/03 已修复待复核 |
 
-## v2 任务（2026-11-06 重组，待开始）
+## v2 任务（2026-11-06 重组，第5棒，待开始）
 
 | 项目 | 内容 |
 | --- | --- |
-| v2 职责 | 部署、高可用、灾备与成本；权衡汇总 |
-| 报告章节 | 3.4、7.2–7.3 |
+| v2 数据库重点 | 运行保障与恢复验收；权衡汇总 |
+| 报告章节 | 3.3、8.2–8.3 |
 | PPT | 第9–10页 |
-| 建议分支 | `lj/v2-operations`，从 `develop` 创建，PR 到 `develop` |
-| 交付位置 | `docs/modules/lj/v2/`：`section.md`、`slides.md`、`references.md` |
+| 开工条件 | ZC 的 v2 PR 已合入 `develop`；第一步审阅 ZC |
+| 分支 | `lj/v2-recovery`，从 `develop` 创建，PR 到 `develop`，checks 通过后自行合入 |
+| 交付位置 | `docs/modules/lj/v2/`：`section.md`、`slides.md`、`references.md`、`experiments/`；`docs/v2/schema/` 中本人表组 |
+| 提示词 | [v2 提示词](../v2-prompts.md) |
 
-具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。以下 v1 记录保留为证据。
+具体任务与验收见[任务安排](../team-tasks.md)第4–10节。以下 v1 记录保留为证据。
 
 ## 主要职责
 

@@ -10,17 +10,40 @@
 | 技术成果状态 | 模块可交付 |
 | 集成状态 | YHT-01/02/03/04 已修复并通过 owner 审计 / LQ 专项复核；YHT-05 文档已修订待复核；与 ZC/LQ 导出接口已实测，ZQO 发布与 LJ 验收的整链路联调待集成方推进 |
 
-## v2 任务（2026-11-06 重组，待开始）
+## v2 任务（2026-11-06 开始）
 
 | 项目 | 内容 |
 | --- | --- |
-| v2 职责 | 需求与数据分析、数据模型与数据库设计；最先交付数据字典 |
+| v2 职责 | 需求与数据分析、数据模型与数据库设计；数据字典供全体先行对齐 |
 | 报告章节 | 2、4 |
 | PPT | 第3–4页 |
-| 建议分支 | `yht/v2-data-model`，从 `develop` 创建，PR 到 `develop` |
-| 交付位置 | `docs/modules/yht/v2/`：`section.md`、`slides.md`、`references.md` |
+| 分支 | `yht/v2-data-model`，从 `develop` 的 `4b60453` 创建 |
+| PR | [#1](https://github.com/zoran-sid/Routeweave/pull/1)，目标 `develop`；数据字典先单独提交 |
+| 交付位置 | `docs/modules/yht/v2/`：`data-dictionary.md`、`section.md`、`slides.md`、`references.md` |
+| 当前状态 | 数据字典 `a35aeac`；第2、4章、两页讲稿与引用 `50f109c`，字段对齐与引用编号 `fcccbce`/`4aee9d2`，交接记录 `ec460b2`；均已推送；GitHub Actions `checks` 成功；PR 待 ZQO 复核 |
 
-具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。以下 v1 记录保留为证据。
+具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。本轮已完成：
+
+- 数据字典：三类数据、五层版本、16 个实体、单位/坐标、来源/更新频率、敏感级别、ER 关系、PostGIS/SQLite 索引映射、三年规模假设。
+- 第2章：功能/非功能需求、三类数据规模与增长、生命周期、访问模式、利益相关者。
+- 第4章：ER 图、关系模式与主外键/约束、Q1/Q2 典型 SQL、三维与时间索引、空间瓦片与时间分区、冷热分层、灵活模式 vs 数据质量权衡。
+- 两页讲稿：第3页数据挑战，第4页模型与索引；引用 IEEE 格式。
+- 验证：相对链接 0 处失效；`git diff --check` 通过；GitHub Actions `checks` 在 `ec460b2` 上成功；未改动其他成员 v2 目录；v1 成果保留。
+
+影响：四名成员可据此对齐 `release_id`、五层版本、`feature_id`、三维几何、`effective`/`valid`、E/C/q 与来源字段；字段变更需在数据字典记录影响。
+
+### 2026-11-06：ZC 按用户指示补齐 v2 合入前要求
+
+依据 [任务安排](../team-tasks.md) 第4、5、7.1节与第10节验收清单核对本分支 `44c897e`。数据字典、第2章、第4章与两页讲稿基本满足；缺可执行模式与操作 A 的执行计划证据，另有三处建模问题。用户要求直接修改提交，ZC 在本分支完成以下修订，**待 YHT 复核确认**，不代表 YHT 已认可：
+
+- 新增 [`docs/v2/schema/`](../v2/schema/schema.sql)：按数据字典生成16张表的 SQLite DDL、39个触发器、三个 R*Tree、[ER 图](../v2/schema/er.md)、[设计决定](../v2/schema/decisions.md)、[操作 A SQL](../v2/schema/op_a.sql)、[测试夹具](../v2/schema/fixtures.py)与13项[测试](../v2/schema/test_schema.py)。
+- 修正建模问题（决定 S-01—S-03）：瓦片与地形主键加 `release_id`；`airspace_restriction.state` 随发布固定；限高体禁止范围为 `ceiling_m` 以上。数据字典第3、7、9节同步。
+- 新增 [操作 A 访问路径实验](../modules/yht/v2/experiments/op_a_index_comparison.py) 与 [结果](../modules/yht/v2/experiments/results/op_a_index_comparison.json)：六种路径结果一致；N=10,000、K=20 时四维 R*Tree 中位37.4 µs，全扫12,429 µs，发布 B-tree 878 µs。
+- `section.md` 第4.2节、新增第4.3.1节；`slides.md` 第4页；`references.md` 新增 [17]–[21]。
+
+验证：`python3 -B -m unittest discover -s docs/v2/schema -v` 13项通过；五个 v1 模块测试通过；实验命令 `python3 -B docs/modules/yht/v2/experiments/op_a_index_comparison.py`（约45秒）。
+
+以下 v1 记录保留为证据。
 
 ## 已完成成果
 

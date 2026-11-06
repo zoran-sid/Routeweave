@@ -22,7 +22,7 @@
 | SQLite R\*Tree 3D | 是 | 7 列虚拟表，三维包围盒过滤 + 回表精算 | SQLite 官方文档：R\*Tree 支持 1–5 维，3 维为 7 列，32 位浮点向外取整 | **原型采用** |
 | SQLite R\*Tree 2D + z 列 | 二维索引，z 在回表时过滤 | 5 列虚拟表 + `top_z/base_z` 条件 | 同上；z 条件只能减少回表后的精确检查 | 保留为对照，不单独作为三维方案 |
 | 均匀网格 3D | 是 | 40 m 立方单元格，对象跨格重复登记 | 本次实测 | 构建快，候选重复多，规模增大后变慢 |
-| PostGIS | 是 | `geometry(PolyhedralSurfaceZ)`、`&&&`、`ST_3DIntersects`，GiST `gist_geometry_ops_3d` | PostGIS 官方文档：三维相交自动包含包围盒比较并使用可用索引；`&&&` 为 n 维包围盒相交 | 生产候选，未在本机实库验证 |
+| PostGIS | 是 | `geometry(PolyhedralSurfaceZ)`、`&&&`、`ST_3DIntersects`，n 维 GiST `gist_geometry_ops_nd` | PostGIS 3.5 官方文档：带 Z/measured 数据可建 n 维 GiST 索引；`&&&` 为 n 维包围盒相交；`ST_3DIntersects` 做精确三维判定并自动做包围盒比较 | 生产候选，未在本机实库验证 |
 | MongoDB 2dsphere | 球面二维 | GeoJSON/球面几何 | 文档以地球球面查询为主，未取得三维体索引的明确说明 | 不选 |
 | Neo4j point index | 点 | 2D/3D 点、距离/包围盒 | 官方文档：point index 只索引点，使用空间填充曲线 | 不选（建筑是体，不是点） |
 | Elasticsearch geo_shape | 二维 | 经纬度形状 | 官方文档：只有经纬度入索引，`ignore_z_value` 默认 true | 不选 |
@@ -126,7 +126,7 @@ Q1 的路径相同，只是包围盒按半径外扩；建筑用线段–盒距�
 
 若把原型搬到生产，建议：
 
-1. **主存储用 PostgreSQL + PostGIS**：建筑用 `geometry(PolyhedralSurfaceZ, 0)` 或带 Z 的 `geometry`，空域用三维体；建 `gist_geometry_ops_3d` 索引；查询先用 `&&&` 做包围盒过滤，再用 `ST_3DIntersects` 精确判定。PostGIS 文档说明 `ST_3DIntersects` 会自动做包围盒比较并使用可用索引，但这不改变"浮点鲁棒性需用 `ST_3DDWithin` 复核"的限制。
+1. **主存储用 PostgreSQL + PostGIS**：建筑用 `geometry(PolyhedralSurfaceZ, 0)` 或带 Z 的 `geometry`，空域用三维体；建 `gist_geometry_ops_nd` 的 GiST 索引，而不是默认的二维 GiST 包围盒。查询先用 `&&&` 做 n 维包围盒候选过滤，再用 `ST_3DIntersects` 精确判定；`ST_3DIntersects` 会自动做包围盒比较并使用可用索引。示例按 PostGIS 3.5 官方文档编写，未在本机执行：`CREATE INDEX ... ON ... USING gist (geom gist_geometry_ops_nd);`。这仍不改变"浮点鲁棒性需用 `ST_3DDWithin` 复核"的限制。
 2. **按发布分区**：每次发布一个 schema 或一个分区表，查询绑定发布 ID；旧发布保留只读，按保留策略下线。这样版本切换是"换分区"，不是"改行"。
 3. **覆盖瓦片做二级分区/聚簇**：`coverage` 瓦片与来源分块对齐，按瓦片聚簇可减少大范围查询的随机 I/O；超大面用 `ST_Subdivide`，避免单个几何过大。
 4. **热/温/冷分层**：热层是当前发布的 R\*Tree/GiST 索引和常用查询结果缓存；温层是历史发布的只读快照；冷层是导出 JSON 或对象存储归档。原型只实现热层的内存/单文件库。

@@ -1,6 +1,6 @@
 # 参考文献与资料用途
 
-读取日期均为 2026-11-05（Asia/Shanghai）。网页只用于核对产品能力和标准语义；本模块的场景、数值和结论来自 `prototype/` 中的合成程序运行。
+读取日期为 2026-11-05；YHT-05 的 PostGIS 索引名称核对补充于 2026-11-06（Asia/Shanghai）。网页只用于核对产品能力和标准语义；本模块的场景、数值和结论来自 `prototype/` 中的合成程序运行。
 
 1. PostGIS. *ST_3DIntersects*. <https://postgis.net/docs/ST_3DIntersects.html>
    用于三维相交语义、包围盒预过滤与空间索引使用方式；文中明确浮点鲁棒性问题可改用 `ST_3DDWithin`。
@@ -40,3 +40,6 @@
 
 13. LQ 模块。`docs/modules/lq/design.md`、`docs/modules/lq/prototype/risk.py`。
     用于 `q=E×C` 的暴露/后果分解、`compile_profiles(snapshot, query, profiles)` 的时段与版本适配；本模块的 `export_lq.py` 按其 profile 结构导出并复跑联合检查。
+
+14. PostGIS. *Data Management — Spatial Indexes*（PostGIS 3.5 手册）. <https://postgis.net/docs/manual-3.5/using_postgis_dbmanagement.html#build-indexes>
+    用于 n 维 GiST 操作符类名称 `gist_geometry_ops_nd` 及带 Z 数据的索引示例；默认二维 GiST 包围盒与精确三维几何判定需要区分，文中示例未在本机执行。

@@ -20,7 +20,7 @@
 | 分支 | `yht/v2-data-model`，从 `develop` 的 `4b60453` 创建 |
 | PR | [#1](https://github.com/zoran-sid/Routeweave/pull/1)，目标 `develop`；数据字典先单独提交 |
 | 交付位置 | `docs/modules/yht/v2/`：`data-dictionary.md`、`section.md`、`slides.md`、`references.md` |
-| 当前状态 | 数据字典 `a35aeac`；第2、4章、两页讲稿与引用 `50f109c`，字段对齐与引用编号 `fcccbce`/`4aee9d2`；均已推送；PR 待 ZQO 复核 |
+| 当前状态 | 数据字典 `a35aeac`；第2、4章、两页讲稿与引用 `50f109c`，字段对齐与引用编号 `fcccbce`/`4aee9d2`，交接记录 `ec460b2`；均已推送；GitHub Actions `checks` 成功；PR 待 ZQO 复核 |
 
 具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。本轮已完成：
 
@@ -28,7 +28,7 @@
 - 第2章：功能/非功能需求、三类数据规模与增长、生命周期、访问模式、利益相关者。
 - 第4章：ER 图、关系模式与主外键/约束、Q1/Q2 典型 SQL、三维与时间索引、空间瓦片与时间分区、冷热分层、灵活模式 vs 数据质量权衡。
 - 两页讲稿：第3页数据挑战，第4页模型与索引；引用 IEEE 格式。
-- 验证：相对链接 0 处失效；`git diff --check` 通过；未改动其他成员 v2 目录；v1 成果保留。
+- 验证：相对链接 0 处失效；`git diff --check` 通过；GitHub Actions `checks` 在 `ec460b2` 上成功；未改动其他成员 v2 目录；v1 成果保留。
 
 影响：四名成员可据此对齐 `release_id`、五层版本、`feature_id`、三维几何、`effective`/`valid`、E/C/q 与来源字段；字段变更需在数据字典记录影响。
 

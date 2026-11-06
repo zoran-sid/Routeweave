@@ -20,7 +20,7 @@
 | 分支 | `yht/v2-data-model`，从 `develop` 的 `4b60453` 创建 |
 | PR | [#1](https://github.com/zoran-sid/Routeweave/pull/1)，目标 `develop`；数据字典先单独提交 |
 | 交付位置 | `docs/modules/yht/v2/`：`data-dictionary.md`、`section.md`、`slides.md`、`references.md` |
-| 当前状态 | 数据字典 `a35aeac`；第2、4章、两页讲稿与引用 `50f109c`；均已推送；PR 待 ZQO 复核 |
+| 当前状态 | 数据字典 `a35aeac`；第2、4章、两页讲稿与引用 `50f109c`，字段对齐与引用编号 `fcccbce`/`4aee9d2`；均已推送；PR 待 ZQO 复核 |
 
 具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。本轮已完成：
 

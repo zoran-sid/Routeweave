@@ -17,7 +17,7 @@ P1：影响约束、未知数据或当前推荐验收，合稿采用相关原型
 | YHT-01 | YHT | P1 | 未知风险区域在两种导出中被丢弃，变成背景低风险 | 本轮复核通过 |
 | YHT-02 | YHT | P1 | 导出忽略不完整覆盖及不支持的非平地输入 | 本轮复核通过 |
 | YHT-03 | YHT | P1 | 走廊限高检查未计入垂直安全缓冲 | 本轮复核通过 |
-| YHT-04 | YHT | P1 | 单独E/C缺失但q保留时，直接ZC导出绕过源质量门禁 | 2026-11-06 LQ新发现，待负责人确认/修复 |
+| YHT-04 | YHT | P1 | 单独E/C缺失但q保留时，直接ZC导出绕过源质量门禁 | 已修复待复核（`1862ab4`） |
 | LJ-01 | LJ | P1 | 双方缺失版本字段仍可验收通过 | 本轮复核通过 |
 | LJ-02 | LJ | P1 | 已标记 stale 的旧发布结果仍可通过当前推荐验收 | 本轮复核通过 |
 | LJ-03 | LJ | P2 | NaN、Infinity、布尔指标及 NaN 耗时未被拒绝 | 本轮复核通过 |
@@ -165,3 +165,5 @@ LQ 本轮未发现独立阻塞缺陷；YHT-01 修复后参与风险输入映射�
 - **复现**：`python3 -B docs/modules/lq/prototype/review_integration.py --output /tmp/lq-risk-review.json`，25项中23项通过，`unknown_E_export_zc`和`unknown_C_export_zc`失败，退出码1。原始[专项证据](../modules/lq/results/integration-review-20261106.json)包含输入空间范围、source_id、源版本、响应和代码摘要；[本人记录](../handoffs/lq.md)与[集成说明](../modules/lq/integration.md)注明实际状态。
 
 待YHT提交后由LQ读取修复版本再复测；此处不代写YHT认可，也未关闭新项。
+
+YHT修复（提交`1862ab44ca094bc493fab6fc7ce0cd6f51f2e2db`，`fix(data): verify exposure factors before zc export`）：`export_snapshot`在`require_exportable`之后调用新增的`require_verifiable_exposure`，逐分区要求`E`/`C`/`q`均为[0,1]内有限数且`|q-E×C|<=1e-9`；缺字段或越界抛`ValueError:unknown_or_invalid_exposure:<id>`，三者不一致抛`ValueError:inconsistent_exposure:<id>`。LQ的`profiles_from_scene`继续独立校验，不依赖该门禁。新增5项回归测试，YHT共42项通过；`docs/integration/audit.py --owner YHT`三项通过；YHT本地运行LQ的`review_integration.py`为25/25通过。该结果只证明YHT入口按验收要求拒绝，LQ仍需在修复版本上独立复测并确认。

@@ -1,5 +1,5 @@
 -- SkyRoute v2 统一数据库模式（SQLite 方言）
--- 逻辑模型：docs/modules/yht/v2/data-dictionary.md（16 个实体）
+-- 逻辑模型：docs/modules/yht/v2/data-dictionary.md（16 个基础实体 + ZQO 第9节变更记录的7个发布实体）
 -- 设计说明：decisions.md；ER 图：er.md；测试：test_schema.py
 --
 -- 方言约定
@@ -146,6 +146,143 @@ WHEN (SELECT status FROM release WHERE release_id = NEW.release_id) <> 'draft'
 BEGIN
     SELECT RAISE(ABORT, 'release_layer: release is not draft');
 END;
+
+-- ZQO v2: physical owner rows stay in YHT tables; logical releases share components.
+CREATE TABLE layer_component (
+    component_id TEXT PRIMARY KEY,
+    layer TEXT NOT NULL CHECK (layer IN ('scene','terrain','airspace','exposure','sources')),
+    owner_release_id TEXT NOT NULL REFERENCES release(release_id),
+    content_hash TEXT NOT NULL CHECK (length(content_hash)=64 AND content_hash NOT GLOB '*[^0-9a-f]*'),
+    feature_count INTEGER NOT NULL CHECK (feature_count>=0),
+    UNIQUE(component_id, layer),
+    UNIQUE(owner_release_id, layer)
+);
+CREATE INDEX component_hash ON layer_component(layer, content_hash);
+CREATE TABLE release_component (
+    release_id TEXT NOT NULL,
+    layer TEXT NOT NULL,
+    component_id TEXT NOT NULL,
+    PRIMARY KEY(release_id, layer),
+    FOREIGN KEY(release_id, layer) REFERENCES release_layer(release_id, layer),
+    FOREIGN KEY(component_id, layer) REFERENCES layer_component(component_id, layer)
+);
+CREATE INDEX component_dependents ON release_component(component_id, release_id);
+CREATE TABLE component_source (
+    component_id TEXT NOT NULL REFERENCES layer_component(component_id),
+    source_id TEXT NOT NULL REFERENCES source(source_id),
+    PRIMARY KEY(component_id, source_id)
+);
+CREATE TABLE current_release (
+    scene_id TEXT PRIMARY KEY,
+    release_id TEXT NOT NULL UNIQUE REFERENCES release(release_id)
+);
+CREATE TABLE publish_request (
+    request_id TEXT PRIMARY KEY,
+    request_hash TEXT NOT NULL CHECK (length(request_hash)=64),
+    release_id TEXT NOT NULL UNIQUE REFERENCES release(release_id)
+);
+CREATE TABLE failed_attempt (
+    attempt_id TEXT PRIMARY KEY,
+    request_id TEXT NOT NULL,
+    candidate_hash TEXT NOT NULL,
+    candidate_release_id TEXT NOT NULL, -- may never exist; deliberately not a foreign key
+    expected_release_id TEXT,
+    observed_release_id TEXT REFERENCES release(release_id),
+    actor_ref TEXT NOT NULL, -- unknown/disabled caller must still be auditable
+    at TEXT NOT NULL,
+    reason TEXT NOT NULL
+);
+CREATE INDEX failed_request ON failed_attempt(request_id);
+CREATE TABLE outbox (
+    event_id TEXT PRIMARY KEY REFERENCES audit_event(event_id),
+    release_id TEXT NOT NULL REFERENCES release(release_id),
+    kind TEXT NOT NULL CHECK(kind IN ('publish','revoke')),
+    created_at TEXT NOT NULL,
+    delivered_at TEXT,
+    attempts INTEGER NOT NULL DEFAULT 0 CHECK(attempts>=0)
+);
+CREATE INDEX outbox_pending ON outbox(delivered_at, created_at);
+
+CREATE TRIGGER release_insert_draft_only BEFORE INSERT ON release
+WHEN NEW.status <> 'draft'
+BEGIN SELECT RAISE(ABORT, 'release: insert as draft'); END;
+CREATE TRIGGER release_layer_target_draft BEFORE UPDATE ON release_layer
+WHEN (SELECT status FROM release WHERE release_id=NEW.release_id)<>'draft'
+BEGIN SELECT RAISE(ABORT, 'release_layer: target is not draft'); END;
+CREATE TRIGGER release_publish_complete BEFORE UPDATE OF status ON release
+WHEN NEW.status='published' AND OLD.status='draft'
+ AND EXISTS(SELECT 1 FROM release_layer WHERE release_id=NEW.release_id AND complete<>1)
+BEGIN SELECT RAISE(ABORT, 'release: incomplete layer'); END;
+CREATE TRIGGER component_insert_draft BEFORE INSERT ON layer_component
+WHEN (SELECT status FROM release WHERE release_id=NEW.owner_release_id)<>'draft'
+BEGIN SELECT RAISE(ABORT, 'component: owner is not draft'); END;
+CREATE TRIGGER component_no_update BEFORE UPDATE ON layer_component
+BEGIN SELECT RAISE(ABORT, 'component: immutable'); END;
+CREATE TRIGGER component_no_delete BEFORE DELETE ON layer_component
+BEGIN SELECT RAISE(ABORT, 'component: immutable'); END;
+CREATE TRIGGER release_component_insert BEFORE INSERT ON release_component BEGIN
+    SELECT CASE WHEN (SELECT status FROM release WHERE release_id=NEW.release_id)<>'draft'
+      THEN RAISE(ABORT, 'release_component: release is not draft') END;
+    SELECT CASE WHEN NOT EXISTS (
+      SELECT 1 FROM layer_component c JOIN release_layer l
+        ON l.release_id=NEW.release_id AND l.layer=NEW.layer
+      JOIN release owner ON owner.release_id=c.owner_release_id
+      JOIN release target ON target.release_id=NEW.release_id
+      WHERE c.component_id=NEW.component_id AND c.content_hash=l.content_hash
+        AND c.feature_count=l.feature_count AND owner.scene_id=target.scene_id
+        AND (owner.release_id=target.release_id OR owner.status<>'draft'))
+      THEN RAISE(ABORT, 'release_component: incompatible component') END;
+END;
+CREATE TRIGGER release_component_no_update BEFORE UPDATE ON release_component
+BEGIN SELECT RAISE(ABORT, 'release_component: immutable'); END;
+CREATE TRIGGER release_component_no_delete BEFORE DELETE ON release_component
+BEGIN SELECT RAISE(ABORT, 'release_component: immutable'); END;
+CREATE TRIGGER component_source_insert BEFORE INSERT ON component_source
+WHEN NOT EXISTS(SELECT 1 FROM layer_component c JOIN release r ON r.release_id=c.owner_release_id
+ WHERE c.component_id=NEW.component_id AND c.layer='sources' AND r.status='draft')
+BEGIN SELECT RAISE(ABORT, 'component_source: draft sources owner required'); END;
+CREATE TRIGGER component_source_no_update BEFORE UPDATE ON component_source
+BEGIN SELECT RAISE(ABORT, 'component_source: immutable'); END;
+CREATE TRIGGER component_source_no_delete BEFORE DELETE ON component_source
+BEGIN SELECT RAISE(ABORT, 'component_source: immutable'); END;
+CREATE TRIGGER head_insert_valid BEFORE INSERT ON current_release
+WHEN NOT EXISTS(SELECT 1 FROM release r WHERE r.release_id=NEW.release_id
+ AND r.scene_id=NEW.scene_id AND r.status='published'
+ AND (SELECT count(*) FROM release_component WHERE release_id=r.release_id)=5)
+BEGIN SELECT RAISE(ABORT, 'head: published mapped release required'); END;
+CREATE TRIGGER head_update_valid BEFORE UPDATE ON current_release
+WHEN NEW.scene_id<>OLD.scene_id OR NOT EXISTS(SELECT 1 FROM release r
+ WHERE r.release_id=NEW.release_id AND r.scene_id=NEW.scene_id AND r.status='published'
+ AND r.base_release_id=OLD.release_id
+ AND (SELECT count(*) FROM release_component WHERE release_id=r.release_id)=5)
+BEGIN SELECT RAISE(ABORT, 'head: successor required'); END;
+CREATE TRIGGER head_no_delete BEFORE DELETE ON current_release
+BEGIN SELECT RAISE(ABORT, 'head: cannot delete'); END;
+CREATE TRIGGER request_no_update BEFORE UPDATE ON publish_request
+BEGIN SELECT RAISE(ABORT, 'publish_request: immutable'); END;
+CREATE TRIGGER request_no_delete BEFORE DELETE ON publish_request
+BEGIN SELECT RAISE(ABORT, 'publish_request: immutable'); END;
+CREATE TRIGGER failure_no_update BEFORE UPDATE ON failed_attempt
+BEGIN SELECT RAISE(ABORT, 'failed_attempt: append-only'); END;
+CREATE TRIGGER failure_no_delete BEFORE DELETE ON failed_attempt
+BEGIN SELECT RAISE(ABORT, 'failed_attempt: append-only'); END;
+CREATE TRIGGER outbox_identity_immutable BEFORE UPDATE ON outbox
+WHEN NEW.event_id IS NOT OLD.event_id OR NEW.release_id IS NOT OLD.release_id
+ OR NEW.kind IS NOT OLD.kind OR NEW.created_at IS NOT OLD.created_at
+BEGIN SELECT RAISE(ABORT, 'outbox: identity immutable'); END;
+CREATE TRIGGER outbox_no_delete BEFORE DELETE ON outbox
+BEGIN SELECT RAISE(ABORT, 'outbox: retain delivery history'); END;
+
+-- Query adapters must resolve the physical owner, rather than filter feature.release_id directly.
+CREATE VIEW resolved_feature AS
+SELECT rc.release_id AS query_release_id, c.owner_release_id, f.*
+FROM release_component rc JOIN layer_component c USING(component_id)
+JOIN feature f ON f.release_id=c.owner_release_id AND f.layer=c.layer;
+CREATE VIEW resolved_source AS
+SELECT rc.release_id AS query_release_id, c.component_id, s.*
+FROM release_component rc JOIN layer_component c USING(component_id)
+JOIN component_source cs USING(component_id) JOIN source s USING(source_id)
+WHERE rc.layer='sources';
 
 -- =====================================================================
 -- 3 源数据与空间（YHT）

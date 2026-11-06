@@ -16,6 +16,8 @@ ENTITIES = {
     "release", "release_layer", "source", "coverage_tile", "feature", "building",
     "terrain_surface", "terrain_post", "airspace_restriction", "airspace_event",
     "exposure_zone", "risk_model", "actor", "access_policy", "lineage_edge", "audit_event",
+    "layer_component", "release_component", "component_source", "current_release",
+    "publish_request", "failed_attempt", "outbox",
 }
 WIN = ("2026-11-05T08:05:00Z", "2026-11-05T08:15:00Z")
 CORRIDOR = {"x0": 100.0, "x1": 300.0, "y0": 100.0, "y1": 140.0, "z0": 40.0, "z1": 90.0}

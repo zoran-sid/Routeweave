@@ -1,0 +1,68 @@
+{
+  "baseline_commit": "5ee1a19e440c0d1c652fa28c92676f96e07c6e0f",
+  "python": "3.13.15",
+  "sqlite": "3.50.4",
+  "v1_module_tests": [
+    {
+      "module": "yht",
+      "exit_code": 0,
+      "tests": 42
+    },
+    {
+      "module": "lq",
+      "exit_code": 0,
+      "tests": 19
+    },
+    {
+      "module": "zc",
+      "exit_code": 0,
+      "tests": 24
+    },
+    {
+      "module": "zqo",
+      "exit_code": 0,
+      "tests": 31
+    },
+    {
+      "module": "lj",
+      "exit_code": 0,
+      "tests": 15
+    }
+  ],
+  "v2_unified_tests": {
+    "run": 27,
+    "failures": 0,
+    "command": "python3 -B -m unittest discover -s docs/v2/schema -v"
+  },
+  "zqo_owner_audit": {
+    "pass": 1,
+    "fail": 0
+  },
+  "full_v1_audit": {
+    "pass": 7,
+    "fail": 0
+  },
+  "v1_five_module_chain": {
+    "pass": 11,
+    "fail": 0
+  },
+  "v1_risk_review": {
+    "pass": 25,
+    "fail": 0
+  },
+  "v2_known_other_owner_defects": {
+    "cases": 5,
+    "unexpectedly_accepted": 5,
+    "issues": [
+      "YHT-V2-05",
+      "YHT-V2-06",
+      "LQ-V2-01"
+    ]
+  },
+  "checks": [
+    "relative document links exist",
+    "experiment source SHA-256 matches worktree",
+    "git diff --check"
+  ],
+  "scope": "v1 compatibility plus v2 publication; v2 governance/query/recovery integration pending"
+}

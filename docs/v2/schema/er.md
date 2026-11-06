@@ -172,3 +172,22 @@ erDiagram
 | `audit_event` | 操作与查询审计 | `at` | 只追加；可绑定发布 | LQ |
 
 R*Tree 虚表（`rtree_building`、`rtree_airspace`、`rtree_exposure`）是派生索引，由触发器维护，可以从基表重建，不出现在 ER 图中。
+
+## ZQO 发布扩展（v2 第2棒）
+
+```mermaid
+erDiagram
+    release ||--o{ release_layer : has
+    release_layer ||--o| release_component : resolves
+    layer_component ||--o{ release_component : reused_by
+    release ||--o{ layer_component : physically_owns
+    layer_component ||--o{ component_source : lists
+    source ||--o{ component_source : referenced_by
+    release ||--o| current_release : current_in_scene
+    release ||--o| publish_request : committed_request
+    release ||--o{ audit_event : audited
+    audit_event ||--o| outbox : delivered
+    release ||--o{ failed_attempt : observed_head
+```
+
+`failed_attempt.observed_release_id` 可空；候选编号仅为文本，可指向从未提交的发布。历史发布与组件不得删除。完整字段见 schema.sql 第2节；逻辑发布和物理 owner 的查询区别见 [ZQO 接口](../../modules/zqo/v2/integration.md)。

@@ -12,17 +12,19 @@
 
 首次交付分支：[codex/zqo-publication-architecture](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-publication-architecture)。技术成果提交为 `130f7b0`，本次将该分支合入共享 `main`，同时保留主线新增的YHT与LJ交付。
 
-## v2 任务（2026-11-06 重组，待开始）
+## v2 任务（2026-11-06 重组，第2棒，待开始）
 
 | 项目 | 内容 |
 | --- | --- |
-| v2 职责 | 问题定义、总体架构与版本一致性；新兴技术主讨论 |
-| 报告章节 | 摘要、1、3.1–3.3 |
+| v2 数据库重点 | 事务、并发控制与版本管理；新兴技术；总体架构 |
+| 报告章节 | 摘要、1、3.1–3.2、5 |
 | PPT | 第1–2页 |
-| 建议分支 | `zqo/v2-architecture`，从 `develop` 创建，PR 到 `develop` |
-| 交付位置 | `docs/modules/zqo/v2/`：`section.md`、`slides.md`、`references.md` |
+| 开工条件 | YHT 的 v2 PR 已合入 `develop`；第一步审阅 YHT |
+| 分支 | `zqo/v2-transactions`，从 `develop` 创建，PR 到 `develop`，checks 通过后自行合入 |
+| 交付位置 | `docs/modules/zqo/v2/`：`section.md`、`slides.md`、`references.md`、`experiments/`；`docs/v2/schema/` 中本人表组 |
+| 提示词 | [v2 提示词](../v2-prompts.md) |
 
-具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。以下 v1 记录保留为证据。
+具体任务与验收见[任务安排](../team-tasks.md)第4–10节。以下 v1 记录保留为证据。
 
 ## 首次交付读取与技术决定
 

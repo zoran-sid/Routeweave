@@ -10,17 +10,19 @@
 | 技术成果状态 | 模块可交付 |
 | 集成状态 | 131项回归、7项审查、11项整链路及25项风险专项通过；报告与10页PPT已整合，YHT-05文档问题已分派 |
 
-## v2 任务（2026-11-06 重组，待开始）
+## v2 任务（2026-11-06 重组，第4棒，待开始）
 
 | 项目 | 内容 |
 | --- | --- |
-| v2 职责 | 技术选型、查询服务与性能评估；v2 整合与发布 |
-| 报告章节 | 5、7.1、8 |
+| v2 数据库重点 | 面向规划的查询负载与性能；v2 整合与发布（第6棒） |
+| 报告章节 | 6、8.1、9 |
 | PPT | 第7–8页 |
-| 建议分支 | `zc/v2-tech-selection`，从 `develop` 创建，PR 到 `develop` |
-| 交付位置 | `docs/modules/zc/v2/`：`section.md`、`slides.md`、`references.md` |
+| 开工条件 | LQ 的 v2 PR 已合入 `develop`；第一步审阅 LQ |
+| 分支 | `zc/v2-query-workload`，从 `develop` 创建，PR 到 `develop`，checks 通过后自行合入 |
+| 交付位置 | `docs/modules/zc/v2/`：`section.md`、`slides.md`、`references.md`、`experiments/`；`docs/v2/schema/` 中本人表组 |
+| 提示词 | [v2 提示词](../v2-prompts.md) |
 
-具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。以下 v1 记录保留为证据。
+具体任务与验收见[任务安排](../team-tasks.md)第4–10节。以下 v1 记录保留为证据。
 
 ## 已完成成果
 

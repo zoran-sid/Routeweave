@@ -72,3 +72,20 @@ python3 -B docs/modules/lq/prototype/review_integration.py --output work/lq/risk
 没有发现需要修改LQ模型或实现的确认缺陷。本轮只新增复核脚本、证据和说明，不修改其他成员代码。YHT-04已写入共享问题清单交给YHT：直接export_snapshot应在单独E/C缺失时明确拒绝，或保留unknown区域及来源；当前严格prepare_source的质量门禁继续有效。
 
 读取YHT后续修复提交后，重跑专项脚本中全部独立导出用例及模块/受影响审查，再决定是否关闭YHT-04。若YHT改为导出unknown而非拒绝，还需确认输出保留box/source、LQ编译和ZC Q2仍unknown。编译窗口、profile/source字段、阈值/聚合或发布lineage发生变化时，重跑时间缺口、发布窗口与来源重开检查。最终报告/PPT和生产部署验证不属于本轮改动。
+
+## 2026-11-06：YHT-04修复后的独立复测（最新）
+
+本轮读取共享主线`621786a7a0816c9c3582026a1ca78b440d9fe6bc`，增量为YHT修复`1862ab44ca094bc493fab6fc7ce0cd6f51f2e2db`及其状态交付。工作区干净，从`c357ac3`快进同步；没有改动LQ或其他成员的模型/实现。
+
+直接ZC导出现在在`require_exportable`之后执行`require_verifiable_exposure`：E/C/q须为[0,1]内有限数且q与E×C一致。LQ入口保留自己的独立检查。风险专项的E/C单独缺失、q缺失、三者全缺失各路径都明确拒绝；原生LQ未知和时间缺口仍按unknown传递并保留范围/来源。正常输入、硬阈值与优化代理、ZQO编译窗口绑定及来源重开映射继续通过。
+
+| 检查 | 本轮实际结果 | 证据 |
+| --- | --- | --- |
+| 风险专项 | 25/25通过，退出码0；此前失败的2项均明确拒绝 | [修复后原始结果](results/integration-review-post-yht04-20261106.json) |
+| 模块回归 | LQ19、YHT42、ZC24、ZQO31、LJ15，共131项通过 | [日志及摘要](results/integration-checks-post-yht04-20261106.json) |
+| 原问题审查 | 7项全部通过 | 同上audit字段 |
+| 五模块实际链路 | 11项全部通过 | 同上five_module字段 |
+
+复现命令沿用上节，把专项输出改为`--output work/lq/risk-post-yht04.json`，audit/five_module也分别使用新路径，避免覆盖历史结果。YHT新增的5项测试包含E缺失、C缺失、q缺失、三者乘积不一致及LQ独立入口缺失检查；本轮实际运行了完整42项YHT测试。
+
+YHT-04由LQ独立复测后确认通过，先前23/25结果仍表示`6567a58`上的历史缺陷。当前复核没有新增阻塞项。只有风险相关代码、输入定义或发布追溯再次变化时才需增量复测；报告合稿和生产验收属于单独事项。

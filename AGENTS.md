@@ -2,12 +2,12 @@
 
 本文件适用于整个仓库。开始工作前阅读当前项目说明、共同口径与成员职责，按实际成果记录进度。
 
-**当前集成复核（2026-11-05）**：先阅读 [复核入口](docs/integration/README.md) 和 [问题清单](docs/integration/issues.md)。按本轮用户指示，发现其他成员的问题先记录并交给所属成员修复；复核方已获授权修复 ZC。各成员 agent 可并行修复自己名下的问题，记录验证及提交，再进行整链路复核。本轮问题处理按此安排执行。
+**当前整合状态（2026-11-06）**：报告、10页PPT及证据已汇总到[最终交付](docs/final/README.md)。先阅读[复核入口](docs/integration/README.md)和[问题清单](docs/integration/issues.md)。131项回归、7项审查、11项整链路及25项风险专项通过；YHT-05为成员文档待修项。按用户指示，发现其他成员的问题先记录并交给所属成员修复；当前整合方获授权修复ZC。各成员agent处理本人问题后记录验证和提交，整合方再同步最终材料。
 
 ## 1. 开始工作
 
-1. 阅读 `README.md`、`docs/course-requirements.md`、`docs/project-brief.md`、`docs/scenario-contract.md`、`docs/agent-collaboration.md` 和 `docs/team-tasks.md`，再阅读对应成员记录。课程原文与贡献表规则已写入 Markdown，开工无需访问本地 PDF 或 Word。
-2. 运行 `git status --short --branch` 与 `git log -5 --oneline`，保留已有修改。按异步协作规则检查远程和其他成员的新提交，记录本轮读取的版本。课程要求与交付映射见 `docs/requirements-audit.md`。
+1. 阅读 `README.md`、`docs/course-requirements.md`、`docs/project-brief.md`、`docs/scenario-contract.md`、`docs/agent-collaboration.md` 和 `docs/team-tasks.md`，再阅读五名成员的全部交接记录，确认各模块当前状态、已完成成果和未解决问题。课程原文与贡献表规则已写入 Markdown，开工无需访问本地 PDF 或 Word。
+2. 运行 `git status --short --branch` 与 `git log -5 --oneline`，保留已有修改。按异步协作规则检查远程和其他成员的新提交，记录本轮读取的版本。课程要求与交付映射见 `docs/requirements-audit.md`；最终材料的章节和页码映射见 `docs/final/course-coverage.md`。
 3. 按成员缩写确认工作包，使用 `starter-v0` 和模块交换约定独立完成设计交付。缺少其他模块时补齐最小模拟输入及验证，不能停在占位接口或等待清单。
 4. 各 agent 自行研究、比较并决定范围内的技术方案，记录证据和适用条件后继续完成工作。无需等待 ZQO 的架构或逐项审批；跨模块兼容检查可由当前 agent 读取已提交成果后执行。
 
@@ -53,6 +53,7 @@ ZQO 主责空域更新与版本一致性，并汇总各模块为总体架构；Y
 
 | 路径 | 内容 |
 | --- | --- |
+| `docs/final/README.md` | 整合报告、PPT、Markdown源稿、课程覆盖及验证证据 |
 | `docs/project-brief.md` | 完整项目背景、目标、功能和研究范围 |
 | `docs/scenario-contract.md` | 空间、时间、风险、版本、查询及模块交换的共同定义 |
 | `docs/team-tasks.md` | 当前责任与协作安排 |

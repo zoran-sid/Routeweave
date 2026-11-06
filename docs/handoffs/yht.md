@@ -8,7 +8,7 @@
 | 负责方向 | 场景需求与三维数据建模 |
 | 展示安排 | PPT 第3–4页，已提供两页可编辑PPT及讲稿 |
 | 技术成果状态 | 模块可交付 |
-| 集成状态 | YHT-01/02/03/04 已修复并通过 owner 审计 / LQ 专项复核，待复核；与 ZC/LQ 导出接口已实测，ZQO 发布与 LJ 验收的整链路联调待集成方推进 |
+| 集成状态 | YHT-01/02/03/04 已修复并通过 owner 审计 / LQ 专项复核；YHT-05 文档已修订待复核；与 ZC/LQ 导出接口已实测，ZQO 发布与 LJ 验收的整链路联调待集成方推进 |
 
 ## 已完成成果
 
@@ -36,9 +36,10 @@ PPT 共 2 页，含可编辑表格和图表，逐页渲染检查；未代填成�
 
 ## 本轮协作记录
 
-- 已检查提交：`c357ac3a032c896eccf1b4b19fc953facf73ad91`（LQ 新增 YHT-04 复核记录，2026-11-06；修复前基线）。五个模块均已交付；已读 AGENTS.md、课程要求、五人交接、`docs/integration/README.md`、`issues.md`、`audit.py` 与 LQ 的 `review_integration.py`。
+- 已检查提交：`bdefc03775c0bc5bc5713ad949a1828c27c04c8f`（整合最终报告与证据，2026-11-06）；五个模块均已交付；已读 AGENTS.md、课程要求、五人交接、`docs/integration/README.md`、`issues.md`、`audit.py` 与 LQ 的 `review_integration.py`。
 - 最终集成修复（`81bd270dd004e7e26e52cea3b95c58ea75b45ba7`，已提交到 `main`，待复核）：YHT-01 未知 `q`/`E`/`C` 不再被丢弃，ZC/LQ 两个导出入口分别抛 `ValueError`；YHT-02 不完整覆盖、非平地、非零基面直接拒绝，不改写质量字段；YHT-03 Q1 限高改为“最高点 + 垂直半径 > ceiling_m”，接触边界不阻断，与 ZC 的 `buffer_m` 语义一致。证据见 [评估](../modules/yht/evaluation.md) 第 2.1 节与 `docs/integration/issues.md`。
 - YHT-04 修复（本轮，提交 `1862ab44ca094bc493fab6fc7ce0cd6f51f2e2db`）：`export_snapshot` 新增 `require_verifiable_exposure`，每个分区的 `E`/`C`/`q` 必须为 [0,1] 内有限数且 `q=E×C`；单独缺 E/C、保留旧 q 或三者不一致时抛 `ValueError`，不再让 ZC 把旧 q 当已知风险。LQ 入口保持独立校验。证据见评估第 2.1 节与 LQ 的 `review_integration.py`（YHT 本地运行 25/25）。
+- YHT-05 文档修订（本轮，提交 `c4ed005f38e1bdc927eba22d23afe69cf35f1fa8`）：`storage.md` 将错误的 `gist_geometry_ops_3d` 改为 PostGIS 3.5 官方 n 维操作符类 `gist_geometry_ops_nd`，并区分默认二维 GiST 包围盒、n 维候选过滤与 `ST_3DIntersects` 精确判定；`references.md` 补第 14 条出处。示例明确标注未在本机执行；SQLite 原型与 131/7/11/25 验证不受影响。
 - 已复用：`starter-v0`、五类版本键、Q1/Q2 状态语义、ZC 的 snapshot 与 preflight 约束、LQ 的 `compile_profiles`/`q=E×C` 口径、课程报告与 PPT 要求。
 - 技术决定：YHT-D1..D12 见[决策表](../modules/yht/design.md#9-设计决策)，覆盖内部格式、几何表示、版本/质量、查询语义、覆盖/地形、存储索引与 ZC/LQ 导出。
 - 跨模块影响：向 ZC 提供可直接加载的快照与 `source_release`；向 LQ 提供带 `E`/`C` 的暴露 profile；向 ZQO 提供五版/清单字段；向 LJ 提供 `status/reasons/versions/coverage` 审计字段。未修改其他成员的工作记录和共同口径。

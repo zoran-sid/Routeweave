@@ -254,6 +254,55 @@ class ExportTest(unittest.TestCase):
                 s, WINDOW, ((0, 0, 10), (450, 450, 120)),
                 (20, 20, 70), (420, 420, 70))
 
+    def test_zc_export_rejects_missing_exposure_e(self):
+        s = m.scene()
+        s["ground_zones"][0]["exposure_e"] = None
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError,
+                                    "unknown_or_invalid_exposure:G-001"):
+            export_zc.export_snapshot(
+                s, WINDOW, ((0, 0, 10), (450, 450, 120)),
+                (20, 20, 70), (420, 420, 70))
+
+    def test_zc_export_rejects_missing_consequence_c(self):
+        s = m.scene()
+        s["ground_zones"][0]["consequence_c"] = None
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError,
+                                    "unknown_or_invalid_exposure:G-001"):
+            export_zc.export_snapshot(
+                s, WINDOW, ((0, 0, 10), (450, 450, 120)),
+                (20, 20, 70), (420, 420, 70))
+
+    def test_zc_export_rejects_missing_q_with_e_c_present(self):
+        s = m.scene()
+        s["ground_zones"][0]["q"] = None
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError,
+                                    "unknown_or_invalid_exposure:G-001"):
+            export_zc.export_snapshot(
+                s, WINDOW, ((0, 0, 10), (450, 450, 120)),
+                (20, 20, 70), (420, 420, 70))
+
+    def test_zc_export_rejects_inconsistent_exposure(self):
+        s = m.scene()
+        s["ground_zones"][0]["q"] = 0.5
+        s = m.seal(s)
+        with self.assertRaisesRegex(ValueError, "inconsistent_exposure:G-001"):
+            export_zc.export_snapshot(
+                s, WINDOW, ((0, 0, 10), (450, 450, 120)),
+                (20, 20, 70), (420, 420, 70))
+
+    def test_lq_profiles_reject_single_missing_exposure_field(self):
+        for field in ("exposure_e", "consequence_c"):
+            s = m.scene()
+            s["ground_zones"][0][field] = None
+            s = m.seal(s)
+            with self.subTest(field=field):
+                with self.assertRaisesRegex(
+                        ValueError, "unknown_or_invalid_exposure:G-001"):
+                    export_lq.profiles_from_scene(s)
+
     def test_lq_profiles_reject_unknown_risk(self):
         s = m.scene()
         s["ground_zones"][0].update(q=None, exposure_e=None, consequence_c=None)

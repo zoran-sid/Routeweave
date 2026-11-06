@@ -51,6 +51,25 @@ def require_exportable(s):
             raise ValueError("unknown_or_invalid_exposure:" + zone.get("id", "?"))
 
 
+def require_verifiable_exposure(s):
+    """Require the source E/C needed to audit ``q = E * C`` before export.
+
+    ZC consumes ``q`` only, but YHT's source quality rule treats a zone whose
+    E or C is missing as unknown.  Exporting it with an old q would launder
+    that unknown into a known risk value, so the direct ZC entry rejects it
+    instead of letting ZC accept the stale q.
+    """
+    for zone in s.get("ground_zones", []):
+        zone_id = zone.get("id", "?")
+        e, c, q = (zone.get("exposure_e"), zone.get("consequence_c"),
+                   zone.get("q"))
+        if not (_unit_number(e) and _unit_number(c) and _unit_number(q)):
+            raise ValueError("unknown_or_invalid_exposure:" + zone_id)
+        if abs(q - e * c) > 1e-9:
+            raise ValueError("inconsistent_exposure:" + zone_id)
+
+
+
 def _clip_box(box, lo, hi):
     low = [max(box[0][i], lo[i]) for i in range(3)]
     high = [min(box[1][i], hi[i]) for i in range(3)]
@@ -68,6 +87,7 @@ def _polygon_box(poly, z0, z1):
 def export_snapshot(s, window, search_bounds, start, goal, query_id="yht-zc-1"):
     """Build a ZC-shaped snapshot and query; versions are placeholders."""
     require_exportable(s)
+    require_verifiable_exposure(s)
     lo, hi = search_bounds
     obstacles = []
     for bld in s["buildings"]:

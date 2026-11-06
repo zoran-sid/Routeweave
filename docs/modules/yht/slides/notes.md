@@ -56,7 +56,7 @@ SkyRoute 的查询需求可以落成五层可独立寻址、独立版本化的�
 **来源**
 
 - 基准：`results/benchmark.json`、`results/summary.csv`；复现 `prototype/evaluate.py`。
-- 测试：`prototype/test_yht.py`（37 项）。
+- 测试：`prototype/test_yht.py`（42 项）。
 - 质量：`results/quality.json`。
 - 导出：`results/zc-export.json`、`results/zc-export-summary.json`、`results/lq-export.json`、`results/lq-export-summary.json`。
 - 存储选型：`storage.md` 第 3–7 节；评估条件见 `evaluation.md` 第 1 节。

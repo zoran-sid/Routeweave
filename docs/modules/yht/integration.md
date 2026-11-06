@@ -2,11 +2,11 @@
 
 ## 1. 已检查基线
 
-- 检查提交：`42948c0f6d62a8746ba5ba30be2fb80130f0ca20`（最终集成复核记录，2026-11-05）；复核基线 `cc20db8` 叠加 ZC 输入校验修复，本模块在 `42948c0` 上完成 YHT-01/02/03 修复。
+- 检查提交：`c357ac3a032c896eccf1b4b19fc953facf73ad91`（LQ 新增 YHT-04 的复核记录，2026-11-06）；本模块在该基线上完成 YHT-04 修复，并保留 `42948c0` 上 YHT-01/02/03 的修复。
 - 已读：共同口径 `docs/scenario-contract.md`、课程要求、协作规则、五人交接记录，以及 `docs/integration/README.md`、`issues.md`、`audit.py`。五个模块均已交付；本模块与 ZC/LQ 的导出接口已实测，ZQO 发布与 LJ 验收的整链路联调仍由集成方推进。
 - 本模块所有场景、来源、暴露值均为合成数据，五类版本用 `mock-yht-*` 标识；没有把模拟值写成实测值。
 
-**模块可交付；YHT-01/02/03 已修复并通过 owner 审计，待复核。** 已做的检查是：ZC 导出快照通过 ZC `preflight` 并得到可行航线；LQ profiles 通过 `compile_profiles` 编译后仍得到同一条航线；本模块 Q1/Q2 与索引/全扫结果一致；未知风险、覆盖不完整和非法地形被导出层明确拒绝；限高走廊把垂直半径计入判定。尚未与 ZQO 的发布服务和 LJ 的验收脚本做端到端联调。
+**模块可交付；YHT-01/02/03/04 已修复并通过 YHT owner 审计与 LQ 专项复核，待复核方确认。** 已做的检查是：ZC 导出快照通过 ZC `preflight` 并得到可行航线；LQ profiles 通过 `compile_profiles` 编译后仍得到同一条航线；本模块 Q1/Q2 与索引/全扫结果一致；未知风险、覆盖不完整、非法地形和不可核验的 E/C 被导出层明确拒绝；限高走廊把垂直半径计入判定。尚未与 ZQO 的发布服务和 LJ 的验收脚本做端到端联调。
 
 ## 2. 可直接复用的输入输出
 
@@ -59,7 +59,7 @@ query_corridor(s, a, b, radius, window, versions, building_candidates=None, veri
 
 - 建筑 → ZC `obstacles[].box`，只保留与搜索域相交者；L 形 B-023 取轴对齐包围盒，保守。
 - 活动空域 → `airspace.restrictions[]`，裁剪到搜索域；`no_fly` 不带 `ceiling_m`，`height_limit` 带 `ceiling_m`。
-- 地面分区 → `risk_data.zones[]`，`q` 原样传递，背景 `0.02`；这是代理值，不是 LQ 的最终风险模型。任一分区 `q` 不是 [0,1] 内的有限数时，导出抛 `ValueError`，不会跳过该分区变成背景低风险。
+- 地面分区 → `risk_data.zones[]`，`q` 原样传递，背景 `0.02`；这是代理值，不是 LQ 的最终风险模型。`export_snapshot` 先调用 `require_verifiable_exposure`：任一区的 `E`/`C`/`q` 缺失、越界或 `q != E×C` 时抛 `ValueError`，不会用旧 q 通过直接 ZC 入口。
 - 覆盖不完整、地形非 `flat`、基面 `z != 0` 或地形点不一致时，导出抛 `ValueError`；只接受完整、零基面平地，不把输入改写成 `complete=True`/`terrain_z=0`。
 - `planner_config` 为 step 20/buffer 5/speed 10/lambda 0/length_scale 100，属于导出适配参数，不是 ZC 的默认值。
 - 源发布五版写入 `source_release`，ZC 五版由 `scenarios.bind` 生成，二者分开，便于追溯"从哪版 YHT 数据导出"。
@@ -115,8 +115,11 @@ query_corridor(s, a, b, radius, window, versions, building_candidates=None, veri
 
 | 检查 | 命令/位置 | 结果 |
 | --- | --- | --- |
-| 本模块 37 项测试 | `python3 -m unittest discover -s docs/modules/yht/prototype -v` | 全部通过 |
+| 本模块 42 项测试 | `python3 -m unittest discover -s docs/modules/yht/prototype -v` | 全部通过 |
 | 未知风险导出拒绝 | `audit.py --owner YHT` 的 YHT-01 | ZC/LQ 两个入口分别抛 `ValueError:unknown_or_invalid_exposure:G-001` |
+| 单独缺失 E/C | LQ 复核的 `unknown_E_export_zc`、`unknown_C_export_zc` | 直接 ZC 导出抛 `ValueError`；LQ 入口独立抛错 |
+| E/C 与 q 不一致 | `test_yht.py` 的 `test_zc_export_rejects_inconsistent_exposure` | 抛 `ValueError:inconsistent_exposure:G-001` |
+| LQ 风险接口专项复核 | `python3 -B docs/modules/lq/prototype/review_integration.py` | 25/25 通过，含 E/C/q/全部缺失四条输入 |
 | 不完整覆盖导出拒绝 | 同上，YHT-02 | `ValueError:incomplete_coverage:T-00-00` |
 | 非平地导出拒绝 | 同上，YHT-02 | `ValueError:unsupported_terrain:only_flat_supported` |
 | 限高缓冲 | 同上，YHT-03 | YHT `blocked`，ZC `forbidden`；58 m + 5 m > 60 m |

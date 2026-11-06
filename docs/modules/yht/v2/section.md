@@ -4,7 +4,7 @@
 
 ## 2 需求与数据分析
 
-SkyRoute 管理城市三维环境、动态空域和地面暴露与风险三类数据，使每次航线查询都基于一致、可追溯的数据快照。平台不把航线算法当作主线：Q1 三维航线查询和 Q2 航段/区域状态与来源查询是下游服务，数据接入、版本、质量、血缘与权限才是本章要解决的问题 [6, pp. 2, 4–7]。
+SkyRoute 管理城市三维环境、动态空域和地面暴露与风险三类数据，使每次航线查询都基于一致、可追溯的数据快照。平台不把航线算法当作主线：Q1 三维航线查询和 Q2 航段/区域状态与来源查询是下游服务，数据接入、版本、质量、血缘与权限才是本章要解决的问题 [11, pp. 2, 4–7]。
 
 ### 2.1 场景与用户
 
@@ -232,9 +232,9 @@ CREATE TABLE building (
 
 ### 4.3 索引与查询计划
 
-空间索引用 PostGIS 的 n 维 GiST 操作符类 `gist_geometry_ops_nd`：`building.solid`、`airspace_restriction.volume` 建三维 GiST；`building.footprint`、`exposure_zone.footprint` 建二维 GiST；`airspace_restriction.effective` 建范围 GiST；`audit_event.at` 用 BRIN。默认 GiST 只按二维包围盒处理，不能替代三维精确判断；`&&&` 只做 n 维候选过滤，最终仍需 `ST_3DIntersects`/`ST_3DDWithin` [1]–[3]。
+空间索引用 PostGIS 的 n 维 GiST 操作符类 `gist_geometry_ops_nd`：`building.solid`、`airspace_restriction.volume` 建三维 GiST；`building.footprint`、`exposure_zone.footprint` 建二维 GiST；`airspace_restriction.effective` 建范围 GiST；`audit_event.at` 用 BRIN。默认 GiST 只按二维包围盒处理，不能替代三维精确判断；`&&&` 只做 n 维候选过滤，最终仍需 `ST_3DIntersects`/`ST_3DDWithin` [1]–[4]。
 
-SQLite R\*Tree 原型验证了同一思路：2,400 栋、200 条查询下，Q2 中位从 10.39 ms 降到 0.0793 ms，Q1 从 122.94 ms 降到 0.155 ms，三维候选比例 0.58%，索引与全扫的状态/命中完全一致 [7]。该结果是单机内存库、Python 精确复核，不含网络和数据库服务端，不能当作生产 QPS。
+SQLite R\*Tree 原型验证了同一思路：2,400 栋、200 条查询下，Q2 中位从 10.39 ms 降到 0.0793 ms，Q1 从 122.94 ms 降到 0.155 ms，三维候选比例 0.58%，索引与全扫的状态/命中完全一致 [12]。该结果是单机内存库、Python 精确复核，不含网络和数据库服务端，不能当作生产 QPS。
 
 Q1 的典型 SQL（取三维走廊内的建筑候选；空域限制同模式）：
 
@@ -300,20 +300,6 @@ SELECT * FROM hits;
 - **冷热分层**：当前发布与最近 90 天审计留在热库；`superseded`/`retired` 发布转 Parquet/对象存储，保留 `release_layer`、清单哈希和血缘；冷数据只读，不参与在线查询。
 - **权衡：灵活模式 vs 数据质量**。暂存层用 JSONB 接收多源 GIS 字段，允许 schema-on-read；发布层只保留经过类型化、约束和质检的核心列，扩展字段放 `attrs` 且不得承载安全判断。这样既不让每个新数据源改表，也不把“能存进去”当成“能安全查询”。如果选择纯 schema-on-read，质量规则会散落在查询里，版本复现和权限审计都会变难；如果选择纯严格模式，多源接入每次都要迁移。当前选择是“暂存灵活、发布严格、质量门禁在发布前”。
 
-## 参考
+## 引用
 
-[1] PostGIS Project, “ST_3DIntersects,” PostGIS 3.5 Manual. [Online]. Available: https://postgis.net/docs/ST_3DIntersects.html
-
-[2] PostGIS Project, “Geometry Overlaps (&&&),” PostGIS 3.5 Manual. [Online]. Available: https://postgis.net/docs/geometry_overlaps_nd.html
-
-[3] PostGIS Project, “Spatial Indexes,” PostGIS 3.5 Manual. [Online]. Available: https://postgis.net/docs/manual-3.5/using_postgis_dbmanagement.html#build-indexes
-
-[4] PostgreSQL Global Development Group, “Table Partitioning,” PostgreSQL 17 Documentation. [Online]. Available: https://www.postgresql.org/docs/current/ddl-partitioning.html
-
-[5] SQLite, “R*Tree Module.” [Online]. Available: https://www.sqlite.org/rtree.html
-
-[6] SkyRoute 课程作业要求, 《作业要求.pdf》, pp. 2, 4–7, 2026.
-
-[7] YHT, “SkyRoute v1 存储与索引评估,” Routeweave repository, docs/modules/yht/storage.md, 2026.
-
-[8] YHT, “SkyRoute v2 数据字典,” Routeweave repository, docs/modules/yht/v2/data-dictionary.md, 2026.
+本文编号与 [references.md](references.md) 一致：PostGIS 三维谓词与索引 [1]–[4]；PostgreSQL 分区、GiST、BRIN 与范围类型 [5]–[8]；SQLite R\*Tree [9]；GeoJSON [10]；课程要求 [11]；v1 存储评估 [12]；v2 数据字典 [14]。

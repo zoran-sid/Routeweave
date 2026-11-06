@@ -23,6 +23,9 @@ jobs:
             python -B -m unittest discover -s "docs/modules/$m/prototype" -v
             echo "::endgroup::"
           done
+      - name: v2 unified schema tests
+        if: hashFiles('docs/v2/schema/test_*.py') != ''
+        run: python -B -m unittest discover -s docs/v2/schema -v
       - name: Integration checks
         run: |
           python -B docs/integration/audit.py --output "$RUNNER_TEMP/audit.json"

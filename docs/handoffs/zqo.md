@@ -12,6 +12,18 @@
 
 首次交付分支：[codex/zqo-publication-architecture](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-publication-architecture)。技术成果提交为 `130f7b0`，本次将该分支合入共享 `main`，同时保留主线新增的YHT与LJ交付。
 
+## v2 任务（2026-11-06 重组，待开始）
+
+| 项目 | 内容 |
+| --- | --- |
+| v2 职责 | 问题定义、总体架构与版本一致性；新兴技术主讨论 |
+| 报告章节 | 摘要、1、3.1–3.3 |
+| PPT | 第1–2页 |
+| 建议分支 | `zqo/v2-architecture`，从 `develop` 创建，PR 到 `develop` |
+| 交付位置 | `docs/modules/zqo/v2/`：`section.md`、`slides.md`、`references.md` |
+
+具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。以下 v1 记录保留为证据。
+
 ## 首次交付读取与技术决定
 
 读取共享主线 `de2033a0b13296dcadd991e101a3bee3c1df4596`，涵盖课程要求、共同场景、协作规则、五人交接，以及LQ/ZC的设计、接口、代码与评估。提交前再次检查远程，基线未变化。

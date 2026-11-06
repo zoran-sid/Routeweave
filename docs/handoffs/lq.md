@@ -2,6 +2,18 @@
 
 项目：SkyRoute。最后更新：2026-11-06（Asia/Shanghai）。
 
+## v2 任务（2026-11-06 重组，待开始）
+
+| 项目 | 内容 |
+| --- | --- |
+| v2 职责 | 数据治理、安全、隐私与伦理；AI 辅助治理 |
+| 报告章节 | 6 |
+| PPT | 第5–6页 |
+| 建议分支 | `lq/v2-governance`，从 `develop` 创建，PR 到 `develop` |
+| 交付位置 | `docs/modules/lq/v2/`：`section.md`、`slides.md`、`references.md` |
+
+具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。以下 v1 记录保留为证据。
+
 ## 当前概况
 
 - 成员：LQ，成员3，地面风险评估与安全治理。

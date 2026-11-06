@@ -100,13 +100,12 @@ v1 已有实质的数据库工作：YHT 的关系表、三维 R*Tree、WAL 读�
 
 ### 7.1 YHT：三维时空数据模型与物理设计（第1棒）
 
-**已完成**（[PR #1](https://github.com/zoran-sid/Routeweave/pull/1)，按本页早期版本开工）：数据字典、第2章、第4章（ER 图、关系模式、主外键与约束、Q1/Q2 SQL、索引、分区与冷热分层、灵活模式 vs 数据质量权衡）、PPT 第3–4页讲稿与引用。
+**已合入 `develop`**（[PR #1](https://github.com/zoran-sid/Routeweave/pull/1)，合并提交 `f05459c`，2026-11-06）：
 
-**合入 PR #1 前补齐**（提示词见 [v2 提示词](v2-prompts.md) 的 YHT 补充）：
+- YHT：数据字典、第2章、第4章（ER 图、关系模式、主外键与约束、Q1/Q2 SQL、索引、分区与冷热分层、灵活模式 vs 数据质量权衡）、PPT 第3–4页讲稿与引用。
+- ZC 按用户指示补齐：[统一模式](v2/schema/schema.sql)（16张表、39个触发器、13项测试）、操作 A 的 SQL 与执行计划、[访问路径实验](modules/yht/v2/experiments/results/op_a_index_comparison.json)、建模修正 S-01—S-03。待 YHT 复核，问题编号 YHT-V2-01—04 见[问题清单](integration/issues.md)。
 
-1. 建立 `docs/v2/schema/` 四个文件：按数据字典生成全部实体的 SQLite DDL，含主键、外键、`CHECK`、索引、R*Tree 虚表；`test_schema.py` 在内存库加载并验证约束与外键。
-2. 操作 A：任务窗口内有效限制的 SQL、示例结果与 `EXPLAIN QUERY PLAN`；对比无索引、仅时间索引、仅空间索引、组合四种情况的访问成本（复用 v1 基准脚本，实验放 `docs/modules/yht/v2/experiments/`）。
-3. 把执行计划和索引对比结果写进第4.3节与 PPT 第4页。
+**第2棒 ZQO 可以开始。**
 
 ### 7.2 ZQO：事务、并发控制与版本管理（第2棒）
 

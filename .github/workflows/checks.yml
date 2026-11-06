@@ -1,0 +1,33 @@
+name: checks
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Module unit tests
+        run: |
+          for m in yht lq zc zqo lj; do
+            echo "::group::$m"
+            python -B -m unittest discover -s "docs/modules/$m/prototype" -v
+            echo "::endgroup::"
+          done
+      - name: Integration checks
+        run: |
+          python -B docs/integration/audit.py --output "$RUNNER_TEMP/audit.json"
+          python -B docs/integration/five_module.py --output "$RUNNER_TEMP/five-module.json"
+          python -B docs/modules/lq/prototype/review_integration.py --output "$RUNNER_TEMP/risk-review.json"
+      - name: Whitespace check
+        if: github.event_name == 'pull_request'
+        run: git diff --check "origin/${{ github.base_ref }}...HEAD"

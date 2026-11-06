@@ -177,6 +177,16 @@ erDiagram
 代表性 DDL（完整字段见数据字典；类型按 PostgreSQL 17 + PostGIS 3.5）：
 
 ```sql
+CREATE TABLE source (
+  source_id   text PRIMARY KEY,
+  name        text NOT NULL,
+  source_type text NOT NULL,
+  license     text NOT NULL,
+  acquired_at timestamptz NOT NULL,
+  update_frequency text NOT NULL,
+  sensitivity text NOT NULL CHECK (sensitivity IN ('public','internal','restricted','sensitive'))
+);
+
 CREATE TABLE release (
   release_id     text PRIMARY KEY,
   scene_id       text NOT NULL,
@@ -196,7 +206,7 @@ CREATE TABLE feature (
   release_id text NOT NULL REFERENCES release(release_id) ON DELETE RESTRICT,
   feature_id text NOT NULL,
   layer      text NOT NULL CHECK (layer IN ('scene','terrain','airspace','exposure','sources')),
-  feature_type text NOT NULL CHECK (feature_type IN ('building','terrain','airspace','exposure')),
+  feature_type text NOT NULL CHECK (feature_type IN ('building','airspace','exposure')),
   source_id  text NOT NULL REFERENCES source(source_id),
   quality    text NOT NULL CHECK (quality IN ('observed','derived','assumed','unknown')),
   valid      tstzrange NOT NULL CHECK (lower(valid) < upper(valid)),

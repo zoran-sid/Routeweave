@@ -204,7 +204,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 | `release_id` | `text` | 是 | 引用 `release` | 所属发布 |
 | `feature_id` | `text` | 是 | 例 `B-001`、`NF-001` | 跨发布稳定的对象标识 |
 | `layer` | `enum` | 是 | 五层 | 对象所属层 |
-| `feature_type` | `enum` | 是 | `building`/`terrain`/`airspace`/`exposure` | 子类型 |
+| `feature_type` | `enum` | 是 | `building`/`airspace`/`exposure` | 子类型 |
 | `name` | `text` | 否 | 自由文本 | 人类可读名称；合成数据可为空 |
 | `source_id` | `text` | 是 | 引用 `source` | 主要来源 |
 | `quality` | `enum` | 是 | 四级质量 | 对象整体质量 |

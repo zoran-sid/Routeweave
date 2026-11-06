@@ -180,9 +180,9 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 
 | 字段 | 类型 | 必填 | 单位/取值 | 说明 |
 | --- | --- | --- | --- | --- |
-| `tile_id` | `text` | 是 | 例 `T-03-04` | 主键；建议 `T-xx-yy` |
-| `release_id` | `text` | 是 | 引用 `release` | 所属发布 |
-| `layer` | `enum` | 是 | `scene`/`terrain`/`airspace`/`exposure` | 覆盖所属层 |
+| `release_id` | `text` | 是 | 引用 `release` | 所属发布；联合主键之一 |
+| `layer` | `enum` | 是 | `scene`/`terrain`/`airspace`/`exposure` | 覆盖所属层；联合主键之一 |
+| `tile_id` | `text` | 是 | 例 `T-03-04` | 联合主键之一；编号在每次发布、每层重复出现 |
 | `tile_x` | `integer` | 是 | ≥0 | 瓦片列号 |
 | `tile_y` | `integer` | 是 | ≥0 | 瓦片行号 |
 | `bounds` | `geometry(Polygon,0)` | 是 | 米 | 瓦片平面范围；基线 100 m × 100 m |
@@ -192,7 +192,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 | `valid` | `tstzrange` | 是 | UTC | 该瓦片覆盖的时间范围 |
 | `checksum` | `text` | 是 | 64 位十六进制 | 瓦片内容哈希，用于发布核对 |
 
-约束：同一发布、同一层的瓦片不可重叠；所有瓦片面积之和必须等于场景边界面积；`complete=false` 的瓦片必须能在发布清单中定位。
+主键：`(release_id, layer, tile_id)`；`(release_id, layer, tile_x, tile_y)` 唯一。约束：同一发布、同一层的瓦片不可重叠；所有瓦片面积之和必须等于场景边界面积；`complete=false` 的瓦片必须能在发布清单中定位。
 
 ### 3.5 `feature`（空间对象公共头）
 
@@ -200,7 +200,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 
 | 字段 | 类型 | 必填 | 单位/取值 | 说明 |
 | --- | --- | --- | --- | --- |
-| `rid` | `bigint` | 是 | 发布内唯一 | 主键；空间表连接的代理键 |
+| `rid` | `bigint` | 是 | 全局唯一 | 主键；空间表连接的代理键，每次发布的每个对象一个新值 |
 | `release_id` | `text` | 是 | 引用 `release` | 所属发布 |
 | `feature_id` | `text` | 是 | 例 `B-001`、`NF-001` | 跨发布稳定的对象标识 |
 | `layer` | `enum` | 是 | 五层 | 对象所属层 |
@@ -242,8 +242,8 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 
 | 字段 | 类型 | 必填 | 单位/取值 | 说明 |
 | --- | --- | --- | --- | --- |
-| `terrain_id` | `text` | 是 | 例 `TER-001` | 主键 |
-| `release_id` | `text` | 是 | 引用 `release` | 所属发布 |
+| `release_id` | `text` | 是 | 引用 `release` | 所属发布；联合主键之一 |
+| `terrain_id` | `text` | 是 | 例 `TER-001` | 联合主键之一；编号可在各发布中重复 |
 | `surface_type` | `enum` | 是 | `grid`/`tin` | 规则格网或三角网 |
 | `bounds` | `geometry(Polygon,0)` | 是 | 米 | 地形覆盖范围 |
 | `post_spacing_m` | `double precision` | 否 | 米，>0 | 格网间距；TIN 为 `NULL` |
@@ -257,7 +257,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 | `valid` | `tstzrange` | 是 | UTC | 地形有效期 |
 | `checksum` | `text` | 是 | 64 位十六进制 | 点/面集合哈希 |
 
-约束：`max_z >= min_z`；`flat=true` 时 `min_z=max_z=0`；格网点必须覆盖 `bounds` 且不重复；非平地查询不得沿用平地快速路径。
+主键：`(release_id, terrain_id)`。约束：`max_z >= min_z`；`flat=true` 时 `min_z=max_z=0`；格网点必须覆盖 `bounds` 且不重复；非平地查询不得沿用平地快速路径。
 
 ### 3.8 `terrain_post`（地形格网点）
 
@@ -265,6 +265,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 
 | 字段 | 类型 | 必填 | 单位/取值 | 说明 |
 | --- | --- | --- | --- | --- |
+| `release_id` | `text` | 是 | 引用 `terrain_surface` | 联合主键 |
 | `terrain_id` | `text` | 是 | 引用 `terrain_surface` | 联合主键 |
 | `ix` | `integer` | 是 | ≥0 | 列号；联合主键 |
 | `iy` | `integer` | 是 | ≥0 | 行号；联合主键 |
@@ -274,7 +275,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 | `quality` | `enum` | 是 | 四级质量 | 单点质量 |
 | `source_id` | `text` | 是 | 引用 `source` | 单点来源 |
 
-主键：`(terrain_id, ix, iy)`。约束：`x/y` 在父地形 `bounds` 内；同一地形内 `(x,y)` 不重复；`post_spacing_m` 与实际格网间距一致。
+主键：`(release_id, terrain_id, ix, iy)`，外键 `(release_id, terrain_id) → terrain_surface`。约束：`x/y` 在父地形 `bounds` 内；同一地形内 `(x,y)` 不重复；`post_spacing_m` 与实际格网间距一致。
 
 ### 3.9 `airspace_restriction`（空域限制）
 
@@ -289,7 +290,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 | `floor_z` | `double precision` | 是 | 米 | 限制体底面 |
 | `ceiling_m` | `double precision` | 否 | 米 | 限高体的绝对上限；`kind='height_limit'` 必填 |
 | `effective` | `tstzrange` | 是 | UTC | 生效窗口；半开区间 |
-| `state` | `enum` | 是 | `published`/`active`/`expired`/`revoked` | 当前状态；由发布流程维护 |
+| `state` | `enum` | 是 | `published`/`active`/`expired`/`revoked` | 该发布时刻的状态，随发布不可变；撤销写入新发布中的 `revoked` 行与一条 `airspace_event` |
 | `authority` | `text` | 是 | 机构缩写 | 发布机构；模拟数据标 `synthetic` |
 | `source_id` | `text` | 是 | 引用 `source` | 来源 |
 | `published_at` | `timestamptz` | 是 | UTC | 对外发布时间 |
@@ -297,7 +298,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 | `quality` | `enum` | 是 | 四级质量 | 数据质量 |
 | `sensitivity` | `enum` | 是 | 四级 | 空域细节按 `restricted` |
 
-约束：`kind='height_limit'` 时 `ceiling_m` 非空且 `ceiling_m > floor_z`；`kind='no_fly'` 时 `ceiling_m` 可为空，表示从 `floor_z` 向上封闭；`upper(volume)` 与 `ceiling_m` 的语义必须一致；`feature.valid` 与 `effective` 不同层，不能互相替代。
+约束：`kind='height_limit'` 时 `ceiling_m` 非空且 `ceiling_m > floor_z`；`kind='no_fly'` 时 `ceiling_m` 可为空，表示从 `floor_z` 向上封闭；`upper(volume)` 与 `ceiling_m` 的语义必须一致；`feature.valid` 与 `effective` 不同层，不能互相替代。禁止飞行的垂直范围：禁飞体为 `[floor_z, ceiling_m]`（`ceiling_m` 为空则向上封闭），限高体为 `ceiling_m` 以上；空间索引与候选复核必须使用禁止范围，不能用 `floor_z..ceiling_m` 代替限高体。
 
 ### 3.10 `airspace_event`（空域事件）
 
@@ -530,7 +531,7 @@ airspace_restriction 1 ── N airspace_event
 | `feature` | B-tree `(release_id, feature_id)` | 对象定位 |
 | `feature` | B-tree `(release_id, layer, feature_type)` | 分层统计 |
 | `coverage_tile` | B-tree `(release_id, layer, tile_x, tile_y)` | 覆盖检查 |
-| `terrain_post` | B-tree `(terrain_id, ix, iy)` | 格网点读取 |
+| `terrain_post` | B-tree `(release_id, terrain_id, ix, iy)` | 格网点读取 |
 | `airspace_event` | B-tree `(restriction_id, occurred_at)` | 事件序列 |
 | `audit_event` | BRIN `(at)` | 追加型审计的范围扫描 |
 
@@ -564,6 +565,7 @@ airspace_restriction 1 ── N airspace_event
 - ZC 的 Q1/Q2 适配需要 `feature_id`、`solid`/`volume`/`footprint`、`valid`、`effective`、`source_id`、`quality` 和版本元组。
 - LJ 的验收需要 `audit_event`、`release` 状态和失败原因；本字典只定义审计字段，不定义验收判据。
 - 变更记录：2026-11-06 初稿，建立三类数据、发布五层、E/C/q、三维/时间索引和敏感级别字段。
+- 变更记录：2026-11-06（ZC 按用户指示修订）生成可执行模式 [`docs/v2/schema/`](../../../v2/schema/schema.sql)。修正 `coverage_tile`、`terrain_surface`、`terrain_post` 主键（编号每次发布重复，原单列主键会在第二次发布冲突）；`rid` 改述为全局代理键；`airspace_restriction.state` 改为随发布固定；补充限高体禁止范围在 `ceiling_m` 以上。逐项理由见 [decisions.md](../../../v2/schema/decisions.md) S-01—S-03。
 
 ## 10. 参考
 

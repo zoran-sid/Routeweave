@@ -36,24 +36,29 @@
 
 ### 页面文字
 
-**主标题**：先把版本说清，再把候选压到 1%
+**主标题**：先把版本说清，再让时空索引决定取数路径
 
-**副标题**：五层发布 + 三维 GiST；索引只缩小候选，精确几何与版本校验决定答案
+**副标题**：16 张表的统一模式由数据库强制约束；四维时空 R*Tree 让“窗口内有效限制”的查询不随规模和历史变慢
 
 **左侧：数据模型**
 
 - `release` 一次发布绑定五层：`scene`、`terrain`、`airspace`、`exposure`、`sources`；`risk_model` 单独版本。
 - `feature` 是公共头，`building` / `airspace_restriction` / `exposure_zone` 共享 `rid`。
 - 建筑存三维体，空域存三维体，地面暴露存二维面 + 高度范围；时间用 `[start, end)`。
-- 发布后只读；新发布替代旧发布；查询先比版本，不一致返回 `unknown`。
+- 发布后只读由触发器强制：非 draft 发布拒绝写入，发布须五层齐全；查询先比版本，不一致返回 `unknown`。
+- 可执行模式：16 张表、39 个触发器、13 项测试通过（`docs/v2/schema/`）。
 
-**右侧：索引与验证**
+**右侧：操作 A“任务窗口内的有效限制”**（SQLite 实测，每条查询中位 µs）
 
-| 方法 | 2,400 栋 Q2 中位 | 相对全扫 |
-| --- | --- | --- |
-| 全扫 | 10.39 ms | 1× |
-| SQLite 3D R\*Tree | 0.0793 ms | 约 131× |
-| 候选比例 | 0.58% | — |
+| 每发布限制数 / 历史发布数 | 全扫 | 发布 B-tree | 四维 R\*Tree |
+| --- | --- | --- | --- |
+| 100 / 1 | 17 | 20 | 25 |
+| 10,000 / 1 | 528 | 802 | 30 |
+| 10,000 / 20 | 12,429 | 878 | 37 |
+
+- 六种访问路径结果完全一致；执行计划 `SCAN r VIRTUAL TABLE INDEX 2:…` 确认由 R\*Tree 四维裁剪。
+- 单列时间 B-tree 只能单侧裁剪区间，比全扫更慢；规划器自选会在路径间切换，p95 达 781 µs，因此固定连接顺序。
+- v1 建筑三维 R\*Tree：2,400 栋 Q2 中位 10.39 → 0.079 ms。
 
 - PostGIS 设计：n 维 GiST `gist_geometry_ops_nd` + `&&&` 候选，`ST_3DIntersects`/`ST_3DDWithin` 精确复核。
 - 时间：`effective` 范围 GiST、`audit_event.at` BRIN；空间瓦片 + 发布哈希分区 + 月度时间分区。
@@ -61,14 +66,16 @@
 
 **底部一行**：
 
-> 索引把 2,400 栋压到约 14 个候选；版本校验决定这 14 个候选能不能被相信。
+> 小规模时怎么查都快；限制增多、历史留在库里以后，只有时空索引保持在几十微秒。版本校验决定这些候选能不能被相信。
 
 ### 讲稿（约 80 秒）
 
 这一页讲模型和索引怎么落地。我们把一次查询绑定到一个 `release`，发布里五层各有版本，风险模型单独版本；任何一层不一致，结果就是 `unknown`。对象层面，`feature` 是公共头，建筑、空域、暴露分区共享同一个 `rid`，所以 Q2 能从一个对象追到来源和审计。
 
-索引分两步：先用三维 GiST 的 `&&&` 把候选压下来，再用 `ST_3DIntersects` 或 `ST_3DDWithin` 做精确判定。SQLite R\*Tree 的实测是 2,400 栋、200 条查询，Q2 从 10.39 ms 降到 0.0793 ms，候选只剩 0.58%；这是单机内存库、Python 复核，不含网络，不能当成生产 QPS。PostGIS 的 n 维 GiST 是设计选择，函数名和操作符类已按官方文档核对，但本机没有做 PostGIS 实库对照。
+这些规则不是写在文档里靠人遵守：统一模式的触发器会直接拒绝改写已发布数据，也会拒绝缺层的发布。
+
+右边是操作 A，也就是“这次任务窗口内，走廊会碰到哪些有效限制”。我们在同一批数据上比较了六种取数路径，结果完全一致，差别只在速度。每个发布只有一百条限制时，怎么查都在二三十微秒。限制增加到一万条、再把二十个历史发布留在同一张表里，全表扫描要 12.4 毫秒，按发布过滤也要 0.88 毫秒，四维时空 R\*Tree 仍是 37 微秒。时间 B-tree 只能按开始时间单侧裁剪，反而最慢。SQLite 规划器自选时会在不同路径之间切换，尾部延迟不稳定，所以查询固定由 R\*Tree 驱动。这些是单机内存库的实测，不含网络；PostGIS 上对应 n 维 GiST 加范围 GiST，尚未实测。
 
 最后一句：索引只负责“少算”，版本负责“算得对”。两者缺一，查询结果都不能用。
 
-**来源**：三维索引与基准见 [v1 存储评估](../storage.md) 第 5 节；PostGIS 索引用法见 [Spatial Indexes](https://postgis.net/docs/manual-3.5/using_postgis_dbmanagement.html#build-indexes)、[`&&&`](https://postgis.net/docs/geometry_overlaps_nd.html)、[ST_3DIntersects](https://postgis.net/docs/ST_3DIntersects.html)；ER 与 SQL 见 [section.md](section.md) 第 4 章。
+**来源**：操作 A 的 SQL、执行计划与访问路径实验见 [section.md](section.md) 第 4.3.1 节、[原始数据](experiments/results/op_a_index_comparison.json)；统一模式见 [`docs/v2/schema/`](../../../v2/schema/schema.sql)；v1 建筑索引基准见 [v1 存储评估](../storage.md) 第 5 节；PostGIS 索引用法见 [Spatial Indexes](https://postgis.net/docs/manual-3.5/using_postgis_dbmanagement.html#build-indexes)、[`&&&`](https://postgis.net/docs/geometry_overlaps_nd.html)、[ST_3DIntersects](https://postgis.net/docs/ST_3DIntersects.html)；ER 与 SQL 见 [section.md](section.md) 第 4 章。

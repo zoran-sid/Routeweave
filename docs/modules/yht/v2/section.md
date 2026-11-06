@@ -160,13 +160,13 @@ erDiagram
 | `release` | `release_id` | `base_release_id → release` | 发布后只读；`lower(valid) < upper(valid)` |
 | `release_layer` | `(release_id, layer)` | `release_id → release` | 五层齐全；哈希与内容一致 |
 | `source` | `source_id` | — | 许可、精度、更新频率必填 |
-| `coverage_tile` | `tile_id` | `release_id`、`source_id` | 同层瓦片不重叠；面积和等于场景面积 |
+| `coverage_tile` | `(release_id, layer, tile_id)` | `release_id`、`source_id` | 同层瓦片不重叠；面积和等于场景面积 |
 | `feature` | `rid` | `release_id`、`source_id` | `(release_id, feature_id)` 唯一；层与子类型一致 |
 | `building` | `rid` | `rid → feature`；两个来源 | `top_z > base_z`；三维体合法；投影一致 |
-| `terrain_surface` | `terrain_id` | `release_id`、`source_id` | 平地 `min_z=max_z=0`；格网覆盖边界 |
-| `terrain_post` | `(terrain_id, ix, iy)` | `terrain_id`、`source_id` | 坐标在边界内；点不重复 |
-| `airspace_restriction` | `rid` | `rid → feature`、`source_id` | 限高体必须有 `ceiling_m`；有效期非空 |
-| `airspace_event` | `event_id` | `restriction_id`、`release_id`、`actor_id` | 只追加；事件按时间单调 |
+| `terrain_surface` | `(release_id, terrain_id)` | `release_id`、`source_id` | 平地 `min_z=max_z=0`；格网覆盖边界 |
+| `terrain_post` | `(release_id, terrain_id, ix, iy)` | `(release_id, terrain_id)`、`source_id` | 坐标在边界内；点不重复 |
+| `airspace_restriction` | `rid` | `rid → feature`、`source_id` | 限高体必须有 `ceiling_m`；有效期非空；状态随发布固定 |
+| `airspace_event` | `event_id` | `(release_id, restriction_id) → feature`、`actor_id` | 只追加；事件按时间单调 |
 | `exposure_zone` | `rid` | `rid → feature`、`risk_model_id`、`source_id` | `0 ≤ E,C,q ≤ 1`；`q=E×C`；分区互斥覆盖 |
 | `risk_model` | `risk_model_id` | `source_id` | 只有 `approved` 可发布 |
 | `actor` | `actor_id` | — | 角色最小集；不存个人信息 |
@@ -174,7 +174,7 @@ erDiagram
 | `lineage_edge` | `edge_id` | 多态端点（应用校验） | 不自环；派生边可追到来源 |
 | `audit_event` | `event_id` | `actor_id`、`release_id` | 只追加；不存完整敏感轨迹 |
 
-代表性 DDL（完整字段见数据字典；类型按 PostgreSQL 17 + PostGIS 3.5）：
+全部16张表的可执行 SQLite DDL 见 [统一模式](../../../v2/schema/schema.sql)，含主键、外键、`CHECK`、R*Tree 与39个触发器；13项测试验证外键、约束、子类型一致、发布须五层齐全、发布后不可变、审计只追加和操作 A 的访问路径 [20]。以下为部署目标 PostgreSQL 17 + PostGIS 3.5 的代表性 DDL：
 
 ```sql
 CREATE TABLE source (
@@ -228,7 +228,9 @@ CREATE TABLE building (
 );
 ```
 
-`exposure_zone` 的 `q` 用 `CHECK (q BETWEEN 0 AND 1 AND abs(q - exposure_e*consequence_c) <= 1e-9)`；`airspace_restriction` 用 `CHECK (kind <> 'height_limit' OR ceiling_m IS NOT NULL)`。发布不可变、覆盖恰好一次和血缘端点存在性由发布事务与质检任务执行，不用单行 CHECK 硬编码。
+`exposure_zone` 的 `q` 用 `CHECK (q BETWEEN 0 AND 1 AND abs(q - exposure_e*consequence_c) <= 1e-9)`；`airspace_restriction` 用 `CHECK (kind <> 'height_limit' OR ceiling_m IS NOT NULL)`。发布后不可变由触发器在数据库内强制：向非 draft 发布插入、修改或删除内容一律拒绝，发布须五层齐全，状态只能按 draft→published→superseded/retired 迁移。覆盖恰好一次和血缘端点存在性是跨行约束，由发布质检执行。
+
+建模时修正了三处：瓦片与地形编号每次发布重复，主键必须含 `release_id`；空域 `state` 随发布固定，撤销写新发布；限高体禁止的是 `ceiling_m` 以上，索引与复核用生成列 `forbid_lo_z/forbid_hi_z` 表示禁止范围，否则会漏掉越过限高的走廊（[决定 S-01—S-03](../../../v2/schema/decisions.md)）。
 
 ### 4.3 索引与查询计划
 
@@ -293,6 +295,57 @@ SELECT * FROM hits;
 
 服务层按“禁飞命中 → `forbidden`；只有未知/不完整 → `unknown`；否则 `clear`”合成 Q2 状态，并把 `release_id`、`source_name`、`effective` 与审计事件一并返回。`ST_Force2D` 只用于地面分区的二维落区，不能用于建筑或空域的三维判断。
 
+### 4.3.1 操作 A：任务窗口内的有效限制
+
+操作 A 回答“在这次任务的时间窗口内，这条三维走廊会碰到哪些有效的空域限制”，是 Q1 取数的第一步。查询绑定一个发布，时间用半开区间重叠判断，垂直方向使用禁止范围；空结果仍需由服务层核对 `release_layer.complete` 与覆盖瓦片，不能直接解释为“安全”。SQLite 原型的 SQL 见 [op_a.sql](../../../v2/schema/op_a.sql)：
+
+```sql
+SELECT f.feature_id, ar.kind, ar.floor_z, ar.ceiling_m, ar.effective_lo, ar.effective_hi
+FROM rtree_airspace AS r                                   -- 四维 R*Tree：x, y, z, t
+CROSS JOIN airspace_restriction AS ar ON ar.rid = r.rid   -- 固定由 R*Tree 驱动
+CROSS JOIN feature AS f ON f.rid = ar.rid
+WHERE r.max_x >= :x0 AND r.min_x <= :x1 AND r.max_y >= :y0 AND r.min_y <= :y1
+  AND r.max_z >= :z0 AND r.min_z <= :z1
+  AND r.max_t >= unixepoch(:win_lo) - 1767225600 AND r.min_t <= unixepoch(:win_hi) - 1767225600
+  AND f.release_id = :release_id AND ar.state IN ('published', 'active')
+  AND ar.effective_lo < :win_hi AND ar.effective_hi > :win_lo          -- 精确复核
+  AND ar.bbox_max_x >= :x0 AND ar.bbox_min_x <= :x1 AND ar.bbox_max_y >= :y0 AND ar.bbox_min_y <= :y1
+  AND ar.forbid_hi_z >= :z0 AND ar.forbid_lo_z <= :z1;
+```
+
+`EXPLAIN QUERY PLAN` 输出 [17]：
+
+```text
+SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6
+SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)
+SEARCH f USING INTEGER PRIMARY KEY (rowid=?)
+```
+
+`INDEX 2` 加八个约束码表示 R*Tree 用全部四维范围裁剪候选，再按主键回表复核。不加 `CROSS JOIN` 时，SQLite 规划器常改由发布或时间 B-tree 驱动，R*Tree 退化为 `INDEX 1:` 的逐行查找 [18]。
+
+为选定访问路径，在同一批合成数据上比较五种固定路径和规划器自选，六种路径对每条查询返回的结果完全一致（0 处不一致）。设置：3 km × 3 km 区域，每个发布 N 条限制（70% 禁飞、30% 限高、5% 已撤销），起始时间分布在30天内、持续15分钟至12小时；表中同时保存 K 份全量复制的历史发布；每组100条查询（10分钟窗口、400 m 走廊外扩20 m、40–120 m 高度带），每条重复5次取中位。环境为内存 SQLite 3.54.1、Python 3.15.0、macOS arm64，结果见 [原始数据](experiments/results/op_a_index_comparison.json) [21]。
+
+| N / K | 全扫 | 发布 B-tree | 时间 B-tree | 三维 R*Tree | **四维 R*Tree** | 规划器自选 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 100 / 1 | 17.2 | 20.4 | 18.0 | 18.8 | 25.1 | 30.0 |
+| 1,000 / 1 | 60.0 | 87.1 | 72.0 | 22.6 | 27.6 | 85.0 |
+| 10,000 / 1 | 528 | 802 | 969 | 55.6 | **29.8** | 33.8（p95 781） |
+| 100 / 20 | 114 | 22.4 | 155 | 22.9 | 26.0 | 32.2 |
+| 1,000 / 20 | 1,095 | 92.2 | 1,754 | 81.3 | **26.9** | 95.7 |
+| 10,000 / 20 | 12,429 | 878 | 45,919 | 1,008 | **37.4** | 37.7 |
+
+单位：每条查询中位耗时，微秒。N=10,000、K=20 时，各路径平均驱动行数分别为200,000、10,000、103,585、3,137和13.6，命中平均0.65条。
+
+结论：
+
+- **基线规模下索引选择影响很小**：约100条活动限制、热库只存当前发布时，所有路径都在17–30微秒。
+- **规模或历史增长后四维 R*Tree 稳定**：N≥1,000 或 K=20 时保持在26–38微秒；N=10,000、K=20 时比全扫快约330倍，比发布 B-tree 快约23倍。
+- **三维索引会被历史拖累**：每次全量复制让同一限制出现 K 次，三维 R*Tree 的候选随 K 线性增加；加入时间维后，候选降到约14条。
+- **单列时间 B-tree 不适合区间查询**：它只能按 `effective_lo < 窗口终点` 单侧裁剪，候选是全表的一半左右，加上回表比全扫更慢。PostgreSQL 的范围类型 GiST 可以解决这一点 [6], [8]。
+- **固定连接顺序**：规划器自选的中位数接近，但会随参数在不同路径之间切换，N=10,000、K=1 时 p95 达781微秒。`op_a.sql` 因此用 `CROSS JOIN` 固定由 R*Tree 驱动，延迟更稳定。
+
+部署到 PostGIS 时，对应设计是 `volume` 的 n 维 GiST 与 `effective` 的范围 GiST；尚未在 PostgreSQL 上实测，上述数字只代表 SQLite 原型。历史发布的全量复制也增加了存储量，组件共享方案由 ZQO 第5章评估。
+
 ### 4.4 分区、冷热分层与权衡
 
 - **空间瓦片**：100 m × 100 m 覆盖瓦片是质检与加载单位；发布时检查瓦片无重叠、面积和等于场景边界、`complete` 标志与对象计数一致。
@@ -302,4 +355,4 @@ SELECT * FROM hits;
 
 ## 引用
 
-本文编号与 [references.md](references.md) 一致：PostGIS 三维谓词与索引 [1]–[4]；PostgreSQL 分区、GiST、BRIN 与范围类型 [5]–[8]；SQLite R\*Tree [9]；GeoJSON [10]；课程要求 [11]；v1 存储评估 [12]；v2 数据字典 [14]。
+本文编号与 [references.md](references.md) 一致：PostGIS 三维谓词与索引 [1]–[4]；PostgreSQL 分区、GiST、BRIN 与范围类型 [5]–[8]；SQLite R\*Tree [9]；GeoJSON [10]；课程要求 [11]；v1 存储评估 [12]；v2 数据字典 [14]；SQLite 查询计划与规划器 [17]、[18]；SQLite 触发器 [19]；统一模式 [20]；操作 A 实验 [21]。

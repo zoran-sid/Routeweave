@@ -34,8 +34,18 @@
 
 [16] LQ, “SkyRoute 地面风险与治理设计,” Routeweave repository, `docs/modules/lq/design.md`, 2026.
 
+[17] SQLite, “EXPLAIN QUERY PLAN.” [Online]. Available: https://www.sqlite.org/eqp.html. [Accessed: Nov. 6, 2026].
+
+[18] SQLite, “The SQLite Query Optimizer Overview,” Sec. “Manual Control Of Query Plans Using CROSS JOIN.” [Online]. Available: https://www.sqlite.org/optoverview.html. [Accessed: Nov. 6, 2026].
+
+[19] SQLite, “CREATE TRIGGER.” [Online]. Available: https://www.sqlite.org/lang_createtrigger.html. [Accessed: Nov. 6, 2026].
+
+[20] YHT and ZC, “SkyRoute v2 统一数据库模式,” Routeweave repository, `docs/v2/schema/`, 2026.
+
+[21] YHT and ZC, “操作 A 访问路径实验,” Routeweave repository, `docs/modules/yht/v2/experiments/results/op_a_index_comparison.json`, 2026.
+
 ## 使用说明
 
 - 第 2 章的数据规模、更新频率和生命周期引用 [11]、[12]、[14]；三维几何和索引语义引用 [1]–[4]；时间范围与分区引用 [5]、[8]。
-- 第 4 章的 ER、关系模式、Q1/Q2 SQL 引用 [1]–[4]、[8]–[10]、[12]–[14]；风险字段 E/C/q 的语义引用 [14]、[16]。
+- 第 4 章的 ER、关系模式、Q1/Q2 SQL 引用 [1]–[4]、[8]–[10]、[12]–[14]；风险字段 E/C/q 的语义引用 [14]、[16]；统一模式、操作 A 的执行计划与访问路径实验引用 [9]、[17]–[21]。
 - 上述仓库文档为团队内部成果，正式报告引用时保留版本与访问日期；外部网页只引用其方法语义，不把示例当作本项目实测结果。

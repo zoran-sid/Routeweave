@@ -1,18 +1,18 @@
 # ZQO 的工作与交接记录
 
-项目：SkyRoute。更新日期：2026-11-05（Asia/Shanghai）。
+项目：SkyRoute。更新日期：2026-11-06（Asia/Shanghai）。
 
 | 项目 | 当前状态 |
 | --- | --- |
 | 成员 | ZQO，成员2 |
 | 负责方向 | 空域更新、版本一致性与架构整合 |
-| 技术成果 | 模块可交付 |
-| 展示 | 已有历史PPT与讲稿；最终展示待整体复核后定稿 |
-| 集成 | 五模块实际链路11项通过；完整问题审查7项通过，详见本轮记录 |
+| 技术成果 | v2 统一模式发布模块已验证；v1 基线保留 |
+| 展示 | v2 两页展示文字与讲稿已交付，交 ZC 统一排版；保留历史 PPT |
+| 集成 | v2 发布与共享查询映射已验证；LQ/ZC/LJ 后续接入；v1 兼容链路保持通过 |
 
 首次交付分支：[codex/zqo-publication-architecture](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-publication-architecture)。技术成果提交为 `130f7b0`，本次将该分支合入共享 `main`，同时保留主线新增的YHT与LJ交付。
 
-## v2 任务（2026-11-06 重组，第2棒，待开始）
+## v2 任务（2026-11-06，第2棒，交付与本地验证完成）
 
 | 项目 | 内容 |
 | --- | --- |
@@ -24,7 +24,37 @@
 | 交付位置 | `docs/modules/zqo/v2/`：`section.md`、`slides.md`、`references.md`、`experiments/`；`docs/v2/schema/` 中本人表组 |
 | 提示词 | [v2 提示词](../v2-prompts.md) |
 
-具体任务与验收见[任务安排](../team-tasks.md)第4–10节。以下 v1 记录保留为证据。
+### 本轮开工、审阅与交付
+
+- 起始工作区干净。按用户命令 fetch → switch develop → pull --ff-only，读取 `5ee1a19`；确认 YHT 合入 `f05459c` / PR #1 的 GitHub `checks` 为 SUCCESS。远程 main 有历史重写，本地旧 main 保留，没有 reset 或强推。
+- 依据最新 v2 提示词第2段，从 develop 创建指定分支 `zqo/v2-transactions`。本轮目标为成员 PR → develop，main 保留已发布基线；遵循任务安排第8节“checks 通过后自行合入、下一棒审阅”的串行规则。
+- 已读 AGENTS、课程要求、共同场景、team-tasks 全文、五人交接、YHT v2 全目录、统一模式与本人 v1 原型/实验。修改前13项模式测试通过，YHT 原索引实验6配置×6路径复跑，查询差异0；证据含原始 schema SHA-256。
+- 交付 [v2 入口](../modules/zqo/v2/README.md)、[章节](../modules/zqo/v2/section.md)、[两页展示稿](../modules/zqo/v2/slides.md)、[IEEE引用](../modules/zqo/v2/references.md)、[架构](../modules/zqo/v2/architecture.md)、[接口](../modules/zqo/v2/integration.md)及[实验](../modules/zqo/v2/experiments/results/transactions-storage.json)。引用采用官方文档，并注明课程 PDF 页码；写作沿用 anti-defensive-writing 原则。
+- 统一模式增加7个发布实体和2个解析视图；修复本人表组 published 直接插入、未完成层发布及 layer 迁移旁路。数据字典只追加第9节变更，其他成员表实现与 v1 文件不改。
+
+### 本轮实测与边界
+
+| 项目 | 实际结果 |
+| --- | --- |
+| 统一模式 CI | 27项通过（原13项 + 本轮14项） |
+| v2 事务 | 双写者一成功一冲突；五点回滚；旧读快照；提交后丢响应幂等；撤销与重开；共享 airspace 对接原操作A |
+| 历史存储 | 10/100/1000版均实测；1000版共享6.20 MiB，全量33.91 MiB，节省81.7%；抽样历史逻辑摘要一致 |
+| v1 兼容 | YHT42、LQ19、ZC24、ZQO31、LJ15，共131项通过 |
+| 集成审查 | 本人审查1项、完整审查7项、v1整链路11项、风险专项25项通过 |
+| 资料验证 | 相对链接存在、实验源码摘要吻合、git diff --check通过 |
+| 外部真实缺陷 | 5个直接SQL探针仍被接受，记录pass=false；不是已通过案例 |
+
+完整验证汇总见 [validation.json](../modules/zqo/v2/experiments/results/validation.json)。本轮实验运行于基线提交加工作树修改，结果中的源码 SHA-256 精确标识实现；`git_head` 表示检查基线，不冒充已提交源码版本。
+
+### 对下一棒的接口与问题
+
+- **LQ**：先审阅本人实验。使用发布清单的 `source_versions`、五层内容摘要、源清单、risk_model_id、compiler_version、risk_window。接入职责分离、权限、真实质量/编译流程及血缘；处理 LQ-V2-01 已引用风险模型可被原地改写。
+- **YHT**：YHT-V2-05 覆盖已发布数据的 INSERT / NEW owner 检查，YHT-V2-06 冻结/版本化来源记录。原SQL与失败结果见 [issues.md](../integration/issues.md)。本人仅在读取时检测漂移并明确报错，不代修或关闭这些项。
+- **ZC**：逻辑 release_id 经 release_component → layer_component 解析物理 owner；原 op_a.sql 绑定该 owner。查询结果记录逻辑发布、组件和来源，采用前新事务复核 head。v2 Q1/Q2及缓存尚待接入。
+- **LJ**：验证故障恢复、失败审计二次提交前的崩溃窗口、outbox 至少一次投递/去重。当前实验验证异常回滚与重开，不代替进程崩溃、断电或备份验收。
+
+完成步骤：推送指定成员分支，创建 develop PR，GitHub checks通过后 merge commit合入并删除成员分支；随后通知下一棒“ZQO 已合入 develop”。PR与合入状态以GitHub记录为准。以下 v1 记录保留为历史证据。
+
 
 ## 首次交付读取与技术决定
 

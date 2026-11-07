@@ -1,5 +1,7 @@
 # LQ v2：数据库治理与访问控制
 
+> **2026-11-07 数据更新（AI 按 ZC 指示完成，不计入 ZC 工作量）**：本模块实验已改用香港九龙开放数据重跑（[香港数据快照](../../../v2/data/hk/README.md)），最新数值以 `experiments/results/` 与最终报告为准；本目录 `section.md`、`slides.md` 中的数值来自原合成数据，保留为过程记录。
+
 开工基线：`61fed41bbcea5b40495d8de37d13f19a0b0ba4ed`（ZQO PR #4已合入develop）。分支`lq/v2-governance`。
 
 - [第7章](section.md)、[展示文字与讲稿](slides.md)、[引用](references.md)。

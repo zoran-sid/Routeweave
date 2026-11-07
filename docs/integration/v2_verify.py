@@ -32,7 +32,7 @@ def commands(tmp):
         ("zqo_run", "ZQO publish/rollback/storage (10 releases)", py + ["docs/modules/zqo/v2/experiments/run.py", "--counts", "10", "--output", out("zqo.json")], 0),
         ("lq_run", "LQ governance, operation C, invalidation", py + ["docs/modules/lq/v2/experiments/run.py", "--output", out("lq.json")], 0),
         ("zc_access", "ZC access paths (quick grid)", py + ["docs/modules/zc/v2/experiments/access_paths.py", "--quick", "--output", out("access.json")], 0),
-        ("zc_invalidation", "ZC cache invalidation (6 graphs, 600 buildings)", py + ["docs/modules/zc/v2/experiments/invalidation.py", "--graphs", "6", "--buildings", "600", "--output", out("inval.json")], 0),
+        ("zc_invalidation", "ZC cache invalidation (6 graphs, Kowloon area M)", py + ["docs/modules/zc/v2/experiments/invalidation.py", "--graphs", "6", "--area", "M", "--output", out("inval.json")], 0),
         ("lj_recovery", "LJ backup, restore checks and truncation detection", py + ["docs/modules/lj/v2/experiments/recovery.py", "--output", out("recovery.json")], 0),
         ("zc_review_lq", "ZC probes of LQ (12/12 after LQ-V2-02 fix)", py + ["docs/modules/zc/v2/experiments/review_lq.py", "--output", out("review_lq.json")], 0),
         ("lq_review_zqo", "LQ probe of ZQO-V2-01 (fixed: both invalid inputs rejected)", py + ["docs/modules/lq/v2/experiments/review_zqo.py", "--output", out("review_zqo.json")], 0),

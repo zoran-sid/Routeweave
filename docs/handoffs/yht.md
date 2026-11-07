@@ -104,3 +104,9 @@ PPT 共 2 页，含可编辑表格和图表，逐页渲染检查；未代填成�
 - LJ：Q1/Q2 返回 `status/reasons/versions/coverage/candidates/checked`，可作验收与审计输入。
 
 任务依据：[项目说明](../project-brief.md)、[共同场景约定](../scenario-contract.md)、[五人分工](../team-tasks.md)、[课程要求全文](../course-requirements.md)、[异步协作](../agent-collaboration.md)、[AI 协作指南](../../AGENTS.md)。
+
+## 2026-11-07：实验改用香港九龙开放数据（AI 按 ZC 指示完成）
+
+- `op_a_index_comparison.py` 改为在九龙 L 区（3.3 km 见方，HK1980 Grid）上运行。每个发布含 8 处民航处公告的真实限飞区，其余为放在真实建筑位置上的场景限制，尺寸与时段分布不变。
+- 新结果：1 万条限制、20 个发布时，四维 R*Tree 44.1 µs，发布 B-tree 1,045 µs，全表扫描 13.7 ms；6 种路径结果一致。结论与合成数据版本相同。
+- 数据字典的坐标说明改为 HK1980 Grid（EPSG:2326）与 mPD；单元测试仍使用 starter-v0 合成片区。

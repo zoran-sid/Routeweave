@@ -40,7 +40,7 @@ pres.defineSlideMaster({
       fontSize: 30, bold: true, color: C.navy, valign: "middle", align: "left", margin: 0 }, text: "" } },
     { placeholder: { options: { name: "presenter", type: "body", x: M, y: H - 0.5, w: 6, h: 0.3, fontFace: FONT,
       fontSize: 11, color: C.muted, margin: 0 }, text: "" } },
-    { text: { text: "SkyRoute v2 · 合成数据实验", options: { x: W - M - 4.6, y: H - 0.5, w: 4, h: 0.3, fontFace: FONT,
+    { text: { text: "SkyRoute v2 · 香港九龙开放数据实验", options: { x: W - M - 4.6, y: H - 0.5, w: 4, h: 0.3, fontFace: FONT,
       fontSize: 11, color: C.muted, align: "right", margin: 0 } } },
   ],
   slideNumber: { x: W - M - 0.5, y: H - 0.5, w: 0.5, h: 0.3, fontFace: FONT, fontSize: 11, color: C.muted, align: "right" },
@@ -80,7 +80,7 @@ const axis = { catAxisLabelFontFace: FONT, valAxisLabelFontFace: FONT, catAxisLa
 pres.addSection({ title: "开场" });
 {
   const s = pres.addSlide({ masterName: "DARK", sectionTitle: "开场" });
-  const layers = [["城市三维环境", "季度更新", 1.2], ["动态空域限制", "分钟级发布", 2.25], ["地面暴露与风险", "月度重算", 3.3]];
+  const layers = [["城市三维环境", "每月更新", 1.2], ["动态空域限制", "公告即时生效", 2.25], ["地面暴露与风险", "普查与设施重算", 3.3]];
   layers.forEach(([a, b, y], i) => {
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 8.0, y, w: 3.0, h: 0.8, fill: { color: [C.teal, "1F6F8B", "2D5E7A"][i] },
       line: { color: C.navy }, rectRadius: 0.1, objectName: "data-layer-" + (i + 1) });
@@ -93,8 +93,8 @@ pres.addSection({ title: "开场" });
   text(s, "SkyRoute", { x: M + 0.1, y: 1.3, w: 7, h: 1.1, color: C.white, fontSize: 54, bold: true, objectName: "slide-title" });
   text(s, "面向城市无人机配送的时空数据管理系统设计", { x: M + 0.1, y: 2.5, w: 7.2, h: 0.6, color: "CFE3EA", fontSize: 22 });
   text(s, "让每一次航线查询都基于一致、可追溯、受控的数据", { x: M + 0.1, y: 3.25, w: 7.2, h: 0.5, color: C.white, fontSize: 16, italic: true });
-  text(s, "INT6164 小组路演 · 2026 年 11 月\nZQO · YHT · LQ · ZC · LJ", { x: M + 0.1, y: 5.6, w: 7, h: 0.9, color: "AFC4D0", fontSize: 14 });
-  s.addNotes("ZQO：我们的项目叫 SkyRoute。无人机配送的航线要同时依赖三类数据：城市三维环境按季度更新，临时禁飞按分钟发布，地面暴露按月重算。我们研究的不是怎么搜出一条最短路，而是怎样让每次查询读到一致、可追溯、受控的数据。接下来五位成员分别讲问题与架构、数据模型、事务与版本、治理、查询性能和恢复。");
+  text(s, "INT6164 小组路演 · 2026 年 11 月 · 数据：香港九龙旺角\nZQO · YHT · LQ · ZC · LJ", { x: M + 0.1, y: 5.6, w: 7, h: 0.9, color: "AFC4D0", fontSize: 14 });
+  s.addNotes("ZQO：我们的项目叫 SkyRoute。无人机配送的航线要同时依赖三类数据：城市三维环境每月更新，限飞区随公告生效，地面暴露随普查和设施数据重算。我们用香港九龙旺角一带的政府开放数据做全部实验。我们研究的不是怎么搜出一条最短路，而是怎样让每次查询读到一致、可追溯、受控的数据。接下来五位成员分别讲问题与架构、数据模型、事务与版本、治理、查询性能和恢复。");
 }
 
 // ---------------------------------------------------------------- 2 ZQO problem
@@ -102,7 +102,7 @@ pres.addSection({ title: "问题与架构（ZQO）" });
 {
   const s = content("问题与架构（ZQO）", "每次航线查询，都应知道自己用了哪一版数据", "主讲：ZQO",
     "ZQO：先看问题。三类数据更新节奏完全不同。如果查询在空域更新的同时分批读取，就可能把新禁飞区和旧风险值拼在一起，结果既不可信，事后也说不清依据是哪一版。我们的核心问题是：数据持续变化时，如何支持高效时空查询、一致性发布、历史追溯和安全访问，为航线规划提供可靠输入。右边是四类用户各自得到的价值：调度员不会采用旧结果，运营人员能看到依据，管理员能追溯变更，系统管理员故障后能证明数据一致。来源：报告第1章；《作业要求.pdf》第1–2页。");
-  const rows = [["城市三维环境", "建筑、地形 · GIS / BIM / LiDAR", "季度"], ["动态空域限制", "禁飞、限高 · 管理机构发布", "分钟级"], ["地面暴露与风险", "人口、设施 · 派生风险", "月度"]];
+  const rows = [["城市三维环境", "建筑轮廓与高度 · 地政总署", "每月"], ["动态空域限制", "无人机限飞区 · 民航处公告", "事件"], ["地面暴露与风险", "普查人口、学校、医院 · 派生风险", "定期"]];
   rows.forEach(([a, b, c], i) => {
     const y = 1.55 + i * 1.05;
     card(s, M, y, 5.6, 0.85, C.sky, "data-card-" + (i + 1));
@@ -155,15 +155,15 @@ pres.addSection({ title: "问题与架构（ZQO）" });
 pres.addSection({ title: "数据与模型（YHT）" });
 {
   const s = content("数据与模型（YHT）", "三类数据、三种节奏，统一到一套由数据库强制的模式", "主讲：YHT",
-    "YHT：三类数据的来源、精度和更新频率都不一样。基线是 25 栋建筑、3 个空域限制体和 6 个暴露分区；三年按 10 个片区、每日发布估算，约 2,400 栋、2 GB 发布数据，这是算术估算。我们把它们统一到 34 个实体的关系模式，规则由数据库在写入时强制：发布后的数据不能改，来源和模型修订必须登记新标识，取值一致性用 CHECK 和触发器保证。建模中修正了三处问题：瓦片和地形编号每次发布重复，主键必须带发布编号；空域状态随发布固定；限高体禁止的是上限以上的空间。来源：报告第2、4章；数据字典。");
-  const cards = [["城市三维环境", "25 → 约 2,400 栋", "高度缺失 · 轮廓自交 · 基准不一致"], ["动态空域", "3 → 约 100 条限制", "生效时间歧义 · 发布与查询交错"], ["地面暴露与风险", "6 → 60 个分区", "假设不透明 · 代理值被误读"]];
+    "YHT：数据全部来自香港政府开放数据。以旺角为中心 3.3 公里见方的九龙 L 区有地政总署的 10,674 栋建筑轮廓和高度、2021 年人口普查的 269 个区组、298 所学校和 5 家医院机构，以及民航处宪报公布的 8 处无人机限飞区。坐标是 HK1980 方格网，高度是主水平基准以上米数。492 栋开放式或临时构筑物没有高度，我们按全高度障碍处理，不当作安全空间；限飞区公告只列名称，边界由设施轮廓外扩 20 米近似。我们把它们统一到 34 个实体的关系模式，规则由数据库在写入时强制：发布后的数据不能改，来源和模型修订必须登记新标识，取值一致性用 CHECK 和触发器保证。建模中修正了三处问题：瓦片和地形编号每次发布重复，主键必须带发布编号；空域状态随发布固定；限高体禁止的是上限以上的空间。来源：报告第2、4章；数据字典。");
+  const cards = [["城市三维环境", "10,674 栋建筑", "492 栋无高度 · mPD 基准 · 多部件轮廓"], ["动态空域", "8 处限飞区", "公告只列名称 · 临时限制为场景数据"], ["地面暴露与风险", "572 个暴露分区", "普查按居住地 · 代理值被误读"]];
   cards.forEach(([a, n, r], i) => {
     const x = M + i * 4.1;
     card(s, x, 1.55, 3.8, 1.55, C.sky, "dataset-" + (i + 1));
     text(s, [{ text: a, options: { bold: true, breakLine: true, fontSize: 17 } }, { text: n, options: { fontSize: 22, bold: true, color: C.teal, breakLine: true } },
       { text: r, options: { fontSize: 13, color: C.muted } }], { x: x + 0.25, y: 1.68, w: 3.35, h: 1.35 });
   });
-  text(s, "基线 → 三年规模假设（算术估算，非实测）", { x: M, y: 3.18, w: 8, h: 0.35, fontSize: 12, color: C.muted });
+  text(s, "九龙 L 区实测（3.3 km 见方，2026-11-07 快照；来源：地政总署、政府统计处、教育局、医管局、民航处）", { x: M, y: 3.18, w: 8, h: 0.35, fontSize: 12, color: C.muted });
   const rules = [["34", "个实体，四个表组按成员负责"], ["发布后", "空间行、来源、模型均不可原地修改"], ["CHECK", "高度 = 顶 − 底；q = E × C；区间 lo < hi"], ["只追加", "事件、审计、派生值、查询结果"]];
   rules.forEach(([a, b], i) => {
     const x = M + i * 3.07;
@@ -181,7 +181,7 @@ pres.addSection({ title: "数据与模型（YHT）" });
 // ---------------------------------------------------------------- 5 YHT op A
 {
   const s = content("数据与模型（YHT）", "时空索引让“窗口内有效限制”的查询不随规模变慢", "主讲：YHT",
-    "YHT：操作 A 回答这次任务窗口内，走廊会碰到哪些有效限制。我们在同一批数据上比较了六种取数路径，结果完全一致，差别只在速度。图中表里保存了 20 个历史发布。限制只有 100 条时，各路径都在二三十微秒。到一万条时，全表扫描 12.4 毫秒，按发布过滤 0.88 毫秒，四维时空 R*Tree 仍是 37 微秒。单列时间 B-tree 只能按开始时间单侧裁剪，反而最慢。SQLite 规划器自选会在路径之间切换，p95 达到 781 微秒，所以查询固定由 R*Tree 驱动。部署到 PostGIS 时对应 n 维 GiST 加范围 GiST，尚未实测。来源：op_a_index_comparison.json；内存 SQLite 3.54.1。");
+    "YHT：操作 A 回答这次任务窗口内，走廊会碰到哪些有效限制。我们在九龙 L 区同一批数据上比较了六种取数路径，每个发布都含 8 处真实限飞区，其余是放在真实建筑位置上的场景限制；结果完全一致，差别只在速度。图中表里保存了 20 个历史发布。限制只有 100 条时，各路径都在二三十微秒。到一万条时，全表扫描 13.7 毫秒，按发布过滤 1.05 毫秒，四维时空 R*Tree 仍是 44 微秒。单列时间 B-tree 只能按开始时间单侧裁剪，反而最慢。SQLite 规划器自选会在路径之间切换，p95 达到 754 微秒，所以查询固定由 R*Tree 驱动。部署到 PostGIS 时对应 n 维 GiST 加范围 GiST，尚未实测。来源：op_a_index_comparison.json；内存 SQLite 3.54.1。");
   const pick = (v) => [100, 1000, 10000].map((n) => opA.find((r) => r.n_per_release === n && r.releases === 20 && r.variant === v).median_us);
   s.addChart(pres.charts.LINE, [
     { name: "全表扫描", labels: ["100", "1,000", "10,000"], values: pick("V0_full_scan") },
@@ -193,19 +193,19 @@ pres.addSection({ title: "数据与模型（YHT）" });
     lineSize: 2, lineDataSymbolSize: 8, valAxisLogScaleBase: 10, showLegend: true, legendPos: "b",
     showValAxisTitle: true, valAxisTitle: "每条查询中位耗时（µs，对数轴）", showCatAxisTitle: true, catAxisTitle: "每个发布的限制数（另存 20 个历史发布）" });
   card(s, 8.85, 1.55, 3.9, 2.3, C.navy, "stat-rtree");
-  text(s, [{ text: "37.4 µs", options: { fontSize: 40, bold: true, color: C.amber, breakLine: true } },
+  text(s, [{ text: "44.1 µs", options: { fontSize: 40, bold: true, color: C.amber, breakLine: true } },
     { text: "四维 R*Tree，1 万条限制 × 20 个发布", options: { fontSize: 14, color: C.white } }], { x: 9.1, y: 1.75, w: 3.5, h: 1.9 });
   card(s, 8.85, 4.05, 3.9, 2.3, C.sky, "stat-compare");
-  text(s, [{ text: "对比", options: { bold: true, breakLine: true } }, { text: "全表扫描 12.4 ms", options: { breakLine: true } },
-    { text: "发布 B-tree 0.88 ms", options: { breakLine: true } }, { text: "6 种路径结果完全一致", options: { color: C.teal, bold: true } }],
+  text(s, [{ text: "对比", options: { bold: true, breakLine: true } }, { text: "全表扫描 13.7 ms", options: { breakLine: true } },
+    { text: "发布 B-tree 1.05 ms", options: { breakLine: true } }, { text: "6 种路径结果完全一致", options: { color: C.teal, bold: true } }],
     { x: 9.1, y: 4.2, w: 3.5, h: 2.0, fontSize: 15 });
 }
 
 // ---------------------------------------------------------------- 6 ZQO transactions
 pres.addSection({ title: "事务与版本（ZQO）" });
 {
-  const s = content("事务与版本（ZQO）", "原子发布保持一致，组件共享节省 81.7% 历史存储", "主讲：ZQO",
-    "ZQO：这页是两个选择。第一，组件、当前指针、事件和成功审计在同一个写事务里提交，读者看不到半次发布。两个请求竞争同一旧版本时只有一个成功，另一个明确返回冲突；五处注入失败全部回滚；提交后丢失响应重试，返回同一发布，不会重复产生事件。第二，历史版本复用没有变化的图层。1000 次发布的数据库从 33.91 MiB 降到 6.20 MiB，历史导出内容一致，读取都约 1 毫秒。发布期间旧读事务继续读旧快照，所以调度采用路线前要用新事务复核当前版本。来源：transactions-storage.json；文件 SQLite，WAL/FULL。");
+  const s = content("事务与版本（ZQO）", "原子发布保持一致，组件共享节省 97.1% 历史存储", "主讲：ZQO",
+    "ZQO：这页是两个选择。第一，组件、当前指针、事件和成功审计在同一个写事务里提交，读者看不到半次发布。两个请求竞争同一旧版本时只有一个成功，另一个明确返回冲突；五处注入失败全部回滚；提交后丢失响应重试，返回同一发布，不会重复产生事件。第二，历史版本复用没有变化的图层。负载是旺角核心 186 栋真实建筑及其地形和暴露分区，每版只改一条场景限制。1000 次发布的数据库从 255.7 MiB 降到 7.45 MiB，历史导出内容一致，读取都约 5 毫秒。发布期间旧读事务继续读旧快照，所以调度采用路线前要用新事务复核当前版本。来源：transactions-storage.json；文件 SQLite，WAL/FULL。");
   table(s, [["实测场景", "结果"], ["两个发布者竞争同一旧版本", "1 次成功 + 1 次版本冲突"], ["五处注入失败", "全部回滚，只留失败记录"],
     ["写入未提交时的旧读事务", "看到旧版；新事务看到完整新版"], ["提交后丢响应并重试", "同一发布，事件不重复"], ["撤销后重开历史版本", "旧版内容与来源不变"]],
     { x: M, y: 1.55, w: 6.3, colW: [3.1, 3.2], rowH: 0.52 });
@@ -243,9 +243,9 @@ pres.addSection({ title: "治理与安全（LQ）" });
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y: 3.05, w: 2.85, h: 1.3, fill: { color: C.white }, line: { color: C.line, width: 1 }, rectRadius: 0.08, objectName: "fact-" + (i + 1) });
     text(s, [{ text: a, options: { bold: true, fontSize: 22, color: C.teal, breakLine: true } }, { text: b, options: { fontSize: 14 } }], { x: x + 0.2, y: 3.18, w: 2.5, h: 1.1 });
   });
-  table(s, [["航段", "查询发布", "暴露层物理所有者", "来源", "模型版本"], ["1", "R1", "R0（组件共享）", "SRC-SYN", "lq-risk-v1 · 1.0.0"], ["2", "R1", "R0（组件共享）", "SRC-SYN", "lq-risk-v1 · 1.0.0"]],
+  table(s, [["航段", "查询发布", "暴露层物理所有者", "来源", "模型版本"], ["1", "R1", "R0（组件共享）", "教育局学校位置", "lq-risk-v1 · 1.0.0"], ["2", "R1", "R0（组件共享）", "2021 人口普查区组", "lq-risk-v1 · 1.0.0"]],
     { x: M, y: 4.6, w: 12.1, colW: [1.2, 2.0, 3.3, 2.4, 3.2], rowH: 0.42 });
-  text(s, "示例：LQ 治理实验中的两段航线。代理值 q = E × C 为合成参数，不是事故概率；人口密度不直接等同于安全性", { x: M, y: 5.95, w: 12.1, h: 0.4, fontSize: 12, color: C.muted });
+  text(s, "示例：旺角的两段航线，分别经过一所学校和一个普查区组。E 来自普查与设施位置；C 与阈值为演示参数，q = E × C 不是事故概率", { x: M, y: 5.95, w: 12.1, h: 0.4, fontSize: 12, color: C.muted });
 }
 
 // ---------------------------------------------------------------- 8 LQ access
@@ -265,17 +265,17 @@ pres.addSection({ title: "治理与安全（LQ）" });
 // ---------------------------------------------------------------- 9 ZC access paths
 pres.addSection({ title: "查询负载（ZC）" });
 {
-  const s = content("查询负载（ZC）", "A* 不变，只换取数方式：取数从 34 ms 降到 0.17 ms", "主讲：ZC",
-    "ZC：这一页回答规划服务慢在哪里。我们把 A* 固定不动，同一批任务只换取数方式。整份读取发布的 JSON，或者用 SQL 读全城对象，耗时都随城市规模线性增长，一万栋时分别是 34 毫秒和 14 毫秒；用时空索引只取搜索域附近的对象，稳定在 0.2 毫秒以内。三种方式交给规划器的输入逐字节相同，所以这部分收益完全来自数据库设计。剩下的二三十毫秒是算法检查航段是否碰到障碍；同一张图上 A* 扩展的节点约是 Dijkstra 的三分之一，最优代价一致。来源：access_paths.json；文件 SQLite 3.54.1，WAL；每规模 12 个任务。");
-  const labels = access.map((r) => r.n_buildings.toLocaleString("en-US") + " 栋");
+  const s = content("查询负载（ZC）", "A* 不变，只换取数方式：取数从 55 ms 降到 0.2 ms", "主讲：ZC",
+    "ZC：这一页回答规划服务慢在哪里。我们把 A* 固定不动，同一批任务只换取数方式。12 个任务都在旺角核心，三个规模只改变数据库里装的城市范围：S 区 186 栋、M 区 2,267 栋、L 区 10,674 栋。整份读取发布的 JSON，或者用 SQL 读全城对象，耗时都随城市范围线性增长，L 区时分别是 55 毫秒和 21 毫秒；用时空索引只取搜索域附近的对象，稳定在 0.2 毫秒以内。三种方式交给规划器的输入逐字节相同，所以这部分收益完全来自数据库设计。剩下的九到十一毫秒是算法检查航段是否碰到障碍，由旺角的局部密度决定；同一张图上 A* 扩展的节点约是 Dijkstra 的八分之一，最优代价一致。来源：access_paths.json；文件 SQLite 3.54.1，WAL。");
+  const labels = access.map((r) => r.area + " 区 · " + r.n_buildings.toLocaleString("en-US") + " 栋");
   const v = (k) => access.map((r) => r.summary[k].data_ms);
   // Lines, not bars: on a log axis bar length does not encode the value.
   s.addChart(pres.charts.LINE, [{ name: "JSON 全量", labels, values: v("json_snapshot") }, { name: "SQL 全量", labels, values: v("sql_full") },
     { name: "R*Tree", labels, values: v("sql_rtree") }],
   { x: M, y: 1.45, w: 7.6, h: 4.95, ...axis, chartColors: [SERIES.base, SERIES.alt, SERIES.chosen], lineSize: 2, lineDataSymbolSize: 8,
     valAxisLogScaleBase: 10, showLegend: true, legendPos: "b", showValAxisTitle: true, valAxisTitle: "每次查询取数中位耗时（ms，对数轴）",
-    showCatAxisTitle: true, catAxisTitle: "城市规模（每规模 12 个任务）" });
-  const pts = [["≈200×", "1 万栋时 R*Tree 比 JSON 快"], ["36 / 36", "规划器输入逐字节相同 → 收益来自数据库"], ["22–45 ms", "剩余是算法的航段检查；A* 扩展约为 Dijkstra 的 1/3"]];
+    showCatAxisTitle: true, catAxisTitle: "九龙嵌套区域（同一批 12 个任务）" });
+  const pts = [["≈280×", "L 区 10,674 栋时 R*Tree 比 JSON 快"], ["36 / 36", "规划器输入逐字节相同 → 收益来自数据库"], ["9–11 ms", "剩余是算法的航段检查；A* 扩展约为 Dijkstra 的 1/8"]];
   pts.forEach(([a, b], i) => {
     const y = 1.55 + i * 1.62;
     card(s, 8.6, y, 4.15, 1.42, i === 0 ? C.navy : C.sky, "point-" + (i + 1));
@@ -286,10 +286,10 @@ pres.addSection({ title: "查询负载（ZC）" });
 
 // ---------------------------------------------------------------- 10 ZC cache
 {
-  const s = content("查询负载（ZC）", "缓存派生图把查询降到 0.3 ms，新发布后只更新受影响的部分", "主讲：ZC",
-    "ZC：既然航段检查是主要成本，可以把整张可飞航段图预先算好。构建一次要五十到一百三十毫秒，之后每次查询只要零点三毫秒左右，同一区域和时间窗被查询三次就划算。难点在于数据会更新。发布不可变，所以旧版本的缓存对旧版本永远正确，历史查询直接命中。新发布到来时，数据库已经记录了这次改动了哪些禁飞区、哪些风险值；只有与改动重叠的图需要修补，其余直接沿用。新增禁飞区时 24 张图只需更新 4 张，用时从 2.4 秒降到 0.35 秒，每张都和全部重建的结果核对一致；其中一条航线确实因新禁飞区变得不可飞。选型上，原型用 SQLite 加空间索引，部署换成 PostgreSQL 与 PostGIS。来源：invalidation.json、access_paths.json；报告第6章。");
+  const s = content("查询负载（ZC）", "缓存派生图把查询降到 0.1 ms，新发布后只更新受影响的部分", "主讲：ZC",
+    "ZC：既然航段检查是主要成本，可以把整张可飞航段图预先算好。构建一次要七十到八十毫秒，之后每次查询只要零点一毫秒左右，同一区域和时间窗被查询八次就划算。难点在于数据会更新。发布不可变，所以旧版本的缓存对旧版本永远正确，历史查询直接命中。新发布到来时，数据库已经记录了这次改动了哪些禁飞区、哪些风险值；只有与改动重叠的图需要修补，其余直接沿用。实验在旺角 M 区 2,267 栋真实建筑上做，两次变化是放在旺角街道上的场景禁飞区。新增禁飞区时 24 张图只需更新 4 张，用时从 3.0 秒降到 0.24 秒；撤销旧禁飞区时更新 8 张，用时从 3.1 秒降到 0.82 秒。每张都和全部重建的结果核对一致；新增禁飞区让 2 条航线变得不可飞，撤销后 8 条航线重新可飞。选型上，原型用 SQLite 加空间索引，部署换成 PostgreSQL 与 PostGIS。来源：invalidation.json、access_paths.json；报告第6章。");
   const a = access[access.length - 1].summary;
-  const stats = [[a.graph_cache.hit_total_ms.toFixed(2) + " ms", "缓存命中（1 万栋）"], ["第 3 次", "同一键查询起收回构建成本"], ["0 处", "48 张图与全部重建不一致"]];
+  const stats = [[a.graph_cache.hit_total_ms.toFixed(2) + " ms", "缓存命中（L 区）"], ["第 8 次", "同一键查询起收回构建成本"], ["0 处", "48 张图与全部重建不一致"]];
   stats.forEach(([x1, b], i) => {
     const x = M + i * 2.1;
     card(s, x, 1.55, 1.9, 1.5, i === 0 ? C.navy : C.sky, "cache-stat-" + (i + 1));
@@ -299,7 +299,7 @@ pres.addSection({ title: "查询负载（ZC）" });
   const tr = inval.map((t, i) => [i === 0 ? "新增禁飞区" : "撤销禁飞区", `${t.carried} / ${t.patched} / ${t.rebuilt}`,
     (t.full_rebuild_ms / 1000).toFixed(2) + " s", (t.targeted_ms / 1000).toFixed(2) + " s", (t.full_rebuild_ms / t.targeted_ms).toFixed(1) + "×"]);
   table(s, [["发布变化", "沿用/修补/重建", "全部重建", "按变更处理", "加速"], ...tr], { x: 7.0, y: 1.55, w: 5.75, colW: [1.35, 1.45, 1.0, 1.15, 0.8], rowH: 0.5, fontSize: 12 });
-  text(s, "2,400 栋 · 24 张缓存图 · 变更来自发布事务写入的 airspace_event 与风险数据集差异", { x: 7.0, y: 3.15, w: 5.75, h: 0.55, fontSize: 12, color: C.muted });
+  text(s, "M 区 2,267 栋 · 24 张缓存图 · 变化为场景禁飞区；变更来自发布事务写入的 airspace_event 与风险数据集差异", { x: 7.0, y: 3.15, w: 5.75, h: 0.55, fontSize: 12, color: C.muted });
   card(s, M, 3.85, 12.15, 1.25, C.sky, "selection");
   text(s, [{ text: "选型", options: { bold: true, fontSize: 17, color: C.navy, breakLine: true } },
     { text: "原型：SQLite + R*Tree（已实测）  →  部署：PostgreSQL + PostGIS（多用户写入、行级权限、三维谓词）", options: { breakLine: true } },
@@ -307,7 +307,7 @@ pres.addSection({ title: "查询负载（ZC）" });
   { x: M + 0.25, y: 3.95, w: 11.6, h: 1.1, fontSize: 15 });
   card(s, M, 5.35, 12.15, 0.75, C.amberLt, "tradeoff");
   text(s, [{ text: "物化 vs 新鲜度：", options: { bold: true, color: C.amber } },
-    { text: "缓存以发布为键，查询不会读到其他版本的图；同一键少于 3 次或限制频繁覆盖大面积时，按需搜索更合适" }],
+    { text: "缓存以发布为键，查询不会读到其他版本的图；同一键少于 8 次或限制频繁覆盖大面积时，按需搜索更合适" }],
   { x: M + 0.25, y: 5.47, w: 11.7, h: 0.5, fontSize: 14 });
 }
 
@@ -315,7 +315,7 @@ pres.addSection({ title: "查询负载（ZC）" });
 pres.addSection({ title: "保障与结论（LJ）" });
 {
   const s = content("保障与结论（LJ）", "恢复不是复制文件，而是五项核验全部通过", "主讲：LJ",
-    "LJ：备份用 SQLite 在线备份 API，数据库、WAL、审计和发布哈希作为一个整体保护；内存里的派生图不备份，恢复后按发布重建。恢复到隔离路径后，依次检查完整性、外键、发布父链和哈希，再重放一条历史查询比对摘要，全部通过才切换读流量，任何一项失败就阻断，不能显示为可用。实验里正常恢复五项全部通过，截断的备份在打开时就被发现是损坏的。RPO 15 分钟、RTO 30 分钟是单机原型的设计目标，不是实测承诺。成本按公开单价估算，2 GB 热数据加备份每月约 0.09 美元。来源：recovery.json；报告第3.3、8.2节。");
+    "LJ：备份用 SQLite 在线备份 API，数据库、WAL、审计和发布哈希作为一个整体保护；内存里的派生图不备份，恢复后按发布重建。恢复到隔离路径后，依次检查完整性、外键、发布父链和哈希，再重放一条历史查询比对摘要，全部通过才切换读流量，任何一项失败就阻断，不能显示为可用。实验对旺角核心的两个真实发布做备份恢复，五项全部通过，截断的备份在打开时就被发现是损坏的。RPO 15 分钟、RTO 30 分钟是单机原型的设计目标，不是实测承诺。成本按公开单价估算，2 GB 热数据加备份每月约 0.09 美元。来源：recovery.json；报告第3.3、8.2节。");
   const checks = ["完整性检查", "外键检查", "发布父链与哈希", "历史查询重放", "派生图按发布重建"];
   checks.forEach((c, i) => {
     const x = M + i * 2.48;
@@ -340,7 +340,7 @@ pres.addSection({ title: "保障与结论（LJ）" });
 // ---------------------------------------------------------------- 12 LJ conclusion
 {
   const s = pres.addSlide({ masterName: "DARK", sectionTitle: "保障与结论（LJ）" });
-  s.addNotes("LJ：最后总结五项权衡。YHT 选择暂存灵活、发布严格；ZQO 选择不可变发布加读快照，采用前复核；LQ 选择内部精确、对外聚合；ZC 选择派生图按发布记账并按变更更新；我选择单机备份加五项恢复核验。局限也很明确：性能来自单机 SQLite 和合成数据，PostgreSQL 和图数据库只做了设计论证，风险代理不是事故概率。下一步是在 PostgreSQL 上复现发布和查询实验、按目标规模演练恢复，并用真实许可数据评审隐私粒度。我们的结论是：先把数据管好，航线规划才有可靠输入。来源：报告第8章。");
+  s.addNotes("LJ：最后总结五项权衡。YHT 选择暂存灵活、发布严格；ZQO 选择不可变发布加读快照，采用前复核；LQ 选择内部精确、对外聚合；ZC 选择派生图按发布记账并按变更更新；我选择单机备份加五项恢复核验。局限也很明确：数据是九龙的开放数据，但临时限制是场景数据、普查人口不含日间人流；性能来自单机 SQLite，PostgreSQL 和图数据库只做了设计论证，风险代理不是事故概率。下一步是在 PostgreSQL 上复现发布和查询实验、按目标规模演练恢复，并用真实许可数据评审隐私粒度。我们的结论是：先把数据管好，航线规划才有可靠输入。来源：报告第8章。");
   text(s, "先把数据管好，航线规划才有可靠输入", { x: M, y: 0.45, w: W - 2 * M, h: 0.8, color: C.white, fontSize: 30, bold: true, objectName: "slide-title" });
   const rows = [["灵活模式 vs 数据质量", "暂存灵活、发布严格", "YHT"], ["一致性 vs 可用性", "不可变发布 + 读快照 + 采用前复核", "ZQO"],
     ["共享价值 vs 隐私", "内部精确、对外聚合", "LQ"], ["物化 vs 新鲜度", "派生图按发布记账、按变更更新", "ZC"], ["恢复目标 vs 成本", "单机备份 + 五项恢复核验", "LJ"]];
@@ -351,7 +351,7 @@ pres.addSection({ title: "保障与结论（LJ）" });
     text(s, who, { x: M + 6.75, y: y + 0.14, w: 0.7, h: 0.42, color: "AFC4D0", fontSize: 13, align: "right" });
   });
   text(s, [{ text: "局限", options: { bold: true, color: C.amber, fontSize: 17, breakLine: true } },
-    { text: "单机 SQLite 与合成数据；PostgreSQL、图数据库为设计论证；风险代理不是事故概率", options: { breakLine: true } },
+    { text: "临时限制为场景数据、普查不含日间人流；单机 SQLite，PostgreSQL、图数据库为设计论证；风险代理不是事故概率", options: { breakLine: true } },
     { text: " ", options: { breakLine: true, fontSize: 14 } },
     { text: "下一步", options: { bold: true, color: C.amber, fontSize: 17, breakLine: true } },
     { text: "PostgreSQL 上复现发布与查询实验 · 目标规模恢复演练 · 真实数据隐私评审" }],

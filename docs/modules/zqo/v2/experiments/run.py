@@ -1,8 +1,10 @@
 """Reproduce operation B evidence and paired 10/100/1000 release storage experiments.
 
 python3 -B docs/modules/zqo/v2/experiments/run.py --output /tmp/zqo-v2.json
-Default workload: 25 buildings, 121 terrain posts, 3 restrictions, 6 exposure zones.
-Every new release changes one restriction's height; all other layers are unchanged.
+Workload: real Hong Kong open data for Kowloon area S (250 m around Mong Kok MTR; docs/v2/data/hk): every
+building with its footprint and height, terrain posts derived from building base heights, census, school and
+hospital exposure zones, plus 3 scenario restrictions. Every new release changes one restriction's height
+(a scenario change); all other layers are unchanged.
 """
 import argparse
 import hashlib
@@ -16,29 +18,37 @@ import tempfile
 import time
 import unittest
 from pathlib import Path
+import sys
 import catalog as cat
 from test_catalog import CatalogTest
+
+sys.path.insert(0, str(cat.ROOT / 'docs/v2/data/hk'))
+import hk  # noqa: E402
+
+AREA = 'S'
+WORKLOAD, _, WORKLOAD_STATS = hk.payload(cat, AREA, restrictions=3, seed=20261106)
 
 
 def environment():
     paths = [Path(__file__), Path(__file__).with_name('catalog.py'), Path(__file__).with_name('test_catalog.py'),
-             cat.SCHEMA/'schema.sql', cat.SCHEMA/'fixtures.py']
+             cat.SCHEMA/'schema.sql', cat.SCHEMA/'fixtures.py', cat.ROOT/'docs/v2/data/hk/hk.py', cat.ROOT/'docs/v2/data/hk/manifest.json']
     return {'python': platform.python_version(), 'sqlite': sqlite3.sqlite_version, 'platform': platform.platform(),
             'git_head': subprocess.check_output(['git','rev-parse','HEAD'],cwd=cat.ROOT,text=True).strip(),
             'working_tree_source_sha256': {str(p.relative_to(cat.ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}}
 
 
 def benchmark(mode, counts):
-    payload = cat.fixture()
+    payload = WORKLOAD
     results = []; semantic_digests = {}
     with tempfile.TemporaryDirectory(prefix='zqo-storage-') as tmp:
         path = Path(tmp)/'catalog.db'; cat.initialize(path); c = cat.connect(path)
+        with c: hk.add_sources(c)
         previous = None; start = time.perf_counter()
         for i in range(max(counts)):
             rid = f'r{i:04d}'
             data = payload if i == 0 else cat.changed(payload, i)
             cat.publish(c,data,request_id='q'+str(i),release_id=rid,expected=previous,
-                        provenance=cat.provenance(),mode=mode,timestamp='2026-11-06T10:00:00Z')
+                        provenance=hk.provenance(cat),mode=mode,timestamp='2026-11-06T10:00:00Z')
             previous=rid
             if i+1 not in counts: continue
             write_seconds = time.perf_counter()-start
@@ -115,9 +125,10 @@ def main():
         raise RuntimeError(stream.getvalue())
     shared,sd=benchmark('shared',args.counts);full,fd=benchmark('full',args.counts)
     assert sd==fd, 'shared/full logical historical exports differ'
-    evidence={'experiment':'unified operation B and historical storage','recorded_at':cat.now(),'synthetic':True,'environment':environment(),
-        'parameters':{'release_counts':args.counts,'buildings':25,'terrain_grid':[11,11],'restrictions':3,'exposure_zones':6,
-                      'change':'one airspace ceiling per release','journal_mode':'WAL','synchronous':'FULL',
+    evidence={'experiment':'unified operation B and historical storage','recorded_at':cat.now(),'synthetic':False,'environment':environment(),
+        'data':'Hong Kong open data, Kowloon area S (docs/v2/data/hk/manifest.json); 3 scenario restrictions',
+        'parameters':{'release_counts':args.counts,'area':AREA,'workload':WORKLOAD_STATS,
+                      'change':'one scenario airspace ceiling per release','journal_mode':'WAL','synchronous':'FULL',
                       'history_latency':'reopened connection; warm OS cache; SQL + digest validation + full JSON serialization; 30 reads alternating oldest/middle/latest',
                       'storage':'main DB after successful TRUNCATE checkpoint; indexes, audit and outbox included'},
         'regressions':{'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'log':stream.getvalue()},

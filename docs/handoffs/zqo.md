@@ -114,3 +114,8 @@ ZC 指示 AI 助手（Claude Code）修复全部成员的未关闭问题并记�
 - **ZQO-V2-01（已修复）**：[`catalog.publish`](../modules/zqo/v2/experiments/catalog.py) 在写事务内要求五层上游版本值与 `compiler_version` 均为非空字符串；空值、空白、`None` 或非字符串直接 `ValueError`，回滚后照常追加 `failed_attempt`。新增回归 `test_provenance_values_must_be_nonempty_strings`：7 种无效输入均被拒绝、不产生发布、head 不变、每次留失败记录，同一请求号改用合法来源后正常发布。ZQO 测试由 14 项增至 15 项，全部通过；LQ 的 `review_zqo.py` 退出码 0。
 - **兼容修订**：`catalog.initialize()` 读取 `schema.sql`、`prototype/evaluate.py` 与 `v2/experiments/run.py` 写结果时显式使用 UTF-8（ZC-V2-02 同类问题）。
 - **证据范围**：[transactions-storage.json](../modules/zqo/v2/experiments/results/transactions-storage.json) 保留原实验基线未重跑；本次修改只拒绝空来源值，不改变合法发布的写入路径，存储与读取结论不受影响。修订后的全量复核见 [verification-v2.json](../final/evidence/verification-v2.json)。
+
+## 2026-11-07：实验改用香港九龙开放数据（AI 按 ZC 指示完成）
+
+- `run.py` 的存储负载改为旺角 S 区真实图层（186 栋建筑、36 个地形点、10 个暴露分区）加 3 条场景限制，发布时使用快照的来源版本。
+- 新结果：1000 次发布组件共享 7.45 MiB，全量复制 255.72 MiB，节省 97.1%（合成数据为 81.7%）；15 项回归通过。

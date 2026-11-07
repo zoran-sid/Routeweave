@@ -1,6 +1,6 @@
 # v2 最终材料与课程要求对照
 
-课程原文见[课程要求全文](../course-requirements.md)，下表沿用《作业要求.pdf》页码。报告指 `SkyRoute-report.pdf`（23 页，章节号与页码按 PDF，文字版见 [report.md](report.md)），PPT 指 `SkyRoute-presentation.pptx`（12 页，文字版见 [slides.md](slides.md)）。PDF 与 PPTX 在本地由 `source/` 构建，不纳入版本库。v1 的对照保留在标签 `v1.0-algorithm-baseline`。
+课程原文见[课程要求全文](../course-requirements.md)，下表沿用《作业要求.pdf》页码。报告指 `SkyRoute-report.pdf`（24 页，章节号与页码按 PDF，文字版见 [report.md](report.md)），PPT 指 `SkyRoute-presentation.pptx`（12 页，文字版见 [slides.md](slides.md)）。PDF 与 PPTX 在本地由 `source/` 构建，不纳入版本库。v1 的对照保留在标签 `v1.0-algorithm-baseline`。
 
 ## 课程任务与报告结构
 
@@ -11,7 +11,7 @@
 | 数据来源、类型、规模与增长 | 2、4、6 | §2.2（6）；三类数据 | 4 | [数据字典](../modules/yht/v2/data-dictionary.md) |
 | 生命周期、访问模式、利益相关者 | 2、4 | §2.3（6）、§1.2（4） | 2 | — |
 | 总体架构图、数据流图、各层与组件职责 | 2、4–5 | §3.1–3.2（7），图 1–2 | 3 | [ZQO 架构](../modules/zqo/v2/architecture.md) |
-| 部署策略、高可用、灾备与成本 | 2、5 | §3.3（8）、§8.2（18） | 11 | [recovery.json](../modules/lj/v2/experiments/results/recovery.json) |
+| 部署策略、高可用、灾备与成本 | 2、5 | §3.3（8）、§8.2（17） | 11 | [recovery.json](../modules/lj/v2/experiments/results/recovery.json) |
 | 实体关系、ER 图、关系模式 | 5 | §4.1–4.2（8–9），图 3 | 4 | [统一模式](../v2/schema/schema.sql)、[ER](../v2/schema/er.md) |
 | 分区、索引、缓存、冷热分层 | 5 | §4.3（9）、§6.3（14） | 5、10 | — |
 | 典型查询与业务操作 | 5–6 | §4.4 操作 A、§5.1 操作 B、§6.1 Q1、§7.2 操作 C | 5–7、9 | [op_a.sql](../v2/schema/op_a.sql)、[op_c.sql](../v2/schema/op_c.sql) |
@@ -22,10 +22,10 @@
 | 隐私、合规与伦理 | 2、5 | §7.4（16） | 8 | — |
 | 至少两项关键设计权衡 | 2、6 | §4.5、§5.4、§6.5、§7.5，汇总于 §8.3（18） | 12 | — |
 | 评估指标、实验或基准方案 | 2、5 | §8.1（17）表 13–14；§4.4、§5.2、§6.2–6.3 | 5–6、9–11 | [verification-v2.json](evidence/verification-v2.json) |
-| 风险、局限与改进方向 | 5–6 | §8.4（18） | 12 | [问题清单](../integration/issues.md) |
+| 风险、局限与改进方向 | 5–6 | §8.4（19） | 12 | [问题清单](../integration/issues.md) |
 | 小组分工说明 | 5 | §9（19） | — | [contributions.md](contributions.md) |
-| 参考文献（统一格式） | 5 | 参考文献（19–21），IEEE，26 条 | 讲稿注明来源 | — |
-| AI 在数据管理与治理中的应用；本组 AI 使用过程 | 1（声明格式未定） | §7.4 AI 辅助发现异常与敏感字段（16）；附录 C（21–23）工具、时间线、人与 AI 分工、审阅发现 | 8 | [contributions.md](contributions.md) |
+| 参考文献（统一格式） | 5 | 参考文献（20–21），IEEE，30 条（含 4 条香港开放数据来源） | 讲稿注明来源 | — |
+| AI 在数据管理与治理中的应用；本组 AI 使用过程 | 1（声明格式未定） | §7.4 AI 辅助发现异常与敏感字段（16）；附录 C（22–24）工具、时间线、人与 AI 分工、审阅发现 | 8 | [contributions.md](contributions.md) |
 
 ## 范围建议（PDF 第6–7页）
 
@@ -37,7 +37,7 @@
 | 至少两个关键决策或权衡 | 五项（§8.3） |
 | 至少两个查询、分析或服务场景 | Q1 航线查询、Q2 状态与来源查询；操作 A、B、C（§2.1、§4.4、§5.1、§7.2） |
 | 治理、安全与隐私纳入总体设计 | 第 7 章，并在架构、模型与恢复中以数据库约束落实 |
-| 合理限定范围，可用模拟实验验证 | 合成数据、单机 SQLite 实测，PostgreSQL 为设计论证（§1.3、§8.4） |
+| 合理限定范围，可用模拟实验验证 | 香港九龙开放数据（建筑、人口普查、学校、医院、限飞区）加标注的场景限制，单机 SQLite 实测，PostgreSQL 为设计论证（§1.3、§2.2、§8.4） |
 
 ## 路演关注点（PDF 第5–6页）
 
@@ -53,7 +53,7 @@
 
 ## 篇幅与形式
 
-- 报告正文（摘要至第 9 章，不含参考文献与附录）9,855 个汉字，满足“不少于 2,500 中文字”的建议（PDF 第4页）。统计方法见 `docs/final/source/build_report.py` 的 `hanzi()`。
+- 报告正文（摘要至第 9 章，不含参考文献与附录）10,485 个汉字，满足“不少于 2,500 中文字”的建议（PDF 第4页）。统计方法见 `docs/final/source/build_report.py` 的 `hanzi()`。
 - PPT 共 12 页，按 ZQO、YHT、ZQO、LQ、ZC、LJ 的顺序讲述，每页附讲稿与来源；汇报时长由课程另行通知，届时按时长增删页面（[任务安排](../team-tasks.md)第9节）。
 - 原型、实验与证据（PDF 第6页加分材料）见报告附录 B 与 [verification-v2.json](evidence/verification-v2.json)。
 

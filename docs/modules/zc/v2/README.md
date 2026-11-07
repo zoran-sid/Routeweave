@@ -1,5 +1,7 @@
 # ZC v2：面向规划的查询负载与性能
 
+> **2026-11-07 数据更新（AI 按 ZC 指示完成，不计入 ZC 工作量）**：本模块实验已改用香港九龙开放数据重跑（[香港数据快照](../../../v2/data/hk/README.md)），最新数值以 `experiments/results/` 与最终报告为准；本目录 `section.md`、`slides.md` 中的数值来自原合成数据，保留为过程记录。
+
 开工基线：`ca2bf58`（YHT PR #1、ZQO PR #4、LQ PR #6 已合入 `develop`）。分支 `zc/v2-query-workload`。第4棒；第6棒整合另行进行。
 
 | 成果 | 内容 |

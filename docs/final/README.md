@@ -6,17 +6,18 @@
 
 | 文件 | 内容 |
 | --- | --- |
-| `SkyRoute-report.pdf`（本地构建，不入库） | 23 页小组报告（XeLaTeX），7 张图、19 张表、26 条 IEEE 参考文献；附录 C 记录 AI 使用与协作过程；由 `source/report/report.tex` 生成 |
+| `SkyRoute-report.pdf`（本地构建，不入库） | 24 页小组报告（XeLaTeX），7 张图、19 张表、30 条 IEEE 参考文献；实验数据为香港九龙开放数据；附录 C 记录 AI 使用与协作过程；由 `source/report/report.tex` 生成 |
 | [report.md](report.md) | 报告的 Markdown 镜像，由 LaTeX 源自动生成，图、表与引用编号与 PDF 一致 |
 | `SkyRoute-presentation.pptx`（本地构建，不入库） | 12 页可编辑汇报稿，原生图表与表格，每页附讲稿；图表配色经 dataviz 校验脚本检查（色觉差异与对比度），对数轴用折线、只标关键数值；由 `source/build_slides.cjs` 生成 |
 | [slides.md](slides.md) | 逐页展示文字、表格、图表数值与讲稿，由 PPTX 自动提取 |
 | [course-coverage.md](course-coverage.md) | 课程要求（PDF 页码）→ 报告章节与页码 → PPT 页 → 证据 |
 | [contributions.md](contributions.md) | 成员实际成果依据与贡献表填写步骤 |
+| [../v2/data/hk/](../v2/data/hk/README.md) | 实验数据：香港九龙开放数据快照（建筑、普查、学校、医院、限飞区）、取得脚本、处理说明与来源署名 |
 | [evidence/verification-v2.json](evidence/verification-v2.json) | 整合复核：20 组命令的命令行、退出码、日志尾部、环境与全部源码摘要 |
 | [evidence/artifact-checks-v2.json](evidence/artifact-checks-v2.json) | 报告与 PPT 的构建、校验与文件摘要 |
 | [source/](source/README.md) | 报告 LaTeX 源、PPT 构建脚本与提取脚本 |
 
-报告正文（摘要至第 9 章，不含参考文献与附录）9,855 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
+报告正文（摘要至第 9 章，不含参考文献与附录）10,485 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
 
 ## 验证状态
 

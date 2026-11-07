@@ -18,7 +18,7 @@ def bind(s, q):
 
 
 def fixture():
-    data = json.loads((Path(__file__).with_name("scenario.json")).read_text())
+    data = json.loads((Path(__file__).with_name("scenario.json")).read_text(encoding="utf-8"))
     return deepcopy(data["snapshot"]), deepcopy(data["query"])
 
 

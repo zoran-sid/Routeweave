@@ -63,7 +63,7 @@ def run():
                         HERE.parents[1]/'zc/prototype/planner.py',HERE.parents[1]/'lq/prototype/risk.py']},
           'trace':trace}
     OUT.mkdir(exist_ok=True)
-    (OUT/'evaluation.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+    (OUT/'evaluation.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n', encoding="utf-8")
     print(json.dumps({'tests':[{k:v for k,v in x.items() if k!='log'} for x in checks],
           'lengths_m':{k:trace[k]['metrics']['length_m'] for k in ('initial','new_query','revoked_query')},
           'old_route_forbidden_segments':sum(e['state']=='forbidden' for e in rechecks)},ensure_ascii=False))

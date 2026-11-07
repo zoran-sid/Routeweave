@@ -59,10 +59,10 @@ def main():
               "grid_nodes_before_filtering": 847, "repeat_count": REPEATS, "source_sha256": hashes,
               "timing_scope": "deepcopy + validation + search + route recheck, in-memory only; no database/network",
               "rows": rows}
-    (OUT / "benchmark.json").write_text(json.dumps(report, indent=2) + "\n")
-    (OUT / "query-examples.json").write_text(json.dumps(examples, indent=2) + "\n")
+    (OUT / "benchmark.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    (OUT / "query-examples.json").write_text(json.dumps(examples, indent=2) + "\n", encoding="utf-8")
     (OUT / "update-example.json").write_text(json.dumps({"new_snapshot": s, "new_query": q,
-        "before": before, "recheck": rechecked, "recheck_ms": recheck_ms, "after": after}, indent=2) + "\n")
+        "before": before, "recheck": rechecked, "recheck_ms": recheck_ms, "after": after}, indent=2) + "\n", encoding="utf-8")
     fields = ["case", "algorithm", "status", "length_m", "time_s", "risk_proxy", "cost", "expanded", "edge_checks", "median_ms", "p95_ms"]
     with (OUT / "summary.csv").open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields)

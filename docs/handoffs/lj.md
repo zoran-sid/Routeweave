@@ -102,3 +102,7 @@
   声称生产部署或云端性能。
 
 任务依据：[项目说明](../project-brief.md)、[共同场景约定](../scenario-contract.md)、[五人分工](../team-tasks.md)、[课程要求全文](../course-requirements.md)、[异步协作](../agent-collaboration.md)、[AI 协作指南](../../AGENTS.md)。
+
+## 2026-11-07：LJ 发现的 ZC-V2-02 已关闭（ZC 记录）
+
+LJ 在第5棒审阅中发现的 ZC-V2-02（Windows 默认编码下读取 SQL 失败、临时连接未关闭）已由 ZC 修复。由于整合环境没有 Windows，ZC 关闭 Python UTF-8 模式并强制 C 语言环境（默认编码 US-ASCII，比 Windows 代码页更严格）重跑全部 20 组命令，全部通过，233 项测试。排查中发现 v1 的 ZC、ZQO、LQ 与集成脚本也存在同类写入问题，已一并修复。LJ 若在 Windows 复跑，可直接使用 `python -B docs/integration/v2_verify.py --output <临时路径>`，不再需要 `-X utf8`。本记录不代写 LJ 的复核结论。

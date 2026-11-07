@@ -902,8 +902,166 @@ CREATE TRIGGER model_control_audit_update AFTER UPDATE ON risk_model_control BEG
 END;
 
 -- =====================================================================
--- 6 查询与结果追溯（ZC 预留：query_run、route_result、route_segment_source、派生图缓存）
+-- 6 查询与结果追溯（ZC）
+-- 一次规划查询绑定一个逻辑发布与任务窗口；结果、航段来源与派生图缓存都随该发布不可变。
+-- 缓存按发布记账：旧发布的缓存对旧发布永久有效，新发布只能“沿用（carried）/修补（patched）/新建（built）”。
 -- =====================================================================
+
+CREATE TABLE route_graph_cache (
+    graph_id        TEXT PRIMARY KEY,
+    release_id      TEXT NOT NULL REFERENCES release(release_id),
+    dataset_id      TEXT NOT NULL REFERENCES risk_dataset(dataset_id),
+    min_x REAL NOT NULL, min_y REAL NOT NULL, min_z REAL NOT NULL,
+    max_x REAL NOT NULL, max_y REAL NOT NULL, max_z REAL NOT NULL,
+    window_lo       TEXT NOT NULL,
+    window_hi       TEXT NOT NULL,
+    config_hash     TEXT NOT NULL CHECK (length(config_hash) = 64 AND config_hash NOT GLOB '*[^0-9a-f]*'),
+    payload_hash    TEXT NOT NULL CHECK (length(payload_hash) = 64 AND payload_hash NOT GLOB '*[^0-9a-f]*'),
+    node_count      INTEGER NOT NULL CHECK (node_count > 0),
+    edge_count      INTEGER NOT NULL CHECK (edge_count >= 0),
+    origin          TEXT NOT NULL CHECK (origin IN ('built','carried','patched')),
+    parent_graph_id TEXT REFERENCES route_graph_cache(graph_id),
+    created_at      TEXT NOT NULL,
+    build_ms        REAL NOT NULL CHECK (build_ms >= 0),
+    UNIQUE (release_id, min_x, min_y, min_z, max_x, max_y, max_z, window_lo, window_hi, config_hash),
+    CHECK (min_x < max_x AND min_y < max_y AND min_z < max_z),
+    CHECK (window_lo < window_hi),
+    CHECK ((origin = 'built') = (parent_graph_id IS NULL))
+);
+
+CREATE INDEX route_graph_release ON route_graph_cache(release_id, window_lo, window_hi);
+
+CREATE TABLE query_run (
+    query_id     TEXT PRIMARY KEY,
+    release_id   TEXT NOT NULL REFERENCES release(release_id),
+    actor_id     TEXT NOT NULL REFERENCES actor(actor_id),
+    requested_at TEXT NOT NULL,
+    window_lo    TEXT NOT NULL,
+    window_hi    TEXT NOT NULL,
+    start_x REAL NOT NULL, start_y REAL NOT NULL, start_z REAL NOT NULL,
+    goal_x  REAL NOT NULL, goal_y  REAL NOT NULL, goal_z  REAL NOT NULL,
+    planner_config TEXT NOT NULL CHECK (json_valid(planner_config)),
+    config_hash  TEXT NOT NULL CHECK (length(config_hash) = 64 AND config_hash NOT GLOB '*[^0-9a-f]*'),
+    algorithm    TEXT NOT NULL CHECK (algorithm IN ('astar','dijkstra')),
+    access_path  TEXT NOT NULL CHECK (access_path IN ('json_snapshot','sql_full','sql_rtree','graph_cache')),
+    status       TEXT NOT NULL CHECK (status IN ('feasible','infeasible','unknown')),
+    reason       TEXT NOT NULL,
+    freshness    TEXT NOT NULL CHECK (freshness IN ('current','historical')),
+    graph_id     TEXT REFERENCES route_graph_cache(graph_id),
+    CHECK (window_lo < window_hi),
+    CHECK ((access_path = 'graph_cache') = (graph_id IS NOT NULL))
+);
+
+CREATE INDEX query_run_release ON query_run(release_id, requested_at);
+
+CREATE TABLE route_result (
+    query_id   TEXT PRIMARY KEY REFERENCES query_run(query_id),
+    length_m   REAL NOT NULL CHECK (length_m >= 0),
+    time_s     REAL NOT NULL CHECK (time_s >= 0),
+    risk_proxy REAL NOT NULL CHECK (risk_proxy >= 0),
+    cost       REAL NOT NULL CHECK (cost >= 0),
+    waypoints  TEXT NOT NULL CHECK (json_valid(waypoints) AND json_array_length(waypoints) >= 2)
+);
+
+-- 航段的风险来源（满足 LQ 操作 C 合同）：一个航段可有多个分区来源。
+CREATE TABLE route_segment_source (
+    query_id     TEXT NOT NULL REFERENCES route_result(query_id),
+    segment_no   INTEGER NOT NULL CHECK (segment_no >= 1),
+    component_id TEXT NOT NULL REFERENCES layer_component(component_id),
+    zone_rid     INTEGER NOT NULL REFERENCES exposure_zone(rid),
+    dataset_id   TEXT NOT NULL REFERENCES risk_dataset(dataset_id),
+    PRIMARY KEY (query_id, segment_no, zone_rid)
+);
+
+CREATE INDEX route_segment_source_zone ON route_segment_source(zone_rid);
+
+-- 查询只能绑定已发布且五层映射完整的发布；任务窗口必须落在发布有效期内；
+-- freshness 由数据库按当前指针判定；只有业务角色可提交查询。
+CREATE TRIGGER query_run_scope BEFORE INSERT ON query_run BEGIN
+    SELECT CASE WHEN NOT EXISTS (
+        SELECT 1 FROM release r WHERE r.release_id = NEW.release_id AND r.status <> 'draft'
+          AND r.valid_lo <= NEW.window_lo AND NEW.window_hi <= r.valid_hi
+          AND (SELECT count(*) FROM release_component rc WHERE rc.release_id = r.release_id) = 5)
+    THEN RAISE(ABORT, 'query_run: published mapped release covering the window required') END;
+    SELECT CASE WHEN NOT EXISTS (
+        SELECT 1 FROM actor a WHERE a.actor_id = NEW.actor_id AND a.active = 1
+          AND a.role IN ('dispatcher','operator','airspace_admin'))
+    THEN RAISE(ABORT, 'query_run: active business actor required') END;
+    SELECT CASE WHEN NEW.freshness IS NOT (
+        CASE WHEN EXISTS (SELECT 1 FROM current_release h JOIN release r ON r.scene_id = h.scene_id
+                          WHERE r.release_id = NEW.release_id AND h.release_id = NEW.release_id)
+             THEN 'current' ELSE 'historical' END)
+    THEN RAISE(ABORT, 'query_run: freshness must match the current release pointer') END;
+    SELECT CASE WHEN NEW.graph_id IS NOT NULL AND NOT EXISTS (
+        SELECT 1 FROM route_graph_cache g WHERE g.graph_id = NEW.graph_id
+          AND g.release_id = NEW.release_id AND g.config_hash = NEW.config_hash
+          AND g.window_lo = NEW.window_lo AND g.window_hi = NEW.window_hi
+          AND NEW.start_x BETWEEN g.min_x AND g.max_x AND NEW.start_y BETWEEN g.min_y AND g.max_y
+          AND NEW.start_z BETWEEN g.min_z AND g.max_z AND NEW.goal_x BETWEEN g.min_x AND g.max_x
+          AND NEW.goal_y BETWEEN g.min_y AND g.max_y AND NEW.goal_z BETWEEN g.min_z AND g.max_z)
+    THEN RAISE(ABORT, 'query_run: graph must match release, window, config and endpoints') END;
+END;
+
+CREATE TRIGGER route_result_feasible BEFORE INSERT ON route_result
+WHEN (SELECT status FROM query_run WHERE query_id = NEW.query_id) IS NOT 'feasible'
+BEGIN SELECT RAISE(ABORT, 'route_result: only feasible queries have a route'); END;
+
+-- 来源必须是该查询发布的暴露组件、该组件物理 owner 下的分区，以及覆盖任务窗口的已封存风险数据集。
+CREATE TRIGGER route_segment_source_scope BEFORE INSERT ON route_segment_source BEGIN
+    SELECT CASE WHEN NOT EXISTS (
+        SELECT 1 FROM query_run q
+        JOIN release_component rc ON rc.release_id = q.release_id AND rc.layer = 'exposure'
+                                 AND rc.component_id = NEW.component_id
+        JOIN layer_component lc ON lc.component_id = rc.component_id
+        JOIN feature f ON f.rid = NEW.zone_rid AND f.release_id = lc.owner_release_id
+                      AND f.feature_type = 'exposure'
+        JOIN risk_dataset d ON d.dataset_id = NEW.dataset_id AND d.release_id = q.release_id
+                           AND d.component_id = rc.component_id AND d.state = 'validated'
+                           AND d.window_lo <= q.window_lo AND q.window_hi <= d.window_hi
+        WHERE q.query_id = NEW.query_id)
+    THEN RAISE(ABORT, 'route_segment_source: component/zone/dataset must match the query release and window') END;
+    SELECT CASE WHEN NEW.segment_no > (
+        SELECT json_array_length(waypoints) - 1 FROM route_result WHERE query_id = NEW.query_id)
+    THEN RAISE(ABORT, 'route_segment_source: segment_no beyond route') END;
+END;
+
+-- 缓存行绑定已发布版本、匹配的风险数据集；沿用/修补必须继承同一域、窗口与配置。
+CREATE TRIGGER route_graph_cache_scope BEFORE INSERT ON route_graph_cache BEGIN
+    SELECT CASE WHEN NOT EXISTS (
+        SELECT 1 FROM release r JOIN risk_dataset d ON d.dataset_id = NEW.dataset_id
+        JOIN release_component rc ON rc.release_id = r.release_id AND rc.layer = 'exposure'
+                                 AND rc.component_id = d.component_id
+        WHERE r.release_id = NEW.release_id AND r.status <> 'draft' AND d.release_id = r.release_id
+          AND d.state = 'validated' AND d.window_lo <= NEW.window_lo AND NEW.window_hi <= d.window_hi
+          AND r.valid_lo <= NEW.window_lo AND NEW.window_hi <= r.valid_hi)
+    THEN RAISE(ABORT, 'route_graph_cache: published release and covering validated dataset required') END;
+    SELECT CASE WHEN NEW.parent_graph_id IS NOT NULL AND NOT EXISTS (
+        SELECT 1 FROM route_graph_cache p WHERE p.graph_id = NEW.parent_graph_id
+          AND p.release_id <> NEW.release_id
+          AND p.min_x = NEW.min_x AND p.min_y = NEW.min_y AND p.min_z = NEW.min_z
+          AND p.max_x = NEW.max_x AND p.max_y = NEW.max_y AND p.max_z = NEW.max_z
+          AND p.window_lo = NEW.window_lo AND p.window_hi = NEW.window_hi
+          AND p.config_hash = NEW.config_hash
+          AND (NEW.origin <> 'carried' OR p.payload_hash = NEW.payload_hash))
+    THEN RAISE(ABORT, 'route_graph_cache: parent must share domain, window and config') END;
+END;
+
+CREATE TRIGGER route_graph_cache_no_update BEFORE UPDATE ON route_graph_cache
+BEGIN SELECT RAISE(ABORT, 'route_graph_cache: append-only'); END;
+CREATE TRIGGER route_graph_cache_no_delete BEFORE DELETE ON route_graph_cache
+BEGIN SELECT RAISE(ABORT, 'route_graph_cache: append-only'); END;
+CREATE TRIGGER query_run_no_update BEFORE UPDATE ON query_run
+BEGIN SELECT RAISE(ABORT, 'query_run: append-only'); END;
+CREATE TRIGGER query_run_no_delete BEFORE DELETE ON query_run
+BEGIN SELECT RAISE(ABORT, 'query_run: append-only'); END;
+CREATE TRIGGER route_result_no_update BEFORE UPDATE ON route_result
+BEGIN SELECT RAISE(ABORT, 'route_result: append-only'); END;
+CREATE TRIGGER route_result_no_delete BEFORE DELETE ON route_result
+BEGIN SELECT RAISE(ABORT, 'route_result: append-only'); END;
+CREATE TRIGGER route_segment_source_no_update BEFORE UPDATE ON route_segment_source
+BEGIN SELECT RAISE(ABORT, 'route_segment_source: append-only'); END;
+CREATE TRIGGER route_segment_source_no_delete BEFORE DELETE ON route_segment_source
+BEGIN SELECT RAISE(ABORT, 'route_segment_source: append-only'); END;
 
 -- =====================================================================
 -- 7 运行与恢复（LJ 预留：备份记录、恢复核验结果）

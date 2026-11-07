@@ -1,0 +1,814 @@
+{
+ "experiment": "zc_v2_cache_invalidation",
+ "started_at": "2026-11-07T02:23:01Z",
+ "synthetic": true,
+ "environment": {
+  "python": "3.15.0",
+  "sqlite": "3.54.1",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "git_head": "ca2bf58189e2b0bf67fbaac56b88319964f94a74"
+ },
+ "parameters": {
+  "buildings": 2400,
+  "graphs": 24,
+  "seed": 20261107,
+  "task_region_m": [
+   900,
+   2100
+  ],
+  "task_day": "2026-11-10 06:00-18:00 UTC",
+  "changes": {
+   "R1": {
+    "publish": {
+     "id": "NF-NEW",
+     "box": [
+      1400.0,
+      1500.0,
+      1800.0,
+      1800.0
+     ],
+     "effective": [
+      "2026-11-10T08:00:00Z",
+      "2026-11-10T14:00:00Z"
+     ]
+    }
+   },
+   "R2": {
+    "revoke": "NF-OLD"
+   }
+  },
+  "planner_config": {
+   "step_m": 20,
+   "buffer_m": 2,
+   "speed_mps": 10,
+   "lambda_risk": 1.0,
+   "length_scale_m": 100
+  }
+ },
+ "source_sha256": {
+  "docs/modules/zc/v2/experiments/invalidation.py": "d02ac25ad4b76bd6b1c15dd8b84e81a4dcbcbfd3fb2b90872713eaea56bb503f",
+  "docs/modules/zc/v2/experiments/planner_io.py": "d18bacb7eba40389c1d3099d2c9fcfac78dfd5453b62d38632fccf8c3ec9c8e4",
+  "docs/modules/zc/v2/experiments/city.py": "8802101865b5002153a14a94ae989fa73b5173e64f170fbe302b542a8c57a8bc",
+  "docs/v2/schema/schema.sql": "a469c1bdce959ce19757e05feda0ee8fdfb1c18d7ec025072083e0ceb162ca7b"
+ },
+ "component_mapping": [
+  {
+   "release_id": "R0",
+   "layer": "airspace",
+   "component_id": "R0:airspace"
+  },
+  {
+   "release_id": "R0",
+   "layer": "exposure",
+   "component_id": "R0:exposure"
+  },
+  {
+   "release_id": "R0",
+   "layer": "scene",
+   "component_id": "R0:scene"
+  },
+  {
+   "release_id": "R0",
+   "layer": "sources",
+   "component_id": "R0:sources"
+  },
+  {
+   "release_id": "R0",
+   "layer": "terrain",
+   "component_id": "R0:terrain"
+  },
+  {
+   "release_id": "R1",
+   "layer": "airspace",
+   "component_id": "R1:airspace"
+  },
+  {
+   "release_id": "R1",
+   "layer": "exposure",
+   "component_id": "R0:exposure"
+  },
+  {
+   "release_id": "R1",
+   "layer": "scene",
+   "component_id": "R0:scene"
+  },
+  {
+   "release_id": "R1",
+   "layer": "sources",
+   "component_id": "R0:sources"
+  },
+  {
+   "release_id": "R1",
+   "layer": "terrain",
+   "component_id": "R0:terrain"
+  },
+  {
+   "release_id": "R2",
+   "layer": "airspace",
+   "component_id": "R2:airspace"
+  },
+  {
+   "release_id": "R2",
+   "layer": "exposure",
+   "component_id": "R0:exposure"
+  },
+  {
+   "release_id": "R2",
+   "layer": "scene",
+   "component_id": "R0:scene"
+  },
+  {
+   "release_id": "R2",
+   "layer": "sources",
+   "component_id": "R0:sources"
+  },
+  {
+   "release_id": "R2",
+   "layer": "terrain",
+   "component_id": "R0:terrain"
+  }
+ ],
+ "transitions": [
+  {
+   "from": "R0",
+   "to": "R1",
+   "graphs": 24,
+   "changed_restrictions": [
+    "NF-NEW"
+   ],
+   "change_boxes": 1,
+   "carried": 20,
+   "patched": 3,
+   "rebuilt": 1,
+   "full_rebuild_ms": 2393.819125,
+   "targeted_ms": 346.188958,
+   "detect_ms": 0.170375,
+   "targeted_vs_full_mismatches": 0,
+   "historical_cache_hits_prev": 24,
+   "routes_changed": 1,
+   "patched_median_ms": 48.857125,
+   "rebuilt_median_ms": 147.393625,
+   "carried_median_ms": 0.131771,
+   "full_median_ms_per_graph": 99.74246354166667,
+   "per_graph": [
+    {
+     "parent": "g-1d040bc9973147d2",
+     "graph_id": "g-c5fd6f2f9157490a",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 960,
+     "ms": 0.392375,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-265b0951088f474b",
+     "graph_id": "g-6cc48dff382848f8",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 672,
+     "ms": 0.148209,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-372a43d6f70a4c60",
+     "graph_id": "g-5da5b6d959fc4dd4",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 864,
+     "ms": 0.165916,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-4b3c4ec7779541de",
+     "graph_id": "g-9324e90f28dd4854",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 504,
+     "ms": 0.129542,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "infeasible",
+     "status_after": "infeasible"
+    },
+    {
+     "parent": "g-557b532420a1497c",
+     "graph_id": "g-ec30f586cccb4d3c",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 768,
+     "ms": 0.140709,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-588a2d2a80d347c6",
+     "graph_id": "g-1432f9e763c4477c",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 672,
+     "ms": 0.120958,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-5af7e1b668194a3a",
+     "graph_id": "g-7592bba508044e96",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 840,
+     "ms": 0.110708,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-5b9e09a652cd4672",
+     "graph_id": "g-2147175608d445fc",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 924,
+     "ms": 0.118458,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-64d0c3ec057e4fde",
+     "graph_id": "g-f8e61ca940ce4435",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 810,
+     "ms": 0.107833,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-66e747adf89345b9",
+     "graph_id": "g-4f563360f11b4a92",
+     "origin": "built",
+     "touching_changes": 1,
+     "recomputed_nodes": 1152,
+     "nodes": 1152,
+     "ms": 147.393625,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-69a9f59253ff4c05",
+     "graph_id": "g-fbe6fbe3fc3c4503",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 1152,
+     "ms": 0.150292,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-6ae570c939aa47de",
+     "graph_id": "g-c8767cf667ba4299",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 588,
+     "ms": 0.118333,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "infeasible",
+     "status_after": "infeasible"
+    },
+    {
+     "parent": "g-6c8e3cb4553a4d12",
+     "graph_id": "g-0ffaced7482d4293",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 960,
+     "ms": 0.107291,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-765bcc1b97e24e7c",
+     "graph_id": "g-e0e720e9e7e84111",
+     "origin": "patched",
+     "touching_changes": 1,
+     "recomputed_nodes": 96,
+     "nodes": 990,
+     "ms": 48.857125,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-76865511324e49cc",
+     "graph_id": "g-8fa85ff66f02490b",
+     "origin": "patched",
+     "touching_changes": 1,
+     "recomputed_nodes": 48,
+     "nodes": 792,
+     "ms": 56.837333,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-8e04569401154166",
+     "graph_id": "g-08360b7fc46b479c",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 624,
+     "ms": 0.134,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "infeasible",
+     "status_after": "infeasible"
+    },
+    {
+     "parent": "g-8f41086405ed4c39",
+     "graph_id": "g-f74311f738d94472",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 792,
+     "ms": 0.102541,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-8fb6872deffd4a2e",
+     "graph_id": "g-7d9ba085b9924abe",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 924,
+     "ms": 0.116584,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-9147e4672c354ddd",
+     "graph_id": "g-775475e2ee854d33",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 504,
+     "ms": 0.167459,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-93c2f370468447d8",
+     "graph_id": "g-b94d316c3f2f49f9",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 780,
+     "ms": 0.1285,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-97cf786e5f074819",
+     "graph_id": "g-b00e4f0746924135",
+     "origin": "patched",
+     "touching_changes": 1,
+     "recomputed_nodes": 336,
+     "nodes": 720,
+     "ms": 47.215541,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "infeasible"
+    },
+    {
+     "parent": "g-9d8d4e47d101412b",
+     "graph_id": "g-88ebca633c2543ab",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 990,
+     "ms": 0.138167,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-c44ba92003654513",
+     "graph_id": "g-56af5cc7d4f1498d",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 588,
+     "ms": 0.134833,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-ce9db34625144fbd",
+     "graph_id": "g-97df275fb0a34963",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 576,
+     "ms": 0.143917,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    }
+   ]
+  },
+  {
+   "from": "R1",
+   "to": "R2",
+   "graphs": 24,
+   "changed_restrictions": [
+    "NF-OLD"
+   ],
+   "change_boxes": 2,
+   "carried": 22,
+   "patched": 2,
+   "rebuilt": 0,
+   "full_rebuild_ms": 2390.268292,
+   "targeted_ms": 147.354208,
+   "detect_ms": 0.087458,
+   "targeted_vs_full_mismatches": 0,
+   "historical_cache_hits_prev": 24,
+   "routes_changed": 0,
+   "patched_median_ms": 51.8459585,
+   "rebuilt_median_ms": null,
+   "carried_median_ms": 0.11997849999999999,
+   "full_median_ms_per_graph": 99.59451216666668,
+   "per_graph": [
+    {
+     "parent": "g-08360b7fc46b479c",
+     "graph_id": "g-f3631e05fb3f43be",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 624,
+     "ms": 0.394542,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "infeasible",
+     "status_after": "infeasible"
+    },
+    {
+     "parent": "g-0ffaced7482d4293",
+     "graph_id": "g-acf405f1b4054d3d",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 960,
+     "ms": 0.12425,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-1432f9e763c4477c",
+     "graph_id": "g-16a20382ef834f17",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 672,
+     "ms": 0.205417,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-2147175608d445fc",
+     "graph_id": "g-9e8e7d8b5a6e4002",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 924,
+     "ms": 0.147041,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-4f563360f11b4a92",
+     "graph_id": "g-d6f047718be0427b",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 1152,
+     "ms": 0.120291,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-56af5cc7d4f1498d",
+     "graph_id": "g-a1b7bb0dc1d0443d",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 588,
+     "ms": 0.109583,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-5da5b6d959fc4dd4",
+     "graph_id": "g-8a6bc4f591dd4eeb",
+     "origin": "patched",
+     "touching_changes": 2,
+     "recomputed_nodes": 162,
+     "nodes": 864,
+     "ms": 54.616875,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-6cc48dff382848f8",
+     "graph_id": "g-56e32113939d4f53",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 672,
+     "ms": 0.174209,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-7592bba508044e96",
+     "graph_id": "g-681e97c5524845a1",
+     "origin": "patched",
+     "touching_changes": 2,
+     "recomputed_nodes": 126,
+     "nodes": 840,
+     "ms": 49.075042,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-775475e2ee854d33",
+     "graph_id": "g-72bd27e210f04e52",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 504,
+     "ms": 0.142041,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-7d9ba085b9924abe",
+     "graph_id": "g-a20efb6b872a4ff3",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 924,
+     "ms": 0.108625,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-88ebca633c2543ab",
+     "graph_id": "g-9a6c17d0fc9a4339",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 990,
+     "ms": 0.102292,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-8fa85ff66f02490b",
+     "graph_id": "g-ccaa5bfedd2b4d22",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 792,
+     "ms": 0.129542,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-9324e90f28dd4854",
+     "graph_id": "g-d529a12ffe63479e",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 504,
+     "ms": 0.119666,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "infeasible",
+     "status_after": "infeasible"
+    },
+    {
+     "parent": "g-97df275fb0a34963",
+     "graph_id": "g-e87418fa02d94512",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 576,
+     "ms": 0.111291,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-b00e4f0746924135",
+     "graph_id": "g-fb9e9ecfbbad450b",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 720,
+     "ms": 0.100584,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "infeasible",
+     "status_after": "infeasible"
+    },
+    {
+     "parent": "g-b94d316c3f2f49f9",
+     "graph_id": "g-8a43e8b2deb7494c",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 780,
+     "ms": 0.093417,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-c5fd6f2f9157490a",
+     "graph_id": "g-22d7c4dd0d974883",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 960,
+     "ms": 0.095917,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-c8767cf667ba4299",
+     "graph_id": "g-e3ee64225a6d4a69",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 588,
+     "ms": 0.117208,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "infeasible",
+     "status_after": "infeasible"
+    },
+    {
+     "parent": "g-e0e720e9e7e84111",
+     "graph_id": "g-6e2e1af873e44e8e",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 990,
+     "ms": 0.089125,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-ec30f586cccb4d3c",
+     "graph_id": "g-1372a8ee58684456",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 768,
+     "ms": 0.121333,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-f74311f738d94472",
+     "graph_id": "g-e8bf95b7f03a4e31",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 792,
+     "ms": 0.125625,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-f8e61ca940ce4435",
+     "graph_id": "g-3f60cdba01ab471e",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 810,
+     "ms": 0.096167,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    },
+    {
+     "parent": "g-fbe6fbe3fc3c4503",
+     "graph_id": "g-433f3fde45ca4758",
+     "origin": "carried",
+     "touching_changes": 0,
+     "recomputed_nodes": 0,
+     "nodes": 1152,
+     "ms": 0.123167,
+     "digest_equal_full_rebuild": true,
+     "route_equal_full_rebuild": true,
+     "status_before": "feasible",
+     "status_after": "feasible"
+    }
+   ]
+  }
+ ],
+ "integrity": {
+  "check": "ok",
+  "foreign_key_violations": 0,
+  "cache_rows_by_origin": {
+   "built": 25,
+   "carried": 42,
+   "patched": 5
+  }
+ }
+}

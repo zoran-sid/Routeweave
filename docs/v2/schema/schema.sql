@@ -7,7 +7,7 @@
 --   区间    <名>_lo / <名>_hi 两列，半开 [lo, hi)
 --   枚举    TEXT + CHECK IN (...)
 --   JSON    TEXT + CHECK (json_valid(...))
---   几何    WKT 文本（SRID 0，局部米制）+ 由发布质检写入的包围盒列
+--   几何    WKT 文本（实测数据 HK1980 Grid / EPSG:2326，米，高度 mPD；单元测试的合成片区为局部米制）+ 由发布质检写入的包围盒列
 --   哈希    64 位小写十六进制
 --   R*Tree  时间维以“距 2026-01-01T00:00:00Z 的秒数”存储（unixepoch - 1767225600）
 -- PostgreSQL/PostGIS 对应写法见 decisions.md 第 3 节。

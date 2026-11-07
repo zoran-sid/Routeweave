@@ -1,5 +1,7 @@
 # ZQO v2：统一模式上的发布事务与历史版本
 
+> **2026-11-07 数据更新（AI 按 ZC 指示完成，不计入 ZC 工作量）**：本模块实验已改用香港九龙开放数据重跑（[香港数据快照](../../../v2/data/hk/README.md)），最新数值以 `experiments/results/` 与最终报告为准；本目录 `section.md`、`slides.md` 中的数值来自原合成数据，保留为过程记录。
+
 基线 `5ee1a19`，YHT PR #1 已通过 merge commit `f05459c` 合入 `develop`。本目录承接 [v2 第2棒](https://github.com/zoran-sid/Routeweave/blob/develop/docs/v2-prompts.md#2-zqo第2棒)；v1 原型、结果和最终材料保留。
 
 | 材料 | 用途 |

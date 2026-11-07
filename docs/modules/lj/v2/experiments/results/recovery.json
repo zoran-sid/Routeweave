@@ -1,5 +1,26 @@
 {
-  "synthetic": true,
+  "synthetic": false,
+  "data": "Hong Kong open data, Kowloon area S (docs/v2/data/hk/manifest.json); NF-001/NF-002 are scenario rows",
+  "data_stats": {
+    "area": "S",
+    "bbox": [
+      835325.0,
+      819925.0,
+      835575.0,
+      820175.0
+    ],
+    "buildings": 186,
+    "unknown_height": 1,
+    "rfz_zones": [],
+    "scenario_restrictions": 1,
+    "exposure_zones": 10,
+    "terrain_posts": 36,
+    "terrain_z": [
+      4.65,
+      5.5
+    ],
+    "density_ref_per_m2": 0.27630874916250014
+  },
   "operation": "SQLite Connection.backup",
   "source_checks": {
     "integrity_check": "ok",
@@ -20,7 +41,7 @@
     "digest": "1aa55e2f53f28ddcda41737224960d37872f04ab771806c0f572cb3185069446"
   },
   "backup": {
-    "elapsed_ms": 3.415,
+    "elapsed_ms": 2.41,
     "restore": {
       "integrity_check": "ok",
       "foreign_key_violations": 0,
@@ -39,14 +60,14 @@
   },
   "passed": true,
   "environment": {
-    "python": "3.14.7",
-    "sqlite": "3.50.4",
-    "platform": "Windows-11-10.0.26300-SP0",
-    "git_head": "c4a3a71d44b9d1c6ee37ee78980aff6e0856beab",
+    "python": "3.15.0",
+    "sqlite": "3.54.1",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "git_head": "a19465581b17caef123df9aa53b2f8659ffb5d5d",
     "source_sha256": {
-      "docs\\modules\\lj\\v2\\experiments\\recovery.py": "de0ff5c157a10ae498bfd78851282a4299a2ba2337d9a8e00713e8b9ca2d208c",
-      "docs\\v2\\schema\\schema.sql": "c94b3f718bb626e453498e7bc53780c4672af82d6d76c5520bd42992567f683f",
-      "docs\\v2\\schema\\fixtures.py": "434cf03ef1d16024417b8d5eec27afd5052ced05324a3786d892ab796aa106e0"
+      "docs/modules/lj/v2/experiments/recovery.py": "b54eca0ec9a0b4baf10a9e8ab8f8f624acafb19863de6edc8ea0c90967ebf4d4",
+      "docs/v2/schema/schema.sql": "51f8e39739e145149a53476a1e57f4a8a471ae6e3c0e06a7b53181a234e01615",
+      "docs/v2/schema/fixtures.py": "cf7e3ae5130c0444306d8582b24b35bf80f02f97e4bbb55507cf3822131e0727"
     }
   }
 }

@@ -1,5 +1,8 @@
 """LQ database governance, operation C, privacy and predecessor review evidence.
 
+Data: real Hong Kong open data for Kowloon area S (docs/v2/data/hk): census, school and hospital exposure zones
+with E from 2021 census density; C and the hard threshold are LQ demonstration parameters.
+
 python3 -B docs/modules/lq/v2/experiments/run.py --output /tmp/lq-v2.json
 """
 import argparse
@@ -14,11 +17,15 @@ import subprocess
 import tempfile
 import time
 import unittest
+import sys
 import governance as gov
 from test_governance import GovernanceTest
 
 cat=gov.cat
 HERE=Path(__file__).resolve().parent
+sys.path.insert(0,str(cat.ROOT/'docs/v2/data/hk'))
+import hk  # noqa: E402
+AREA='S'
 
 
 def execute():
@@ -28,15 +35,18 @@ def execute():
     records={'tests':{'run':tests.testsRun,'failures':len(tests.failures),'errors':len(tests.errors),'log':stream.getvalue()}}
     with tempfile.TemporaryDirectory(prefix='lq-governance-') as tmp:
         path=Path(tmp)/'lq.db';cat.initialize(path);c=cat.connect(path);gov.seed(c)
-        payload=cat.fixture()
-        gov.request_release(c,payload,'R0',None,'AUTHOR','approved-R0');gov.approve(c,'approved-R0','REVIEWER')
-        gov.publish_approved(c,payload,'R0',None,'approved-R0','REVIEWER')
+        with c: hk.add_sources(c)
+        payload,_,stats=hk.payload(cat,AREA,restrictions=3,seed=20261106)
+        records['data_stats']=stats
+        prov=hk.provenance(cat)
+        gov.request_release(c,payload,'R0',None,'AUTHOR','approved-R0',prov);gov.approve(c,'approved-R0','REVIEWER')
+        gov.publish_approved(c,payload,'R0',None,'approved-R0','REVIEWER',prov)
         changed=cat.changed(payload)
-        gov.request_release(c,changed,'R1','R0','AUTHOR','approved-R1');gov.approve(c,'approved-R1','REVIEWER')
-        gov.publish_approved(c,changed,'R1','R0','approved-R1','REVIEWER')
+        gov.request_release(c,changed,'R1','R0','AUTHOR','approved-R1',prov);gov.approve(c,'approved-R1','REVIEWER')
+        gov.publish_approved(c,changed,'R1','R0','approved-R1','REVIEWER',prov)
         started=time.perf_counter_ns();gov.compile_dataset(c,'R0','D0');zones=gov.compile_dataset(c,'R1','D1')
         records['compile']={'two_datasets_elapsed_ms':(time.perf_counter_ns()-started)/1e6,
-                           'zones_per_dataset':len(zones),'periods':12,'window':list(cat.WIN),
+                           'zones_per_dataset':len(zones),'periods':c.execute("SELECT count(*) FROM risk_input_period WHERE dataset_id IN ('D0','D1')").fetchone()[0],'window':list(cat.WIN),
                            'definition':'single demonstration, not a repeated performance benchmark'}
         gov.lineage(c,'D0');gov.lineage(c,'D1')
         # Explicit temporary consumer contract; no production ZC table is silently added.
@@ -68,7 +78,7 @@ def execute():
           JOIN affected a ON l.from_kind=a.kind AND l.from_id=a.id)
           SELECT d.dataset_id,d.release_id,d.component_id,d.risk_model_id
           FROM affected a JOIN risk_dataset d ON a.kind='dataset' AND d.dataset_id=a.id ORDER BY d.dataset_id"""
-        affected=cat.rows(c,affected_sql,{'source':'SRC-SYN'})
+        affected=cat.rows(c,affected_sql,{'source':'SRC-HK-CENSUS'})
         assert [r['dataset_id'] for r in affected]==['D0','D1']
         records['invalidation']={'sql':affected_sql,'result':affected,'meaning':'candidate derivations to rebuild/revalidate, not proof an entire route is forbidden'}
         records['access']={}
@@ -78,9 +88,9 @@ def execute():
         try: gov.read_audited(path,'DISPATCH','SELECT * FROM exposure_zone')
         except sqlite3.DatabaseError as e: records['raw_table_denied']=str(e)
         try:
-            gov.request_release(c,payload,'R2','R1','AUTHOR','self');gov.approve(c,'self','AUTHOR')
+            gov.request_release(c,payload,'R2','R1','AUTHOR','self',prov);gov.approve(c,'self','AUTHOR')
         except sqlite3.IntegrityError as e: records['self_approval_denied']=str(e)
-        periods={'G-0':[{'valid':[cat.WIN[0],'2026-06-01T00:00:00Z'],'E':.5,'C':.4}]}
+        periods={zones[0]['zone_id']:[{'valid':[cat.WIN[0],'2026-06-01T00:00:00Z'],'E':.5,'C':.4}]}
         gov.compile_dataset(c,'R1','GAP',periods,seal=False)
         try: c.execute("UPDATE risk_dataset SET state='validated' WHERE dataset_id='GAP'")
         except sqlite3.IntegrityError as e:
@@ -96,7 +106,7 @@ def execute():
                               'foreign_key_violations':len(c.execute('PRAGMA foreign_key_check').fetchall()),
                               'history_reopen_unchanged':True}
         # Privacy illustration: 200m-cell summaries vs raw zone geometry, no anonymity claim.
-        records['privacy']={'raw_rows':len(zones),'display_rows_per_release':3,'display_grid_m':200,'min_zones_per_cell':2,
+        records['privacy']={'raw_rows':len(zones),'display_rows_per_release':len([r for r in records['access']['DISPATCH']['summary'] if r['release_id']=='R1']),'display_grid_m':200,'min_zones_per_cell':2,
                             'retained_columns':['release_id','cell_x','cell_y','zone_count','display_proxy'],
                             'warning':'display proxy is rounded and must never replace planning inputs; no formal anonymity guarantee'}
         c.close()
@@ -106,11 +116,12 @@ def execute():
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);args=p.parse_args()
     evidence=execute()
-    paths=[*HERE.glob('*.py'),HERE/'op_c.sql',cat.SCHEMA/'schema.sql',cat.SCHEMA/'test_governance_v2.py',Path(cat.__file__),cat.SCHEMA/'fixtures.py',cat.ROOT/'docs/modules/lq/prototype/risk.py']
+    paths=[*HERE.glob('*.py'),HERE/'op_c.sql',cat.SCHEMA/'schema.sql',cat.SCHEMA/'test_governance_v2.py',Path(cat.__file__),cat.SCHEMA/'fixtures.py',cat.ROOT/'docs/modules/lq/prototype/risk.py',cat.ROOT/'docs/v2/data/hk/hk.py',cat.ROOT/'docs/v2/data/hk/manifest.json']
     evidence.update(environment={'python':platform.python_version(),'sqlite':sqlite3.sqlite_version,'platform':platform.platform(),
         'git_head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=cat.ROOT,text=True).strip(),
         'source_sha256':{str(f.relative_to(cat.ROOT)):hashlib.sha256(f.read_bytes()).hexdigest() for f in paths}},
-        synthetic=True,parameters={'buildings':25,'terrain_posts':121,'exposure_zones':6,'published_releases':2,
+        synthetic=False,data='Hong Kong open data, Kowloon area S (docs/v2/data/hk/manifest.json); 3 scenario restrictions',
+        parameters={'area':AREA,'published_releases':2,
                                    'risk_datasets':2,'temporary_queries':1,'temporary_segments':2})
     args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(evidence,ensure_ascii=False,indent=2,allow_nan=False)+'\n', encoding="utf-8")
     print(json.dumps({'tests':evidence['tests']['run'],'operation_C_rows':len(evidence['operation_C']['result']),

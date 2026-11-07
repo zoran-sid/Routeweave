@@ -3,12 +3,32 @@
     "run": 18,
     "failures": 0,
     "errors": 0,
-    "log": "test_approval_binds_payload_and_is_immutable (test_governance.GovernanceTest.test_approval_binds_payload_and_is_immutable) ... ok\ntest_audit_and_quality_are_append_only (test_governance.GovernanceTest.test_audit_and_quality_are_append_only) ... ok\ntest_author_cannot_approve_and_operator_cannot_approve (test_governance.GovernanceTest.test_author_cannot_approve_and_operator_cannot_approve) ... ok\ntest_complete_native_periods_compiled_and_frozen (test_governance.GovernanceTest.test_complete_native_periods_compiled_and_frozen) ... ok\ntest_database_NULL_and_inconsistent_q_rejected (test_governance.GovernanceTest.test_database_NULL_and_inconsistent_q_rejected) ... ok\ntest_dataset_window_component_and_model_gate (test_governance.GovernanceTest.test_dataset_window_component_and_model_gate) ... ok\ntest_disabled_model_control_is_separate_and_audited (test_governance.GovernanceTest.test_disabled_model_control_is_separate_and_audited) ... ok\ntest_dispatcher_cannot_author_release_request (test_governance.GovernanceTest.test_dispatcher_cannot_author_release_request) ... ok\ntest_gap_cannot_be_validated_even_with_pass_label (test_governance.GovernanceTest.test_gap_cannot_be_validated_even_with_pass_label) ... ok\ntest_lineage_and_reverse_invalidation_query (test_governance.GovernanceTest.test_lineage_and_reverse_invalidation_query) ... ok\ntest_native_missing_E_C_rolls_back (test_governance.GovernanceTest.test_native_missing_E_C_rolls_back) ... ok\ntest_period_overlap_rejected (test_governance.GovernanceTest.test_period_overlap_rejected) ... ok\ntest_policy_sensitivity_cap_is_enforced (test_governance.GovernanceTest.test_policy_sensitivity_cap_is_enforced) ... ok\ntest_reader_filters_org_role_active_and_hides_columns (test_governance.GovernanceTest.test_reader_filters_org_role_active_and_hides_columns) ... ok\ntest_referenced_model_immutable_new_version_preserves_history (test_governance.GovernanceTest.test_referenced_model_immutable_new_version_preserves_history) ... ok\ntest_sensitive_source_is_filtered_without_mutating_old_release (test_governance.GovernanceTest.test_sensitive_source_is_filtered_without_mutating_old_release) ... ok\ntest_sql_bypass_and_dml_are_rejected_and_denials_audited (test_governance.GovernanceTest.test_sql_bypass_and_dml_are_rejected_and_denials_audited) ... ok\ntest_unknown_quality_does_not_become_validated_risk (test_governance.GovernanceTest.test_unknown_quality_does_not_become_validated_risk) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 1.011s\n\nOK\n"
+    "log": "test_approval_binds_payload_and_is_immutable (test_governance.GovernanceTest.test_approval_binds_payload_and_is_immutable) ... ok\ntest_audit_and_quality_are_append_only (test_governance.GovernanceTest.test_audit_and_quality_are_append_only) ... ok\ntest_author_cannot_approve_and_operator_cannot_approve (test_governance.GovernanceTest.test_author_cannot_approve_and_operator_cannot_approve) ... ok\ntest_complete_native_periods_compiled_and_frozen (test_governance.GovernanceTest.test_complete_native_periods_compiled_and_frozen) ... ok\ntest_database_NULL_and_inconsistent_q_rejected (test_governance.GovernanceTest.test_database_NULL_and_inconsistent_q_rejected) ... ok\ntest_dataset_window_component_and_model_gate (test_governance.GovernanceTest.test_dataset_window_component_and_model_gate) ... ok\ntest_disabled_model_control_is_separate_and_audited (test_governance.GovernanceTest.test_disabled_model_control_is_separate_and_audited) ... ok\ntest_dispatcher_cannot_author_release_request (test_governance.GovernanceTest.test_dispatcher_cannot_author_release_request) ... ok\ntest_gap_cannot_be_validated_even_with_pass_label (test_governance.GovernanceTest.test_gap_cannot_be_validated_even_with_pass_label) ... ok\ntest_lineage_and_reverse_invalidation_query (test_governance.GovernanceTest.test_lineage_and_reverse_invalidation_query) ... ok\ntest_native_missing_E_C_rolls_back (test_governance.GovernanceTest.test_native_missing_E_C_rolls_back) ... ok\ntest_period_overlap_rejected (test_governance.GovernanceTest.test_period_overlap_rejected) ... ok\ntest_policy_sensitivity_cap_is_enforced (test_governance.GovernanceTest.test_policy_sensitivity_cap_is_enforced) ... ok\ntest_reader_filters_org_role_active_and_hides_columns (test_governance.GovernanceTest.test_reader_filters_org_role_active_and_hides_columns) ... ok\ntest_referenced_model_immutable_new_version_preserves_history (test_governance.GovernanceTest.test_referenced_model_immutable_new_version_preserves_history) ... ok\ntest_sensitive_source_is_filtered_without_mutating_old_release (test_governance.GovernanceTest.test_sensitive_source_is_filtered_without_mutating_old_release) ... ok\ntest_sql_bypass_and_dml_are_rejected_and_denials_audited (test_governance.GovernanceTest.test_sql_bypass_and_dml_are_rejected_and_denials_audited) ... ok\ntest_unknown_quality_does_not_become_validated_risk (test_governance.GovernanceTest.test_unknown_quality_does_not_become_validated_risk) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.650s\n\nOK\n"
+  },
+  "data_stats": {
+    "area": "S",
+    "bbox": [
+      835325.0,
+      819925.0,
+      835575.0,
+      820175.0
+    ],
+    "buildings": 186,
+    "unknown_height": 1,
+    "rfz_zones": [],
+    "scenario_restrictions": 3,
+    "exposure_zones": 10,
+    "terrain_posts": 36,
+    "terrain_z": [
+      4.65,
+      5.5
+    ],
+    "density_ref_per_m2": 0.27630874916250014
   },
   "compile": {
-    "two_datasets_elapsed_ms": 4.154459,
-    "zones_per_dataset": 6,
-    "periods": 12,
+    "two_datasets_elapsed_ms": 9.709125,
+    "zones_per_dataset": 10,
+    "periods": 20,
     "window": [
       "2026-01-01T00:00:00Z",
       "2027-01-01T00:00:00Z"
@@ -44,14 +64,14 @@
         "query_id": "Q1",
         "segment_no": 1,
         "component_id": "R0:exposure",
-        "zone_rid": 29,
+        "zone_rid": 190,
         "dataset_id": "D1"
       },
       {
         "query_id": "Q1",
         "segment_no": 2,
         "component_id": "R0:exposure",
-        "zone_rid": 30,
+        "zone_rid": 191,
         "dataset_id": "D1"
       }
     ],
@@ -62,15 +82,15 @@
         "release_id": "R1",
         "component_id": "R0:exposure",
         "owner_release_id": "R0",
-        "zone_id": "G-0",
-        "source_id": "SRC-SYN",
-        "source_name": "synthetic",
+        "zone_id": "SCH-087",
+        "source_id": "SRC-HK-SCHOOL",
+        "source_name": "School Location and Information",
         "risk_model_id": "lq-risk-v1",
         "model_version": "1.0.0",
-        "q_max": 0.2,
+        "q_max": 0.95,
         "window_lo": "2026-01-01T00:00:00Z",
         "window_hi": "2027-01-01T00:00:00Z",
-        "upstream_exposure_version": "synthetic-v2-1"
+        "upstream_exposure_version": "hk-census2021-edb-ha@2026-11-07"
       },
       {
         "query_id": "Q1",
@@ -78,15 +98,15 @@
         "release_id": "R1",
         "component_id": "R0:exposure",
         "owner_release_id": "R0",
-        "zone_id": "G-1",
-        "source_id": "SRC-SYN",
-        "source_name": "synthetic",
+        "zone_id": "LSG-22907L",
+        "source_id": "SRC-HK-CENSUS",
+        "source_name": "2021 Population Census by Large Subunit Group",
         "risk_model_id": "lq-risk-v1",
         "model_version": "1.0.0",
-        "q_max": 0.2,
+        "q_max": 0.109,
         "window_lo": "2026-01-01T00:00:00Z",
         "window_hi": "2027-01-01T00:00:00Z",
-        "upstream_exposure_version": "synthetic-v2-1"
+        "upstream_exposure_version": "hk-census2021-edb-ha@2026-11-07"
       }
     ],
     "explain_query_plan": [
@@ -195,45 +215,45 @@
       "summary": [
         {
           "release_id": "R0",
-          "cell_x": 0,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819600,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R0",
-          "cell_x": 200,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819800,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.9
         },
         {
           "release_id": "R0",
-          "cell_x": 400,
-          "cell_y": 0,
+          "cell_x": 835400,
+          "cell_y": 820000,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R1",
-          "cell_x": 0,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819600,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R1",
-          "cell_x": 200,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819800,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.9
         },
         {
           "release_id": "R1",
-          "cell_x": 400,
-          "cell_y": 0,
+          "cell_x": 835400,
+          "cell_y": 820000,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         }
       ],
       "detail_rows": 0
@@ -242,45 +262,45 @@
       "summary": [
         {
           "release_id": "R0",
-          "cell_x": 0,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819600,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R0",
-          "cell_x": 200,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819800,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.9
         },
         {
           "release_id": "R0",
-          "cell_x": 400,
-          "cell_y": 0,
+          "cell_x": 835400,
+          "cell_y": 820000,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R1",
-          "cell_x": 0,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819600,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R1",
-          "cell_x": 200,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819800,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.9
         },
         {
           "release_id": "R1",
-          "cell_x": 400,
-          "cell_y": 0,
+          "cell_x": 835400,
+          "cell_y": 820000,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         }
       ],
       "detail_rows": 0
@@ -289,48 +309,48 @@
       "summary": [
         {
           "release_id": "R0",
-          "cell_x": 0,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819600,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R0",
-          "cell_x": 200,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819800,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.9
         },
         {
           "release_id": "R0",
-          "cell_x": 400,
-          "cell_y": 0,
+          "cell_x": 835400,
+          "cell_y": 820000,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R1",
-          "cell_x": 0,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819600,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         },
         {
           "release_id": "R1",
-          "cell_x": 200,
-          "cell_y": 0,
+          "cell_x": 835200,
+          "cell_y": 819800,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.9
         },
         {
           "release_id": "R1",
-          "cell_x": 400,
-          "cell_y": 0,
+          "cell_x": 835400,
+          "cell_y": 820000,
           "zone_count": 2,
-          "display_proxy": 0.2
+          "display_proxy": 0.1
         }
       ],
-      "detail_rows": 12
+      "detail_rows": 20
     },
     "SYS": {
       "summary": [],
@@ -388,7 +408,7 @@
       "result": "success",
       "reason": null,
       "request_id": "approved-R0",
-      "detail": "{\"hashes\":{\"airspace\":\"e8e7f4131431f7bad747f4b2e81413c9940adebe4586138e2721024ce1ec6fe2\",\"exposure\":\"44a412f1a9e17f7be62892d3ad25d8324bad815527e1308881cbe687b921c2b1\",\"scene\":\"c6738de282001fd1e39f4c00fd53508ad448a25bd23b027d916b2f16561e5cbd\",\"sources\":\"5f615b44801df4cb09bc9cadf72229339db1a4a76d74778ec68380466dbfd6c2\",\"terrain\":\"642a8e348b387928e52b54cc6a330357971cc1921933ffc3435469ddfc7a24b9\"},\"provenance\":{\"compiler_version\":\"synthetic-fixture-1\",\"risk_model_id\":\"lq-risk-v1\",\"risk_window\":[\"2026-01-01T00:00:00Z\",\"2027-01-01T00:00:00Z\"],\"source_versions\":{\"airspace\":\"synthetic-v2-1\",\"exposure\":\"synthetic-v2-1\",\"scene\":\"synthetic-v2-1\",\"sources\":\"synthetic-v2-1\",\"terrain\":\"synthetic-v2-1\"}}}"
+      "detail": "{\"hashes\":{\"airspace\":\"6593942f0bc5808e42cab0b443b080059528629d1caeaf01171dd15094b371b0\",\"exposure\":\"e5fc0c80d27c1dfec23e7e9257cbe09ee9220a5d19b377b45354225ae83dfca2\",\"scene\":\"bfb1d8387c3f8389010001b149b37190a1717ee44808c7643a130507d7db993e\",\"sources\":\"a19be2f5e0d1788dc09e7b6f2b27aa25ad8aee6317f96cbedb4cb7f52529ac7d\",\"terrain\":\"21ee82beab46f6324152619319bdf3542a1cef8eb51fed03185c190b510de3ca\"},\"provenance\":{\"compiler_version\":\"hk-loader-1\",\"risk_model_id\":\"lq-risk-v1\",\"risk_window\":[\"2026-01-01T00:00:00Z\",\"2027-01-01T00:00:00Z\"],\"source_versions\":{\"airspace\":\"hk-cad-gn8002@2026-11-07+scenario\",\"exposure\":\"hk-census2021-edb-ha@2026-11-07\",\"scene\":\"hk-landsd-building@2026-11-07\",\"sources\":\"hk-snapshot@2026-11-07\",\"terrain\":\"hk-derived-from-base-height@2026-11-07\"}}}"
     },
     {
       "event_id": "approval:approved-R1",
@@ -414,10 +434,10 @@
       "result": "success",
       "reason": null,
       "request_id": "approved-R1",
-      "detail": "{\"hashes\":{\"airspace\":\"dc4f3d92379570a1f8d779709a95b97360946f9f0aaa94355540cf3e93521143\",\"exposure\":\"44a412f1a9e17f7be62892d3ad25d8324bad815527e1308881cbe687b921c2b1\",\"scene\":\"c6738de282001fd1e39f4c00fd53508ad448a25bd23b027d916b2f16561e5cbd\",\"sources\":\"5f615b44801df4cb09bc9cadf72229339db1a4a76d74778ec68380466dbfd6c2\",\"terrain\":\"642a8e348b387928e52b54cc6a330357971cc1921933ffc3435469ddfc7a24b9\"},\"provenance\":{\"compiler_version\":\"synthetic-fixture-1\",\"risk_model_id\":\"lq-risk-v1\",\"risk_window\":[\"2026-01-01T00:00:00Z\",\"2027-01-01T00:00:00Z\"],\"source_versions\":{\"airspace\":\"synthetic-v2-1\",\"exposure\":\"synthetic-v2-1\",\"scene\":\"synthetic-v2-1\",\"sources\":\"synthetic-v2-1\",\"terrain\":\"synthetic-v2-1\"}}}"
+      "detail": "{\"hashes\":{\"airspace\":\"d36e9e58bc219cd0d395df62d3071d0310259ab9e038c8dcadb430c6f87ee257\",\"exposure\":\"e5fc0c80d27c1dfec23e7e9257cbe09ee9220a5d19b377b45354225ae83dfca2\",\"scene\":\"bfb1d8387c3f8389010001b149b37190a1717ee44808c7643a130507d7db993e\",\"sources\":\"a19be2f5e0d1788dc09e7b6f2b27aa25ad8aee6317f96cbedb4cb7f52529ac7d\",\"terrain\":\"21ee82beab46f6324152619319bdf3542a1cef8eb51fed03185c190b510de3ca\"},\"provenance\":{\"compiler_version\":\"hk-loader-1\",\"risk_model_id\":\"lq-risk-v1\",\"risk_window\":[\"2026-01-01T00:00:00Z\",\"2027-01-01T00:00:00Z\"],\"source_versions\":{\"airspace\":\"hk-cad-gn8002@2026-11-07+scenario\",\"exposure\":\"hk-census2021-edb-ha@2026-11-07\",\"scene\":\"hk-landsd-building@2026-11-07\",\"sources\":\"hk-snapshot@2026-11-07\",\"terrain\":\"hk-derived-from-base-height@2026-11-07\"}}}"
     },
     {
-      "event_id": "read:4f9228e84bc94648a31c040c1b6f72ab",
+      "event_id": "read:55826cd29af74cf295567a9d9462dd9d",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "DISPATCH",
       "action": "query",
@@ -430,7 +450,7 @@
       "detail": "{\"role_snapshot\": \"dispatcher\"}"
     },
     {
-      "event_id": "read:1535b806cc1644748f1b7c77f08779e3",
+      "event_id": "read:82f62e8eab0d402697e32511564acac6",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "DISPATCH",
       "action": "query",
@@ -443,7 +463,7 @@
       "detail": "{\"role_snapshot\": \"dispatcher\"}"
     },
     {
-      "event_id": "read:e36ace51f22d4cebb0a100397ca3cf35",
+      "event_id": "read:aadd79e21e454ba3bf552d646dd04f52",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "OPER",
       "action": "query",
@@ -456,7 +476,7 @@
       "detail": "{\"role_snapshot\": \"operator\"}"
     },
     {
-      "event_id": "read:25d139dd84fc4163addeb1fe8f657864",
+      "event_id": "read:91edfb02390546f89ecfef41c5fcb56f",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "OPER",
       "action": "query",
@@ -469,7 +489,7 @@
       "detail": "{\"role_snapshot\": \"operator\"}"
     },
     {
-      "event_id": "read:aadbbca498aa4a8fa4f563b44a36809f",
+      "event_id": "read:1f833cbd61b54eb7a3789f8a1f20d82e",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "REVIEWER",
       "action": "query",
@@ -482,7 +502,7 @@
       "detail": "{\"role_snapshot\": \"airspace_admin\"}"
     },
     {
-      "event_id": "read:cc14cf3d8da743a3bf7698acf35d05ee",
+      "event_id": "read:7ff9ff601a354971a65502924da251ab",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "REVIEWER",
       "action": "query",
@@ -495,7 +515,7 @@
       "detail": "{\"role_snapshot\": \"airspace_admin\"}"
     },
     {
-      "event_id": "read:f17b659f4fb94609a5b1a230ea638452",
+      "event_id": "read:f7af7f4ade154ec8bb17f76c89d31144",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "SYS",
       "action": "query",
@@ -508,7 +528,7 @@
       "detail": "{\"role_snapshot\": \"system_admin\"}"
     },
     {
-      "event_id": "read:7926061c769d434881d338286e99a6e0",
+      "event_id": "read:7792e025767d410997a388be34668cbf",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "SYS",
       "action": "query",
@@ -521,7 +541,7 @@
       "detail": "{\"role_snapshot\": \"system_admin\"}"
     },
     {
-      "event_id": "read:75e8c30033e140eeb938a413b52bec5d",
+      "event_id": "read:c709b418d04940cc9f57ee48c88a8d74",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "OTHER",
       "action": "query",
@@ -534,7 +554,7 @@
       "detail": "{\"role_snapshot\": \"dispatcher\"}"
     },
     {
-      "event_id": "read:714a45f56cc146279eb37cf16094a007",
+      "event_id": "read:2a8dcdaa762a4332875b7d0705ca5cd0",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "OTHER",
       "action": "query",
@@ -547,7 +567,7 @@
       "detail": "{\"role_snapshot\": \"dispatcher\"}"
     },
     {
-      "event_id": "read:ef9cb05776a048ada7bea0cac067a8d5",
+      "event_id": "read:4d1716c0f3674c29bf45da6a17aef4ea",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "OFF",
       "action": "query",
@@ -560,7 +580,7 @@
       "detail": "{\"role_snapshot\": \"dispatcher\"}"
     },
     {
-      "event_id": "read:59aae28529f548669c645e5de598b52d",
+      "event_id": "read:ea0619ddde3f4265be7a5ac941856f75",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "OFF",
       "action": "query",
@@ -573,7 +593,7 @@
       "detail": "{\"role_snapshot\": \"dispatcher\"}"
     },
     {
-      "event_id": "read:9d5b62395c02436c9a3ae8c14df1ec0c",
+      "event_id": "read:f225b166fd0c4a4b844c4679374eb216",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "DISPATCH",
       "action": "deny",
@@ -586,7 +606,7 @@
       "detail": "{\"role_snapshot\": \"dispatcher\"}"
     },
     {
-      "event_id": "denied-approval:043f188f226e46bbb1ef9d8ca65db717",
+      "event_id": "denied-approval:49fd4d5e8767404b891c52cc354494a4",
       "at": "2026-11-07T00:00:00Z",
       "actor_id": "AUTHOR",
       "action": "deny",
@@ -605,7 +625,7 @@
     "history_reopen_unchanged": true
   },
   "privacy": {
-    "raw_rows": 6,
+    "raw_rows": 10,
     "display_rows_per_release": 3,
     "display_grid_m": 200,
     "min_zones_per_cell": 2,
@@ -622,25 +642,26 @@
     "python": "3.15.0",
     "sqlite": "3.54.1",
     "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
-    "git_head": "5fdf18aa5d2746873e954ddb106b169f30b3282f",
+    "git_head": "a19465581b17caef123df9aa53b2f8659ffb5d5d",
     "source_sha256": {
-      "docs/modules/lq/v2/experiments/run.py": "8804559de86492ce1c889cc73bd700d3c5de637b6991f62c71a79a520e9cd979",
+      "docs/modules/lq/v2/experiments/run.py": "fba4617c38078004ed29aa1b217a3853d7e05343db8308263a54b31cee691fba",
       "docs/modules/lq/v2/experiments/test_governance.py": "7f5ba25d327bfe04ff19390ed63bb90d1cfce508f28c45f706f8d4cfaf66e192",
-      "docs/modules/lq/v2/experiments/review_zqo.py": "c2cf02fd48ee46801a31eb94a588007983c303b961b1bc3251b4878eb8dd4cda",
+      "docs/modules/lq/v2/experiments/review_zqo.py": "2baff5548df3540c1bd2c44a281a4aa1525cd6d210de2829daf809c6f7e0457f",
       "docs/modules/lq/v2/experiments/governance.py": "09718255d4fd8bd1b418f616b950cc8b9d9837bc9086a2746227d16cb8d1c00a",
       "docs/modules/lq/v2/experiments/op_c.sql": "aa291938a1714a1d8240be9b94f9706e52dd5dfca2b130c612668c5a938f1d46",
       "docs/v2/schema/schema.sql": "51f8e39739e145149a53476a1e57f4a8a471ae6e3c0e06a7b53181a234e01615",
       "docs/v2/schema/test_governance_v2.py": "a9bdd74babee1e554242595e5be239a6d5b80e949dcaf35fa2596c1eea848415",
-      "docs/modules/zqo/v2/experiments/catalog.py": "df0b0f9e1a39efdd22243078c5b009b85a822fcbffd69b83bf9f9b4ec931bad5",
+      "docs/modules/zqo/v2/experiments/catalog.py": "2667b1b0da504cc96e6b6338786124a0bfb18a223dc08759b15f972ad07f07df",
       "docs/v2/schema/fixtures.py": "cf7e3ae5130c0444306d8582b24b35bf80f02f97e4bbb55507cf3822131e0727",
-      "docs/modules/lq/prototype/risk.py": "22ab69531cbfb992482a11ab0ae9811613745ab6a895728806f3db988852737f"
+      "docs/modules/lq/prototype/risk.py": "22ab69531cbfb992482a11ab0ae9811613745ab6a895728806f3db988852737f",
+      "docs/v2/data/hk/hk.py": "25197d0eed44ec74f60bd27731d098311ccf1a938ac18a2c2b899a39ac0e12ca",
+      "docs/v2/data/hk/manifest.json": "7b3764b1f34f4a299c0ae8d9fd54837bb41cb36683fcfa1d61f75b698bcb09f9"
     }
   },
-  "synthetic": true,
+  "synthetic": false,
+  "data": "Hong Kong open data, Kowloon area S (docs/v2/data/hk/manifest.json); 3 scenario restrictions",
   "parameters": {
-    "buildings": 25,
-    "terrain_posts": 121,
-    "exposure_zones": 6,
+    "area": "S",
     "published_releases": 2,
     "risk_datasets": 2,
     "temporary_queries": 1,

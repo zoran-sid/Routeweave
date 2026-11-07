@@ -1,7 +1,7 @@
 {
   "experiment": "op_a_index_comparison",
   "question": "access path for restrictions active in a task window inside a 3D corridor",
-  "started_at": "2026-11-06T10:21:27Z",
+  "started_at": "2026-11-07T08:55:17Z",
   "environment": {
     "python": "3.15.0",
     "sqlite": "3.54.1",
@@ -13,7 +13,23 @@
     "seed": 20261106,
     "queries_per_config": 100,
     "repeats_per_query": 5,
-    "area_m": 3000.0,
+    "area_hk1980": [
+      833800.0,
+      818400.0,
+      837100.0,
+      821700.0
+    ],
+    "real_zones": [
+      "Mong Kok Police Station",
+      "Kowloon West Regional Headquarters",
+      "Sham Shui Po Police Station",
+      "Kowloon City Police Station",
+      "Kowloon City Headquarters and Hung Hom Divisional Police Station",
+      "West Kowloon Law Courts Building",
+      "Gun Club Hill Barracks",
+      "Express Rail Link West Kowloon Control Point"
+    ],
+    "data": "Kowloon area L (docs/v2/data/hk/manifest.json); real CAD restricted flying zones + scenario rows",
     "start_span_days": 30,
     "window_s": 600,
     "corridor": {
@@ -25,44 +41,46 @@
       ]
     },
     "history_model": "each release is a full copy of the same restriction set",
-    "restriction_mix": "70% no_fly (half open-topped), 30% height_limit, 5% revoked"
+    "restriction_mix": "real zones: no_fly all altitudes, whole study year; scenario rows: 70% no_fly (half open-topped), 30% height_limit, 5% revoked, centred on real building locations"
   },
   "source_sha256": {
-    "script": "e2092d8830d096efb8b0d178260fc0aa02bd5ce990d54e4bccdef14e3b277a2d",
-    "schema.sql": "2b837f28dbcbd5b442b3b3be04d3ddebbe9722d78568b3d0883b226e2fa814c3",
+    "script": "66eff6e74845f72c470037b8853c3c5746cbe927b9cd9a4e453d884b7a86a846",
+    "schema.sql": "de1a47384bf0a30fb573c9ace7a38717415aa6234d568aad14bba54019f15bf2",
     "op_a.sql": "8636abd28d99211096ec4f1f28c92e5265cb297c1ec28d8d69145b1b7b5a722d",
-    "fixtures.py": "cf7e3ae5130c0444306d8582b24b35bf80f02f97e4bbb55507cf3822131e0727"
+    "fixtures.py": "cf7e3ae5130c0444306d8582b24b35bf80f02f97e4bbb55507cf3822131e0727",
+    "hk.py": "25197d0eed44ec74f60bd27731d098311ccf1a938ac18a2c2b899a39ac0e12ca",
+    "manifest.json": "7b3764b1f34f4a299c0ae8d9fd54837bb41cb36683fcfa1d61f75b698bcb09f9"
   },
   "builds": [
     {
       "n_per_release": 100,
       "releases": 1,
-      "build_seconds": 0.0
+      "build_seconds": 0.01
     },
     {
       "n_per_release": 1000,
       "releases": 1,
-      "build_seconds": 0.03
+      "build_seconds": 0.04
     },
     {
       "n_per_release": 10000,
       "releases": 1,
-      "build_seconds": 0.27
+      "build_seconds": 0.34
     },
     {
       "n_per_release": 100,
       "releases": 20,
-      "build_seconds": 0.05
+      "build_seconds": 0.06
     },
     {
       "n_per_release": 1000,
       "releases": 20,
-      "build_seconds": 0.48
+      "build_seconds": 0.58
     },
     {
       "n_per_release": 10000,
       "releases": 20,
-      "build_seconds": 5.63
+      "build_seconds": 6.51
     }
   ],
   "results": [
@@ -72,10 +90,10 @@
       "total_rows": 100,
       "variant": "V0_full_scan",
       "label": "全表扫描（基线）",
-      "median_us": 17.17,
-      "p95_us": 17.54,
+      "median_us": 22.54,
+      "p95_us": 23.92,
       "mean_driving_rows": 100,
-      "mean_hits": 0,
+      "mean_hits": 0.12,
       "mismatched_queries": 0,
       "plan": [
         "SCAN ar",
@@ -89,10 +107,10 @@
       "total_rows": 100,
       "variant": "V1_release_btree",
       "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
-      "median_us": 20.42,
-      "p95_us": 20.88,
+      "median_us": 26.96,
+      "p95_us": 27.96,
       "mean_driving_rows": 100,
-      "mean_hits": 0,
+      "mean_hits": 0.12,
       "mismatched_queries": 0,
       "plan": [
         "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
@@ -106,10 +124,10 @@
       "total_rows": 100,
       "variant": "V2_time_btree",
       "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
-      "median_us": 17.96,
-      "p95_us": 22.54,
-      "mean_driving_rows": 49.8,
-      "mean_hits": 0,
+      "median_us": 23.62,
+      "p95_us": 28.88,
+      "mean_driving_rows": 53.4,
+      "mean_hits": 0.12,
       "mismatched_queries": 0,
       "plan": [
         "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
@@ -123,447 +141,446 @@
       "total_rows": 100,
       "variant": "V3_rtree_3d",
       "label": "三维 R*Tree 驱动（x, y, z）",
-      "median_us": 18.83,
-      "p95_us": 19.42,
-      "mean_driving_rows": 1.7,
-      "mean_hits": 0,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 100,
-      "releases": 1,
-      "total_rows": 100,
-      "variant": "V4_rtree_4d",
-      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
-      "median_us": 25.12,
-      "p95_us": 25.75,
-      "mean_driving_rows": 0,
-      "mean_hits": 0,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 100,
-      "releases": 1,
-      "total_rows": 100,
-      "variant": "V5_planner_default",
-      "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
-      "median_us": 30.0,
-      "p95_us": 32.38,
-      "mean_driving_rows": null,
-      "mean_hits": 0,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "SCAN r VIRTUAL TABLE INDEX 1:",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 1,
-      "total_rows": 1000,
-      "variant": "V0_full_scan",
-      "label": "全表扫描（基线）",
-      "median_us": 60.0,
-      "p95_us": 64.33,
-      "mean_driving_rows": 1000,
-      "mean_hits": 0.06,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN ar",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 1,
-      "total_rows": 1000,
-      "variant": "V1_release_btree",
-      "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
-      "median_us": 87.12,
-      "p95_us": 91.25,
-      "mean_driving_rows": 1000,
-      "mean_hits": 0.06,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 1,
-      "total_rows": 1000,
-      "variant": "V2_time_btree",
-      "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
-      "median_us": 72.02,
-      "p95_us": 119.58,
-      "mean_driving_rows": 480.4,
-      "mean_hits": 0.06,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 1,
-      "total_rows": 1000,
-      "variant": "V3_rtree_3d",
-      "label": "三维 R*Tree 驱动（x, y, z）",
-      "median_us": 22.63,
-      "p95_us": 24.75,
-      "mean_driving_rows": 16.9,
-      "mean_hits": 0.06,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 1,
-      "total_rows": 1000,
-      "variant": "V4_rtree_4d",
-      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
-      "median_us": 27.58,
-      "p95_us": 29.38,
-      "mean_driving_rows": 0.1,
-      "mean_hits": 0.06,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 1,
-      "total_rows": 1000,
-      "variant": "V5_planner_default",
-      "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
-      "median_us": 85.04,
-      "p95_us": 110.12,
-      "mean_driving_rows": null,
-      "mean_hits": 0.06,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "SCAN r VIRTUAL TABLE INDEX 1:",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 10000,
-      "releases": 1,
-      "total_rows": 10000,
-      "variant": "V0_full_scan",
-      "label": "全表扫描（基线）",
-      "median_us": 527.54,
-      "p95_us": 555.71,
-      "mean_driving_rows": 10000,
-      "mean_hits": 0.69,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN ar",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 10000,
-      "releases": 1,
-      "total_rows": 10000,
-      "variant": "V1_release_btree",
-      "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
-      "median_us": 801.98,
-      "p95_us": 833.0,
-      "mean_driving_rows": 10000,
-      "mean_hits": 0.69,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 10000,
-      "releases": 1,
-      "total_rows": 10000,
-      "variant": "V2_time_btree",
-      "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
-      "median_us": 969.46,
-      "p95_us": 1668.62,
-      "mean_driving_rows": 5278.6,
-      "mean_hits": 0.69,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 10000,
-      "releases": 1,
-      "total_rows": 10000,
-      "variant": "V3_rtree_3d",
-      "label": "三维 R*Tree 驱动（x, y, z）",
-      "median_us": 55.62,
-      "p95_us": 65.62,
-      "mean_driving_rows": 157.2,
-      "mean_hits": 0.69,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 10000,
-      "releases": 1,
-      "total_rows": 10000,
-      "variant": "V4_rtree_4d",
-      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
-      "median_us": 29.81,
-      "p95_us": 33.38,
-      "mean_driving_rows": 0.7,
-      "mean_hits": 0.69,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 10000,
-      "releases": 1,
-      "total_rows": 10000,
-      "variant": "V5_planner_default",
-      "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
-      "median_us": 33.77,
-      "p95_us": 780.67,
-      "mean_driving_rows": null,
-      "mean_hits": 0.69,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "SCAN r VIRTUAL TABLE INDEX 1:",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 100,
-      "releases": 20,
-      "total_rows": 2000,
-      "variant": "V0_full_scan",
-      "label": "全表扫描（基线）",
-      "median_us": 114.17,
-      "p95_us": 119.5,
-      "mean_driving_rows": 2000,
-      "mean_hits": 0.04,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN ar",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 100,
-      "releases": 20,
-      "total_rows": 2000,
-      "variant": "V1_release_btree",
-      "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
-      "median_us": 22.35,
-      "p95_us": 22.58,
-      "mean_driving_rows": 100,
-      "mean_hits": 0.04,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 100,
-      "releases": 20,
-      "total_rows": 2000,
-      "variant": "V2_time_btree",
-      "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
-      "median_us": 155.31,
-      "p95_us": 269.21,
-      "mean_driving_rows": 1074,
-      "mean_hits": 0.04,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 100,
-      "releases": 20,
-      "total_rows": 2000,
-      "variant": "V3_rtree_3d",
-      "label": "三维 R*Tree 驱动（x, y, z）",
-      "median_us": 22.9,
-      "p95_us": 32.83,
-      "mean_driving_rows": 31.2,
-      "mean_hits": 0.04,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 100,
-      "releases": 20,
-      "total_rows": 2000,
-      "variant": "V4_rtree_4d",
-      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
-      "median_us": 25.96,
-      "p95_us": 26.71,
-      "mean_driving_rows": 0.8,
-      "mean_hits": 0.04,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 100,
-      "releases": 20,
-      "total_rows": 2000,
-      "variant": "V5_planner_default",
-      "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
-      "median_us": 32.21,
-      "p95_us": 34.29,
-      "mean_driving_rows": null,
-      "mean_hits": 0.04,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH f USING INDEX sqlite_autoindex_feature_1 (release_id=?)",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SCAN r VIRTUAL TABLE INDEX 1:"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 20,
-      "total_rows": 20000,
-      "variant": "V0_full_scan",
-      "label": "全表扫描（基线）",
-      "median_us": 1095.33,
-      "p95_us": 1241.38,
-      "mean_driving_rows": 20000,
-      "mean_hits": 0.07,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN ar",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 20,
-      "total_rows": 20000,
-      "variant": "V1_release_btree",
-      "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
-      "median_us": 92.23,
-      "p95_us": 95.96,
-      "mean_driving_rows": 1000,
-      "mean_hits": 0.07,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 20,
-      "total_rows": 20000,
-      "variant": "V2_time_btree",
-      "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
-      "median_us": 1754.35,
-      "p95_us": 3536.79,
-      "mean_driving_rows": 9811.4,
-      "mean_hits": 0.07,
-      "mismatched_queries": 0,
-      "plan": [
-        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 20,
-      "total_rows": 20000,
-      "variant": "V3_rtree_3d",
-      "label": "三维 R*Tree 驱动（x, y, z）",
-      "median_us": 81.27,
-      "p95_us": 112.71,
-      "mean_driving_rows": 309.8,
-      "mean_hits": 0.07,
-      "mismatched_queries": 0,
-      "plan": [
-        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
-        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
-        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
-        "USE TEMP B-TREE FOR ORDER BY"
-      ]
-    },
-    {
-      "n_per_release": 1000,
-      "releases": 20,
-      "total_rows": 20000,
-      "variant": "V4_rtree_4d",
-      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
-      "median_us": 26.9,
-      "p95_us": 36.17,
+      "median_us": 24.56,
+      "p95_us": 26.96,
       "mean_driving_rows": 1.4,
-      "mean_hits": 0.07,
+      "mean_hits": 0.12,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 100,
+      "releases": 1,
+      "total_rows": 100,
+      "variant": "V4_rtree_4d",
+      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
+      "median_us": 33.38,
+      "p95_us": 36.29,
+      "mean_driving_rows": 0.1,
+      "mean_hits": 0.12,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 100,
+      "releases": 1,
+      "total_rows": 100,
+      "variant": "V5_planner_default",
+      "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
+      "median_us": 39.92,
+      "p95_us": 45.08,
+      "mean_driving_rows": null,
+      "mean_hits": 0.12,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "SCAN r VIRTUAL TABLE INDEX 1:",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 1,
+      "total_rows": 1000,
+      "variant": "V0_full_scan",
+      "label": "全表扫描（基线）",
+      "median_us": 74.67,
+      "p95_us": 76.83,
+      "mean_driving_rows": 1000,
+      "mean_hits": 0.14,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN ar",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 1,
+      "total_rows": 1000,
+      "variant": "V1_release_btree",
+      "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
+      "median_us": 108.6,
+      "p95_us": 111.38,
+      "mean_driving_rows": 1000,
+      "mean_hits": 0.14,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 1,
+      "total_rows": 1000,
+      "variant": "V2_time_btree",
+      "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
+      "median_us": 84.42,
+      "p95_us": 161.25,
+      "mean_driving_rows": 483.4,
+      "mean_hits": 0.14,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 1,
+      "total_rows": 1000,
+      "variant": "V3_rtree_3d",
+      "label": "三维 R*Tree 驱动（x, y, z）",
+      "median_us": 27.33,
+      "p95_us": 34.25,
+      "mean_driving_rows": 13.7,
+      "mean_hits": 0.14,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 1,
+      "total_rows": 1000,
+      "variant": "V4_rtree_4d",
+      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
+      "median_us": 34.44,
+      "p95_us": 37.42,
+      "mean_driving_rows": 0.1,
+      "mean_hits": 0.14,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 1,
+      "total_rows": 1000,
+      "variant": "V5_planner_default",
+      "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
+      "median_us": 101.42,
+      "p95_us": 120.0,
+      "mean_driving_rows": null,
+      "mean_hits": 0.14,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH f USING INDEX sqlite_autoindex_feature_1 (release_id=?)",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SCAN r VIRTUAL TABLE INDEX 1:"
+      ]
+    },
+    {
+      "n_per_release": 10000,
+      "releases": 1,
+      "total_rows": 10000,
+      "variant": "V0_full_scan",
+      "label": "全表扫描（基线）",
+      "median_us": 625.15,
+      "p95_us": 644.33,
+      "mean_driving_rows": 10000,
+      "mean_hits": 0.85,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN ar",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 10000,
+      "releases": 1,
+      "total_rows": 10000,
+      "variant": "V1_release_btree",
+      "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
+      "median_us": 984.62,
+      "p95_us": 1120.08,
+      "mean_driving_rows": 10000,
+      "mean_hits": 0.85,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 10000,
+      "releases": 1,
+      "total_rows": 10000,
+      "variant": "V2_time_btree",
+      "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
+      "median_us": 1195.02,
+      "p95_us": 2091.17,
+      "mean_driving_rows": 5151.3,
+      "mean_hits": 0.85,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 10000,
+      "releases": 1,
+      "total_rows": 10000,
+      "variant": "V3_rtree_3d",
+      "label": "三维 R*Tree 驱动（x, y, z）",
+      "median_us": 52.67,
+      "p95_us": 130.79,
+      "mean_driving_rows": 148.5,
+      "mean_hits": 0.85,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 10000,
+      "releases": 1,
+      "total_rows": 10000,
+      "variant": "V4_rtree_4d",
+      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
+      "median_us": 38.38,
+      "p95_us": 43.46,
+      "mean_driving_rows": 0.9,
+      "mean_hits": 0.85,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 10000,
+      "releases": 1,
+      "total_rows": 10000,
+      "variant": "V5_planner_default",
+      "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
+      "median_us": 42.9,
+      "p95_us": 753.71,
+      "mean_driving_rows": null,
+      "mean_hits": 0.85,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "SCAN r VIRTUAL TABLE INDEX 1:",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 100,
+      "releases": 20,
+      "total_rows": 2000,
+      "variant": "V0_full_scan",
+      "label": "全表扫描（基线）",
+      "median_us": 138.69,
+      "p95_us": 146.92,
+      "mean_driving_rows": 2000,
+      "mean_hits": 0.13,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN ar",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 100,
+      "releases": 20,
+      "total_rows": 2000,
+      "variant": "V1_release_btree",
+      "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
+      "median_us": 27.67,
+      "p95_us": 29.08,
+      "mean_driving_rows": 100,
+      "mean_hits": 0.13,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 100,
+      "releases": 20,
+      "total_rows": 2000,
+      "variant": "V2_time_btree",
+      "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
+      "median_us": 198.98,
+      "p95_us": 310.88,
+      "mean_driving_rows": 1210,
+      "mean_hits": 0.13,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 100,
+      "releases": 20,
+      "total_rows": 2000,
+      "variant": "V3_rtree_3d",
+      "label": "三维 R*Tree 驱动（x, y, z）",
+      "median_us": 25.19,
+      "p95_us": 34.88,
+      "mean_driving_rows": 24.2,
+      "mean_hits": 0.13,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 100,
+      "releases": 20,
+      "total_rows": 2000,
+      "variant": "V4_rtree_4d",
+      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
+      "median_us": 30.85,
+      "p95_us": 41.38,
+      "mean_driving_rows": 2.6,
+      "mean_hits": 0.13,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 100,
+      "releases": 20,
+      "total_rows": 2000,
+      "variant": "V5_planner_default",
+      "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
+      "median_us": 37.54,
+      "p95_us": 41.04,
+      "mean_driving_rows": null,
+      "mean_hits": 0.13,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH f USING INDEX sqlite_autoindex_feature_1 (release_id=?)",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SCAN r VIRTUAL TABLE INDEX 1:"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 20,
+      "total_rows": 20000,
+      "variant": "V0_full_scan",
+      "label": "全表扫描（基线）",
+      "median_us": 1207.19,
+      "p95_us": 1276.54,
+      "mean_driving_rows": 20000,
+      "mean_hits": 0.19,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN ar",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 20,
+      "total_rows": 20000,
+      "variant": "V1_release_btree",
+      "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
+      "median_us": 107.94,
+      "p95_us": 111.0,
+      "mean_driving_rows": 1000,
+      "mean_hits": 0.19,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 20,
+      "total_rows": 20000,
+      "variant": "V2_time_btree",
+      "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
+      "median_us": 1993.1,
+      "p95_us": 4097.79,
+      "mean_driving_rows": 9587,
+      "mean_hits": 0.19,
+      "mismatched_queries": 0,
+      "plan": [
+        "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 20,
+      "total_rows": 20000,
+      "variant": "V3_rtree_3d",
+      "label": "三维 R*Tree 驱动（x, y, z）",
+      "median_us": 56.25,
+      "p95_us": 171.46,
+      "mean_driving_rows": 208,
+      "mean_hits": 0.19,
+      "mismatched_queries": 0,
+      "plan": [
+        "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
+        "SEARCH ar USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)",
+        "USE TEMP B-TREE FOR ORDER BY"
+      ]
+    },
+    {
+      "n_per_release": 1000,
+      "releases": 20,
+      "total_rows": 20000,
+      "variant": "V4_rtree_4d",
+      "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
+      "median_us": 33.23,
+      "p95_us": 47.17,
+      "mean_driving_rows": 3.8,
+      "mean_hits": 0.19,
       "mismatched_queries": 0,
       "plan": [
         "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
@@ -578,10 +595,10 @@
       "total_rows": 20000,
       "variant": "V5_planner_default",
       "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
-      "median_us": 95.67,
-      "p95_us": 102.08,
+      "median_us": 113.71,
+      "p95_us": 119.38,
       "mean_driving_rows": null,
-      "mean_hits": 0.07,
+      "mean_hits": 0.19,
       "mismatched_queries": 0,
       "plan": [
         "SEARCH f USING INDEX sqlite_autoindex_feature_1 (release_id=?)",
@@ -595,10 +612,10 @@
       "total_rows": 200000,
       "variant": "V0_full_scan",
       "label": "全表扫描（基线）",
-      "median_us": 12429.25,
-      "p95_us": 13388.75,
+      "median_us": 13667.38,
+      "p95_us": 14447.25,
       "mean_driving_rows": 200000,
-      "mean_hits": 0.65,
+      "mean_hits": 0.61,
       "mismatched_queries": 0,
       "plan": [
         "SCAN ar",
@@ -612,10 +629,10 @@
       "total_rows": 200000,
       "variant": "V1_release_btree",
       "label": "发布 B-tree 驱动（feature(release_id, layer, feature_type)）",
-      "median_us": 877.6,
-      "p95_us": 972.58,
+      "median_us": 1045.04,
+      "p95_us": 1099.79,
       "mean_driving_rows": 10000,
-      "mean_hits": 0.65,
+      "mean_hits": 0.61,
       "mismatched_queries": 0,
       "plan": [
         "SEARCH f USING INDEX feature_release_type (release_id=? AND layer=? AND feature_type=?)",
@@ -629,10 +646,10 @@
       "total_rows": 200000,
       "variant": "V2_time_btree",
       "label": "时间 B-tree 驱动（airspace_restriction(effective_lo)）",
-      "median_us": 45918.65,
-      "p95_us": 83328.83,
-      "mean_driving_rows": 103584.8,
-      "mean_hits": 0.65,
+      "median_us": 43101.62,
+      "p95_us": 82424.79,
+      "mean_driving_rows": 99191.6,
+      "mean_hits": 0.61,
       "mismatched_queries": 0,
       "plan": [
         "SEARCH ar USING INDEX exp_ar_effective_lo (effective_lo<?)",
@@ -646,10 +663,10 @@
       "total_rows": 200000,
       "variant": "V3_rtree_3d",
       "label": "三维 R*Tree 驱动（x, y, z）",
-      "median_us": 1008.1,
-      "p95_us": 1419.08,
-      "mean_driving_rows": 3136.8,
-      "mean_hits": 0.65,
+      "median_us": 519.67,
+      "p95_us": 2916.29,
+      "mean_driving_rows": 2167.2,
+      "mean_hits": 0.61,
       "mismatched_queries": 0,
       "plan": [
         "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4",
@@ -664,10 +681,10 @@
       "total_rows": 200000,
       "variant": "V4_rtree_4d",
       "label": "时空四维 R*Tree 驱动（x, y, z, t），即 op_a.sql",
-      "median_us": 37.4,
-      "p95_us": 58.25,
-      "mean_driving_rows": 13.6,
-      "mean_hits": 0.65,
+      "median_us": 44.06,
+      "p95_us": 86.58,
+      "mean_driving_rows": 13,
+      "mean_hits": 0.61,
       "mismatched_queries": 0,
       "plan": [
         "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
@@ -682,10 +699,10 @@
       "total_rows": 200000,
       "variant": "V5_planner_default",
       "label": "规划器自选（op_a.sql 去掉 CROSS JOIN，不固定连接顺序）",
-      "median_us": 37.67,
-      "p95_us": 58.96,
+      "median_us": 45.04,
+      "p95_us": 86.25,
       "mean_driving_rows": null,
-      "mean_hits": 0.65,
+      "mean_hits": 0.61,
       "mismatched_queries": 0,
       "plan": [
         "SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6",
@@ -695,5 +712,5 @@
       ]
     }
   ],
-  "synthetic": true
+  "synthetic": false
 }

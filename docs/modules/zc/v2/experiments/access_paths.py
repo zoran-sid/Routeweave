@@ -1,6 +1,6 @@
 """Q1 data-access experiment: fixed A*, same tasks, four ways to feed the planner.
 
-For each city size and task, measure separately:
+For each nested Kowloon area (real Hong Kong open data) and task, measure separately:
   pin      read transaction, layer owners, freshness, validated risk dataset
   io       JSON path only: read the whole-release export file
   db       SQL path: rows returned by the database
@@ -46,10 +46,11 @@ def timed(fn, repeats):
     return statistics.median(samples), out
 
 
-def run_scale(n, queries, repeats, seed, tmp):
+def run_scale(area, queries, repeats, seed, tmp):
+    n = area
     path = Path(tmp) / f"city-{n}.db"
     t0 = time.perf_counter()
-    pl, boxes = city.payload(n, seed=seed)
+    pl, boxes, stats = city.payload(area, seed=seed)
     c = city.database(str(path), pl)
     setup_s = time.perf_counter() - t0
     ts = city.tasks(queries, boxes, seed=seed + 1)
@@ -135,7 +136,7 @@ def run_scale(n, queries, repeats, seed, tmp):
 
     # unfiltered v1 input equals filtered input in results (relevance filter is safe)
     filter_check = None
-    if n <= 500:
+    if stats["buildings"] <= 500:
         mism = 0
         for task in ts[:4]:
             c.execute("BEGIN")
@@ -164,7 +165,7 @@ def run_scale(n, queries, repeats, seed, tmp):
         hit.append(sum(tm.values()))
     c.close()
     db_bytes = path.stat().st_size + (Path(str(path) + "-wal").stat().st_size if Path(str(path) + "-wal").exists() else 0)
-    return {"n_buildings": n, "queries": queries, "setup_seconds": round(setup_s, 2), "db_bytes": db_bytes,
+    return {"area": area, "n_buildings": stats["buildings"], "data_stats": stats, "queries": queries, "setup_seconds": round(setup_s, 2), "db_bytes": db_bytes,
             "json_export_bytes": len(doc), "json_export_ms": export_ms, "checks": checks,
             "filter_equivalence": filter_check, "cache_hit_total_ms": hit, "tasks": rows}
 
@@ -202,7 +203,7 @@ def main():
     ap.add_argument("--output", default=str(HERE / "results" / "access_paths.json"))
     ap.add_argument("--seed", type=int, default=20261107)
     args = ap.parse_args()
-    sizes = (200, 1000) if args.quick else (200, 2400, 10000)
+    sizes = ("S", "M") if args.quick else ("S", "M", "L")
     queries, repeats = (4, 2) if args.quick else (12, 3)
     started = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     scales = []
@@ -212,13 +213,15 @@ def main():
             s = run_scale(n, queries, repeats, args.seed, tmp)
             s["summary"] = summarize(s)
             scales.append(s)
-            print(f"N={n} done in {time.perf_counter() - t:.1f}s checks={s['checks']}", file=sys.stderr)
-    files = [HERE / f for f in ("access_paths.py", "planner_io.py", "city.py")] + [
+            print(f"area={n} done in {time.perf_counter() - t:.1f}s checks={s['checks']}", file=sys.stderr)
+    files = [HERE / f for f in ("access_paths.py", "planner_io.py", "city.py")] + [io.ROOT / "docs/v2/data/hk/hk.py",
+        io.ROOT / "docs/v2/data/hk/manifest.json",
         io.ROOT / "docs/v2/schema/schema.sql", io.ROOT / "docs/v2/schema/op_c.sql",
         io.ROOT / "docs/modules/zc/prototype/planner.py", io.ROOT / "docs/modules/zqo/v2/experiments/catalog.py",
         io.ROOT / "docs/modules/lq/v2/experiments/governance.py"]
     out = {
-        "experiment": "zc_v2_access_paths", "started_at": started, "synthetic": True,
+        "experiment": "zc_v2_access_paths", "started_at": started, "synthetic": False,
+        "data": "Hong Kong open data, Kowloon nested areas (docs/v2/data/hk/manifest.json); 100 scenario restrictions per area",
         "environment": {"python": platform.python_version(), "sqlite": sqlite3.sqlite_version,
                         "platform": platform.platform(), "machine": platform.machine(),
                         "database": "file SQLite in WAL mode, published through catalog.publish",
@@ -226,8 +229,9 @@ def main():
                                                    capture_output=True).stdout.strip()},
         "parameters": {"seed": args.seed, "queries_per_scale": queries, "repeats": repeats,
                        "planner_config": io.CONFIG, "risk_model": io.RISK_MODEL,
-                       "domain": "task bbox + 40 m, z 20-120 m, 20 m grid", "area_m": city.AREA,
-                       "restrictions": 100, "exposure_zones": 100, "task_window_min": 10},
+                       "domain": "task bbox + 40 m, z 20-120 mPD, 20 m grid", "areas_hk1980": city.AREAS,
+                       "task_region": "area S (Mong Kok core), same tasks at every scale",
+                       "scenario_restrictions": 100, "task_window_min": 10},
         "source_sha256": {str(f.relative_to(io.ROOT)): hashlib.sha256(f.read_bytes()).hexdigest() for f in files},
         "scales": scales,
     }

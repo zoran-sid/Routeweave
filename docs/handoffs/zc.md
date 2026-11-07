@@ -127,3 +127,8 @@ YHT可复用几何反例和规划访问需求；LQ可替换风险输入与聚合
 - **AI 使用过程**：报告新增附录 C，含工具与工作方式、过程时间线、人与 AI 分工、审阅发现。§9 改为引用附录 C。报告现为 23 页，正文 9,808 个汉字。
 - **本地交付物**：PDF 与 PPTX 按用户指示只在本地构建，不入库（`.gitignore`）。`main` 只保留项目成果；协作说明、交接记录与问题清单保留在 `develop`。
 - **发布**：收尾改动经 [zoran-sid/Routeweave#13](https://github.com/zoran-sid/Routeweave/pull/13) 合入 `develop`，经 [#14](https://github.com/zoran-sid/Routeweave/pull/14) 发布到 `main`。随后用 `hotfix/main-project-only`（[#15](https://github.com/zoran-sid/Routeweave/pull/15)）从 `main` 删除过程文件，指向这些文件的 40 个链接改为 `develop` 地址，并打标签 `v2.1-submission`（`deeb524`）。该 hotfix 不合回 `develop`。`main` 上复核 20/20 组、233 项测试通过。AGENTS.md 第6节已改为：发布一律经 `hotfix/*`。
+
+## 2026-11-07：贡献归属调整（ZC 决定）
+
+- 整合阶段代修的问题（YHT-V2-01—04 的补齐，LQ-V2-02、ZQO-V2-01、ZC-V2-02）以及 v1、v2 的整体合并、复核与发布，改记为 AI 助手（Claude Code）的工作，不计入 ZC。其他成员按原工作量计算。
+- [contributions.md](../final/contributions.md) 重新评分：ZC 的实现由 8 改为 7，审阅修复由 7 改为 5，整合由 10 改为 6。比例为 YHT 23%、ZQO 23%、LQ 20%、ZC 22%、LJ 12%，取整规则写在该页。报告 §9 与附录 C、问题清单和各成员交接中的代修记录同步改为 AI 按 ZC 指示完成。本地贡献表已按新比例更新。

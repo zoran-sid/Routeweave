@@ -567,7 +567,7 @@ airspace_restriction 1 ── N airspace_event
 - ZC 的 Q1/Q2 适配需要 `feature_id`、`solid`/`volume`/`footprint`、`valid`、`effective`、`source_id`、`quality` 和版本元组。
 - LJ 的验收需要 `audit_event`、`release` 状态和失败原因；本字典只定义审计字段，不定义验收判据。
 - 变更记录：2026-11-06 初稿，建立三类数据、发布五层、E/C/q、三维/时间索引和敏感级别字段。
-- 变更记录：2026-11-06（ZC 按用户指示修订）生成可执行模式 [`docs/v2/schema/`](../../../v2/schema/schema.sql)。修正 `coverage_tile`、`terrain_surface`、`terrain_post` 主键（编号每次发布重复，原单列主键会在第二次发布冲突）；`rid` 改述为全局代理键；`airspace_restriction.state` 改为随发布固定；补充限高体禁止范围在 `ceiling_m` 以上。逐项理由见 [decisions.md](../../../v2/schema/decisions.md) S-01—S-03。
+- 变更记录：2026-11-06（AI 按 ZC 指示修订）生成可执行模式 [`docs/v2/schema/`](../../../v2/schema/schema.sql)。修正 `coverage_tile`、`terrain_surface`、`terrain_post` 主键（编号每次发布重复，原单列主键会在第二次发布冲突）；`rid` 改述为全局代理键；`airspace_restriction.state` 改为随发布固定；补充限高体禁止范围在 `ceiling_m` 以上。逐项理由见 [decisions.md](../../../v2/schema/decisions.md) S-01—S-03。
 
 - 变更记录：2026-11-06（ZQO，第2棒，基线 `5ee1a19`）：发布与版本分节新增 `layer_component`（物理图层及内容摘要）、`release_component`（逻辑发布五层映射）、`component_source`（来源成员清单）、`current_release`（每场景当前指针）、`publish_request`（幂等成功凭据）、`failed_attempt`（回滚后失败尝试）、`outbox`（事务内待发送事件），共7表；完整字段/外键见 [schema.sql](../../../v2/schema/schema.sql) 第2节。
 - 同轮映射约定：`release_layer.layer_version` 是规范化关系行的 SHA-256；上游五层版本另存 `release.manifest.provenance.source_versions`，同时保存风险模型、编译器和窗口。`feature.release_id`、地形与覆盖行的 `release_id` 表示物理所有者；查询的逻辑发布通过 `release_component → layer_component.owner_release_id` 解析，新增 `resolved_feature` / `resolved_source` 视图。现有实体列不变；YHT 原独立索引夹具仍可运行。

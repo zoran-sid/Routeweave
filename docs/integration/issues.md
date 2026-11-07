@@ -4,7 +4,7 @@
 
 | 编号 | 负责人 | 问题 | 处理 | 状态 |
 | --- | --- | --- | --- | --- |
-| YHT-V2-01 | YHT | 缺可执行统一模式与测试（任务安排第4、7.1节） | ZC 按用户指示新增 `docs/v2/schema/`，13项测试 | 已复核通过（YHT，2026-11-07）：合并后 `discover -s docs/v2/schema` 59项通过 |
+| YHT-V2-01 | YHT | 缺可执行统一模式与测试（任务安排第4、7.1节） | AI 按 ZC 指示新增 `docs/v2/schema/`，13项测试 | 已复核通过（YHT，2026-11-07）：合并后 `discover -s docs/v2/schema` 59项通过 |
 | YHT-V2-02 | YHT | 操作 A 缺 `EXPLAIN QUERY PLAN` 与索引对比 | ZC 新增访问路径实验与第4.3.1节 | 已复核通过（YHT，2026-11-07）：重跑 6配置×6路径，`mismatched_queries` 全0；N=10000、K=20 四维 R*Tree 37.4 µs |
 | YHT-V2-03 | YHT | `coverage_tile`、`terrain_surface` 单列主键在第二次发布冲突 | 主键加 `release_id`（决定 S-01） | 已复核通过（YHT，2026-11-07）：`test_tile_and_terrain_ids_repeat_across_releases` 通过 |
 | YHT-V2-04 | YHT | 空域 `state` 原地维护与发布不可变冲突；限高体索引范围错误 | 状态随发布固定；增加禁止范围生成列（S-02、S-03） | 已复核通过（YHT，2026-11-07）：状态/限高相关 schema 测试通过；ZQO 发布/撤销事务按 S-02 实现 |
@@ -53,8 +53,8 @@ YHT PR #1（`f05459c`）已合入，GitHub `checks` 为 SUCCESS。修改前13项
 | --- | --- | --- | --- |
 | INT-V2-01 | ZC | LJ 的 PR #8 以 `main` 为目标，ZC 整合时未核对目标分支即合并，`main` 一度包含未完成的 v2。经用户确认后将 `main` 以 `--force-with-lease` 恢复到 `5d4034b`（临时放开 force push，完成后恢复保护：须 PR、须 `checks`、禁止 force push 与删除）；同一分支经 PR #9 合入 `develop`。CI 新增检查：发往 `main` 的 PR 只能来自 `develop` 或 `hotfix/*`。GitHub 上 PR #8 仍显示为已合并，其内容只存在于 `develop` | 已处理 |
 | ZC-V2-02 | ZC | 读取 `op_c.sql` 与 LQ SQL 时显式使用 UTF-8；`review_lq.py` 的授权连接在 `finally` 中关闭；ZQO `catalog.initialize()` 读取 `schema.sql` 时显式使用 UTF-8（一行兼容修订，行为不变，所有成员实验都经此入口） | **已关闭（2026-11-07）**：关闭 UTF-8 模式、C 语言环境（默认编码 US-ASCII，严于 Windows 代码页）下全量复核 20/20、233 项测试通过；同类写入问题在 v1 ZC/ZQO/LQ 脚本与 `audit.py`、`five_module.py` 中一并修复 |
-| LQ-V2-02 | LQ | 整合复跑 `review_lq.py`：`op_c_task_window` 仍为 LQ 版 0 行、ZC 正式版 2 行 | **已修复（2026-11-07，ZC 按用户指示代修，记在 LQ 名下）**：LQ `op_c.sql` 改为数据集窗口包含任务窗口；`run.py` 以 10 分钟任务窗验证 2 行、超窗 0 行；`governance.json` 重跑；探针 12/12。修复日志见 [LQ 交接](../handoffs/lq.md) |
-| ZQO-V2-01 | ZQO | 整合复跑 `review_zqo.py` 退出码 1，空上游版本值与空编译器版本仍可发布 | **已修复（2026-11-07，ZC 按用户指示代修，记在 ZQO 名下）**：`catalog.publish` 在事务内拒绝空/空白/非字符串来源版本与编译器版本并留失败审计；新增 7 种无效输入回归；`review_zqo.py` 退出码 0。修复日志见 [ZQO 交接](../handoffs/zqo.md) |
+| LQ-V2-02 | LQ | 整合复跑 `review_lq.py`：`op_c_task_window` 仍为 LQ 版 0 行、ZC 正式版 2 行 | **已修复（2026-11-07，AI 按 ZC 指示代修，记在 LQ 名下，不计入 ZC 工作量）**：LQ `op_c.sql` 改为数据集窗口包含任务窗口；`run.py` 以 10 分钟任务窗验证 2 行、超窗 0 行；`governance.json` 重跑；探针 12/12。修复日志见 [LQ 交接](../handoffs/lq.md) |
+| ZQO-V2-01 | ZQO | 整合复跑 `review_zqo.py` 退出码 1，空上游版本值与空编译器版本仍可发布 | **已修复（2026-11-07，AI 按 ZC 指示代修，记在 ZQO 名下，不计入 ZC 工作量）**：`catalog.publish` 在事务内拒绝空/空白/非字符串来源版本与编译器版本并留失败审计；新增 7 种无效输入回归；`review_zqo.py` 退出码 0。修复日志见 [ZQO 交接](../handoffs/zqo.md) |
 
 ## 最新状态（2026-11-06，整合基线2850d89）
 
@@ -254,7 +254,7 @@ YHT修复（提交`1862ab44ca094bc493fab6fc7ce0cd6f51f2e2db`，`fix(data): verif
   `catalog.initialize()` 对 `schema.sql` 调用未指定编码的 `Path.read_text()`，
   因 UTF-8 字节触发 `UnicodeDecodeError`；`review_lq.py` 随后因数据库连接未及时
   关闭，在临时目录清理时触发 `PermissionError`。
-- **整合修复（ZC，2026-11-07）**：见上方“v2 第6棒整合”中 ZC-V2-02 一行，已在非 UTF-8 语言环境下全量复核后关闭。
+- **整合修复（AI 按 ZC 指示代修，2026-11-07，不计入 ZC 工作量）**：见上方“v2 第6棒整合”中 ZC-V2-02 一行，已在非 UTF-8 语言环境下全量复核后关闭。
 - **当前处理**：使用 `python -X utf8` 后，统一模式 18 项和 ZC 查询回归 9 项通过；
   取数实验的正确性检查为 0 不一致。该环境开关是本轮 LJ 实验的复现前提，但不关闭
   ZC-V2-02。

@@ -31,7 +31,7 @@
 
 `op_c.sql`使用这些字段，关联逻辑发布、真实物理owner、来源组件清单与模型。实验明确让R1复用R0:exposure，2段结果均追溯到旧owner。正式接入需将SQL中的TEMP表替换为ZC真实表，并增加外键/发布匹配约束；trace入口要核验认证actor、任务机构与权限，不能直接向客户端开放这条内部SQL。
 
-**LQ-V2-02 修订（2026-11-07，ZC 按用户指示代为修复）**：`op_c.sql` 原要求查询窗口等于数据集窗口，而数据集按发布有效期编译，规划任务是10分钟窗口，正式航线因此追溯为0行。现改为“数据集窗口包含任务窗口”，`run.py` 用10分钟任务窗验证追溯，并以超出数据集窗口的查询验证过滤；结果见更新后的 [governance.json](experiments/results/governance.json)。正式表上的同一规则见 [docs/v2/schema/op_c.sql](../../../v2/schema/op_c.sql)。
+**LQ-V2-02 修订（2026-11-07，AI 按 ZC 指示代为修复，不计入 ZC 工作量）**：`op_c.sql` 原要求查询窗口等于数据集窗口，而数据集按发布有效期编译，规划任务是10分钟窗口，正式航线因此追溯为0行。现改为“数据集窗口包含任务窗口”，`run.py` 用10分钟任务窗验证追溯，并以超出数据集窗口的查询验证过滤；结果见更新后的 [governance.json](experiments/results/governance.json)。正式表上的同一规则见 [docs/v2/schema/op_c.sql](../../../v2/schema/op_c.sql)。
 
 使用`compile_dataset`生成派生表，外部时段按zone_id传入LQ原生periods；默认演示从同一组件的exposure_zone读取常量时段。SQL质量结果和封存状态决定是否可供追溯，非validated派生层不参与操作C。新任务窗需新数据集且与对应发布窗匹配，不能只改查询时间。
 

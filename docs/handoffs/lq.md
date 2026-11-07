@@ -93,9 +93,9 @@
 - **边界与责任**：模型公式仅附录，不重写v1算法；权限实测基于可信服务的固定查询/SQLite连接，未声称文件管理员隔离或PostgreSQL已部署。操作C用TEMP查询结果夹具，向ZC登记真实query_run/route_segment_source字段需求。YHT-V2-05/06继续由YHT修复，ZQO-V2-01继续由ZQO修复；本棒未代写认可。
 - **保留与后续**：90日热审计、365日归档为内部参数，依赖对象与历史结果共同保留，交LJ设计归档恢复；ZC下一棒先复跑本棒实验，在正式结果表上执行操作C。提交/PR/checks/合并状态以GitHub实际记录为准，检查通过后按提示词自行合入develop，再告知用户通知ZC。
 
-## 2026-11-07：ZC 按用户指示代修 LQ-V2-02 与编码问题
+## 2026-11-07：AI 按 ZC 指示代修 LQ-V2-02 与编码问题
 
-用户指示由 ZC 修复全部成员的未关闭问题并记在各成员名下。以下为修复日志，LQ-V2-02 据此关闭：
+ZC 指示 AI 助手（Claude Code）修复全部成员的未关闭问题并记在各成员名下；代修记为 AI 的工作，不计入 ZC 工作量。以下为修复日志，LQ-V2-02 据此关闭：
 
 - **LQ-V2-02（已修复）**：[`op_c.sql`](../modules/lq/v2/experiments/op_c.sql) 由“查询窗口等于数据集窗口”改为“数据集窗口包含任务窗口”。[`run.py`](../modules/lq/v2/experiments/run.py) 用 10 分钟任务窗口验证追溯（2 段航线均返回来源），并以超出数据集窗口的查询验证过滤（0 行）。[governance.json](../modules/lq/v2/experiments/results/governance.json) 已用修订代码重跑，新增 `trace_window_rule` 记录；18 项测试通过。ZC 的独立探针 `op_c_task_window` 转为通过（12/12）。对接说明第“ZC操作C合同”节已注明修订。
 - **编码（ZC-V2-02 同类）**：`prototype/evaluate.py`、`prototype/review_integration.py`、`v2/experiments/run.py`、`v2/experiments/review_zqo.py` 的文本读写显式使用 UTF-8；行为在 UTF-8 系统上不变，非 UTF-8 系统（含 Windows 默认代码页）不再失败。

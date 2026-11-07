@@ -103,7 +103,7 @@ v1 已有实质的数据库工作：YHT 的关系表、三维 R*Tree、WAL 读�
 **已合入 `develop`**（[PR #1](https://github.com/zoran-sid/Routeweave/pull/1)，合并提交 `f05459c`，2026-11-06）：
 
 - YHT：数据字典、第2章、第4章（ER 图、关系模式、主外键与约束、Q1/Q2 SQL、索引、分区与冷热分层、灵活模式 vs 数据质量权衡）、PPT 第3–4页讲稿与引用。
-- ZC 按用户指示补齐：[统一模式](v2/schema/schema.sql)（16张表、39个触发器、13项测试）、操作 A 的 SQL 与执行计划、[访问路径实验](modules/yht/v2/experiments/results/op_a_index_comparison.json)、建模修正 S-01—S-03。待 YHT 复核，问题编号 YHT-V2-01—04 见[问题清单](integration/issues.md)。
+- AI 按 ZC 指示补齐（记为 AI 的工作，不计入 ZC 工作量）：[统一模式](v2/schema/schema.sql)（16张表、39个触发器、13项测试）、操作 A 的 SQL 与执行计划、[访问路径实验](modules/yht/v2/experiments/results/op_a_index_comparison.json)、建模修正 S-01—S-03。待 YHT 复核，问题编号 YHT-V2-01—04 见[问题清单](integration/issues.md)。
 
 **第2棒 ZQO 可以开始。**
 
@@ -155,7 +155,7 @@ v1 已有实质的数据库工作：YHT 的关系表、三维 R*Tree、WAL 读�
 
 组装 v2 报告与 PPT（页数按内容与汇报时长统一编排），重写课程覆盖表与要求对照，运行全部检查，打 `v2.0-rc.1`；全员确认后发布到 `main`。
 
-**已完成**（2026-11-07，分支 `zc/v2-integration`）：23 页 LaTeX PDF 报告（正文 9,808 个汉字，附录 C 记录 AI 使用与协作过程）、12 页 PPT、Markdown 镜像与讲稿、课程覆盖对照、贡献依据与整合证据，入口见[最终交付](final/README.md)。整合复核 20/20 组命令符合预期、233 项测试通过。逐棒审阅发现的 10 个问题全部修复（LQ-V2-02、ZQO-V2-01 由 ZC 按用户指示代修）。按用户指示于 2026-11-07 发布到 `main`，标签 `v2.0-submission`。同日完成提交前收尾后，`main` 精简为只含项目成果（标签 `v2.1-submission`），过程文件保留在 `develop`。
+**已完成**（2026-11-07，分支 `zc/v2-integration`）：23 页 LaTeX PDF 报告（正文 9,855 个汉字，附录 C 记录 AI 使用与协作过程）、12 页 PPT、Markdown 镜像与讲稿、课程覆盖对照、贡献依据与整合证据，入口见[最终交付](final/README.md)。整合复核 20/20 组命令符合预期、233 项测试通过。逐棒审阅发现的 10 个问题全部修复（LQ-V2-02、ZQO-V2-01 由 AI 按 ZC 指示代修，不计入 ZC 工作量）。按用户指示于 2026-11-07 发布到 `main`，标签 `v2.0-submission`。同日完成提交前收尾后，`main` 精简为只含项目成果（标签 `v2.1-submission`），过程文件保留在 `develop`。
 
 ## 8 串行执行与交接
 

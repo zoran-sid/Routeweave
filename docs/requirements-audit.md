@@ -4,7 +4,7 @@
 
 ## 交付状态
 
-v2 报告（23 页 PDF，正文 9,808 个汉字，附录 C 为 AI 使用与协作过程）、12 页 PPT 与证据已整合，入口见[最终材料](final/README.md)；逐项的报告章节、页码、PPT 页与证据见[课程覆盖对照](final/course-coverage.md)。整合复核 20/20 组命令符合预期，233 项测试通过，见 [verification-v2.json](final/evidence/verification-v2.json)。
+v2 报告（23 页 PDF，正文 9,855 个汉字，附录 C 为 AI 使用与协作过程）、12 页 PPT 与证据已整合，入口见[最终材料](final/README.md)；逐项的报告章节、页码、PPT 页与证据见[课程覆盖对照](final/course-coverage.md)。整合复核 20/20 组命令符合预期，233 项测试通过，见 [verification-v2.json](final/evidence/verification-v2.json)。
 
 ## 评分关注点与本组回应
 

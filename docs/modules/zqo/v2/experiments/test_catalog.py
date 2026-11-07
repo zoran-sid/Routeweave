@@ -137,13 +137,17 @@ class CatalogTest(unittest.TestCase):
         self.assertEqual(cat.head(self.c),'r0')
         self.assertEqual(self.count('failed_attempt'),2)
 
-    def test_reference_metadata_drift_is_visible_failure(self):
-        self.c.execute("UPDATE source SET license='changed' WHERE source_id='SRC-SYN'")
-        with self.assertRaisesRegex(ValueError,'component drift: sources'):
-            cat.snapshot(self.c,'r0')
-        with self.assertRaisesRegex(ValueError,'component drift: sources'):
-            self.pub(cat.changed(self.payload),'r1','r0')
+    def test_reference_source_metadata_is_immutable(self):
+        # YHT-V2-06: a source referenced by a published release cannot change in place.
+        # The guard fires at write time; later export drift checks are a second layer.
+        before = self.c.execute(
+            "SELECT license FROM source WHERE source_id='SRC-SYN'").fetchone()[0]
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.c.execute("UPDATE source SET license='changed' WHERE source_id='SRC-SYN'")
+        self.assertEqual(self.c.execute(
+            "SELECT license FROM source WHERE source_id='SRC-SYN'").fetchone()[0], before)
         self.assertEqual(cat.head(self.c),'r0')
+        cat.snapshot(self.c,'r0')
 
     def test_publish_role_denied_without_mutation(self):
         with self.assertRaises(PermissionError): self.pub(self.payload,'denied','r0',actor='UNKNOWN')

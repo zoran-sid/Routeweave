@@ -18,9 +18,10 @@
 | 报告章节 | 2、4 |
 | PPT | 第3–4页 |
 | 分支 | `yht/v2-data-model`，从 `develop` 的 `4b60453` 创建 |
-| PR | [#1](https://github.com/zoran-sid/Routeweave/pull/1)，目标 `develop`；数据字典先单独提交 |
+| 修复分支 | `yht/v2-immutability`，从 `develop` 的 `61fed41` 创建；YHT-V2-05/06 修复 `0748f2d`，模型文档 `4e501c3` |
+| PR | [#1](https://github.com/zoran-sid/Routeweave/pull/1)（已合入）；本轮修复 [#5](https://github.com/zoran-sid/Routeweave/pull/5)，目标 `develop` |
 | 交付位置 | `docs/modules/yht/v2/`：`data-dictionary.md`、`section.md`、`slides.md`、`references.md` |
-| 当前状态 | 数据字典 `a35aeac`；第2、4章、两页讲稿与引用 `50f109c`，字段对齐与引用编号 `fcccbce`/`4aee9d2`，交接记录 `ec460b2`；均已推送；GitHub Actions `checks` 成功；PR 待 ZQO 复核 |
+| 当前状态 | 数据字典 `a35aeac`；第2、4章、两页讲稿与引用 `50f109c`，字段对齐与引用编号 `fcccbce`/`4aee9d2`，交接记录 `ec460b2`；均已推送；GitHub Actions `checks` 成功；YHT-V2-01—04 复核通过，YHT-V2-05/06 已修复并与 `develop` 合并验证通过，PR #5 待合入 |
 
 具体任务、依赖与验收见[任务安排](../team-tasks.md)第5–8节。本轮已完成：
 
@@ -42,6 +43,21 @@
 - `section.md` 第4.2节、新增第4.3.1节；`slides.md` 第4页；`references.md` 新增 [17]–[21]。
 
 验证：`python3 -B -m unittest discover -s docs/v2/schema -v` 13项通过；五个 v1 模块测试通过；实验命令 `python3 -B docs/modules/yht/v2/experiments/op_a_index_comparison.py`（约45秒）。
+
+### 2026-11-07：修复 YHT-V2-05/06 并与 develop 合并验证
+
+基线 `develop` `61fed41`，分支 `yht/v2-immutability`。
+
+- YHT-V2-05：`feature_immutable_update` 同时检查 OLD/NEW 所属发布；新增 `building`、`airspace_restriction`、`exposure_zone`、`coverage_tile`、`terrain_surface`、`terrain_post` 的 INSERT draft-only 触发器，堵住“已发布 feature 后补子类型/地形/覆盖”的旁路。
+- YHT-V2-06：新增 `source_provenance_usage` 视图，汇总所有非 draft 引用（含 feature、子类型来源列、空域/暴露/地形/覆盖/事件/模型及 `component_source` 的 owner 与映射发布）；`source_immutable_update/delete` 在引用后拒绝原地修改/删除，错误提示登记新 `source_id`。旧发布重开仍解析旧行，新来源可正常入库。
+- 回归：`docs/v2/schema` 32 项测试通过；YHT v1 42 项测试通过；ZQO `run.py --counts 10` 14 项回归通过，4 条 YHT 探针（feature/building/terrain/source）全部 `rejected`；LQ-V2-01 仍为 LQ 的待修项。ZQO 的 `test_reference_metadata_drift_is_visible_failure` 改为 `test_reference_source_metadata_is_immutable`，只调整测试以匹配“写时拒绝”的新保证，不改 ZQO 发布实现。
+- 修复提交 `0748f2d50129c2b301069d5c59ccc6d5a804bef6`（`fix(schema): close published-release write bypasses`）。
+
+**与 develop 合并验证（2026-11-07）。** 将 `develop` `0f1dfcb`（含 LQ PR #6、ZC PR #7）合入修复分支。`schema.sql` 冲突按“LQ v2 extension 在前、YHT 的 `source_provenance_usage` 与 `source_immutable_*` 在后、ZC 第6节保持原样”合并；`issues.md` 保留 ZQO/LQ/ZC 三棒审阅小节，只把 YHT-V2-05/06 改为“已修复”并补验证命令，未改 LQ-V2-02、ZQO-V2-01 等他人条目。
+
+- 合并后测试：`docs/v2/schema` 59 项、ZC v2 9 项、ZQO 14 项、LQ 18 项通过；ZC 的 `review_lq.py` 12 项探针中 11 项通过，唯一失败是已知 LQ-V2-02（0 行 vs 2 行），未改 LQ 代码或结论。该脚本在 Windows 上退出时清理临时库报 `WinError 32`，用 `TemporaryDirectory(ignore_cleanup_errors=True)` 包装重跑以取得结果，探针语义不变。
+- v1 五模块测试：YHT 42、ZQO 31、ZC 24、LQ 19、LJ 15，全部通过。`audit.py --owner YHT` 三项 PASS；全量 `audit.py` 七项 PASS；`five_module.py` 11 项 PASS。命令输出写入 `/tmp`，未覆盖各成员 `experiments/results/` 下的既有 JSON。
+- YHT-V2-01—04 复核：01 统一模式 59 项通过；02 操作 A 六配置×六路径 `mismatched_queries=0`，N=10,000、K=20 时四维 R\*Tree 37.4 µs、全扫 12,429 µs；03 `test_tile_and_terrain_ids_repeat_across_releases` 通过；04 空域状态/限高相关 schema 测试通过。四项均为复核通过，未改 ZC 实现。
 
 以下 v1 记录保留为证据。
 

@@ -155,7 +155,7 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 
 ### 3.3 `source`（来源）
 
-来源：采集登记；更新：来源或许可变更时；敏感级别：`internal`；生命周期：长期，发布时引用。
+来源：采集登记；更新：来源或许可变更时；敏感级别：`internal`；生命周期：长期，发布时引用；被非 draft 发布引用后不可原地修改。
 
 | 字段 | 类型 | 必填 | 单位/取值 | 说明 |
 | --- | --- | --- | --- | --- |
@@ -173,6 +173,8 @@ YHT 内容层固定为五类：`scene`、`terrain`、`airspace`、`exposure`、`
 | `sensitivity` | `enum` | 是 | 四级 | 来源整体敏感级别 |
 | `contact_ref` | `text` | 否 | 工单/接口编号 | 不存个人联系方式 |
 | `notes` | `text` | 否 | 自由文本 | 许可限制、已知偏差 |
+
+`source_id` 是来源的身份，不是可覆盖的配置行。被任一非 draft 发布（直接引用，或经 `component_source` 映射）引用后，`source` 行禁止 `UPDATE`/`DELETE`；许可、精度或联系方式变化时登记新的 `source_id`，由新发布引用。旧发布重开仍解析旧行，因此历史来源不会随维护操作漂移。实现见 [schema.sql](../../../v2/schema/schema.sql) 的 `source_immutable_update/delete` 与 `source_provenance_usage`，边界见 [决策 S-05/S-08](../../../v2/schema/decisions.md)。
 
 ### 3.4 `coverage_tile`（覆盖瓦片）
 
@@ -569,7 +571,7 @@ airspace_restriction 1 ── N airspace_event
 
 - 变更记录：2026-11-06（ZQO，第2棒，基线 `5ee1a19`）：发布与版本分节新增 `layer_component`（物理图层及内容摘要）、`release_component`（逻辑发布五层映射）、`component_source`（来源成员清单）、`current_release`（每场景当前指针）、`publish_request`（幂等成功凭据）、`failed_attempt`（回滚后失败尝试）、`outbox`（事务内待发送事件），共7表；完整字段/外键见 [schema.sql](../../../v2/schema/schema.sql) 第2节。
 - 同轮映射约定：`release_layer.layer_version` 是规范化关系行的 SHA-256；上游五层版本另存 `release.manifest.provenance.source_versions`，同时保存风险模型、编译器和窗口。`feature.release_id`、地形与覆盖行的 `release_id` 表示物理所有者；查询的逻辑发布通过 `release_component → layer_component.owner_release_id` 解析，新增 `resolved_feature` / `resolved_source` 视图。现有实体列不变；YHT 原独立索引夹具仍可运行。
-- 同轮生命周期：当前指针只接受已发布且五层映射完整的版本；撤销写新空域组件和 `airspace_event`，历史内容保留；`superseded` / `retired` 也可显式历史读取。来源/模型的原地修改会导致摘要校验失败，未实现的历史元数据冻结由 YHT-V2-06 / LQ-V2-01 跟进。技术决定与受影响查询见 [ZQO 对接说明](../../zqo/v2/integration.md)。
+- 同轮生命周期：当前指针只接受已发布且五层映射完整的版本；撤销写新空域组件和 `airspace_event`，历史内容保留；`superseded` / `retired` 也可显式历史读取。来源被非 draft 发布引用后禁止原地修改，修订登记新 `source_id`；模型冻结仍由 LQ-V2-01 跟进。技术决定与受影响查询见 [ZQO 对接说明](../../zqo/v2/integration.md)。
 
 ## 10. 参考
 

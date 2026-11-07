@@ -181,6 +181,92 @@ class SchemaTest(unittest.TestCase):
                 ("EV-X", "rel-1", "NF-404", "publish", "2026-11-05T09:00:00Z",
                  "2026-11-05T09:00:00Z", "A-ADMIN", "SRC-SYN", fx.sha("x"), "r", None))
 
+    # --- published immutability bypasses ---------------------------------
+    def test_feature_cannot_move_to_published_release(self):
+        published_release(self.conn)
+        fx.create_release(self.conn, "rel-2")
+        fx.add_layers(self.conn, "rel-2")
+        fx.add_feature(self.conn, 9, "rel-2", "B-009", "building")
+        self.assertAborts("UPDATE feature SET release_id = 'rel-1' WHERE rid = 9",
+                          message="immutable")
+        fx.create_release(self.conn, "rel-3")
+        fx.add_layers(self.conn, "rel-3")
+        self.conn.execute("UPDATE feature SET release_id = 'rel-3' WHERE rid = 9")
+        self.assertEqual(self.conn.execute(
+            "SELECT release_id FROM feature WHERE rid = 9").fetchone()[0], "rel-3")
+
+    def test_subtype_insert_after_publication_rejected(self):
+        fx.create_release(self.conn, "rel-2")
+        fx.add_layers(self.conn, "rel-2")
+        fx.add_feature(self.conn, 20, "rel-2", "B-020", "building")
+        fx.add_feature(self.conn, 21, "rel-2", "NF-020", "airspace")
+        fx.add_feature(self.conn, 22, "rel-2", "GZ-020", "exposure")
+        fx.publish(self.conn, "rel-2")
+        wkt = fx.box_wkt(0, 0, 10, 10)
+        self.assertAborts(
+            "INSERT INTO building (rid, footprint_wkt, solid_wkt, bbox_min_x, bbox_min_y,"
+            " bbox_max_x, bbox_max_y, base_z, top_z, height_m, footprint_source, height_source,"
+            " height_method, is_landmark) VALUES (20,?,?,0,0,10,10,0,10,10,'SRC-SYN','SRC-SYN',"
+            "'assumed',0)", (wkt, wkt), message="immutable")
+        self.assertAborts(
+            "INSERT INTO airspace_restriction (rid, restriction_id, kind, volume_wkt,"
+            " bbox_min_x, bbox_min_y, bbox_max_x, bbox_max_y, floor_z, ceiling_m, effective_lo,"
+            " effective_hi, state, authority, source_id, published_at, revoked_at, quality,"
+            " sensitivity) VALUES (21,'NF-020','no_fly',?,0,0,10,10,0,NULL,"
+            "'2026-11-05T08:00:00Z','2026-11-05T09:00:00Z','published','synthetic','SRC-SYN',"
+            "'2026-11-01T00:00:00Z',NULL,'assumed','restricted')", (wkt,), message="immutable")
+        self.assertAborts(
+            "INSERT INTO exposure_zone (rid, zone_id, class, footprint_wkt, bbox_min_x,"
+            " bbox_min_y, bbox_max_x, bbox_max_y, floor_z, top_z, exposure_e, consequence_c, q,"
+            " risk_model_id, source_id, quality, valid_lo, valid_hi, sensitivity) VALUES"
+            " (22,'GZ-020','residential',?,0,0,10,10,0,30,0.5,0.4,0.2,'lq-risk-v1','SRC-SYN',"
+            "'assumed','2026-01-01T00:00:00Z','2027-01-01T00:00:00Z','restricted')",
+            (wkt,), message="immutable")
+
+    def test_coverage_and_terrain_insert_after_publication_rejected(self):
+        published_release(self.conn)
+        self.assertAborts(
+            "INSERT INTO coverage_tile (release_id, layer, tile_id, tile_x, tile_y, bounds_wkt,"
+            " complete, quality, source_id, valid_lo, valid_hi, checksum) VALUES"
+            " ('rel-1','scene','T-99',9,9,?,1,'assumed','SRC-SYN',"
+            "'2026-01-01T00:00:00Z','2027-01-01T00:00:00Z',?)",
+            (fx.box_wkt(0, 0, 10, 10), fx.sha("tile")), message="immutable")
+        self.assertAborts(
+            "INSERT INTO terrain_surface (release_id, terrain_id, surface_type, bounds_wkt,"
+            " post_spacing_m, vertical_datum, flat, min_z, max_z, source_id, quality, valid_lo,"
+            " valid_hi, checksum) VALUES ('rel-1','TER-99','grid',?,20,'local-z0',1,0,0,"
+            "'SRC-SYN','assumed','2026-01-01T00:00:00Z','2027-01-01T00:00:00Z',?)",
+            (fx.box_wkt(0, 0, 100, 100), fx.sha("terrain")), message="immutable")
+
+    def test_terrain_post_insert_after_publication_rejected(self):
+        fx.create_release(self.conn, "rel-t")
+        fx.add_layers(self.conn, "rel-t")
+        self.conn.execute(
+            "INSERT INTO terrain_surface (release_id, terrain_id, surface_type, bounds_wkt,"
+            " post_spacing_m, vertical_datum, flat, min_z, max_z, source_id, quality, valid_lo,"
+            " valid_hi, checksum) VALUES ('rel-t','TER-001','grid',?,20,'local-z0',1,0,0,"
+            "'SRC-SYN','assumed','2026-01-01T00:00:00Z','2027-01-01T00:00:00Z',?)",
+            (fx.box_wkt(0, 0, 100, 100), fx.sha("terrain-t")))
+        fx.publish(self.conn, "rel-t")
+        self.assertAborts(
+            "INSERT INTO terrain_post (release_id, terrain_id, ix, iy, x, y, z, quality,"
+            " source_id) VALUES ('rel-t','TER-001',0,0,0,0,0,'assumed','SRC-SYN')",
+            message="immutable")
+
+    def test_source_is_immutable_when_used_by_published_release(self):
+        self.conn.execute("UPDATE source SET license = 'draft-license' WHERE source_id = 'SRC-SYN'")
+        original = self.conn.execute(
+            "SELECT license FROM source WHERE source_id = 'SRC-SYN'").fetchone()[0]
+        published_release(self.conn)
+        self.assertAborts("UPDATE source SET license = 'changed' WHERE source_id = 'SRC-SYN'",
+                          message="immutable")
+        self.assertAborts("DELETE FROM source WHERE source_id = 'SRC-SYN'", message="immutable")
+        self.assertEqual(self.conn.execute(
+            "SELECT license FROM source WHERE source_id = 'SRC-SYN'").fetchone()[0], original)
+        fx.add_source(self.conn, "SRC-NEW")
+        self.assertEqual(self.conn.execute(
+            "SELECT count(*) FROM source WHERE source_id = 'SRC-NEW'").fetchone()[0], 1)
+
     # --- indexes and operation A ----------------------------------------
     def test_rtree_rows_are_maintained_by_triggers(self):
         published_release(self.conn)

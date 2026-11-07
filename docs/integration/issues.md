@@ -4,10 +4,10 @@
 
 | 编号 | 负责人 | 问题 | 处理 | 状态 |
 | --- | --- | --- | --- | --- |
-| YHT-V2-01 | YHT | 缺可执行统一模式与测试（任务安排第4、7.1节） | ZC 按用户指示新增 `docs/v2/schema/`，13项测试 | 已修订，待 YHT 复核 |
-| YHT-V2-02 | YHT | 操作 A 缺 `EXPLAIN QUERY PLAN` 与索引对比 | ZC 新增访问路径实验与第4.3.1节 | 已修订，待 YHT 复核 |
-| YHT-V2-03 | YHT | `coverage_tile`、`terrain_surface` 单列主键在第二次发布冲突 | 主键加 `release_id`（决定 S-01） | 已修订，待 YHT 复核 |
-| YHT-V2-04 | YHT | 空域 `state` 原地维护与发布不可变冲突；限高体索引范围错误 | 状态随发布固定；增加禁止范围生成列（S-02、S-03） | 已修订，待 YHT 复核；ZQO 发布/撤销事务按 S-02 实现 |
+| YHT-V2-01 | YHT | 缺可执行统一模式与测试（任务安排第4、7.1节） | ZC 按用户指示新增 `docs/v2/schema/`，13项测试 | 已复核通过（YHT，2026-11-07）：合并后 `discover -s docs/v2/schema` 59项通过 |
+| YHT-V2-02 | YHT | 操作 A 缺 `EXPLAIN QUERY PLAN` 与索引对比 | ZC 新增访问路径实验与第4.3.1节 | 已复核通过（YHT，2026-11-07）：重跑 6配置×6路径，`mismatched_queries` 全0；N=10000、K=20 四维 R*Tree 37.4 µs |
+| YHT-V2-03 | YHT | `coverage_tile`、`terrain_surface` 单列主键在第二次发布冲突 | 主键加 `release_id`（决定 S-01） | 已复核通过（YHT，2026-11-07）：`test_tile_and_terrain_ids_repeat_across_releases` 通过 |
+| YHT-V2-04 | YHT | 空域 `state` 原地维护与发布不可变冲突；限高体索引范围错误 | 状态随发布固定；增加禁止范围生成列（S-02、S-03） | 已复核通过（YHT，2026-11-07）：状态/限高相关 schema 测试通过；ZQO 发布/撤销事务按 S-02 实现 |
 
 
 ## v2 第2棒审阅（ZQO，基线 `5ee1a19`）
@@ -16,8 +16,8 @@ YHT PR #1（`f05459c`）已合入，GitHub `checks` 为 SUCCESS。修改前13项
 
 | 编号 | 负责人 | 真实缺口与复现 | 完成判据 | 状态 |
 | --- | --- | --- | --- | --- |
-| YHT-V2-05 | YHT | draft 的 feature 可 UPDATE 到已发布 release；已发布 feature 可后补子类型；已发布版本可新增地形。原 immutable 触发器未覆盖所有 INSERT / NEW 所属版本检查 | 源空间表检查旧/新 owner 和新增子行；拒绝全部已发布内容变更；增加覆盖 feature、子类型、coverage、terrain 的回归，保持合法 draft 写入和原索引实验 | 待 YHT 修复 |
-| YHT-V2-06 | YHT | `source.license` 在发布后仍可原地修改；历史来源跟着改变 | 已引用 source 采用不可变版本编号或真正的历史源表；测试旧发布可重开且来源不变、新来源可合法入库；更新字典与迁移约定 | 待 YHT 修复 |
+| YHT-V2-05 | YHT | draft 的 feature 可 UPDATE 到已发布 release；已发布 feature 可后补子类型；已发布版本可新增地形。原 immutable 触发器未覆盖所有 INSERT / NEW 所属版本检查 | 源空间表检查旧/新 owner 和新增子行；拒绝全部已发布内容变更；增加覆盖 feature、子类型、coverage、terrain 的回归，保持合法 draft 写入和原索引实验 | 已修复：`0748f2d`；`feature_immutable_update` 检查 OLD/NEW，子表 INSERT 加 draft-only 触发器；合并后 schema 59项、YHT 42项、ZQO 14项通过，4 条 YHT 探针全部 rejected。验证：`python3 -B -m unittest discover -s docs/v2/schema -v`；`python3 -B docs/modules/zqo/v2/experiments/run.py --counts 10 --output /tmp/zqo.json` |
+| YHT-V2-06 | YHT | `source.license` 在发布后仍可原地修改；历史来源跟着改变 | 已引用 source 采用不可变版本编号或真正的历史源表；测试旧发布可重开且来源不变、新来源可合法入库；更新字典与迁移约定 | 已修复：`0748f2d`；`source_provenance_usage` 汇总全部非 draft 引用，`source_immutable_update/delete` 拒绝原地改/删，修订登记新 `source_id`；字典与 S-08 已更新；合并后 schema 59项、LQ 18项通过。验证：`python3 -B -m unittest discover -s docs/v2/schema -v`；`python3 -B docs/modules/lq/v2/experiments/run.py --output /tmp/lq.json` |
 | LQ-V2-01 | LQ | 已引用 `risk_model.formula` 仍可原地修改，历史 exposure 的模型解释漂移 | 模型版本不可变或独立版本表；审批/状态调整与计算参数历史分开；测试旧发布模型参数稳定、修订使用新版本 | LQ第3棒已修复；ZC第4棒复核通过（[探针](../modules/zc/v2/experiments/results/lq-review.json)） |
 
 复现脚本：`python3 -B docs/modules/zqo/v2/experiments/run.py --counts 10 --output /tmp/zqo-v2-review.json`。`known_other_owner_defects` 保存5条原始SQL、预期 rejected、实际 accepted 和 `pass=false`，不把这些结果计作通过。完整证据在 [transactions-storage.json](../modules/zqo/v2/experiments/results/transactions-storage.json)。ZQO 的 `snapshot()` 检查关系行摘要，漂移明确报错，不能恢复已被原地改写的数据；该检测不关闭问题。

@@ -47,7 +47,7 @@ YHT PR #1（`f05459c`）已合入，GitHub `checks` 为 SUCCESS。修改前13项
 
 ## v2 第6棒整合（ZC，基线 1500683 + LJ）
 
-整合前五棒均已完成：YHT PR #1/#5、ZQO PR #4、LQ PR #6、ZC PR #7、LJ 见下。全量复核脚本 `docs/integration/v2_verify.py` 重跑全部测试、实验与审阅脚本，20/20 组命令符合预期，231 项测试通过（[verification-v2.json](../final/evidence/verification-v2.json)）。
+整合前五棒均已完成：YHT PR #1/#5、ZQO PR #4、LQ PR #6、ZC PR #7、LJ 见下。全量复核脚本 `docs/integration/v2_verify.py` 重跑全部测试、实验与审阅脚本，20/20 组命令符合预期，231 项测试通过；修复 LQ-V2-02、ZQO-V2-01、ZC-V2-02 后于发布前重跑为 233 项（[verification-v2.json](../final/evidence/verification-v2.json)）。
 
 | 编号 | 负责人 | 记录 | 状态 |
 | --- | --- | --- | --- |

@@ -4,7 +4,7 @@
 
 已读取五名成员交接及主线`2850d89`，独立重跑全部验证：131项模块回归、7项原问题审查、11项五模块链路、25项风险专项均通过。完整命令、日志、输入输出和源码摘要见[本轮证据](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/evidence/verification.json)。历史性能JSON及原问题复现记录保持原基线。
 
-[整合报告](../final/report.md)、[Word](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/SkyRoute-report.docx)、[10页PPT](../final/SkyRoute-presentation.pptx)及[逐页讲稿](../final/slides.md)已形成，课程覆盖见[对照表](../final/course-coverage.md)。当前有一项文档待修YHT-05：原生产候选稿的PostGIS索引操作符类名称，由YHT修订；整合稿未采用该错误名称。正式身份、贡献比例及签字由成员完成，课程平台上传未执行。
+[整合报告](../final/report.md)、[Word](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/SkyRoute-report.docx)、[10页PPT](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/SkyRoute-presentation.pptx)及[逐页讲稿](../final/slides.md)已形成，课程覆盖见[对照表](../final/course-coverage.md)。当前有一项文档待修YHT-05：原生产候选稿的PostGIS索引操作符类名称，由YHT修订；整合稿未采用该错误名称。正式身份、贡献比例及签字由成员完成，课程平台上传未执行。
 
 复核日期：2026-11-05。首次审查基线：`cc20db8a6c3d2c92f030c8322cdf067ece249f91`，叠加当时的ZC输入校验修复。最新独立复测基线为`621786a`（2026-11-06，LQ）；前轮ZQO结果保留如下。最终报告与展示已在2026-11-06完成整合，见[最终交付](../final/README.md)；下方保留前轮记录。
 

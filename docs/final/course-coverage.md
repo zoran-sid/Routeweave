@@ -1,6 +1,6 @@
 # v2 最终材料与课程要求对照
 
-课程原文见[课程要求全文](../course-requirements.md)，下表沿用《作业要求.pdf》页码。报告指 [SkyRoute-report.pdf](SkyRoute-report.pdf)（21 页，章节号与页码按 PDF），PPT 指 [SkyRoute-presentation.pptx](SkyRoute-presentation.pptx)（12 页）。v1 的对照保留在标签 `v1.0-algorithm-baseline`。
+课程原文见[课程要求全文](../course-requirements.md)，下表沿用《作业要求.pdf》页码。报告指 `SkyRoute-report.pdf`（23 页，章节号与页码按 PDF，文字版见 [report.md](report.md)），PPT 指 `SkyRoute-presentation.pptx`（12 页，文字版见 [slides.md](slides.md)）。PDF 与 PPTX 在本地由 `source/` 构建，不纳入版本库。v1 的对照保留在标签 `v1.0-algorithm-baseline`。
 
 ## 课程任务与报告结构
 
@@ -24,7 +24,8 @@
 | 评估指标、实验或基准方案 | 2、5 | §8.1（17）表 13–14；§4.4、§5.2、§6.2–6.3 | 5–6、9–11 | [verification-v2.json](evidence/verification-v2.json) |
 | 风险、局限与改进方向 | 5–6 | §8.4（18） | 12 | [问题清单](../integration/issues.md) |
 | 小组分工说明 | 5 | §9（19） | — | [contributions.md](contributions.md) |
-| 参考文献（统一格式） | 5 | 参考文献（20–21），IEEE，26 条 | 讲稿注明来源 | — |
+| 参考文献（统一格式） | 5 | 参考文献（19–21），IEEE，26 条 | 讲稿注明来源 | — |
+| AI 在数据管理与治理中的应用；本组 AI 使用过程 | 1（声明格式未定） | §7.4 AI 辅助发现异常与敏感字段（16）；附录 C（21–23）工具、时间线、人与 AI 分工、审阅发现 | 8 | [contributions.md](contributions.md) |
 
 ## 范围建议（PDF 第6–7页）
 
@@ -52,12 +53,12 @@
 
 ## 篇幅与形式
 
-- 报告正文（摘要至第 9 章，不含参考文献与附录）9,887 个汉字，满足“不少于 2,500 中文字”的建议（PDF 第4页）。统计方法见 `docs/final/source/build_report.py` 的 `hanzi()`。
+- 报告正文（摘要至第 9 章，不含参考文献与附录）9,808 个汉字，满足“不少于 2,500 中文字”的建议（PDF 第4页）。统计方法见 `docs/final/source/build_report.py` 的 `hanzi()`。
 - PPT 共 12 页，按 ZQO、YHT、ZQO、LQ、ZC、LJ 的顺序讲述，每页附讲稿与来源；汇报时长由课程另行通知，届时按时长增删页面（[任务安排](../team-tasks.md)第9节）。
 - 原型、实验与证据（PDF 第6页加分材料）见报告附录 B 与 [verification-v2.json](evidence/verification-v2.json)。
 
 ## 需由成员确认的提交信息
 
-- 封面姓名与学号：复制 `source/report/cover-info.example.tex` 为 `cover-info.tex` 填写后重新构建；该文件不进入版本库。
+- 封面姓名与学号：在 `source/report/report.tex` 开头的成员表中填写后重新构建 PDF。
 - 贡献比例与全员逐行签字（合计 100%），见 [contributions.md](contributions.md)。
 - 正式提交负责人、截止时间、汇报时长、上传格式与 AI 使用声明格式，以 Moodle 或教师通知为准。

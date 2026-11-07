@@ -14,7 +14,7 @@
 
 ## 项目文档
 
-- [v2 最终交付](docs/final/README.md)：21 页 PDF 报告（LaTeX）、12 页可编辑 PPT、Markdown 镜像与讲稿、课程覆盖对照、贡献依据与整合证据。
+- [v2 最终交付](docs/final/README.md)：23 页 PDF 报告（LaTeX 源，PDF 本地构建）、12 页可编辑 PPT（构建脚本）、Markdown 镜像与讲稿、课程覆盖对照、贡献依据与整合证据。
 - [问题清单](docs/integration/issues.md)：v2 各棒审阅发现与修复状态，以及 v1 历次集成记录。
 - [统一数据库模式](docs/v2/schema/schema.sql)：34 个实体、约束、触发器与时空索引，含 [ER 图](docs/v2/schema/er.md) 与 [设计决定](docs/v2/schema/decisions.md)。
 - [完整项目说明](docs/project-brief.md)：背景、目标、用户、功能、技术方向和研究范围。

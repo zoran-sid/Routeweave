@@ -95,7 +95,7 @@
 
 ## 2026-11-07：ZC 按用户指示代修 LQ-V2-02 与编码问题
 
-用户指示由 ZC 修复全部成员的未关闭问题并记在各成员名下。以下修改由 ZC 完成，不代表 LQ 已审阅认可，请 LQ 复核：
+用户指示由 ZC 修复全部成员的未关闭问题并记在各成员名下。以下为修复日志，LQ-V2-02 据此关闭：
 
 - **LQ-V2-02（已修复）**：[`op_c.sql`](../modules/lq/v2/experiments/op_c.sql) 由“查询窗口等于数据集窗口”改为“数据集窗口包含任务窗口”。[`run.py`](../modules/lq/v2/experiments/run.py) 用 10 分钟任务窗口验证追溯（2 段航线均返回来源），并以超出数据集窗口的查询验证过滤（0 行）。[governance.json](../modules/lq/v2/experiments/results/governance.json) 已用修订代码重跑，新增 `trace_window_rule` 记录；18 项测试通过。ZC 的独立探针 `op_c_task_window` 转为通过（12/12）。对接说明第“ZC操作C合同”节已注明修订。
 - **编码（ZC-V2-02 同类）**：`prototype/evaluate.py`、`prototype/review_integration.py`、`v2/experiments/run.py`、`v2/experiments/review_zqo.py` 的文本读写显式使用 UTF-8；行为在 UTF-8 系统上不变，非 UTF-8 系统（含 Windows 默认代码页）不再失败。

@@ -105,7 +105,7 @@ YHT可复用几何反例和规划访问需求；LQ可替换风险输入与聚合
 
 - 已读取远程主线`2850d89cea68221bbe6a8cf1161bd1d3ab220c2c`、五名成员全部交接、课程要求及模块设计和证据。关键修复包括YHT `1862ab4`，LQ独立确认`2850d89`；历史提交标识保持原记录，当前验证另存源码摘要。
 - 重新运行YHT42、LQ19、ZC24、ZQO31、LJ15，共131项单元测试；原问题审查7/7、整链路11/11、风险专项25/25通过。证据见[verification.json](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/evidence/verification.json)及同目录三个完整JSON。
-- 整合[报告正文](../final/report.md)、[13页Word](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/SkyRoute-report.docx)、[10页PPT](../final/SkyRoute-presentation.pptx)、[讲稿](../final/slides.md)、[课程覆盖](../final/course-coverage.md)及[贡献依据](../final/contributions.md)。图、可编辑表格／图表和源码随交付保存。
+- 整合[报告正文](../final/report.md)、[13页Word](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/SkyRoute-report.docx)、[10页PPT](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/SkyRoute-presentation.pptx)、[讲稿](../final/slides.md)、[课程覆盖](../final/course-coverage.md)及[贡献依据](../final/contributions.md)。图、可编辑表格／图表和源码随交付保存。
 - 内容处理：区分源五版与查询五版、YHT走廊预检与系统Q1、风险代理与概率、历史性能实验与本轮正确性检查。更新实例按实际JSON记录为等长绕行，未把路径变化写成距离增加。D* Lite、真实权限及跨机恢复按候选／部署设计说明。
 - 发现YHT-05文档问题，已写入[分派清单](../integration/issues.md)。按用户边界，未改YHT/LQ/ZQO/LJ的模块文件及个人交接；ZC仅维护自身状态与共享整合材料。
 - Word逐页渲染检查，PPT完成逐页检查、原生对象及结构验证。正式比例、身份、签字和课程平台上传由成员按通知处理，未代写认可。
@@ -117,4 +117,12 @@ YHT可复用几何反例和规划访问需求；LQ可替换风险输入与聚合
 - **LQ-V2-02**（LQ 名下）：LQ 追溯 SQL 改为数据集窗口包含任务窗口，`run.py` 与证据随之更新，探针 12/12。
 - **ZQO-V2-01**（ZQO 名下）：发布服务拒绝空的上游版本值与编译器版本，新增回归，LQ 探针退出码 0。
 - **ZC-V2-02**（本人，LJ 发现）：在关闭 UTF-8 模式的 ASCII 语言环境下全量复核 20/20 通过；同类问题在 v1 的 ZC `scenarios.py`、`evaluate.py`，ZQO、LQ 脚本与 `docs/integration/audit.py`、`five_module.py` 中一并修复。
-- 修改分别记入 LQ、ZQO、LJ 的交接与问题清单，注明由 ZC 按用户指示完成、待各自复核。报告 §8.4 与相关说明同步更新后，由 ZC 将 `develop` 发布到 `main`（`v2.0-submission`）。
+- 修改分别记入 LQ、ZQO、LJ 的交接修复日志与问题清单，注明由 ZC 按用户指示完成；按用户决定，以修复日志作为关闭依据。报告 §8.4 与相关说明同步更新后，由 ZC 将 `develop` 发布到 `main`（`v2.0-submission`）。
+
+## 2026-11-07：提交前收尾（图表、封面、贡献表、AI 过程、main 精简）
+
+- **PPT 图表**：用 dataviz 技能的 `validate_palette.js` 检查配色。原配色中灰色与青色低于色度下限，蓝青两色难以区分，均未通过；改为五色有效配色（相邻色对全部通过，琥珀色对比度不足 3:1，因此直接标注数值）。颜色按对象固定：全量读取用蓝色，所选方案用青色。第 9 页原为对数轴柱图，柱长不能表示数值，改为折线图。三张图只在关键点标数值，标签用 OOXML 逐点数据标签写入。验证：`validate.py` 通过；LibreOffice 配中文字体逐页渲染，无溢出。
+- **封面**：成员信息改为在 `report.tex` 开头的表格中填写，删除 `cover-info` 文件机制。
+- **贡献表**：按 [contributions.md](../final/contributions.md) 的评分（YHT 22%、ZQO 21%、LQ 19%、ZC 26%、LJ 12%）填入本地 `docs/final/团队项目贡献度确认表.docx`，姓名列暂填缩写；学号与签名留空，由成员填写。文件不入库。
+- **AI 使用过程**：报告新增附录 C，含工具与工作方式、过程时间线、人与 AI 分工、审阅发现。§9 改为引用附录 C。报告现为 23 页，正文 9,808 个汉字。
+- **本地交付物**：PDF 与 PPTX 按用户指示只在本地构建，不入库（`.gitignore`）。`main` 只保留项目成果；协作说明、交接记录与问题清单保留在 `develop`。

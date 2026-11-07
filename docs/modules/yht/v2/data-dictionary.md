@@ -581,3 +581,23 @@ airspace_restriction 1 ── N airspace_event
 - [PostGIS ST_3DIntersects](https://postgis.net/docs/ST_3DIntersects.html)
 - [PostGIS geometry_overlaps_nd（`&&&`）](https://postgis.net/docs/geometry_overlaps_nd.html)
 - [PostGIS ST_3DDWithin](https://postgis.net/docs/ST_3DDWithin.html)
+
+### 9.3 LQ 第3棒变更记录（2026-11-07）
+
+仅追加统一模型变更，不修改YHT章节结论。新增7实体，现有23实体合计30个：
+
+| 实体 | 关键字段/约束 | 时间、来源与版本 |
+| --- | --- | --- |
+| risk_model_control | risk_model_id PK/FK、enabled、changed_by FK、at、reason | 参数版本保持不可变；启停独立审计 |
+| risk_dataset | dataset_id PK、release_id/component_id/risk_model_id FK、window_lo/hi、compiler_version、created_by、created_at、state | 绑定逻辑发布及真实exposure组件；窗口完全匹配；draft→validated |
+| risk_input_period | (dataset_id,zone_rid,valid_lo) PK、valid_hi、exposure_e、consequence_c | 实际细时段输入，裁剪至编译窗；不可重叠，缺口拒绝封存 |
+| derived_risk | (dataset_id,zone_rid) PK/FK、q_max、source_id FK | 按输入时段计算最大代理，保留原空间/来源引用 |
+| quality_check | check_id PK、dataset_id FK、rule、result、checked_at、actor_id、detail JSON | 只追加，质量证据；封存门禁仍独立验证跨行覆盖与最大值 |
+| governance_request | request_id PK、object_kind/object_id UNIQUE、author_id、payload_hash、created_at | 候选发布或治理对象的内容摘要，immutable |
+| governance_approval | request_id PK/FK、reviewer_id、decision、at、reason | 同机构活跃安全管理员审批，作者不得自审，decision不可覆盖 |
+
+既有字段变化：access_policy.action增加approve；audit_event.action增加approve/quality/model_control；lineage_edge端点增加component/dataset，触发器校验端点及实际dataset依赖。actor及risk_model不加列，兼容既有初始化与发布payload。
+
+语义细化：risk_model已批准或被引用后，原公式、参数、有效期及status全部不可更新；更新模型另注册ID，停用写risk_model_control。exposure_zone沿用NOT NULL、q=E×C和范围CHECK，增加模型覆盖的INSERT/UPDATE校验。risk_dataset是LQ派生资产，不改ZQO历史五层清单。
+
+访问视图v_exposure_summary按机构、角色、活跃、策略敏感上限聚合200米格网，至少两个合格分区；v_exposure_detail仅安全管理员在机构和敏感上限内读取。服务固定查询端点与连接authorizer组合，SQLite文件管理员仍属于可信部署边界。新增实体的源版本、SQL、ER及迁移见`docs/v2/schema/`与`docs/modules/lq/v2/integration.md`。

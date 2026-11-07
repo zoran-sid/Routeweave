@@ -1,0 +1,637 @@
+{
+  "tests": {
+    "run": 18,
+    "failures": 0,
+    "errors": 0,
+    "log": "test_approval_binds_payload_and_is_immutable (test_governance.GovernanceTest.test_approval_binds_payload_and_is_immutable) ... ok\ntest_audit_and_quality_are_append_only (test_governance.GovernanceTest.test_audit_and_quality_are_append_only) ... ok\ntest_author_cannot_approve_and_operator_cannot_approve (test_governance.GovernanceTest.test_author_cannot_approve_and_operator_cannot_approve) ... ok\ntest_complete_native_periods_compiled_and_frozen (test_governance.GovernanceTest.test_complete_native_periods_compiled_and_frozen) ... ok\ntest_database_NULL_and_inconsistent_q_rejected (test_governance.GovernanceTest.test_database_NULL_and_inconsistent_q_rejected) ... ok\ntest_dataset_window_component_and_model_gate (test_governance.GovernanceTest.test_dataset_window_component_and_model_gate) ... ok\ntest_disabled_model_control_is_separate_and_audited (test_governance.GovernanceTest.test_disabled_model_control_is_separate_and_audited) ... ok\ntest_dispatcher_cannot_author_release_request (test_governance.GovernanceTest.test_dispatcher_cannot_author_release_request) ... ok\ntest_gap_cannot_be_validated_even_with_pass_label (test_governance.GovernanceTest.test_gap_cannot_be_validated_even_with_pass_label) ... ok\ntest_lineage_and_reverse_invalidation_query (test_governance.GovernanceTest.test_lineage_and_reverse_invalidation_query) ... ok\ntest_native_missing_E_C_rolls_back (test_governance.GovernanceTest.test_native_missing_E_C_rolls_back) ... ok\ntest_period_overlap_rejected (test_governance.GovernanceTest.test_period_overlap_rejected) ... ok\ntest_policy_sensitivity_cap_is_enforced (test_governance.GovernanceTest.test_policy_sensitivity_cap_is_enforced) ... ok\ntest_reader_filters_org_role_active_and_hides_columns (test_governance.GovernanceTest.test_reader_filters_org_role_active_and_hides_columns) ... ok\ntest_referenced_model_immutable_new_version_preserves_history (test_governance.GovernanceTest.test_referenced_model_immutable_new_version_preserves_history) ... ok\ntest_sensitive_source_is_filtered_without_mutating_old_release (test_governance.GovernanceTest.test_sensitive_source_is_filtered_without_mutating_old_release) ... ok\ntest_sql_bypass_and_dml_are_rejected_and_denials_audited (test_governance.GovernanceTest.test_sql_bypass_and_dml_are_rejected_and_denials_audited) ... ok\ntest_unknown_quality_does_not_become_validated_risk (test_governance.GovernanceTest.test_unknown_quality_does_not_become_validated_risk) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.424s\n\nOK\n"
+  },
+  "compile": {
+    "two_datasets_elapsed_ms": 2.781834,
+    "zones_per_dataset": 6,
+    "periods": 12,
+    "window": [
+      "2026-01-01T00:00:00Z",
+      "2027-01-01T00:00:00Z"
+    ],
+    "definition": "single demonstration, not a repeated performance benchmark"
+  },
+  "trace_window_mismatch_filtered": true,
+  "operation_C": {
+    "sql": "-- query_run / route_segment_source are TEMP fixtures until ZC's next leg.\nSELECT q.query_id, seg.segment_no, r.release_id, rc.component_id,\n       lc.owner_release_id, f.feature_id AS zone_id, src.source_id, src.name AS source_name,\n       m.risk_model_id,m.model_version,dr.q_max,d.window_lo,d.window_hi,\n       json_extract(r.manifest,'$.provenance.source_versions.exposure') AS upstream_exposure_version\nFROM query_run q JOIN release r ON r.release_id=q.release_id\nJOIN route_segment_source seg ON seg.query_id=q.query_id\nJOIN release_component rc ON rc.release_id=r.release_id AND rc.layer='exposure' AND rc.component_id=seg.component_id\nJOIN layer_component lc ON lc.component_id=rc.component_id\nJOIN feature f ON f.rid=seg.zone_rid AND f.release_id=lc.owner_release_id\nJOIN risk_dataset d ON d.dataset_id=seg.dataset_id AND d.release_id=q.release_id AND d.component_id=rc.component_id AND d.state='validated' AND q.window_lo=d.window_lo AND q.window_hi=d.window_hi\nJOIN derived_risk dr ON dr.dataset_id=d.dataset_id AND dr.zone_rid=f.rid\nJOIN risk_model m ON m.risk_model_id=d.risk_model_id\nJOIN source src ON src.source_id=dr.source_id\nJOIN release_component source_rc ON source_rc.release_id=q.release_id AND source_rc.layer='sources'\nJOIN component_source cs ON cs.component_id=source_rc.component_id AND cs.source_id=src.source_id\nWHERE q.query_id=:query_id\nORDER BY seg.segment_no,zone_id;\n",
+    "query_fixture": [
+      {
+        "query_id": "Q1",
+        "release_id": "R1",
+        "actor_id": "DISPATCH",
+        "window_lo": "2026-01-01T00:00:00Z",
+        "window_hi": "2027-01-01T00:00:00Z"
+      }
+    ],
+    "segment_fixture": [
+      {
+        "query_id": "Q1",
+        "segment_no": 1,
+        "component_id": "R0:exposure",
+        "zone_rid": 29,
+        "dataset_id": "D1"
+      },
+      {
+        "query_id": "Q1",
+        "segment_no": 2,
+        "component_id": "R0:exposure",
+        "zone_rid": 30,
+        "dataset_id": "D1"
+      }
+    ],
+    "result": [
+      {
+        "query_id": "Q1",
+        "segment_no": 1,
+        "release_id": "R1",
+        "component_id": "R0:exposure",
+        "owner_release_id": "R0",
+        "zone_id": "G-0",
+        "source_id": "SRC-SYN",
+        "source_name": "synthetic",
+        "risk_model_id": "lq-risk-v1",
+        "model_version": "1.0.0",
+        "q_max": 0.2,
+        "window_lo": "2026-01-01T00:00:00Z",
+        "window_hi": "2027-01-01T00:00:00Z",
+        "upstream_exposure_version": "synthetic-v2-1"
+      },
+      {
+        "query_id": "Q1",
+        "segment_no": 2,
+        "release_id": "R1",
+        "component_id": "R0:exposure",
+        "owner_release_id": "R0",
+        "zone_id": "G-1",
+        "source_id": "SRC-SYN",
+        "source_name": "synthetic",
+        "risk_model_id": "lq-risk-v1",
+        "model_version": "1.0.0",
+        "q_max": 0.2,
+        "window_lo": "2026-01-01T00:00:00Z",
+        "window_hi": "2027-01-01T00:00:00Z",
+        "upstream_exposure_version": "synthetic-v2-1"
+      }
+    ],
+    "explain_query_plan": [
+      {
+        "id": 24,
+        "parent": 0,
+        "notused": 46,
+        "detail": "SEARCH q USING INDEX sqlite_autoindex_query_run_1 (query_id=?)"
+      },
+      {
+        "id": 31,
+        "parent": 0,
+        "notused": 47,
+        "detail": "SEARCH source_rc USING INDEX sqlite_autoindex_release_component_1 (release_id=? AND layer=?)"
+      },
+      {
+        "id": 40,
+        "parent": 0,
+        "notused": 46,
+        "detail": "SEARCH r USING INDEX sqlite_autoindex_release_1 (release_id=?)"
+      },
+      {
+        "id": 48,
+        "parent": 0,
+        "notused": 47,
+        "detail": "SEARCH rc USING INDEX sqlite_autoindex_release_component_1 (release_id=? AND layer=?)"
+      },
+      {
+        "id": 58,
+        "parent": 0,
+        "notused": 46,
+        "detail": "SEARCH lc USING INDEX sqlite_autoindex_layer_component_1 (component_id=?)"
+      },
+      {
+        "id": 66,
+        "parent": 0,
+        "notused": 62,
+        "detail": "SEARCH seg USING INDEX sqlite_autoindex_route_segment_source_1 (query_id=?)"
+      },
+      {
+        "id": 76,
+        "parent": 0,
+        "notused": 46,
+        "detail": "SEARCH d USING INDEX sqlite_autoindex_risk_dataset_1 (dataset_id=?)"
+      },
+      {
+        "id": 95,
+        "parent": 0,
+        "notused": 45,
+        "detail": "SEARCH f USING INTEGER PRIMARY KEY (rowid=?)"
+      },
+      {
+        "id": 101,
+        "parent": 0,
+        "notused": 47,
+        "detail": "SEARCH dr USING INDEX sqlite_autoindex_derived_risk_1 (dataset_id=? AND zone_rid=?)"
+      },
+      {
+        "id": 114,
+        "parent": 0,
+        "notused": 46,
+        "detail": "SEARCH src USING INDEX sqlite_autoindex_source_1 (source_id=?)"
+      },
+      {
+        "id": 119,
+        "parent": 0,
+        "notused": 45,
+        "detail": "SEARCH cs USING COVERING INDEX sqlite_autoindex_component_source_1 (component_id=? AND source_id=?)"
+      },
+      {
+        "id": 131,
+        "parent": 0,
+        "notused": 46,
+        "detail": "SEARCH m USING INDEX sqlite_autoindex_risk_model_1 (risk_model_id=?)"
+      },
+      {
+        "id": 162,
+        "parent": 0,
+        "notused": 0,
+        "detail": "USE TEMP B-TREE FOR LAST TERM OF ORDER BY"
+      }
+    ],
+    "passed": true,
+    "boundary": "trusted same-organization internal trace; external callers need actor/org checks before execution"
+  },
+  "invalidation": {
+    "sql": "WITH RECURSIVE affected(kind,id) AS (\n          VALUES('source',:source) UNION SELECT l.to_kind,l.to_id FROM lineage_edge l\n          JOIN affected a ON l.from_kind=a.kind AND l.from_id=a.id)\n          SELECT d.dataset_id,d.release_id,d.component_id,d.risk_model_id\n          FROM affected a JOIN risk_dataset d ON a.kind='dataset' AND d.dataset_id=a.id ORDER BY d.dataset_id",
+    "result": [
+      {
+        "dataset_id": "D0",
+        "release_id": "R0",
+        "component_id": "R0:exposure",
+        "risk_model_id": "lq-risk-v1"
+      },
+      {
+        "dataset_id": "D1",
+        "release_id": "R1",
+        "component_id": "R0:exposure",
+        "risk_model_id": "lq-risk-v1"
+      }
+    ],
+    "meaning": "candidate derivations to rebuild/revalidate, not proof an entire route is forbidden"
+  },
+  "access": {
+    "DISPATCH": {
+      "summary": [
+        {
+          "release_id": "R0",
+          "cell_x": 0,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R0",
+          "cell_x": 200,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R0",
+          "cell_x": 400,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 0,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 200,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 400,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        }
+      ],
+      "detail_rows": 0
+    },
+    "OPER": {
+      "summary": [
+        {
+          "release_id": "R0",
+          "cell_x": 0,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R0",
+          "cell_x": 200,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R0",
+          "cell_x": 400,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 0,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 200,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 400,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        }
+      ],
+      "detail_rows": 0
+    },
+    "REVIEWER": {
+      "summary": [
+        {
+          "release_id": "R0",
+          "cell_x": 0,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R0",
+          "cell_x": 200,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R0",
+          "cell_x": 400,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 0,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 200,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        },
+        {
+          "release_id": "R1",
+          "cell_x": 400,
+          "cell_y": 0,
+          "zone_count": 2,
+          "display_proxy": 0.2
+        }
+      ],
+      "detail_rows": 12
+    },
+    "SYS": {
+      "summary": [],
+      "detail_rows": 0
+    },
+    "OTHER": {
+      "summary": [],
+      "detail_rows": 0
+    },
+    "OFF": {
+      "summary": [],
+      "detail_rows": 0
+    }
+  },
+  "raw_table_denied": "restricted endpoint accepts fixed view queries only",
+  "self_approval_denied": "governance_approval: independent active safety reviewer required",
+  "gap_rejected": {
+    "reason": "risk_dataset: gap/missing result/incorrect maximum",
+    "quality": {
+      "check_id": "gap-failure",
+      "dataset_id": "GAP",
+      "rule": "temporal_coverage",
+      "result": "fail",
+      "checked_at": "2026-11-07T00:00:00Z",
+      "actor_id": "REVIEWER",
+      "detail": "{\"error\": \"risk_dataset: gap/missing result/incorrect maximum\"}"
+    }
+  },
+  "LQ-V2-01": {
+    "passed": true,
+    "rejection": "risk_model: immutable version; register a new model id"
+  },
+  "audit": [
+    {
+      "event_id": "approval:approved-R0",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "REVIEWER",
+      "action": "approve",
+      "object_kind": "governance_request",
+      "object_id": "approved-R0",
+      "release_id": null,
+      "result": "success",
+      "reason": "synthetic review",
+      "request_id": "approved-R0",
+      "detail": null
+    },
+    {
+      "event_id": "audit:R0",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "REVIEWER",
+      "action": "publish",
+      "object_kind": "release",
+      "object_id": "R0",
+      "release_id": "R0",
+      "result": "success",
+      "reason": null,
+      "request_id": "approved-R0",
+      "detail": "{\"hashes\":{\"airspace\":\"e8e7f4131431f7bad747f4b2e81413c9940adebe4586138e2721024ce1ec6fe2\",\"exposure\":\"44a412f1a9e17f7be62892d3ad25d8324bad815527e1308881cbe687b921c2b1\",\"scene\":\"c6738de282001fd1e39f4c00fd53508ad448a25bd23b027d916b2f16561e5cbd\",\"sources\":\"5f615b44801df4cb09bc9cadf72229339db1a4a76d74778ec68380466dbfd6c2\",\"terrain\":\"642a8e348b387928e52b54cc6a330357971cc1921933ffc3435469ddfc7a24b9\"},\"provenance\":{\"compiler_version\":\"synthetic-fixture-1\",\"risk_model_id\":\"lq-risk-v1\",\"risk_window\":[\"2026-01-01T00:00:00Z\",\"2027-01-01T00:00:00Z\"],\"source_versions\":{\"airspace\":\"synthetic-v2-1\",\"exposure\":\"synthetic-v2-1\",\"scene\":\"synthetic-v2-1\",\"sources\":\"synthetic-v2-1\",\"terrain\":\"synthetic-v2-1\"}}}"
+    },
+    {
+      "event_id": "approval:approved-R1",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "REVIEWER",
+      "action": "approve",
+      "object_kind": "governance_request",
+      "object_id": "approved-R1",
+      "release_id": null,
+      "result": "success",
+      "reason": "synthetic review",
+      "request_id": "approved-R1",
+      "detail": null
+    },
+    {
+      "event_id": "audit:R1",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "REVIEWER",
+      "action": "publish",
+      "object_kind": "release",
+      "object_id": "R1",
+      "release_id": "R1",
+      "result": "success",
+      "reason": null,
+      "request_id": "approved-R1",
+      "detail": "{\"hashes\":{\"airspace\":\"dc4f3d92379570a1f8d779709a95b97360946f9f0aaa94355540cf3e93521143\",\"exposure\":\"44a412f1a9e17f7be62892d3ad25d8324bad815527e1308881cbe687b921c2b1\",\"scene\":\"c6738de282001fd1e39f4c00fd53508ad448a25bd23b027d916b2f16561e5cbd\",\"sources\":\"5f615b44801df4cb09bc9cadf72229339db1a4a76d74778ec68380466dbfd6c2\",\"terrain\":\"642a8e348b387928e52b54cc6a330357971cc1921933ffc3435469ddfc7a24b9\"},\"provenance\":{\"compiler_version\":\"synthetic-fixture-1\",\"risk_model_id\":\"lq-risk-v1\",\"risk_window\":[\"2026-01-01T00:00:00Z\",\"2027-01-01T00:00:00Z\"],\"source_versions\":{\"airspace\":\"synthetic-v2-1\",\"exposure\":\"synthetic-v2-1\",\"scene\":\"synthetic-v2-1\",\"sources\":\"synthetic-v2-1\",\"terrain\":\"synthetic-v2-1\"}}}"
+    },
+    {
+      "event_id": "read:fa8903e0b5d94e9b98b0647eab736524",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "DISPATCH",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"dispatcher\"}"
+    },
+    {
+      "event_id": "read:d6f112b545bf442d83af1666dba383a3",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "DISPATCH",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"dispatcher\"}"
+    },
+    {
+      "event_id": "read:4384a3be20d24a05bc7d2c6fee33239c",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "OPER",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"operator\"}"
+    },
+    {
+      "event_id": "read:f041f65a5ce54eadbb6fc48a6e2bb166",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "OPER",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"operator\"}"
+    },
+    {
+      "event_id": "read:0a8d8fc08a0549c6ab3b637e45230fd7",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "REVIEWER",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"airspace_admin\"}"
+    },
+    {
+      "event_id": "read:dfd432dc032a44119e5acef7265fd4bf",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "REVIEWER",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"airspace_admin\"}"
+    },
+    {
+      "event_id": "read:c401a8e51ac944849dfbb09fe55ecef4",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "SYS",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"system_admin\"}"
+    },
+    {
+      "event_id": "read:af8f476d4a1f4b738d4f176de23994d4",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "SYS",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"system_admin\"}"
+    },
+    {
+      "event_id": "read:52b0b70231d84107806bd9b536690e68",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "OTHER",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"dispatcher\"}"
+    },
+    {
+      "event_id": "read:b32adc37f53d43168011c43b67296975",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "OTHER",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"dispatcher\"}"
+    },
+    {
+      "event_id": "read:9d55cb160ef144d297ae0acb741969e0",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "OFF",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"dispatcher\"}"
+    },
+    {
+      "event_id": "read:50ea8fb4ef0543df8c54cf1beaf22fd4",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "OFF",
+      "action": "query",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "success",
+      "reason": "restricted view",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"dispatcher\"}"
+    },
+    {
+      "event_id": "read:bdf90a8c915647f1a48d722a05c2ae4d",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "DISPATCH",
+      "action": "deny",
+      "object_kind": "view",
+      "object_id": "restricted-query",
+      "release_id": null,
+      "result": "denied",
+      "reason": "restricted endpoint accepts fixed view queries only",
+      "request_id": null,
+      "detail": "{\"role_snapshot\": \"dispatcher\"}"
+    },
+    {
+      "event_id": "denied-approval:e6a80e806911488f95bb072ae7f7c38e",
+      "at": "2026-11-07T00:00:00Z",
+      "actor_id": "AUTHOR",
+      "action": "deny",
+      "object_kind": "governance_request",
+      "object_id": "self",
+      "release_id": null,
+      "result": "denied",
+      "reason": "governance_approval: independent active safety reviewer required",
+      "request_id": "self",
+      "detail": null
+    }
+  ],
+  "integrity": {
+    "check": "ok",
+    "foreign_key_violations": 0,
+    "history_reopen_unchanged": true
+  },
+  "privacy": {
+    "raw_rows": 6,
+    "display_rows_per_release": 3,
+    "display_grid_m": 200,
+    "min_zones_per_cell": 2,
+    "retained_columns": [
+      "release_id",
+      "cell_x",
+      "cell_y",
+      "zone_count",
+      "display_proxy"
+    ],
+    "warning": "display proxy is rounded and must never replace planning inputs; no formal anonymity guarantee"
+  },
+  "environment": {
+    "python": "3.13.9",
+    "sqlite": "3.50.4",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "git_head": "61fed41bbcea5b40495d8de37d13f19a0b0ba4ed",
+    "source_sha256": {
+      "docs/modules/lq/v2/experiments/run.py": "0e05946a1fb5cc195900ea841b49ae2d4bd7dab194381a2df5fe84cb1829b3bd",
+      "docs/modules/lq/v2/experiments/test_governance.py": "7f5ba25d327bfe04ff19390ed63bb90d1cfce508f28c45f706f8d4cfaf66e192",
+      "docs/modules/lq/v2/experiments/review_zqo.py": "c2cf02fd48ee46801a31eb94a588007983c303b961b1bc3251b4878eb8dd4cda",
+      "docs/modules/lq/v2/experiments/governance.py": "09718255d4fd8bd1b418f616b950cc8b9d9837bc9086a2746227d16cb8d1c00a",
+      "docs/modules/lq/v2/experiments/op_c.sql": "998404b6b4a1e94abf6e81bc8b019bb55b57a2028fd56598faab27a9f0d20b4b",
+      "docs/v2/schema/schema.sql": "ce4b5054f919a15e0ede1c5b476280956ca8ab8a78a8f8fde439249c36c0b7b5",
+      "docs/v2/schema/test_governance_v2.py": "a9bdd74babee1e554242595e5be239a6d5b80e949dcaf35fa2596c1eea848415",
+      "docs/modules/zqo/v2/experiments/catalog.py": "9853e35cda807341844c7eada6ef193e1f05542f4a79002c7844b0121cda4865",
+      "docs/v2/schema/fixtures.py": "cf7e3ae5130c0444306d8582b24b35bf80f02f97e4bbb55507cf3822131e0727",
+      "docs/modules/lq/prototype/risk.py": "22ab69531cbfb992482a11ab0ae9811613745ab6a895728806f3db988852737f"
+    }
+  },
+  "synthetic": true,
+  "parameters": {
+    "buildings": 25,
+    "terrain_posts": 121,
+    "exposure_zones": 6,
+    "published_releases": 2,
+    "risk_datasets": 2,
+    "temporary_queries": 1,
+    "temporary_segments": 2
+  }
+}

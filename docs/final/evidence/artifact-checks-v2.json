@@ -1,29 +1,29 @@
 {
- "recorded_at": "2026-11-07T08:25:26Z",
+ "recorded_at": "2026-11-07T09:02:07Z",
  "report": {
   "file": "docs/final/SkyRoute-report.pdf",
-  "sha256": "d214bd6da7d46b36afe86c9e841ea9df87e5ca0d821a5d24b0b0e5dd4e08a13e",
-  "pages": 23,
-  "hanzi_body": 9855,
-  "engine": "XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.10.7)  7 NOV 2026 16:25",
+  "sha256": "c089dc368389977edc10f98e3bdcf54ee6d1a6907f82f8dccd3790fcdabc22e8",
+  "pages": 24,
+  "hanzi_body": 10485,
+  "engine": "XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.10.7)  7 NOV 2026 17:01",
   "errors": 0,
   "overfull_boxes": 0,
   "figures": 7,
   "tables": 19,
-  "references": 26,
-  "source_sha256": "7b14eb16e408d4936c7334c76452a2120f0256ce5a314e877f6dd1b109656761",
-  "markdown_mirror_sha256": "712518f627a961c5f9422030b1ae4163a3a1d9f703483b734aa3c1a32792ad18"
+  "references": 30,
+  "source_sha256": "998169116897fc66dff34e7241b26091525ec065c2ef0d6d696ebc559d85a2fc",
+  "markdown_mirror_sha256": "4691e7b5d20ec7db6f09088d58706925fbdeb1e21b638471178f1a937e69d0cc"
  },
  "presentation": {
   "file": "docs/final/SkyRoute-presentation.pptx",
-  "sha256": "1bf00b50e3bfa0ca835e5e51c0d97bf46cfae84febe5ee903b60a487227368ff",
+  "sha256": "59ec08c46f35b0fdc033ef3da8fa43b56f75ff9ba03d331514d8bba835a99f09",
   "slides": 12,
   "speaker_notes": 12,
   "native_charts": 3,
   "zip_folder_entries": 0,
   "ooxml_validation": "pptx skill validate.py: All validations PASSED",
   "visual_check": "per-slide render (Quick Look) for layout and overflow; chart series read back from file",
-  "slides_md_sha256": "8d936f17dc0d815bf98d428f227df1b3992f9b543622c488d75f2fb311405a8e",
-  "builder_sha256": "d95c4176903614ba077eda927b4d7c2a258f84b2b379a08afa2eaffc6d20ed9b"
+  "slides_md_sha256": "ba96905177067873bd16010a2a4ddbf71741ba92058b9926c700847caccfe700",
+  "builder_sha256": "b0960c9c7ca07d524f8263ddfeef9b284942e200d258449331f09a42f9ec7211"
  }
 }

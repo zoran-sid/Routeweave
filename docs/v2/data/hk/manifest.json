@@ -1,0 +1,119 @@
+{
+ "retrieved_at": "2026-11-07T08:41:57Z",
+ "crs": "EPSG:2326 (HK1980 Grid), metres",
+ "vertical_datum": "Hong Kong Principal Datum (mPD)",
+ "centre": [
+  835450.0,
+  820050.0
+ ],
+ "areas": {
+  "S": [
+   835325.0,
+   819925.0,
+   835575.0,
+   820175.0
+  ],
+  "M": [
+   834900.0,
+   819500.0,
+   836000.0,
+   820600.0
+  ],
+  "L": [
+   833800.0,
+   818400.0,
+   837100.0,
+   821700.0
+  ]
+ },
+ "extent": [
+  833800.0,
+  818400.0,
+  837100.0,
+  821700.0
+ ],
+ "licence": "DATA.GOV.HK Terms and Conditions: free use with source identified and attribution to the Government of the HKSAR and the providing organisation",
+ "layers": {
+  "buildings": {
+   "file": "snapshot/buildings.json.gz",
+   "records": 10674,
+   "sha256_json": "aa8a09a04c75cdf307a08ced296f9e2d2904a02d501125a6358cddfe9ff6b2a7",
+   "provider": "Lands Department",
+   "url": "https://portal.csdi.gov.hk/server/rest/services/common/landsd_rcd_1637211194312_35158/FeatureServer/0/query",
+   "query": {
+    "where": "Status='Active'",
+    "geometry": "833800.0,818400.0,837100.0,821700.0",
+    "geometryType": "esriGeometryEnvelope",
+    "inSR": 2326,
+    "outSR": 2326,
+    "spatialRel": "esriSpatialRelIntersects",
+    "outFields": "OBJECTID,BuildingCSUID,BuildingBlockType,Status,BuildingNameEN,BaseHeight,TopHeight,Storeys,DateStamp",
+    "returnGeometry": "true",
+    "geometryPrecision": 2,
+    "orderByFields": "OBJECTID",
+    "resultRecordCount": 2000,
+    "f": "json"
+   }
+  },
+  "census_lsg": {
+   "file": "snapshot/census_lsg.json.gz",
+   "records": 269,
+   "sha256_json": "5ae44eb246d9b49c318711413202aa60f8bc2a689df1e564e5f6ab1f708a34e4",
+   "provider": "Census and Statistics Department (2021 Population Census)",
+   "url": "https://portal.csdi.gov.hk/server/rest/services/common/censtatd_rcd_1635933282224_58228/FeatureServer/0/query",
+   "query": {
+    "where": "1=1",
+    "geometry": "833800.0,818400.0,837100.0,821700.0",
+    "geometryType": "esriGeometryEnvelope",
+    "inSR": 2326,
+    "outSR": 2326,
+    "spatialRel": "esriSpatialRelIntersects",
+    "outFields": "OBJECTID,lsbg,t_pop",
+    "returnGeometry": "true",
+    "geometryPrecision": 2,
+    "orderByFields": "OBJECTID",
+    "resultRecordCount": 2000,
+    "f": "json"
+   }
+  },
+  "schools": {
+   "file": "snapshot/schools.json.gz",
+   "records": 298,
+   "sha256_json": "30ffdc7ae08d27abbb005a40657ed22bc0952b8645610f68160e975362930eb3",
+   "provider": "Education Bureau",
+   "csdi_datasets": [
+    "edb_rcd_1629267205213_10118",
+    "edb_rcd_1629267205213_1378",
+    "edb_rcd_1629267205213_1928",
+    "edb_rcd_1629267205213_2165",
+    "edb_rcd_1629267205213_23500",
+    "edb_rcd_1629267205213_46994",
+    "edb_rcd_1629267205213_53323",
+    "edb_rcd_1629267205213_63457",
+    "edb_rcd_1629267205213_6391",
+    "edb_rcd_1629267205213_74992",
+    "edb_rcd_1629267205213_7733",
+    "edb_rcd_1629267205213_77942",
+    "edb_rcd_1629267205213_87907",
+    "edb_rcd_1629267205213_92681",
+    "edb_rcd_1629267205213_94310",
+    "edb_rcd_1629267205213_95112"
+   ]
+  },
+  "hospitals": {
+   "file": "snapshot/hospitals.json.gz",
+   "records": 5,
+   "sha256_json": "5f565d30ab0f75eafa13e94f9b1152d6e09c3155ef39c3ae234fb6e3fb562f2b",
+   "provider": "Hospital Authority",
+   "url": "https://www.ha.org.hk/opendata/facility-hosp.json",
+   "transform": "https://www.geodetic.gov.hk/transform/v2/ (wgsgeog -> hkgrid)"
+  },
+  "rfz": {
+   "file": "snapshot/rfz.json.gz",
+   "records": 18,
+   "sha256_json": "a584bb8887fce71c1cdd320d76fd81135d2393c8dfcc4dbb221499750bc4c720",
+   "provider": "Civil Aviation Department (gazetted names); footprints from Lands Department",
+   "notice": "https://www.cad.gov.hk/documents/G.N.8002_E.pdf"
+  }
+ }
+}

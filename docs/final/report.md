@@ -10,7 +10,7 @@
 
 方案以一套 34 个实体的统一关系模式为核心：五类数据绑定为不可变发布，逻辑发布通过组件映射共享未变化的图层；时空 R\*Tree 支持“任务窗口内的有效限制”等查询；发布事务以写锁、预期版本比较和幂等凭据保证原子切换；风险数据作为带模型版本的派生数据集封存；查询结果、航段来源与派生图缓存按发布记账，可追溯到来源与模型版本。主要创新在于把数据血缘与版本化派生数据管理落实为数据库约束和可复核实验。
 
-在 SQLite 原型上的合成实验表明：四维时空索引在 1 万条限制、20 个历史发布时每次查询 37.4 µs，全表扫描为 12.4 ms；1000 次发布的组件共享比全量复制节省 81.7% 存储；规划服务经时空索引取数 0.04–0.17 ms，比整份 JSON 快约 200 倍；新发布后按数据库变更记录沿用或修补派生图，比全部重建快 6.9 与 16.2 倍且结果完全一致；备份恢复后的完整性、外键、发布链与历史重放核验能发现截断损坏。
+实验以香港九龙旺角一带的政府开放数据（10,674 栋建筑、2021 年人口普查、学校与医院、民航处无人机限飞区）在 SQLite 原型上进行：四维时空索引在 1 万条限制、20 个历史发布时每次查询 44.1 µs，全表扫描为 13.7 ms；1000 次发布的组件共享比全量复制节省 97.1% 存储；规划服务经时空索引取数 0.16–0.20 ms，比整份 JSON 快约 280 倍；新发布后按数据库变更记录沿用或修补派生图，比全部重建快 12.2 与 3.8 倍且结果完全一致；备份恢复后的完整性、外键、发布链与历史重放核验能发现截断损坏。
 
 **关键词：**时空数据管理；版本化发布；数据血缘；派生数据管理；空间索引；无人机物流
 
@@ -41,7 +41,7 @@
 
 ## 范围与假设
 
-研究对象是包含高层建筑、商业区、住宅区及人员密集区域的模拟城市片区。空间采用局部米制直角坐标（PostGIS SRID 0），垂直基准为片区共同参考平面；时间统一为 UTC，有效期采用半开区间 $`[\mathit{lo},\mathit{hi})`$。全部数据为合成数据。原型使用 SQLite（WAL 模式）实现并实测；部署目标为 PostgreSQL 与 PostGIS，作为设计论证。真实飞控、实时自主避障与实际飞行部署不在范围内。课程依据为《作业要求.pdf》第 1–2、6–7 页\[1\]。
+研究对象是香港九龙旺角一带的真实城市片区：以港铁旺角站为中心、边长 250 m、1.1 km、3.3 km 的三个嵌套正方形（下称 S、M、L 区），分别有 186、2,267、10,674 栋建筑。建筑轮廓与高度、2021 年人口普查、学校与医院位置、民航处公布的无人机限飞区取自香港政府开放数据（2026 年 11 月 7 日快照，按 DATA.GOV.HK 条款注明来源使用）\[27, 28, 29, 30\]；地形由建筑底部高度派生；发布与更新实验所需的临时限制是放在真实位置上的场景数据，不是真实公告。空间采用 HK1980 Grid（EPSG:2326，米），高度为香港主水平基准以上米数（mPD）；时间统一为 UTC，有效期采用半开区间 $`[\mathit{lo},\mathit{hi})`$。原型使用 SQLite（WAL 模式）实现并实测；部署目标为 PostgreSQL 与 PostGIS，作为设计论证。真实飞控、实时自主避障与实际飞行部署不在范围内。课程依据为《作业要求.pdf》第 1–2、6–7 页\[1\]。
 
 # 需求与数据分析
 
@@ -73,15 +73,15 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 
 ## 数据来源、规模与增长
 
-| 数据 | 来源与格式 | 更新频率 | 基线 / 三年假设 | 主要质量风险 |
+| 数据 | 来源与格式 | 更新频率 | 实测规模 | 主要质量风险 |
 |:---|:---|:---|:---|:---|
-| 城市三维环境 | 城市 GIS、BIM、LiDAR；GeoJSON、IFC、LAS | 建筑季度或年度，地形年度 | 25 栋 / 约 2,400 栋 | 高度缺失、轮廓自交、坐标与高程基准不一致 |
-| 动态空域 | 空域机构接口或人工发布；JSON | 事件驱动，分钟级 | 3 个限制体 / 约 100 条活动限制，每日 20 条事件 | 生效时间歧义、撤销后复用标识、发布与查询交错 |
-| 地面暴露与风险 | 人口、POI、土地利用；LQ 派生 | 月或季度，模型评审时 | 6 个分区 / 60 个分区 | 暴露与后果假设不透明、分区漏覆盖、代理值被误读为概率 |
+| 城市三维环境 | 地政总署建筑图层（CSDI 要素服务）；地形由建筑底部高度派生 | 建筑每月 | 10,674 栋，其中 492 栋开放式或临时构筑物无高度 | 高度缺失、平面与高程基准（HK1980、mPD）需显式记录、多部件轮廓 |
+| 动态空域 | 民航处限飞区宪报公告；实验另加场景临时限制 | 公告事件驱动 | 8 处限飞区；场景限制 100–10,000 条 | 公告只列名称、边界在无人机地图；生效时间、撤销与发布交错 |
+| 地面暴露与风险 | 2021 年人口普查大小区组、教育局学校、医管局医院；LQ 派生 | 普查每五年，设施每月，模型评审时 | 269 个普查区组、298 所学校、5 家医院机构 | 普查按居住地统计、未含日间人流；设施范围为假设方格；代理值被误读为概率 |
 
-三类数据（三年数字为算术估算，非实测）
+三类数据（L 区实测规模，2026-11-07 快照）
 
-按每日发布一版、保留三年估算，2,400 栋建筑约 1,095 个发布，原始发布数据约 0.97 GB，加索引与历史约 2 GB；空域事件三年约 2.2 万条；查询审计按每日 1 万次约 11 GB，热库只保留 90 天。
+L 区快照压缩后约 1.3 MB，与 100 条场景限制一起发布并编译风险数据集后的 SQLite 文件约 15 MB。按每日发布一版、保留三年估算，2,400 栋建筑约 1,095 个发布，原始发布数据约 0.97 GB，加索引与历史约 2 GB；空域事件三年约 2.2 万条；查询审计按每日 1 万次约 11 GB，热库只保留 90 天。
 
 ## 生命周期与访问模式
 
@@ -183,14 +183,14 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
       AND ar.effective_lo < :win_hi AND ar.effective_hi > :win_lo   -- exact recheck
       AND ar.forbid_hi_z >= :z0 AND ar.forbid_lo_z <= :z1;
 
-执行计划为 `SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6`，随后按主键回表\[3\]。实验在同一批合成数据上比较五种固定路径与 SQLite 规划器自选，六种路径对每条查询的结果完全一致（图4）。
+执行计划为 `SCAN r VIRTUAL TABLE INDEX 2:D1B0D3B2D5B4D7B6`，随后按主键回表\[3\]。实验在 L 区同一批数据上比较五种固定路径与 SQLite 规划器自选（每个发布含 8 处真实限飞区，其余为放在真实建筑位置上的场景限制），六种路径对每条查询的结果完全一致（图4）。
 
 <figure id="fig:opa" data-latex-placement="htbp">
 <p>（图形见 PDF）</p>
 <figcaption>操作 A 的访问路径（表中保存 20 个全量复制的历史发布；内存 SQLite 3.54.1，每组 100 条查询）。</figcaption>
 </figure>
 
-结论有三点。第一，约 100 条活动限制且只存当前发布时，所有路径都在 17–30 µs，索引选择影响很小。第二，限制增多或历史留在同一张表后，四维 R\*Tree 保持在 26–38 µs；1 万条限制、20 个发布时为 37.4 µs，发布 B-tree 为 878 µs，全表扫描为 12.4 ms。第三，单列时间 B-tree 只能按开始时间单侧裁剪区间，候选约为全表一半，加上回表比全扫更慢；PostgreSQL 的范围类型 GiST 可以解决这一点\[11, 12\]。规划器自选的中位数接近最优，但会随参数在不同路径间切换，1 万条限制时 p95 达 781 µs，因此查询用 `CROSS JOIN` 固定由 R\*Tree 驱动\[4\]。
+结论有三点。第一，约 100 条限制且只存当前发布时，所有路径都在 23–40 µs，索引选择影响很小。第二，限制增多或历史留在同一张表后，四维 R\*Tree 保持在 31–44 µs；1 万条限制、20 个发布时为 44.1 µs，发布 B-tree 为 1,045 µs，全表扫描为 13.7 ms。第三，单列时间 B-tree 只能按开始时间单侧裁剪区间，候选约为全表一半，加上回表比全扫更慢；PostgreSQL 的范围类型 GiST 可以解决这一点\[11, 12\]。规划器自选的中位数接近最优，但会随参数在不同路径间切换，1 万条限制、单发布时 p95 达 754 µs，因此查询用 `CROSS JOIN` 固定由 R\*Tree 驱动\[4\]。
 
 ## 设计权衡：灵活模式与数据质量
 
@@ -216,7 +216,7 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 
 ## 历史存储：组件共享与全量复制
 
-发布不可变带来历史版本的存储开销。逻辑发布与物理组件分离后，未变化的图层由新发布直接引用旧组件，只有变化的图层写入新行。在每版只修改一个限制高度的负载下（25 栋建筑、121 个地形点、3 个限制、6 个暴露分区），1000 次发布的数据库为 6.20 MiB，全量复制为 33.91 MiB，节省 81.7%（图5）；抽样历史导出的内容摘要相同，历史重建中位耗时约 1.04 ms 与 1.07 ms，两者相当。
+发布不可变带来历史版本的存储开销。逻辑发布与物理组件分离后，未变化的图层由新发布直接引用旧组件，只有变化的图层写入新行。负载取旺角 S 区的真实图层（186 栋建筑及其轮廓、36 个地形点、10 个普查与学校暴露分区）加 3 条场景限制，每版只修改一条限制的高度。1000 次发布的数据库为 7.45 MiB，全量复制为 255.72 MiB，节省 97.1%（图5）；真实楼体轮廓使每版场景层远大于合成负载，共享的收益随之增大。抽样历史导出的内容摘要相同，历史重建中位耗时约 4.81 ms 与 4.76 ms，两者相当。
 
 <figure id="fig:storage" data-latex-placement="htbp">
 <p>（图形见 PDF）</p>
@@ -253,7 +253,7 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 
 一次 Q1 在一个读事务内完成：读取发布与当前指针，确定逻辑发布及其新鲜度；经组件映射找到各层的物理所有者；绑定一个已封存、属于该发布暴露组件、窗口覆盖任务窗口的风险数据集；用三维、四维与二维 R\*Tree 读取搜索域附近的建筑、限制与暴露分区，并连接派生风险值；最后把结果写入 `query_run`、`route_result` 与 `route_segment_source`。这些表的触发器要求查询绑定已发布、映射完整、有效期覆盖任务窗口的发布，提交者为在岗业务角色，新鲜度由数据库判定，航段来源必须属于查询发布与覆盖任务窗口的数据集，所有结果只追加。
 
-搜索域取起终点包围盒外扩 40 m、高度 20–120 m、20 m 网格，共 825–891 个节点。3 km × 3 km 合成城市在 200、2,400、10,000 栋建筑时，每个搜索域内的对象中位数分别为 4、18.5、71.5 个。
+搜索域取起终点包围盒外扩 40 m、高度 20–120 mPD、20 m 网格，共 324–702 个节点。12 个任务的起终点都在 S 区内，三个规模使用同一批任务，只改变数据库所含的城市范围；旺角的真实密度使每个搜索域内的对象中位数在三个规模下都是 60–64 个。
 
 ## 固定 A\*，只换数据访问方式
 
@@ -261,37 +261,37 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 
 <figure id="fig:access" data-latex-placement="htbp">
 <p>（图形见 PDF） （图形见 PDF）</p>
-<figcaption>规划查询的耗时分解（文件 SQLite 3.54.1，WAL；每规模 12 个任务）。</figcaption>
+<figcaption>规划查询的耗时分解（九龙 S/M/L 区，文件 SQLite 3.54.1，WAL；同一批 12 个任务）。</figcaption>
 </figure>
 
-| 建筑数 | JSON 全量 | SQL 全量 |  R\*Tree | 按需 A\* | 构建派生图 | 缓存命中 |
-|-------:|----------:|---------:|---------:|---------:|-----------:|---------:|
-|    200 |      1.41 |     0.54 | **0.04** |     22.2 |       48.7 |     0.58 |
-|  2,400 |      8.11 |     3.36 | **0.07** |     35.7 |       73.1 |     0.54 |
-| 10,000 |      33.6 |     14.5 | **0.17** |     45.1 |      128.8 |     0.31 |
+| 区域（建筑数） | JSON 全量 | SQL 全量 |  R\*Tree | 按需 A\* | 构建派生图 | 缓存命中 |
+|:---------------|----------:|---------:|---------:|---------:|-----------:|---------:|
+| S（186）       |      1.30 |     0.53 | **0.16** |      9.1 |       67.9 |     0.12 |
+| M（2,267）     |      10.3 |     4.24 | **0.18** |     10.6 |       77.0 |     0.10 |
+| L（10,674）    |      55.2 |     21.3 | **0.20** |     10.7 |       81.1 |     0.10 |
 
 规划查询各阶段中位耗时（ms） {#tab:access}
 
 收益来源可以分开计量（图6，表9）：
 
-- **取数成本由数据库设计决定。** 整份发布的读取随城市规模线性增长，1 万栋时 JSON 路径 33.6 ms，已达单次搜索的四分之三；R\*Tree 路径只与搜索域内对象数有关，中位数不超过 0.17 ms，比 JSON 快约 200 倍，比 SQL 全量快约 85 倍。
+- **取数成本由数据库设计决定。** 整份发布的读取随城市范围线性增长，L 区 10,674 栋时 JSON 路径 55.2 ms，是单次搜索的 5 倍；R\*Tree 路径只与搜索域内对象数有关，中位数不超过 0.20 ms，比 JSON 快约 280 倍，比 SQL 全量快约 108 倍。
 
 - **结果不受取数方式影响。** 36 个任务中三条非缓存路径交给规划器的输入摘要逐字节相同，另用 4 个任务对比全城对象与过滤后对象，规划结果一致；速度差异全部来自取数路径。
 
-- **搜索成本由算法与对象密度决定。** 按需 A\* 在扩展节点时逐条检查航段与对象相交，耗时随域内对象数从 22.2 ms 增至 45.1 ms；同一派生图上 A\* 扩展 125–214 个节点，Dijkstra 扩展 465–747 个，最优代价 36/36 一致（附录A）。
+- **搜索成本由算法与对象密度决定。** 按需 A\* 在扩展节点时逐条检查航段与对象相交，三个规模的域内对象相同，搜索中位耗时都在 9.1–10.7 ms，说明搜索成本取决于局部密度而非城市范围；同一派生图上 A\* 扩展 10–92 个节点，Dijkstra 扩展 128–428 个，最优代价 36/36 一致（附录A）。
 
 ## 物化派生图与新发布后的失效处理
 
-派生图把搜索域内全部允许航段及其代价预先算好，元数据写入 `route_graph_cache` 并绑定风险数据集。构建一张图需 49–129 ms，是一次按需搜索的 2–3 倍；命中后整条查询只需 0.31–0.58 ms，同一键的第 3 次查询起收回构建成本。
+派生图把搜索域内全部允许航段及其代价预先算好，元数据写入 `route_graph_cache` 并绑定风险数据集。构建一张图需 68–81 ms，约是一次按需搜索的 7–8 倍；命中后整条查询只需 0.10–0.12 ms，同一键的第 8 次查询起收回构建成本。
 
-新发布到来时，搜索域与任务窗口都不与变更相交的图直接沿用，只插入一行缓存记录；相交的图只重算触及变更的节点与航段；受影响节点超过一半，或场景、地形、暴露组件发生变化时整图重建。两次真实发布的结果见表10：每张图都与全部重建的结果比对摘要，48 张图 0 处不一致；变更检测低于 0.2 ms。新增禁飞区使一条航线由可行变为不可行，说明失效处理直接决定结果正确性。旧发布上的 24 个历史查询全部直接命中原缓存。
+新发布到来时，搜索域与任务窗口都不与变更相交的图直接沿用，只插入一行缓存记录；相交的图只重算触及变更的节点与航段；受影响节点超过一半，或场景、地形、暴露组件发生变化时整图重建。两次真实发布的结果见表10：每张图都与全部重建的结果比对摘要，48 张图 0 处不一致；变更检测低于 0.2 ms。新增禁飞区使 2 条航线由可行变为不可行，撤销旧禁飞区使 8 条航线重新可行，说明失效处理直接决定结果正确性。旧发布上的 24 个历史查询全部直接命中原缓存。
 
 | 发布变化         | 沿用 / 修补 / 重建 | 全部重建 | 按变更处理 |  加速 | 与重建不一致 |
 |:-----------------|:------------------:|---------:|-----------:|------:|:------------:|
-| R0→R1 新增禁飞区 |     20 / 3 / 1     | 2,394 ms |     346 ms |  6.9× |      0       |
-| R1→R2 撤销禁飞区 |     22 / 2 / 0     | 2,390 ms |     147 ms | 16.2× |      0       |
+| R0→R1 新增禁飞区 |     20 / 2 / 2     | 2,975 ms |     245 ms | 12.2× |      0       |
+| R1→R2 撤销禁飞区 |     16 / 3 / 5     | 3,111 ms |     817 ms |  3.8× |      0       |
 
-新发布后派生图的处理（2,400 栋，24 张缓存图） {#tab:inval}
+新发布后派生图的处理（M 区 2,267 栋，24 张缓存图；两次变化为场景限制） {#tab:inval}
 
 ## 技术比较与选型
 
@@ -314,7 +314,7 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 
 ## 质量与版本化派生数据
 
-风险层是带模型版本的派生数据集。`risk_dataset` 绑定逻辑发布、物理暴露组件、风险模型、编译窗口与编译器；`risk_input_period` 保留时段输入，`derived_risk` 保存全窗口最大值，`quality_check` 保存检查证据。时段先裁剪到任务窗口，数据库拒绝重叠；封存时触发器独立核对每个分区覆盖的时长与最大代理值，即使应用写入“质检通过”，时间缺口也无法封存。已批准或被引用的模型禁止原地修改，修订使用新模型标识；模型启停记录在独立控制表并审计，历史解释不随停用改变。演示代理 $`q=E\times C`$、硬阈值 0.9 与 5 m 影响包络均为合成参数，代理值不是事故概率。人口密度是输入之一，不直接等同于安全性。
+风险层是带模型版本的派生数据集。`risk_dataset` 绑定逻辑发布、物理暴露组件、风险模型、编译窗口与编译器；`risk_input_period` 保留时段输入，`derived_risk` 保存全窗口最大值，`quality_check` 保存检查证据。时段先裁剪到任务窗口，数据库拒绝重叠；封存时触发器独立核对每个分区覆盖的时长与最大代理值，即使应用写入“质检通过”，时间缺口也无法封存。已批准或被引用的模型禁止原地修改，修订使用新模型标识；模型启停记录在独立控制表并审计，历史解释不随停用改变。暴露 $`E`$ 由 2021 年普查的大小区组人口密度归一化得到，学校与医院分区取 1；后果 $`C`$、硬阈值 0.9 与 5 m 影响包络是演示参数，代理值 $`q=E\times C`$ 不是事故概率。学校与医院分区的 $`q=0.95`$ 超过硬阈值，规划不得飞越。人口密度是输入之一，不直接等同于安全性。
 
 ## 血缘与操作 C：追溯一条航线的来源
 
@@ -354,31 +354,31 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 
 | 实验 | 负责 | 条件 | 主要结果 |
 |:---|:---|:---|:---|
-| 操作 A 访问路径 | YHT | 内存 SQLite；每发布 100–10,000 条限制、1 或 20 个发布；6 种路径 | 四维 R\*Tree 37.4 µs，发布 B-tree 878 µs，全扫 12.4 ms；6 种路径结果一致 |
+| 操作 A 访问路径 | YHT | 内存 SQLite；L 区，每发布 100–10,000 条限制（含 8 处真实限飞区）、1 或 20 个发布；6 种路径 | 四维 R\*Tree 44.1 µs，发布 B-tree 1,045 µs，全扫 13.7 ms；6 种路径结果一致 |
 | 并发发布与回滚 | ZQO | 文件 SQLite（WAL）；竞争、读写交错、五处注入失败、丢响应重试 | 一次成功一次冲突；未提交写入不可见；失败全部回滚；重试不重复发布 |
-| 历史存储 | ZQO | 10/100/1,000 次发布，每版改一个限制 | 组件共享 6.20 MiB，全量 33.91 MiB，节省 81.7% |
-| 治理约束 | LQ | 6 个分区、2 个发布、2 个派生数据集；18 项测试 | 模型不可原地修改；时段缺口无法封存；自审被拒；受限视图按角色过滤 |
-| 规划取数路径 | ZC | 200/2,400/10,000 栋，每规模 12 个任务 | R\*Tree 0.04–0.17 ms，JSON 1.4–33.6 ms；输入、结果、追溯 36/36 一致 |
-| 派生图失效 | ZC | 2,400 栋，24 张图，两次真实发布 | 比全部重建快 6.9× 与 16.2×；48 张图 0 处不一致 |
-| 恢复核验 | LJ | 在线备份；2 个发布；截断故障注入 | 正常恢复通过完整性、外键、发布链与历史重放；截断备份被检测 |
-| 整合复核 | ZC | 20 组命令重跑全部测试、实验与审阅脚本 | 20/20 符合预期，233 项测试通过；关闭 UTF-8 模式的 ASCII 语言环境下同样通过 |
+| 历史存储 | ZQO | S 区真实图层，10/100/1,000 次发布，每版改一条场景限制 | 组件共享 7.45 MiB，全量 255.72 MiB，节省 97.1% |
+| 治理约束 | LQ | S 区 10 个普查与学校分区、2 个发布、2 个派生数据集；18 项测试 | 模型不可原地修改；时段缺口无法封存；自审被拒；受限视图按角色过滤 |
+| 规划取数路径 | ZC | S/M/L 区 186/2,267/10,674 栋，同一批 12 个任务 | R\*Tree 0.16–0.20 ms，JSON 1.3–55.2 ms；输入、结果、追溯 36/36 一致 |
+| 派生图失效 | ZC | M 区 2,267 栋，24 张图，两次真实发布（变化为场景限制） | 比全部重建快 12.2× 与 3.8×；48 张图 0 处不一致 |
+| 恢复核验 | LJ | 在线备份；S 区 2 个发布；截断故障注入 | 正常恢复通过完整性、外键、发布链与历史重放；截断备份被检测 |
+| 整合复核 | AI | 20 组命令重跑全部测试、实验与审阅脚本 | 20/20 符合预期，233 项测试通过；关闭 UTF-8 模式的 ASCII 语言环境下同样通过 |
 
-数据库实验汇总（全部为合成数据，结果文件记录环境与源码摘要） {#tab:exp}
+数据库实验汇总（香港九龙开放数据，临时限制为场景数据；结果文件记录环境与源码摘要） {#tab:exp}
 
 | 指标 | 定义 | 实测 | 建议告警 |
 |:---|:---|:---|:---|
-| 取数耗时 | 读事务开始到规划输入就绪（R\*Tree） | 0.07 / 0.09 ms | p95 \> 1 ms |
-| 搜索耗时 | 按需 A\* | 35.7 / 104.9 ms | p95 \> 500 ms |
-| 缓存命中耗时 | 查缓存到返回航线 | 0.54 / 1.42 ms | p95 \> 5 ms |
-| 发布后缓存就绪 | 新发布到全部缓存沿用或修补完成 | 147–346 ms（24 张图） | \> 5 s |
+| 取数耗时 | 读事务开始到规划输入就绪（R\*Tree） | 0.18 / 0.23 ms | p95 \> 1 ms |
+| 搜索耗时 | 按需 A\* | 10.6 / 36.1 ms | p95 \> 500 ms |
+| 缓存命中耗时 | 查缓存到返回航线 | 0.10 ms（中位数） | p95 \> 5 ms |
+| 发布后缓存就绪 | 新发布到全部缓存沿用、修补或重建完成 | 245–817 ms（24 张图） | \> 5 s |
 | 追溯完整率 | 可行航线中能被追溯的航段比例 | 100% | \< 100% |
 | 恢复核验 | 完整性、外键、发布链、历史重放 | 全部通过 | 任一失败即阻断 |
 
-监测指标（2,400 栋规模实测中位数 / p95）
+监测指标（M 区 2,267 栋实测中位数 / p95）
 
 ## 恢复验收与成本
 
-恢复验收由五项检查组成：SQLite 完整性检查返回 ok，否则隔离备份并切换上一份；外键检查零行，否则阻止服务；发布父版本存在且哈希完整，否则不允许恢复为当前；固定发布的历史查询结果与摘要一致，否则标记未知并重新取证；派生图只按发布重建，不复用不匹配的图。实验对两个发布做在线备份与恢复，五项检查全部通过；截断后的备份在打开时被检测为损坏。
+恢复验收由五项检查组成：SQLite 完整性检查返回 ok，否则隔离备份并切换上一份；外键检查零行，否则阻止服务；发布父版本存在且哈希完整，否则不允许恢复为当前；固定发布的历史查询结果与摘要一致，否则标记未知并重新取证；派生图只按发布重建，不复用不匹配的图。实验对旺角 S 区的两个发布（186 栋建筑及其地形、暴露分区）做在线备份与恢复，五项检查全部通过；截断后的备份在打开时被检测为损坏。
 
 成本按 YHT 的规模假设估算：约 2 GB 热数据加一份同等大小的备份放在对象存储，按 2026 年 11 月查阅的 Amazon S3 Standard 公开单价 0.023 美元/GB·月，约为每月 0.09 美元；保留 12 份月度备份约 24 GB，约为每月 0.55 美元\[23\]。估算不含请求、跨区复制与出站费用，部署时需按区域重新核价。成本的主要驱动项是审计与查询结果的保留期，而非空间数据本身。
 
@@ -396,9 +396,11 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 
 ## 局限与改进方向
 
-- **部署环境未实测。** 性能数据来自单机 SQLite 与合成数据；PostgreSQL、PostGIS、图数据库与 pgRouting 只作设计论证，多用户写入、复制与跨区故障切换需在目标规模上演练。
+- **部署环境未实测。** 性能数据来自单机 SQLite 与九龙开放数据快照（临时限制为场景数据）；PostgreSQL、PostGIS、图数据库与 pgRouting 只作设计论证，多用户写入、复制与跨区故障切换需在目标规模上演练。
 
-- **几何精度。** 原型以轴对齐包围盒做精确判定；非矩形楼体与斜面空域需要 PostGIS 三维谓词复核。
+- **几何精度。** 原型以轴对齐包围盒做判定；旺角的真实楼体多为非矩形，包围盒判定偏保守，非矩形楼体与斜面空域需要 PostGIS 三维谓词复核。
+
+- **实测数据的局限。** 普查人口按居住地统计，未含日间人流；限飞区边界由设施轮廓外扩 20 m 近似，官方边界以民航处无人机地图为准；地形由建筑底部高度派生，5 m 数码地形模型未能经脚本取得；492 栋开放式或临时构筑物没有高度记录，按全高度障碍处理。
 
 - **风险模型。** 代理值缺少机型失效率与伤害校准，不能解释为事故概率；AI 辅助治理的准确率尚未评估。
 
@@ -424,13 +426,13 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 
 <div class="thebibliography">
 
-99 香港教育大学, “INT6164 课程大作业：面向真实场景的新一代数据管理系统设计,” 《作业要求.pdf》, pp. 1–7, 课程提供材料. SQLite, “The SQLite R\*Tree Module.” \[Online\]. Available: <https://www.sqlite.org/rtree.html> SQLite, “EXPLAIN QUERY PLAN.” \[Online\]. Available: <https://www.sqlite.org/eqp.html> SQLite, “The SQLite Query Optimizer Overview.” \[Online\]. Available: <https://www.sqlite.org/optoverview.html> SQLite, “Isolation in SQLite.” \[Online\]. Available: <https://www.sqlite.org/isolation.html> SQLite, “Transaction.” \[Online\]. Available: <https://www.sqlite.org/lang_transaction.html> SQLite, “Compile-Time Authorization Callbacks.” \[Online\]. Available: <https://www.sqlite.org/c3ref/set_authorizer.html> SQLite, “Online Backup API.” \[Online\]. Available: <https://www.sqlite.org/backup.html> PostGIS Project, “Spatial Indexes,” *PostGIS 3.5 Manual*. \[Online\]. Available: <https://postgis.net/docs/manual-3.5/using_postgis_dbmanagement.html> PostGIS Project, “ST_3DIntersects,” *PostGIS 3.5 Manual*. \[Online\]. Available: <https://postgis.net/docs/ST_3DIntersects.html> PostgreSQL Global Development Group, “GiST Indexes,” *PostgreSQL Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/current/gist.html> PostgreSQL Global Development Group, “Range Types,” *PostgreSQL Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/current/rangetypes.html> PostgreSQL Global Development Group, “BRIN Indexes,” *PostgreSQL Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/current/brin.html> PostgreSQL Global Development Group, “Table Partitioning,” *PostgreSQL Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/current/ddl-partitioning.html> PostgreSQL Global Development Group, “CREATE TABLE,” *PostgreSQL 18 Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/18/sql-createtable.html> PostgreSQL Global Development Group, “Trigger Functions,” *PostgreSQL 18 Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/18/plpgsql-trigger.html> PostgreSQL Global Development Group, “Row Security Policies,” *PostgreSQL 18 Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/18/ddl-rowsecurity.html> Apache Software Foundation, “Reliability,” *Apache Iceberg Documentation*. \[Online\]. Available: <https://iceberg.apache.org/docs/latest/reliability/> Apache Software Foundation, “Queries: Time Travel,” *Apache Iceberg Documentation*. \[Online\]. Available: <https://iceberg.apache.org/docs/latest/spark-queries/> Neo4j, “Native Projection,” *Graph Data Science Manual*. \[Online\]. Available: <https://neo4j.com/docs/graph-data-science/current/management-ops/graph-creation/graph-project/> pgRouting Contributors, “pgr_aStar,” *pgRouting Manual*. \[Online\]. Available: <https://docs.pgrouting.org/latest/en/pgr_aStar.html> NIST, *Security and Privacy Controls for Information Systems and Organizations*, SP 800-53 Rev. 5, 2020. \[Online\]. Available: <https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final> Amazon Web Services, “Amazon S3 Pricing.” \[Online\]. Available: <https://aws.amazon.com/s3/pricing/> E. W. Dijkstra, “A note on two problems in connexion with graphs,” *Numerische Mathematik*, vol. 1, pp. 269–271, 1959. P. E. Hart, N. J. Nilsson, and B. Raphael, “A formal basis for the heuristic determination of minimum cost paths,” *IEEE Trans. Syst. Sci. Cybern.*, vol. 4, no. 2, pp. 100–107, 1968. S. Koenig and M. Likhachev, “D\* Lite,” in *Proc. AAAI-02*, 2002, pp. 476–483.
+99 香港教育大学, “INT6164 课程大作业：面向真实场景的新一代数据管理系统设计,” 《作业要求.pdf》, pp. 1–7, 课程提供材料. SQLite, “The SQLite R\*Tree Module.” \[Online\]. Available: <https://www.sqlite.org/rtree.html> SQLite, “EXPLAIN QUERY PLAN.” \[Online\]. Available: <https://www.sqlite.org/eqp.html> SQLite, “The SQLite Query Optimizer Overview.” \[Online\]. Available: <https://www.sqlite.org/optoverview.html> SQLite, “Isolation in SQLite.” \[Online\]. Available: <https://www.sqlite.org/isolation.html> SQLite, “Transaction.” \[Online\]. Available: <https://www.sqlite.org/lang_transaction.html> SQLite, “Compile-Time Authorization Callbacks.” \[Online\]. Available: <https://www.sqlite.org/c3ref/set_authorizer.html> SQLite, “Online Backup API.” \[Online\]. Available: <https://www.sqlite.org/backup.html> PostGIS Project, “Spatial Indexes,” *PostGIS 3.5 Manual*. \[Online\]. Available: <https://postgis.net/docs/manual-3.5/using_postgis_dbmanagement.html> PostGIS Project, “ST_3DIntersects,” *PostGIS 3.5 Manual*. \[Online\]. Available: <https://postgis.net/docs/ST_3DIntersects.html> PostgreSQL Global Development Group, “GiST Indexes,” *PostgreSQL Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/current/gist.html> PostgreSQL Global Development Group, “Range Types,” *PostgreSQL Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/current/rangetypes.html> PostgreSQL Global Development Group, “BRIN Indexes,” *PostgreSQL Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/current/brin.html> PostgreSQL Global Development Group, “Table Partitioning,” *PostgreSQL Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/current/ddl-partitioning.html> PostgreSQL Global Development Group, “CREATE TABLE,” *PostgreSQL 18 Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/18/sql-createtable.html> PostgreSQL Global Development Group, “Trigger Functions,” *PostgreSQL 18 Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/18/plpgsql-trigger.html> PostgreSQL Global Development Group, “Row Security Policies,” *PostgreSQL 18 Documentation*. \[Online\]. Available: <https://www.postgresql.org/docs/18/ddl-rowsecurity.html> Apache Software Foundation, “Reliability,” *Apache Iceberg Documentation*. \[Online\]. Available: <https://iceberg.apache.org/docs/latest/reliability/> Apache Software Foundation, “Queries: Time Travel,” *Apache Iceberg Documentation*. \[Online\]. Available: <https://iceberg.apache.org/docs/latest/spark-queries/> Neo4j, “Native Projection,” *Graph Data Science Manual*. \[Online\]. Available: <https://neo4j.com/docs/graph-data-science/current/management-ops/graph-creation/graph-project/> pgRouting Contributors, “pgr_aStar,” *pgRouting Manual*. \[Online\]. Available: <https://docs.pgrouting.org/latest/en/pgr_aStar.html> NIST, *Security and Privacy Controls for Information Systems and Organizations*, SP 800-53 Rev. 5, 2020. \[Online\]. Available: <https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final> Amazon Web Services, “Amazon S3 Pricing.” \[Online\]. Available: <https://aws.amazon.com/s3/pricing/> E. W. Dijkstra, “A note on two problems in connexion with graphs,” *Numerische Mathematik*, vol. 1, pp. 269–271, 1959. P. E. Hart, N. J. Nilsson, and B. Raphael, “A formal basis for the heuristic determination of minimum cost paths,” *IEEE Trans. Syst. Sci. Cybern.*, vol. 4, no. 2, pp. 100–107, 1968. S. Koenig and M. Likhachev, “D\* Lite,” in *Proc. AAAI-02*, 2002, pp. 476–483. Lands Department, HKSAR Government, “Building,” Common Spatial Data Infrastructure Portal, dataset landsd_rcd_1637211194312_35158. \[Online\]. Available: <https://portal.csdi.gov.hk> (data from DATA.GOV.HK) Census and Statistics Department, HKSAR Government, “2021 Population Census (Statistics and Boundaries of Large Subunit Groups).” \[Online\]. Available: <https://data.gov.hk/en-data/dataset/hk-censtatd-census_geo-2021-population-census-by-lsg> Civil Aviation Department, HKSAR Government, “Small Unmanned Aircraft Order: Designation of Restricted Flying Zone Notice,” G.N. 8002, 2025. \[Online\]. Available: <https://www.cad.gov.hk/documents/G.N.8002_E.pdf> Education Bureau, “School Location and Information”; Hospital Authority, “List of Hospital Authority Hospitals/Institutions.” \[Online\]. Available: <https://data.gov.hk>
 
 </div>
 
 # 航线算法对照
 
-规划器在有限三维网格上以 26 邻接搜索。建筑、有效限制与风险硬阈值先过滤航段，可行航段代价为“长度/100 m + $`\lambda`$ × 风险代理”。启发式取到终点的欧氏距离除以 100 m；风险代理非负，启发式一致，A\* 与 Dijkstra 得到相同的最优代价\[24, 25\]。在同一派生图上运行两者，36 个任务的最优代价全部一致；A\* 扩展节点中位数 125–214 个，Dijkstra 为 465–747 个，图上搜索耗时分别为 0.29–0.57 ms 与 0.77–1.73 ms。D\* Lite 等增量搜索适用于同一图上的局部边变化\[26\]；本设计在数据层用发布记账与变更驱动的修补处理变化，增量搜索留作后续候选。
+规划器在有限三维网格上以 26 邻接搜索。建筑、有效限制与风险硬阈值先过滤航段，可行航段代价为“长度/100 m + $`\lambda`$ × 风险代理”。启发式取到终点的欧氏距离除以 100 m；风险代理非负，启发式一致，A\* 与 Dijkstra 得到相同的最优代价\[24, 25\]。在同一派生图上运行两者，36 个任务的最优代价全部一致；A\* 扩展节点中位数 23 个，Dijkstra 为 195–196 个，图上搜索耗时约 0.07 ms 与 0.38–0.39 ms。D\* Lite 等增量搜索适用于同一图上的局部边变化\[26\]；本设计在数据层用发布记账与变更驱动的修补处理变化，增量搜索留作后续候选。
 
 # 复现与证据
 
@@ -442,6 +444,7 @@ Q1 与 Q2 的状态优先级为：命中硬约束返回不可行或禁止；关�
 | 内容 | 仓库路径 |
 |:---|:---|
 | 统一模式、ER 与设计决定 | `docs/v2/schema/` |
+| 实验数据快照与来源 | `docs/v2/data/hk/` |
 | 操作 A 访问路径 | `docs/modules/yht/v2/experiments/results/op_a_index_comparison.json` |
 | 发布事务与历史存储 | `docs/modules/zqo/v2/experiments/results/transactions-storage.json` |
 | 治理约束与操作 C | `docs/modules/lq/v2/experiments/results/governance.json` |

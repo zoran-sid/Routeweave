@@ -2,7 +2,7 @@
 
 本文件适用于整个仓库。开始工作前阅读当前项目说明、共同口径与成员职责，按实际成果记录进度。
 
-**当前版本状态（2026-11-07）**：v2 已发布到 `main`（标签 `v2.0-submission`）；v1（算法方向）保留在标签 `v1.0-algorithm-baseline`。v2 以数据库为中心，五棒完成后由 ZC 整合：21 页 PDF 报告、12 页 PPT 与证据见[最终交付](docs/final/README.md)，逐棒审阅发现的问题见[问题清单](docs/integration/issues.md)。正式提交前的修改仍从 `develop` 创建个人分支，再经发布 PR 进入 `main`，规则见第6节。
+**当前版本状态（2026-11-07）**：v2 已发布到 `main`，最终标签为 `v2.1-submission`，此前的 `v2.0-submission` 保留；v1（算法方向）保留在标签 `v1.0-algorithm-baseline`。`main` 只保存项目成果。本文件、任务安排、提示词、交接记录、问题清单与课程要求对照等协作过程文件只在 `develop`。v2 以数据库为中心，五棒完成后由 ZC 整合：23 页 PDF 报告与 12 页 PPT 由 `docs/final/source/` 在本地构建，不入库，入口见[最终交付](docs/final/README.md)；逐棒审阅发现的问题见[问题清单](docs/integration/issues.md)。修改先从 `develop` 创建个人分支，再经 `hotfix/*` 发布到 `main`，规则见第6节。
 
 ## 1. 开始工作
 
@@ -85,12 +85,12 @@ v2 按课程报告章节分工，详见[任务安排](docs/team-tasks.md)。仓�
 
 | 分支 | 含义 | 写入方式 |
 | --- | --- | --- |
-| `main` | 已完成、可正式提交的版本；GitHub 默认展示 | 只合并来自 `develop` 的发布 PR：全部检查通过、小组确认后由整合方合并，并打版本标签 |
+| `main` | 已完成、可正式提交的版本，只含项目成果，不含协作过程文件；GitHub 默认展示 | 只合并发布 PR：全部检查通过、小组确认后由整合方合并，并打版本标签 |
 | `develop` | 中间开发版本，汇总已完成审阅的章节、PPT和修订 | 只合并成员分支 PR；保持检查通过，可随时生成候选版本 |
 | `<成员缩写小写>/<主题>` | 个人工作，例如 `zc/tech-selection`、`lq/governance` | 从最新 `develop` 创建，完成后 PR 到 `develop`，合并后删除 |
-| `hotfix/<主题>` | 已发布 `main` 的紧急更正 | 从 `main` 创建，PR 回 `main`，再合入 `develop` |
+| `hotfix/<主题>` | 向 `main` 发布或更正 | 从 `main` 创建，带入 `develop` 上已审阅的成果改动（不含过程文件）后 PR 到 `main`；不合回 `develop`，以免删除过程文件 |
 
-版本标签：`v1.0-algorithm-baseline` 为 v1 完整交付；v2 候选版本用 `v2.0-rc.N`，最终提交用 `v2.0-submission`。
+版本标签：`v1.0-algorithm-baseline` 为 v1 完整交付；v2 候选版本用 `v2.0-rc.N`，最终提交用 `v2.0-submission`；`main` 精简为只含项目成果后的版本为 `v2.1-submission`。
 
 开工流程：
 
@@ -104,7 +104,7 @@ git switch -c <缩写>/<主题>
 - 常规工作不直接推送 `main` 或 `develop`；`develop` 上的小修（错字、链接）可直接推送，推送后确认 `checks` 通过。
 - PR 标题沿用下方提交命名格式；正文写明改动、验证命令与结果、受影响的其他成员。合并方式使用 merge commit，保留成员提交和作者记录。
 - 合并前分支须基于最新 `develop`，GitHub Actions 的 `checks` 通过；跨成员内容至少由一名其他成员（或其 agent）审阅。
-- `develop` → `main` 的发布 PR 附课程覆盖表与验证证据，合并后打标签。发往 `main` 的 PR 只能来自 `develop` 或 `hotfix/*`，CI 的 `checks` 会拒绝其他来源；开 PR 前确认目标分支（`gh pr create --base develop`）。
+- 发往 `main` 的发布 PR 附课程覆盖表与验证证据，合并后打标签。CI 的 `checks` 只接受来自 `develop` 或 `hotfix/*` 的 PR。自 `v2.1-submission` 起 `main` 不含过程文件，从 `develop` 直接发 PR 会把这些文件带回 `main`，因此发布一律经 `hotfix/*`。开 PR 前确认目标分支（`gh pr create --base develop`）。
 
 ### 6.2 提交命名
 

@@ -16,7 +16,7 @@
 | [evidence/artifact-checks-v2.json](evidence/artifact-checks-v2.json) | 报告与 PPT 的构建、校验与文件摘要 |
 | [source/](source/README.md) | 报告 LaTeX 源、PPT 构建脚本与提取脚本 |
 
-报告正文（摘要至第 9 章，不含参考文献与附录）9,808 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
+报告正文（摘要至第 9 章，不含参考文献与附录）9,855 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
 
 ## 验证状态
 
@@ -28,7 +28,7 @@
 | v1 模块测试与集成脚本 | 全部通过 |
 | PPTX 结构校验 | 通过；无多余 ZIP 目录项 |
 
-逐棒审阅共发现 10 个问题，发布前全部修复并复核；其中 LQ-V2-02、ZQO-V2-01 由 ZC 在整合阶段按用户指示代修，修复日志记在 LQ、ZQO 各自的交接文件中，详见[问题清单](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/issues.md)。
+逐棒审阅共发现 10 个问题，发布前全部修复并复核；其中 LQ-V2-02、ZQO-V2-01 由 AI 助手在整合阶段按 ZC 的指示代修（记为 AI 的工作，不计入 ZC 工作量），修复日志记在 LQ、ZQO 各自的交接文件中，详见[问题清单](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/issues.md)。
 
 ## 构建与复核
 

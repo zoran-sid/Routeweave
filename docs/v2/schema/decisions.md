@@ -58,15 +58,17 @@ PostgreSQL 一列尚未部署实测，属于设计映射；性能结论只引用
 | S-02 | 字典称 `airspace_restriction.state` 由发布流程维护，与“发布后只读”冲突 | `state` 记录该发布时刻的状态，随发布不可变；撤销写入新发布中的 `revoked` 行和一条 `airspace_event` | 保证历史可复现；ZQO 的发布/撤销事务按此实现 |
 | S-03 | 限高体禁止的是 `ceiling_m` 以上，按 `floor_z..ceiling_m` 建索引会漏掉越过限高的走廊 | 增加生成列 `forbid_lo_z` / `forbid_hi_z`，R*Tree z 维与精确复核都用禁止范围 | 测试中 60 m 限高命中 40–90 m 走廊，120 m 限高不命中 |
 | S-04 | 操作 A 用哪种访问路径 | 空域采用四维时空 R*Tree，`op_a.sql` 用 `CROSS JOIN` 固定由 R*Tree 驱动 | 实验比较全扫、发布 B-tree、时间 B-tree、三维与四维 R*Tree；SQLite 规划器自选时 R*Tree 退化为逐行查找 |
-| S-05 | 发布不可变由谁保证 | 数据库触发器拒绝向非 draft 发布插入、修改或删除内容；发布须五层齐全；状态只能按 draft→published→superseded/retired 迁移 | 不依赖应用自觉；测试覆盖 |
+| S-05 | 发布不可变由谁保证 | 触发器拒绝向非 draft 发布插入、修改或删除内容，且 feature 的 OLD/NEW 发布都必须是 draft；发布须五层齐全；状态只能按 draft→published→superseded/retired 迁移 | 不依赖应用自觉；测试覆盖 feature 跨发布移动、子类型/覆盖/地形后补 |
 | S-06 | `airspace_event.restriction_id` 引用的列在全表不唯一 | `restriction_id` 必须等于 `feature_id`；事件以 `(release_id, restriction_id)` 外键引用 `feature(release_id, feature_id)` | 由子类型触发器和复合外键保证 |
 | S-07 | 血缘端点类型多样 | `lineage_edge` 不设跨类型外键，只检查取值与不自环；端点存在性由发布质检校验 | 与字典一致；LQ 可增加按类型的校验视图 |
+| S-08 | `source` 许可/精度变更会改写已发布版本的历史来源 | `source_id` 是版本身份：被任一非 draft 发布直接引用，或经 `component_source` 映射后，`source` 行禁止 `UPDATE`/`DELETE`；变更登记新 `source_id`。`source_provenance_usage` 汇总全部引用表 | 旧发布重开仍解析旧行；测试覆盖更新/删除拒绝与新来源入库；ZQO 的漂移测试改为写时拒绝 |
 
 ## 5 已知限制
 
 - SQLite 原型不解析 WKT，精确判定使用轴对齐包围盒；非矩形楼体与斜面空域需 PostGIS 精确谓词复核。
 - 暴露分区互斥且恰好覆盖一次、瓦片面积和等于场景面积，属于跨行约束，由发布质检执行，不用单行 `CHECK`。
 - R*Tree 以32位浮点向外取整存储，只作候选；时间维以“距 2026-01-01 的秒数”存储，一年内精度约2秒，精确时间判定使用基表文本列。
+- `source` 行一旦被非 draft 发布引用即冻结；修订必须新建 `source_id` 再让新发布引用。迁移既有数据时先建新来源行，不能直接改旧行。
 
 ## S-04 ZQO：逻辑发布与物理组件分离（2026-11-06）
 

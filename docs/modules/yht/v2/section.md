@@ -159,7 +159,7 @@ erDiagram
 | --- | --- | --- | --- |
 | `release` | `release_id` | `base_release_id → release` | 发布后只读；`lower(valid) < upper(valid)` |
 | `release_layer` | `(release_id, layer)` | `release_id → release` | 五层齐全；哈希与内容一致 |
-| `source` | `source_id` | — | 许可、精度、更新频率必填 |
+| `source` | `source_id` | — | 许可、精度、更新频率必填；被非 draft 发布引用后不可原地改，变更登记新 `source_id` |
 | `coverage_tile` | `(release_id, layer, tile_id)` | `release_id`、`source_id` | 同层瓦片不重叠；面积和等于场景面积 |
 | `feature` | `rid` | `release_id`、`source_id` | `(release_id, feature_id)` 唯一；层与子类型一致 |
 | `building` | `rid` | `rid → feature`；两个来源 | `top_z > base_z`；三维体合法；投影一致 |

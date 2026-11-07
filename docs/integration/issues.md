@@ -53,8 +53,8 @@ YHT PR #1（`f05459c`）已合入，GitHub `checks` 为 SUCCESS。修改前13项
 | --- | --- | --- | --- |
 | INT-V2-01 | ZC | LJ 的 PR #8 以 `main` 为目标，ZC 整合时未核对目标分支即合并，`main` 一度包含未完成的 v2。经用户确认后将 `main` 以 `--force-with-lease` 恢复到 `5d4034b`（临时放开 force push，完成后恢复保护：须 PR、须 `checks`、禁止 force push 与删除）；同一分支经 PR #9 合入 `develop`。CI 新增检查：发往 `main` 的 PR 只能来自 `develop` 或 `hotfix/*`。GitHub 上 PR #8 仍显示为已合并，其内容只存在于 `develop` | 已处理 |
 | ZC-V2-02 | ZC | 读取 `op_c.sql` 与 LQ SQL 时显式使用 UTF-8；`review_lq.py` 的授权连接在 `finally` 中关闭；ZQO `catalog.initialize()` 读取 `schema.sql` 时显式使用 UTF-8（一行兼容修订，行为不变，所有成员实验都经此入口） | **已关闭（2026-11-07）**：关闭 UTF-8 模式、C 语言环境（默认编码 US-ASCII，严于 Windows 代码页）下全量复核 20/20、233 项测试通过；同类写入问题在 v1 ZC/ZQO/LQ 脚本与 `audit.py`、`five_module.py` 中一并修复 |
-| LQ-V2-02 | LQ | 整合复跑 `review_lq.py`：`op_c_task_window` 仍为 LQ 版 0 行、ZC 正式版 2 行 | **已修复（2026-11-07，ZC 按用户指示代修，记在 LQ 名下）**：LQ `op_c.sql` 改为数据集窗口包含任务窗口；`run.py` 以 10 分钟任务窗验证 2 行、超窗 0 行；`governance.json` 重跑；探针 12/12。待 LQ 复核 |
-| ZQO-V2-01 | ZQO | 整合复跑 `review_zqo.py` 退出码 1，空上游版本值与空编译器版本仍可发布 | **已修复（2026-11-07，ZC 按用户指示代修，记在 ZQO 名下）**：`catalog.publish` 在事务内拒绝空/空白/非字符串来源版本与编译器版本并留失败审计；新增 7 种无效输入回归；`review_zqo.py` 退出码 0。待 ZQO 复核 |
+| LQ-V2-02 | LQ | 整合复跑 `review_lq.py`：`op_c_task_window` 仍为 LQ 版 0 行、ZC 正式版 2 行 | **已修复（2026-11-07，ZC 按用户指示代修，记在 LQ 名下）**：LQ `op_c.sql` 改为数据集窗口包含任务窗口；`run.py` 以 10 分钟任务窗验证 2 行、超窗 0 行；`governance.json` 重跑；探针 12/12。修复日志见 [LQ 交接](../handoffs/lq.md) |
+| ZQO-V2-01 | ZQO | 整合复跑 `review_zqo.py` 退出码 1，空上游版本值与空编译器版本仍可发布 | **已修复（2026-11-07，ZC 按用户指示代修，记在 ZQO 名下）**：`catalog.publish` 在事务内拒绝空/空白/非字符串来源版本与编译器版本并留失败审计；新增 7 种无效输入回归；`review_zqo.py` 退出码 0。修复日志见 [ZQO 交接](../handoffs/zqo.md) |
 
 ## 最新状态（2026-11-06，整合基线2850d89）
 
@@ -78,7 +78,7 @@ P1：影响约束、未知数据或当前推荐验收，合稿采用相关原型
 | YHT-02 | YHT | P1 | 导出忽略不完整覆盖及不支持的非平地输入 | 本轮复核通过 |
 | YHT-03 | YHT | P1 | 走廊限高检查未计入垂直安全缓冲 | 本轮复核通过 |
 | YHT-04 | YHT | P1 | 单独E/C缺失但q保留时，直接ZC导出绕过源质量门禁 | LQ独立复核通过（`621786a`，2026-11-06） |
-| YHT-05 | YHT | P2文档 | 生产候选稿使用不存在于所引官方说明的`gist_geometry_ops_3d`名称 | 已修订待复核（`c4ed005`，2026-11-06） |
+| YHT-05 | YHT | P2文档 | 生产候选稿使用不存在于所引官方说明的`gist_geometry_ops_3d`名称 | 已修复：`c4ed005`；修复日志见 [YHT 交接](../handoffs/yht.md)（按修复日志关闭） |
 | LJ-01 | LJ | P1 | 双方缺失版本字段仍可验收通过 | 本轮复核通过 |
 | LJ-02 | LJ | P1 | 已标记 stale 的旧发布结果仍可通过当前推荐验收 | 本轮复核通过 |
 | LJ-03 | LJ | P2 | NaN、Infinity、布尔指标及 NaN 耗时未被拒绝 | 本轮复核通过 |

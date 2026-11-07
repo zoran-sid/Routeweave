@@ -3,7 +3,6 @@
 | 文件 | 用途 |
 | --- | --- |
 | [report/report.tex](report/report.tex) | 报告唯一源稿（ctexart，XeLaTeX）；7 张图为 TikZ / pgfplots |
-| [report/cover-info.example.tex](report/cover-info.example.tex) | 封面成员信息模板；复制为 `cover-info.tex` 填写，该文件不入库 |
 | [build_report.py](build_report.py) | 从成员结果 JSON 生成图表数据（`report/data/*.dat`），编译 PDF，生成 Markdown 镜像，统计正文汉字 |
 | [build_slides.cjs](build_slides.cjs) | 用 pptxgenjs 3.12 构建 12 页 PPTX；图表数值从成员结果 JSON 读取，每页写入讲稿 |
 | [extract_slides.py](extract_slides.py) | 从 PPTX 提取文字、表格、图表数值与讲稿到 `../slides.md`，只依赖 Python 标准库 |

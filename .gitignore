@@ -4,8 +4,7 @@ __pycache__/
 /work/
 ~$*
 
-# LaTeX build outputs and private cover data (docs/final/source/report)
-docs/final/source/report/cover-info.tex
+# LaTeX build outputs (docs/final/source/report)
 docs/final/source/report/*.aux
 docs/final/source/report/*.log
 docs/final/source/report/*.toc
@@ -14,3 +13,8 @@ docs/final/source/report/*.fls
 docs/final/source/report/*.fdb_latexmk
 docs/final/source/report/*.xdv
 docs/final/source/report/report.pdf
+
+# Built deliverables are kept locally; build them from docs/final/source
+docs/final/SkyRoute-report.pdf
+docs/final/SkyRoute-presentation.pptx
+docs/final/*.docx

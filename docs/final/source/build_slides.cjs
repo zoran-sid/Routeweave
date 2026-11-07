@@ -1,5 +1,5 @@
 // SkyRoute v2 presentation builder (pptxgenjs 3.12). Chart data is read from the members' result files.
-// Usage (repo root): npm install pptxgenjs@3.12.0 (any directory on NODE_PATH), then
+// Usage (repo root): npm install pptxgenjs@3.12.0 (brings jszip; any directory on NODE_PATH), then
 //   node docs/final/source/build_slides.cjs [output.pptx]
 const fs = require("fs");
 const path = require("path");
@@ -17,6 +17,15 @@ const FONT = "Microsoft YaHei";
 const C = { navy: "13293D", teal: "147D86", tealLt: "D7EEF0", sky: "EEF4F8", amber: "D98B1F", amberLt: "FBEFD9",
   ink: "1B2B38", muted: "5B6B78", line: "C9D6DF", white: "FFFFFF", grey: "8A99A6", greyLt: "E6EBEF" };
 const W = 13.333, H = 7.5, M = 0.6;
+// Chart series colors, checked with the dataviz skill's validate_palette.js (light surface, adjacent pairs: all pass;
+// amber is below 3:1 contrast, so its series carries a direct label). Color follows the entity across slides:
+// full-read baseline = blue, second baseline = amber, the design we chose = teal.
+const SERIES = { base: "1C6FB8", alt: "D9822B", third: "C94F8A", fourth: "5B4AC2", chosen: "0F9A8C" };
+// Selective direct labels: series name -> [point indexes, number format]. Written as native per-point
+// data labels after pptxgenjs saves the file (pptxgenjs only labels whole charts).
+const US = '[>=1000]#,##0" µs";0.0" µs"', MS = '0.00" ms"', MIB = '0.00" MiB"';
+const POINT_LABELS = { "全表扫描": [[2], US], "时间 B-tree": [[2], US], "四维 R*Tree": [[2], US],
+  "全量复制": [[2], MIB], "组件共享": [[2], MIB], "JSON 全量": [[2], MS], "SQL 全量": [[2], MS], "R*Tree": [[2], MS] };
 
 const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE";
@@ -147,7 +156,7 @@ pres.addSection({ title: "数据与模型（YHT）" });
 {
   const s = content("数据与模型（YHT）", "三类数据、三种节奏，统一到一套由数据库强制的模式", "主讲：YHT",
     "YHT：三类数据的来源、精度和更新频率都不一样。基线是 25 栋建筑、3 个空域限制体和 6 个暴露分区；三年按 10 个片区、每日发布估算，约 2,400 栋、2 GB 发布数据，这是算术估算。我们把它们统一到 34 个实体的关系模式，规则由数据库在写入时强制：发布后的数据不能改，来源和模型修订必须登记新标识，取值一致性用 CHECK 和触发器保证。建模中修正了三处问题：瓦片和地形编号每次发布重复，主键必须带发布编号；空域状态随发布固定；限高体禁止的是上限以上的空间。来源：报告第2、4章；数据字典。");
-  const cards = [["城市三维环境", "25 → 约 2,400 栋", "高度缺失 · 轮廓自交 · 基准不一致"], ["动态空域", "3 → 约 100 条活动限制", "生效时间歧义 · 发布与查询交错"], ["地面暴露与风险", "6 → 60 个分区", "假设不透明 · 代理值被误读"]];
+  const cards = [["城市三维环境", "25 → 约 2,400 栋", "高度缺失 · 轮廓自交 · 基准不一致"], ["动态空域", "3 → 约 100 条限制", "生效时间歧义 · 发布与查询交错"], ["地面暴露与风险", "6 → 60 个分区", "假设不透明 · 代理值被误读"]];
   cards.forEach(([a, n, r], i) => {
     const x = M + i * 4.1;
     card(s, x, 1.55, 3.8, 1.55, C.sky, "dataset-" + (i + 1));
@@ -180,8 +189,8 @@ pres.addSection({ title: "数据与模型（YHT）" });
     { name: "发布 B-tree", labels: ["100", "1,000", "10,000"], values: pick("V1_release_btree") },
     { name: "三维 R*Tree", labels: ["100", "1,000", "10,000"], values: pick("V3_rtree_3d") },
     { name: "四维 R*Tree", labels: ["100", "1,000", "10,000"], values: pick("V4_rtree_4d") },
-  ], { x: M, y: 1.45, w: 7.8, h: 4.9, ...axis, chartColors: ["8A99A6", "D98B1F", "B5835A", "4F86A8", "147D86"],
-    lineSize: 2.5, lineDataSymbolSize: 8, valAxisLogScaleBase: 10, showLegend: true, legendPos: "b",
+  ], { x: M, y: 1.45, w: 7.8, h: 4.9, ...axis, chartColors: [SERIES.base, SERIES.alt, SERIES.third, SERIES.fourth, SERIES.chosen],
+    lineSize: 2, lineDataSymbolSize: 8, valAxisLogScaleBase: 10, showLegend: true, legendPos: "b",
     showValAxisTitle: true, valAxisTitle: "每条查询中位耗时（µs，对数轴）", showCatAxisTitle: true, catAxisTitle: "每个发布的限制数（另存 20 个历史发布）" });
   card(s, 8.85, 1.55, 3.9, 2.3, C.navy, "stat-rtree");
   text(s, [{ text: "37.4 µs", options: { fontSize: 40, bold: true, color: C.amber, breakLine: true } },
@@ -204,16 +213,15 @@ pres.addSection({ title: "事务与版本（ZQO）" });
   flow.forEach((f, i) => {
     const x = M + i * 2.15;
     card(s, x, 5.0, 1.9, 0.95, i === 2 ? C.teal : C.sky, "txn-" + (i + 1));
-    text(s, f, { x: x + 0.1, y: 5.05, w: 1.7, h: 0.85, align: "center", valign: "middle", bold: true, fontSize: 13, color: i === 2 ? C.white : C.ink });
+    text(s, f, { x: x + 0.1, y: 5.05, w: 1.7, h: 0.85, align: "center", valign: "middle", bold: true, fontSize: 12, color: i === 2 ? C.white : C.ink });
     if (i < 2) arrow(s, x + 1.92, 5.47, x + 2.13, 5.47);
   });
   text(s, "任一步失败 → 全部回滚，另写失败记录", { x: M, y: 6.05, w: 6.3, h: 0.35, fontSize: 13, color: C.amber, bold: true });
   const sz = (mode) => [10, 100, 1000].map((n) => +(store.find((r) => r.mode === mode && r.releases === n).db_bytes / 2 ** 20).toFixed(2));
   s.addChart(pres.charts.BAR, [{ name: "全量复制", labels: ["10 次", "100 次", "1,000 次"], values: sz("full") },
     { name: "组件共享", labels: ["10 次", "100 次", "1,000 次"], values: sz("shared") }],
-  { x: 7.2, y: 1.45, w: 5.55, h: 4.3, barDir: "col", barGrouping: "clustered", ...axis, chartColors: ["8A99A6", "147D86"],
-    showValue: true, dataLabelPosition: "outEnd", dataLabelFontFace: FONT, dataLabelFontSize: 11, dataLabelColor: C.ink, dataLabelFormatCode: "0.00",
-    showLegend: true, legendPos: "b", showValAxisTitle: true, valAxisTitle: "数据库大小（MiB）", showCatAxisTitle: true, catAxisTitle: "发布次数" });
+  { x: 7.2, y: 1.45, w: 5.55, h: 4.3, barDir: "col", barGrouping: "clustered", ...axis, chartColors: [SERIES.base, SERIES.chosen],
+    barGapWidthPct: 70, barOverlapPct: -8, showLegend: true, legendPos: "b", showValAxisTitle: true, valAxisTitle: "数据库大小（MiB）", showCatAxisTitle: true, catAxisTitle: "发布次数" });
   text(s, "代价：发布写入串行；共享粒度为整层，改一处仍重写该层", { x: 7.2, y: 5.85, w: 5.55, h: 0.5, fontSize: 13, color: C.muted });
 }
 
@@ -257,15 +265,16 @@ pres.addSection({ title: "治理与安全（LQ）" });
 // ---------------------------------------------------------------- 9 ZC access paths
 pres.addSection({ title: "查询负载（ZC）" });
 {
-  const s = content("查询负载（ZC）", "同一个 A*，只换取数方式：索引把取数从 34 ms 降到 0.17 ms", "主讲：ZC",
+  const s = content("查询负载（ZC）", "A* 不变，只换取数方式：取数从 34 ms 降到 0.17 ms", "主讲：ZC",
     "ZC：这一页回答规划服务慢在哪里。我们把 A* 固定不动，同一批任务只换取数方式。整份读取发布的 JSON，或者用 SQL 读全城对象，耗时都随城市规模线性增长，一万栋时分别是 34 毫秒和 14 毫秒；用时空索引只取搜索域附近的对象，稳定在 0.2 毫秒以内。三种方式交给规划器的输入逐字节相同，所以这部分收益完全来自数据库设计。剩下的二三十毫秒是算法检查航段是否碰到障碍；同一张图上 A* 扩展的节点约是 Dijkstra 的三分之一，最优代价一致。来源：access_paths.json；文件 SQLite 3.54.1，WAL；每规模 12 个任务。");
   const labels = access.map((r) => r.n_buildings.toLocaleString("en-US") + " 栋");
   const v = (k) => access.map((r) => r.summary[k].data_ms);
-  s.addChart(pres.charts.BAR, [{ name: "JSON 全量", labels, values: v("json_snapshot") }, { name: "SQL 全量", labels, values: v("sql_full") },
+  // Lines, not bars: on a log axis bar length does not encode the value.
+  s.addChart(pres.charts.LINE, [{ name: "JSON 全量", labels, values: v("json_snapshot") }, { name: "SQL 全量", labels, values: v("sql_full") },
     { name: "R*Tree", labels, values: v("sql_rtree") }],
-  { x: M, y: 1.45, w: 7.6, h: 4.95, barDir: "col", barGrouping: "clustered", ...axis, chartColors: ["8A99A6", "D98B1F", "147D86"],
-    valAxisLogScaleBase: 10, showValue: true, dataLabelPosition: "outEnd", dataLabelFontFace: FONT, dataLabelFontSize: 10, dataLabelColor: C.ink,
-    dataLabelFormatCode: "0.00", showLegend: true, legendPos: "b", showValAxisTitle: true, valAxisTitle: "每次查询取数中位耗时（ms，对数轴）" });
+  { x: M, y: 1.45, w: 7.6, h: 4.95, ...axis, chartColors: [SERIES.base, SERIES.alt, SERIES.chosen], lineSize: 2, lineDataSymbolSize: 8,
+    valAxisLogScaleBase: 10, showLegend: true, legendPos: "b", showValAxisTitle: true, valAxisTitle: "每次查询取数中位耗时（ms，对数轴）",
+    showCatAxisTitle: true, catAxisTitle: "城市规模（每规模 12 个任务）" });
   const pts = [["≈200×", "1 万栋时 R*Tree 比 JSON 快"], ["36 / 36", "规划器输入逐字节相同 → 收益来自数据库"], ["22–45 ms", "剩余是算法的航段检查；A* 扩展约为 Dijkstra 的 1/3"]];
   pts.forEach(([a, b], i) => {
     const y = 1.55 + i * 1.62;
@@ -351,7 +360,40 @@ pres.addSection({ title: "保障与结论（LJ）" });
   text(s, "谢谢", { x: W - M - 2, y: 6.45, w: 2, h: 0.6, color: C.white, fontSize: 24, bold: true, align: "right" });
 }
 
-pres.writeFile({ fileName: OUT }).then((f) => {
+const xmlAttr = (v) => v.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const SHOW = (val) => `<c:showLegendKey val="0"/><c:showVal val="${val}"/><c:showCatName val="0"/><c:showSerName val="0"/>` +
+  '<c:showPercent val="0"/><c:showBubbleSize val="0"/>';
+function pointLabel(idx, fmt, pos) {
+  return `<c:dLbl><c:idx val="${idx}"/><c:numFmt formatCode="${xmlAttr(fmt)}" sourceLinked="0"/>` +
+    "<c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr><c:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr>" +
+    `<a:defRPr sz="1100" b="1"><a:solidFill><a:srgbClr val="${C.ink}"/></a:solidFill><a:latin typeface="${FONT}"/>` +
+    `<a:ea typeface="${FONT}"/></a:defRPr></a:pPr><a:endParaRPr lang="zh-CN"/></a:p></c:txPr><c:dLblPos val="${pos}"/>${SHOW(1)}</c:dLbl>`;
+}
+// Replace each labelled series' data-label block with per-point labels; text wears the ink color, not the series color.
+async function labelPoints(file) {
+  const JSZip = require("jszip");
+  const zip = await JSZip.loadAsync(fs.readFileSync(file));
+  const used = new Set();
+  for (const name of Object.keys(zip.files).filter((n) => /^ppt\/charts\/chart\d+\.xml$/.test(n))) {
+    const xml = await zip.file(name).async("string");
+    const pos = xml.includes("<c:lineChart>") ? "r" : "outEnd";
+    const out = xml.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
+      const series = (ser.match(/<c:tx>[\s\S]*?<c:v>([^<]*)<\/c:v>/) || [])[1];
+      const spec = POINT_LABELS[series];
+      if (!spec) return ser;
+      used.add(series);
+      const block = `<c:dLbls>${spec[0].map((i) => pointLabel(i, spec[1], pos)).join("")}${SHOW(0)}</c:dLbls>`;
+      return /<c:dLbls>[\s\S]*?<\/c:dLbls>/.test(ser) ? ser.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/, block) : ser.replace("<c:cat>", block + "<c:cat>");
+    });
+    zip.file(name, out);
+  }
+  const missing = Object.keys(POINT_LABELS).filter((k) => !used.has(k));
+  if (missing.length) throw new Error("labelled series not found: " + missing.join(", "));
+  fs.writeFileSync(file, await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" }));
+}
+
+pres.writeFile({ fileName: OUT }).then(async (f) => {
+  await labelPoints(f);
   try { require("child_process").execFileSync("zip", ["-dq", f, "*/"]); } catch (e) { /* no folder entries */ }
   console.log("wrote " + f);
 });

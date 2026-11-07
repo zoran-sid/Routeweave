@@ -38,7 +38,14 @@
   ent/.style={draw=line,rounded corners=1.5pt,font=\scriptsize\ttfamily,inner sep=2.5pt,fill=white,minimum width=2.6cm},
 }
 
-\IfFileExists{cover-info.tex}{\input{cover-info.tex}}{\input{cover-info.example.tex}}
+% 封面成员信息：在下方表格中填写姓名与学号后重新编译（python3 docs/final/source/build_report.py）。
+\newcommand{\memberrows}{%
+成员1 & LJ  & \hspace{6em} & \hspace{8em} \\
+成员2 & ZQO & & \\
+成员3 & LQ  & & \\
+成员4 & YHT & & \\
+成员5 & ZC  & & \\
+}
 
 \title{\textbf{SkyRoute：面向城市无人机配送的时空数据管理系统设计}\\[0.6em]
 \large SkyRoute: Spatio-temporal Data Management for Urban UAV Delivery}
@@ -682,7 +689,7 @@ LJ & 3.3、8.2–8.3 & 部署与备份恢复流程；恢复核验与截断故障
 \end{tabularx}
 \end{table}
 
-\textbf{AI 使用说明。} 本组成员使用 AI 编程与写作助手（Anthropic Claude、OpenAI Codex）辅助资料检索、方案比较、代码实现、测试与文稿起草。全部实验数据由仓库脚本实际运行产生，结果文件记录运行环境与源码摘要；每名成员审阅并对本人负责章节的结论负责。课程对 AI 使用声明的具体格式以正式通知为准。
+本组在项目全过程使用 AI 编程与写作助手，使用方式与协作过程见附录~\ref{app:ai}。
 
 \begin{thebibliography}{99}\small
 \bibitem{course} 香港教育大学, “INT6164 课程大作业：面向真实场景的新一代数据管理系统设计,” 《作业要求.pdf》, pp. 1–7, 课程提供材料.
@@ -741,9 +748,57 @@ python3 -B -m unittest discover -s docs/v2/schema -v
 规划取数与派生图失效 & \nolinkurl{docs/modules/zc/v2/experiments/results/} \\
 恢复核验 & \nolinkurl{docs/modules/lj/v2/experiments/results/recovery.json} \\
 整合复核 & \nolinkurl{docs/final/evidence/verification-v2.json} \\
-问题清单 & \nolinkurl{docs/integration/issues.md} \\
+问题清单与交接记录 & \texttt{develop} 分支的 \nolinkurl{docs/integration/issues.md}、\nolinkurl{docs/handoffs/} \\
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\section{AI 使用与协作过程}\label{app:ai}
+
+\subsection{工具与工作方式}
+
+五名成员各自使用 AI 编程与写作助手（Anthropic Claude Code、OpenAI Codex），在同一个 Git 仓库（\url{https://github.com/zoran-sid/Routeweave}）中异步工作。仓库根目录的协作说明规定了项目口径、成员分工、提交命名、分支规则与写作要求；每个 AI 开工前读取课程要求、项目说明、任务安排与其他成员的交接记录，完成后在本人交接记录中写明读取的版本、技术决定、验证命令与结果、对其他成员的影响。课程原文已转写为 Markdown，所有 AI 读取同一份要求。协作说明、任务安排、交接记录与问题清单保留在 \texttt{develop} 分支；\texttt{main} 只保留项目成果。
+
+\subsection{过程时间线}
+
+\begin{table}[H]\centering\small
+\caption{项目过程}
+\begin{tabularx}{\textwidth}{L{2.4cm}Y}
+\toprule
+阶段 & 内容 \\
+\midrule
+v1（11 月 4–6 日） & 按业务领域分五个模块（空域、风险、三维数据、算法、运维），完成算法方向的报告、PPT 与 131 项测试；保留为标签 \texttt{v1.0-algorithm-baseline} \\
+重组（11 月 6 日） & 成员对照课程“数据管理系统设计”的评分结构，判断 v1 主线偏向航线算法；合并两份 AI 评估意见后，按课程报告章节重新分工，航线规划降为验证数据库设计的业务场景 \\
+v2 接力（11 月 6–7 日） & 按 YHT → ZQO → LQ → ZC → LJ 串行完成：每位成员开工前先审阅上一位的成果，把问题写入问题清单，再交付本人章节、实验与展示文字 \\
+整合与发布（11 月 7 日） & ZC 重跑全部测试与实验，组装 LaTeX 报告与 PPT，修复遗留问题后发布 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{人与 AI 的分工}
+
+研究问题的界定、v1 到 v2 的重组决定、成员分工、问题处理优先级与发布时点由成员决定。AI 完成资料检索与比较、数据库模式与实验代码、测试、实验运行、章节起草、图表与排版。实验数据全部由仓库脚本实际运行产生，结果文件记录 Python 与 SQLite 版本、平台和源码摘要；外部技术结论引用官方文档或论文。模拟假设、设计论证与实测结果分别标注。
+
+\subsection{质量控制与审阅发现}
+
+分支 \texttt{main} 只接收已完成的版本，\texttt{develop} 汇总各成员的成果，个人工作经拉取请求合并；GitHub Actions 在每次合并前运行全部测试与集成脚本，\texttt{main} 受分支保护。整合时曾误合并一个以 \texttt{main} 为目标的拉取请求，随即恢复 \texttt{main} 并增加检查，只允许来自 \texttt{develop} 或修复分支的请求进入 \texttt{main}。逐棒审阅发现的问题如下，全部在发布前修复：
+
+\begin{table}[H]\centering\small
+\caption{逐棒审阅发现的问题}
+\begin{tabularx}{\textwidth}{L{2.3cm}L{1.6cm}YL{2.6cm}}
+\toprule
+编号 & 发现者 & 问题 & 处理 \\
+\midrule
+YHT-V2-01—04 & ZC & 缺可执行统一模式与执行计划证据；瓦片与地形主键冲突；空域状态原地维护；限高体索引范围错误 & ZC 补齐，YHT 复核 \\
+YHT-V2-05/06 & ZQO & 已发布数据仍可经子表或更新写入；来源许可可原地修改 & YHT 修复 \\
+LQ-V2-01 & ZQO & 已批准风险模型可原地修改 & LQ 修复，ZC 复核 \\
+ZQO-V2-01 & LQ & 发布服务接受空的上游版本值 & ZC 整合时修复 \\
+LQ-V2-02 & ZC & 追溯 SQL 要求查询窗口等于数据集窗口 & ZC 整合时修复 \\
+ZC-V2-02 & LJ & 非 UTF-8 系统上读写文本失败 & ZC 修复，ASCII 语言环境复核 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+每位成员对本人负责章节的结论负责。课程对 AI 使用声明的格式若另有要求，以正式通知为准。
 
 \end{document}

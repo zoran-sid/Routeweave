@@ -1,0 +1,29 @@
+{
+ "recorded_at": "2026-11-07T07:01:46Z",
+ "report": {
+  "file": "docs/final/SkyRoute-report.pdf",
+  "sha256": "f177154cae4a01e51b97a59f405c5d1a60f09b251ae32a1d1174c64c666f5dc8",
+  "pages": 21,
+  "hanzi_body": 9833,
+  "engine": "XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.10.7)  7 NOV 2026 14:48",
+  "errors": 0,
+  "overfull_boxes": 0,
+  "figures": 7,
+  "tables": 17,
+  "references": 26,
+  "source_sha256": "a8acb772ed3ed603fdd50a921244a9e3d65895b42e9fc322a414eece0439f920",
+  "markdown_mirror_sha256": "09851f536b2ddb02617f3fd01dbef78add8e36deb4dfcfdf8d1382e8e9470c23"
+ },
+ "presentation": {
+  "file": "docs/final/SkyRoute-presentation.pptx",
+  "sha256": "a09662f920a60977c48dc760be49cd68676bdfe37c15f1cea61b680b38014083",
+  "slides": 12,
+  "speaker_notes": 12,
+  "native_charts": 3,
+  "zip_folder_entries": 0,
+  "ooxml_validation": "pptx skill validate.py: All validations PASSED",
+  "visual_check": "per-slide render (Quick Look) for layout and overflow; chart series read back from file",
+  "slides_md_sha256": "2840fe22fa3c8d8461cc1fa9189a221dd1ac49ac8be021acc5a7363abd02548d",
+  "builder_sha256": "82e4c76fe8017aad00c8521b9847a65a84ae6e254b36780607faf39d19aa3746"
+ }
+}

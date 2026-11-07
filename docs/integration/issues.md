@@ -41,13 +41,24 @@ YHT PR #1（`f05459c`）已合入，GitHub `checks` 为 SUCCESS。修改前13项
 | --- | --- | --- | --- | --- |
 | LQ-V2-02 | LQ | `docs/modules/lq/v2/experiments/op_c.sql` 要求 `q.window = dataset.window`。数据集窗口按 LQ 触发器等于发布有效期（2026全年），规划任务是10分钟窗口；同一条已写入正式表的航线，LQ 版追溯0行，ZC 正式版 [op_c.sql](../v2/schema/op_c.sql) 2行。复现：`python3 -B docs/modules/zc/v2/experiments/review_lq.py --output /tmp/zc-lq.json`，探针 `op_c_task_window` | LQ 版改为任务窗口落在数据集窗口内，或说明保留相等合同的理由并与正式表约束一致；复跑探针为通过 | 待 LQ 确认 |
 | ZQO-V2-01 | ZQO | 空上游版本值与空 compiler_version 仍可发布 | 见上节 LQ 记录 | ZC 复跑 `review_zqo.py` 退出码1，仍待 ZQO 修复 |
-| YHT-V2-05/06 | YHT | 见上节 | YHT PR #5 已开，checks 成功 | PR #5 未合入 develop；ZC 本棒未依赖其行为，合入后复跑 ZC 测试 |
+| YHT-V2-05/06 | YHT | 见上节 | YHT PR #5 已开，checks 成功 | PR #5 已于 2026-11-07 合入 develop；ZC 整合时复跑 ZC 9 项与统一模式全部测试通过 |
 
 **ZC-V2-C01 已落实**：`query_run`（query_id、release_id、actor_id、window_lo/hi 等）与 `route_segment_source`（query_id、segment_no、component_id、zone_rid、dataset_id，含 zone 索引）为正式表，外键与发布、窗口、数据集一致性由触发器在写入时校验。
 
+## v2 第6棒整合（ZC，基线 1500683 + LJ）
+
+整合前五棒均已完成：YHT PR #1/#5、ZQO PR #4、LQ PR #6、ZC PR #7、LJ 见下。全量复核脚本 `docs/integration/v2_verify.py` 重跑全部测试、实验与审阅脚本，20/20 组命令符合预期，231 项测试通过（[verification-v2.json](../final/evidence/verification-v2.json)）。
+
+| 编号 | 负责人 | 记录 | 状态 |
+| --- | --- | --- | --- |
+| INT-V2-01 | ZC | LJ 的 PR #8 以 `main` 为目标，ZC 整合时未核对目标分支即合并，`main` 一度包含未完成的 v2。经用户确认后将 `main` 以 `--force-with-lease` 恢复到 `5d4034b`（临时放开 force push，完成后恢复保护：须 PR、须 `checks`、禁止 force push 与删除）；同一分支经 PR #9 合入 `develop`。CI 新增检查：发往 `main` 的 PR 只能来自 `develop` 或 `hotfix/*`。GitHub 上 PR #8 仍显示为已合并，其内容只存在于 `develop` | 已处理 |
+| ZC-V2-02 | ZC | 读取 `op_c.sql` 与 LQ SQL 时显式使用 UTF-8；`review_lq.py` 的授权连接在 `finally` 中关闭；ZQO `catalog.initialize()` 读取 `schema.sql` 时显式使用 UTF-8（一行兼容修订，行为不变，所有成员实验都经此入口）。macOS 无法复现 Windows 默认编码 | 已修复，待 LJ 在 Windows 默认编码下复跑确认 |
+| LQ-V2-02 | LQ | 整合复跑 `review_lq.py`：`op_c_task_window` 仍为 LQ 版 0 行、ZC 正式版 2 行 | 仍待 LQ 处理；报告以正式版 `docs/v2/schema/op_c.sql` 为准 |
+| ZQO-V2-01 | ZQO | 整合复跑 `review_zqo.py` 退出码 1，空上游版本值与空编译器版本仍可发布 | 仍待 ZQO 修复；报告 §8.4 列为局限 |
+
 ## 最新状态（2026-11-06，整合基线2850d89）
 
-ZC读取全部成员修复并独立复测，131项回归、原7项审查、11项整链路和25项风险专项均通过，见[最终证据](../final/evidence/verification.json)。报告与PPT已整合。YHT-05为生产候选文档问题，已由YHT修订并提交待复核。下文保留历次问题触发与修复证据，当前状态以总表及最新复核为准。
+ZC读取全部成员修复并独立复测，131项回归、原7项审查、11项整链路和25项风险专项均通过，见[最终证据](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/evidence/verification.json)。报告与PPT已整合。YHT-05为生产候选文档问题，已由YHT修订并提交待复核。下文保留历次问题触发与修复证据，当前状态以总表及最新复核为准。
 
 日期：2026-11-05。检查基线：`cc20db8a6c3d2c92f030c8322cdf067ece249f91`，叠加 ZC 输入校验修复。记录中的“实际”均来自 [审查脚本](audit.py) 与 [原始输出](results/audit.json)。源码 SHA-256 随结果保存，便于核对修复前后版本。
 
@@ -243,6 +254,7 @@ YHT修复（提交`1862ab44ca094bc493fab6fc7ce0cd6f51f2e2db`，`fix(data): verif
   `catalog.initialize()` 对 `schema.sql` 调用未指定编码的 `Path.read_text()`，
   因 UTF-8 字节触发 `UnicodeDecodeError`；`review_lq.py` 随后因数据库连接未及时
   关闭，在临时目录清理时触发 `PermissionError`。
+- **整合修复（ZC，2026-11-07）**：见上方“v2 第6棒整合”中 ZC-V2-02 一行；待 LJ 在 Windows 默认编码下复跑相关测试与 `review_lq.py` 后关闭。
 - **当前处理**：使用 `python -X utf8` 后，统一模式 18 项和 ZC 查询回归 9 项通过；
   取数实验的正确性检查为 0 不一致。该环境开关是本轮 LJ 实验的复现前提，但不关闭
   ZC-V2-02。

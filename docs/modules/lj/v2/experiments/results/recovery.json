@@ -20,7 +20,7 @@
     "digest": "1aa55e2f53f28ddcda41737224960d37872f04ab771806c0f572cb3185069446"
   },
   "backup": {
-    "elapsed_ms": 3.194,
+    "elapsed_ms": 3.415,
     "restore": {
       "integrity_check": "ok",
       "foreign_key_violations": 0,
@@ -42,7 +42,7 @@
     "python": "3.14.7",
     "sqlite": "3.50.4",
     "platform": "Windows-11-10.0.26300-SP0",
-    "git_head": "15006838043e4ca34ce2f99b1df87e0ae801c16e",
+    "git_head": "c4a3a71d44b9d1c6ee37ee78980aff6e0856beab",
     "source_sha256": {
       "docs\\modules\\lj\\v2\\experiments\\recovery.py": "de0ff5c157a10ae498bfd78851282a4299a2ba2337d9a8e00713e8b9ca2d208c",
       "docs\\v2\\schema\\schema.sql": "c94b3f718bb626e453498e7bc53780c4672af82d6d76c5520bd42992567f683f",

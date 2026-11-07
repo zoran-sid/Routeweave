@@ -1,0 +1,223 @@
+{
+  "experiment": "unified operation B and historical storage",
+  "recorded_at": "2026-11-06T14:04:12Z",
+  "synthetic": true,
+  "environment": {
+    "python": "3.13.15",
+    "sqlite": "3.50.4",
+    "platform": "macOS-26.6-arm64-arm-64bit-Mach-O",
+    "git_head": "5ee1a19e440c0d1c652fa28c92676f96e07c6e0f",
+    "working_tree_source_sha256": {
+      "docs/modules/zqo/v2/experiments/run.py": "4123006b6dd45e9dabdb26b655ec5422261141ade1b00273f29843b8a2e650bc",
+      "docs/modules/zqo/v2/experiments/catalog.py": "9853e35cda807341844c7eada6ef193e1f05542f4a79002c7844b0121cda4865",
+      "docs/modules/zqo/v2/experiments/test_catalog.py": "46826ac9ffca9c5769ccc09d531c8c91078023a7dac71827f2b608da113d036a",
+      "docs/v2/schema/schema.sql": "97d7701faf2ee34fcf6830e154eb80f0ff29012493da069cb426713cf3e8bbc1",
+      "docs/v2/schema/fixtures.py": "cf7e3ae5130c0444306d8582b24b35bf80f02f97e4bbb55507cf3822131e0727"
+    }
+  },
+  "parameters": {
+    "release_counts": [
+      10,
+      100,
+      1000
+    ],
+    "buildings": 25,
+    "terrain_grid": [
+      11,
+      11
+    ],
+    "restrictions": 3,
+    "exposure_zones": 6,
+    "change": "one airspace ceiling per release",
+    "journal_mode": "WAL",
+    "synchronous": "FULL",
+    "history_latency": "reopened connection; warm OS cache; SQL + digest validation + full JSON serialization; 30 reads alternating oldest/middle/latest",
+    "storage": "main DB after successful TRUNCATE checkpoint; indexes, audit and outbox included"
+  },
+  "regressions": {
+    "run": 14,
+    "failures": 0,
+    "errors": 0,
+    "log": "test_failpoints_are_atomic_and_audited (test_catalog.CatalogTest.test_failpoints_are_atomic_and_audited) ... ok\ntest_full_copy_exports_equal_shared (test_catalog.CatalogTest.test_full_copy_exports_equal_shared) ... ok\ntest_invalid_rows_rollback_and_source_coverage (test_catalog.CatalogTest.test_invalid_rows_rollback_and_source_coverage) ... ok\ntest_lost_reply_idempotency_and_key_reuse (test_catalog.CatalogTest.test_lost_reply_idempotency_and_key_reuse) ... ok\ntest_own_sql_guards (test_catalog.CatalogTest.test_own_sql_guards) ... ok\ntest_provenance_window_missing_release_and_no_safe_default (test_catalog.CatalogTest.test_provenance_window_missing_release_and_no_safe_default) ... ok\ntest_publish_role_denied_without_mutation (test_catalog.CatalogTest.test_publish_role_denied_without_mutation) ... ok\ntest_reference_metadata_drift_is_visible_failure (test_catalog.CatalogTest.test_reference_metadata_drift_is_visible_failure) ... ok\ntest_release_insert_and_completeness_guards (test_catalog.CatalogTest.test_release_insert_and_completeness_guards) ... ok\ntest_revoke_is_new_version_and_event (test_catalog.CatalogTest.test_revoke_is_new_version_and_event) ... ok\ntest_shared_airspace_operation_a_resolves_owner (test_catalog.CatalogTest.test_shared_airspace_operation_a_resolves_owner) ... ok\ntest_shared_layers_and_history_reopen (test_catalog.CatalogTest.test_shared_layers_and_history_reopen) ... ok\ntest_two_publishers_one_winner (test_catalog.CatalogTest.test_two_publishers_one_winner) ... ok\ntest_wal_reader_and_new_reader_visibility (test_catalog.CatalogTest.test_wal_reader_and_new_reader_visibility) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 0.282s\n\nOK\n"
+  },
+  "storage": [
+    {
+      "mode": "shared",
+      "releases": 10,
+      "db_bytes": 397312,
+      "wal_bytes_after_checkpoint": 0,
+      "components": 14,
+      "feature_rows": 61,
+      "terrain_posts": 121,
+      "publish_elapsed_seconds": 0.0408,
+      "read_samples": 30,
+      "historical_release_ids": [
+        "r0000",
+        "r0004",
+        "r0009"
+      ],
+      "history_export_median_us": 1031.98,
+      "history_export_p95_us": 1047.88,
+      "export_bytes_mean": 40234,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    {
+      "mode": "shared",
+      "releases": 100,
+      "db_bytes": 942080,
+      "wal_bytes_after_checkpoint": 0,
+      "components": 104,
+      "feature_rows": 331,
+      "terrain_posts": 121,
+      "publish_elapsed_seconds": 0.3925,
+      "read_samples": 30,
+      "historical_release_ids": [
+        "r0000",
+        "r0049",
+        "r0099"
+      ],
+      "history_export_median_us": 1040.1,
+      "history_export_p95_us": 1078.88,
+      "export_bytes_mean": 40234,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    {
+      "mode": "shared",
+      "releases": 1000,
+      "db_bytes": 6500352,
+      "wal_bytes_after_checkpoint": 0,
+      "components": 1004,
+      "feature_rows": 3031,
+      "terrain_posts": 121,
+      "publish_elapsed_seconds": 4.0709,
+      "read_samples": 30,
+      "historical_release_ids": [
+        "r0000",
+        "r0499",
+        "r0999"
+      ],
+      "history_export_median_us": 1040.21,
+      "history_export_p95_us": 1069.58,
+      "export_bytes_mean": 40234,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    {
+      "mode": "full",
+      "releases": 10,
+      "db_bytes": 663552,
+      "wal_bytes_after_checkpoint": 0,
+      "components": 50,
+      "feature_rows": 340,
+      "terrain_posts": 1210,
+      "publish_elapsed_seconds": 0.062,
+      "read_samples": 30,
+      "historical_release_ids": [
+        "r0000",
+        "r0004",
+        "r0009"
+      ],
+      "history_export_median_us": 1052.69,
+      "history_export_p95_us": 1073.5,
+      "export_bytes_mean": 40234,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    {
+      "mode": "full",
+      "releases": 100,
+      "db_bytes": 3756032,
+      "wal_bytes_after_checkpoint": 0,
+      "components": 500,
+      "feature_rows": 3400,
+      "terrain_posts": 12100,
+      "publish_elapsed_seconds": 0.6418,
+      "read_samples": 30,
+      "historical_release_ids": [
+        "r0000",
+        "r0049",
+        "r0099"
+      ],
+      "history_export_median_us": 1056.69,
+      "history_export_p95_us": 1088.62,
+      "export_bytes_mean": 40234,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    },
+    {
+      "mode": "full",
+      "releases": 1000,
+      "db_bytes": 35553280,
+      "wal_bytes_after_checkpoint": 0,
+      "components": 5000,
+      "feature_rows": 34000,
+      "terrain_posts": 121000,
+      "publish_elapsed_seconds": 6.8057,
+      "read_samples": 30,
+      "historical_release_ids": [
+        "r0000",
+        "r0499",
+        "r0999"
+      ],
+      "history_export_median_us": 1069.06,
+      "history_export_p95_us": 1118.96,
+      "export_bytes_mean": 40234,
+      "integrity_check": "ok",
+      "foreign_key_violations": 0
+    }
+  ],
+  "paired_semantic_hashes_equal": true,
+  "sampled_semantic_hashes": {
+    "r0000": "3764bc60de5fffbc75153ecb2bdf8f986a95a4c495914bd0383021755894bbf5",
+    "r0004": "2a59380a4d3a0e6c06254e8fe8b21b0d724ff1c3bc90663cc1956d58cb5df607",
+    "r0009": "a43b49e2e0d4b3ddd2e0500b872b31e7eabe1b8586b1035d16ddf7e8246a6a9a",
+    "r0049": "d8db14fb7f90dbb34985553c617a562666cf7e49cc9eb5a7dc61c892545b1dca",
+    "r0099": "fc66167f1642fe3448d6ad4efa4952956eb3a2484f1318222f046e324e4dd601",
+    "r0499": "da0e113acba6c7acfe6b7d4db9078e747c63cd49aa45caad11b98f266eacbc62",
+    "r0999": "fc38d8b728ab46a2d3eebe215460f21cd31806993d02ce1e06a1e4883e5def2a"
+  },
+  "known_other_owner_defects": [
+    {
+      "issue": "YHT-V2-05",
+      "case": "draft feature can move to published owner",
+      "sql": "UPDATE feature SET release_id='published' WHERE rid=2",
+      "expected": "rejected",
+      "actual": "accepted",
+      "pass": false
+    },
+    {
+      "issue": "YHT-V2-05",
+      "case": "subtype inserted after publication",
+      "sql": "INSERT INTO building (rid,footprint_wkt,solid_wkt,bbox_min_x,bbox_min_y,bbox_max_x,bbox_max_y,base_z,top_z,height_m,footprint_source,height_source,height_method,is_landmark) VALUES(1,'p','s',0,0,1,1,0,10,10,'SRC-SYN','SRC-SYN','assumed',0)",
+      "expected": "rejected",
+      "actual": "accepted",
+      "pass": false
+    },
+    {
+      "issue": "YHT-V2-05",
+      "case": "terrain inserted after publication",
+      "sql": "INSERT INTO terrain_surface (release_id,terrain_id,surface_type,bounds_wkt,post_spacing_m,vertical_datum,flat,min_z,max_z,source_id,quality,valid_lo,valid_hi,checksum) VALUES('published','late','grid','p',1,'local-z0',1,0,0,'SRC-SYN','assumed','2026-01-01T00:00:00Z','2027-01-01T00:00:00Z','0000000000000000000000000000000000000000000000000000000000000000')",
+      "expected": "rejected",
+      "actual": "accepted",
+      "pass": false
+    },
+    {
+      "issue": "YHT-V2-06",
+      "case": "source metadata update accepted",
+      "sql": "UPDATE source SET license='changed' WHERE source_id='SRC-SYN'",
+      "expected": "rejected",
+      "actual": "accepted",
+      "pass": false
+    },
+    {
+      "issue": "LQ-V2-01",
+      "case": "risk model formula update accepted",
+      "sql": "UPDATE risk_model SET formula='different' WHERE risk_model_id='lq-risk-v1'",
+      "expected": "rejected",
+      "actual": "accepted",
+      "pass": false
+    }
+  ]
+}

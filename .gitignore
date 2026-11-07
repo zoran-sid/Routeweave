@@ -2,3 +2,15 @@
 __pycache__/
 *.py[cod]
 /work/
+~$*
+
+# LaTeX build outputs and private cover data (docs/final/source/report)
+docs/final/source/report/cover-info.tex
+docs/final/source/report/*.aux
+docs/final/source/report/*.log
+docs/final/source/report/*.toc
+docs/final/source/report/*.out
+docs/final/source/report/*.fls
+docs/final/source/report/*.fdb_latexmk
+docs/final/source/report/*.xdv
+docs/final/source/report/report.pdf

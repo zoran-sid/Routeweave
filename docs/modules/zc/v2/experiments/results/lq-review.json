@@ -1,0 +1,124 @@
+{
+ "review": "ZC leg 4 review of LQ leg 3",
+ "synthetic": true,
+ "environment": {
+  "python": "3.15.0",
+  "sqlite": "3.54.1",
+  "git_head": "5fdf18aa5d2746873e954ddb106b169f30b3282f"
+ },
+ "probes": [
+  {
+   "probe": "model_formula_update",
+   "claim": "LQ-V2-01: approved/referenced risk_model cannot change in place",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "risk_model: immutable version; register a new model id",
+   "pass": true
+  },
+  {
+   "probe": "model_delete",
+   "claim": "LQ-V2-01: referenced risk_model cannot be deleted",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "risk_model: retained version",
+   "pass": true
+  },
+  {
+   "probe": "sealed_derived_update",
+   "claim": "validated derived_risk is append-only",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "derived_risk: append-only",
+   "pass": true
+  },
+  {
+   "probe": "sealed_dataset_reopen",
+   "claim": "validated risk_dataset cannot return to draft",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "risk_dataset: immutable identity or validated result",
+   "pass": true
+  },
+  {
+   "probe": "self_approval",
+   "claim": "author cannot approve own request",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "governance_approval: independent active safety reviewer required",
+   "pass": true
+  },
+  {
+   "probe": "gap_seal",
+   "claim": "a dataset with a temporal gap cannot be sealed",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "risk_dataset: gap/missing result/incorrect maximum",
+   "pass": true
+  },
+  {
+   "probe": "endpoint_raw_table",
+   "claim": "fixed endpoint denies raw exposure_zone",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "restricted endpoint accepts fixed view queries only",
+   "pass": true
+  },
+  {
+   "probe": "endpoint_helper_view",
+   "claim": "fixed endpoint denies the internal resolved_feature view",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "restricted endpoint accepts fixed view queries only",
+   "pass": true
+  },
+  {
+   "probe": "authorizer_raw_table",
+   "claim": "reader() authorizer alone denies raw exposure_zone",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "access to exposure_zone.rid is prohibited",
+   "pass": true
+  },
+  {
+   "probe": "authorizer_helper_view",
+   "claim": "reader() authorizer alone confines a dispatcher to the two restricted views",
+   "expected": "rejected",
+   "actual": "rejected",
+   "detail": "access to resolved_feature.feature_id is prohibited",
+   "pass": true
+  },
+  {
+   "probe": "dispatcher_detail_rows",
+   "claim": "dispatcher sees no exposure detail",
+   "expected": 0,
+   "actual": 0,
+   "pass": true
+  },
+  {
+   "probe": "op_c_task_window",
+   "claim": "LQ op_c.sql traces a route planned for a task window",
+   "expected": 2,
+   "actual": 2,
+   "pass": true,
+   "detail": {
+    "task_window": [
+     "2026-11-05T08:05:00Z",
+     "2026-11-05T08:15:00Z"
+    ],
+    "dataset_window": [
+     "2026-01-01T00:00:00Z",
+     "2027-01-01T00:00:00Z"
+    ],
+    "zc_op_c_rows": 2,
+    "lq_op_c_rows": 2,
+    "cause": "LQ requires q.window == dataset window; tasks are sub-windows"
+   }
+  }
+ ],
+ "passed": 12,
+ "total": 12,
+ "integrity": {
+  "check": "ok",
+  "foreign_key_violations": 0
+ }
+}

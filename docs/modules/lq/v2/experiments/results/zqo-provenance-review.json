@@ -1,0 +1,29 @@
+{
+  "issue": "ZQO-V2-01",
+  "cases": [
+    {
+      "case": "empty_upstream_versions",
+      "actual": "rejected",
+      "reason": "upstream source versions must be non-empty strings: airspace,exposure,scene,sources,terrain",
+      "passed": true
+    },
+    {
+      "case": "empty_compiler_version",
+      "actual": "rejected",
+      "reason": "compiler_version must be a non-empty string",
+      "passed": true
+    }
+  ],
+  "synthetic": true,
+  "environment": {
+    "python": "3.15.0",
+    "sqlite": "3.54.1",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "git_head": "5fdf18aa5d2746873e954ddb106b169f30b3282f",
+    "source_sha256": {
+      "docs/modules/lq/v2/experiments/review_zqo.py": "c2cf02fd48ee46801a31eb94a588007983c303b961b1bc3251b4878eb8dd4cda",
+      "docs/modules/zqo/v2/experiments/catalog.py": "2667b1b0da504cc96e6b6338786124a0bfb18a223dc08759b15f972ad07f07df",
+      "docs/v2/schema/schema.sql": "51f8e39739e145149a53476a1e57f4a8a471ae6e3c0e06a7b53181a234e01615"
+    }
+  }
+}

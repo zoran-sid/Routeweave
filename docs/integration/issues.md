@@ -1,8 +1,64 @@
 # 最终集成问题清单
 
+## v2 问题（2026-11-06 起）
+
+| 编号 | 负责人 | 问题 | 处理 | 状态 |
+| --- | --- | --- | --- | --- |
+| YHT-V2-01 | YHT | 缺可执行统一模式与测试（任务安排第4、7.1节） | ZC 按用户指示新增 `docs/v2/schema/`，13项测试 | 已复核通过（YHT，2026-11-07）：合并后 `discover -s docs/v2/schema` 59项通过 |
+| YHT-V2-02 | YHT | 操作 A 缺 `EXPLAIN QUERY PLAN` 与索引对比 | ZC 新增访问路径实验与第4.3.1节 | 已复核通过（YHT，2026-11-07）：重跑 6配置×6路径，`mismatched_queries` 全0；N=10000、K=20 四维 R*Tree 37.4 µs |
+| YHT-V2-03 | YHT | `coverage_tile`、`terrain_surface` 单列主键在第二次发布冲突 | 主键加 `release_id`（决定 S-01） | 已复核通过（YHT，2026-11-07）：`test_tile_and_terrain_ids_repeat_across_releases` 通过 |
+| YHT-V2-04 | YHT | 空域 `state` 原地维护与发布不可变冲突；限高体索引范围错误 | 状态随发布固定；增加禁止范围生成列（S-02、S-03） | 已复核通过（YHT，2026-11-07）：状态/限高相关 schema 测试通过；ZQO 发布/撤销事务按 S-02 实现 |
+
+
+## v2 第2棒审阅（ZQO，基线 `5ee1a19`）
+
+YHT PR #1（`f05459c`）已合入，GitHub `checks` 为 SUCCESS。修改前13项统一模式测试通过；完整运行 YHT `op_a_index_comparison.py`，6配置×6路径的 `mismatched_queries` 合计0。[独立复跑结果](../modules/zqo/v2/experiments/results/yht-index-review.json)保留修改前 schema SHA；YHT 第4章的性能数值属于其原实验，本轮不替换该结论。字典、SQL、操作 A 的基础接口可承载本轮发布扩展。
+
+| 编号 | 负责人 | 真实缺口与复现 | 完成判据 | 状态 |
+| --- | --- | --- | --- | --- |
+| YHT-V2-05 | YHT | draft 的 feature 可 UPDATE 到已发布 release；已发布 feature 可后补子类型；已发布版本可新增地形。原 immutable 触发器未覆盖所有 INSERT / NEW 所属版本检查 | 源空间表检查旧/新 owner 和新增子行；拒绝全部已发布内容变更；增加覆盖 feature、子类型、coverage、terrain 的回归，保持合法 draft 写入和原索引实验 | 已修复：`0748f2d`；`feature_immutable_update` 检查 OLD/NEW，子表 INSERT 加 draft-only 触发器；合并后 schema 59项、YHT 42项、ZQO 14项通过，4 条 YHT 探针全部 rejected。验证：`python3 -B -m unittest discover -s docs/v2/schema -v`；`python3 -B docs/modules/zqo/v2/experiments/run.py --counts 10 --output /tmp/zqo.json` |
+| YHT-V2-06 | YHT | `source.license` 在发布后仍可原地修改；历史来源跟着改变 | 已引用 source 采用不可变版本编号或真正的历史源表；测试旧发布可重开且来源不变、新来源可合法入库；更新字典与迁移约定 | 已修复：`0748f2d`；`source_provenance_usage` 汇总全部非 draft 引用，`source_immutable_update/delete` 拒绝原地改/删，修订登记新 `source_id`；字典与 S-08 已更新；合并后 schema 59项、LQ 18项通过。验证：`python3 -B -m unittest discover -s docs/v2/schema -v`；`python3 -B docs/modules/lq/v2/experiments/run.py --output /tmp/lq.json` |
+| LQ-V2-01 | LQ | 已引用 `risk_model.formula` 仍可原地修改，历史 exposure 的模型解释漂移 | 模型版本不可变或独立版本表；审批/状态调整与计算参数历史分开；测试旧发布模型参数稳定、修订使用新版本 | LQ第3棒已修复；ZC第4棒复核通过（[探针](../modules/zc/v2/experiments/results/lq-review.json)） |
+
+复现脚本：`python3 -B docs/modules/zqo/v2/experiments/run.py --counts 10 --output /tmp/zqo-v2-review.json`。`known_other_owner_defects` 保存5条原始SQL、预期 rejected、实际 accepted 和 `pass=false`，不把这些结果计作通过。完整证据在 [transactions-storage.json](../modules/zqo/v2/experiments/results/transactions-storage.json)。ZQO 的 `snapshot()` 检查关系行摘要，漂移明确报错，不能恢复已被原地改写的数据；该检测不关闭问题。
+
+本轮仅修复自己发布表组的直接插入 published、未完成层发布和 release_layer 迁移到已发布版本旁路，并新增统一模式回归。其他表组实现保持不变。新增组件共享改变查询的版本解析：ZC 使用逻辑 release_id → component → physical owner；直接按 feature.release_id 过滤逻辑新版会漏行，详见 [接口映射](../modules/zqo/v2/integration.md)。
+
+## v2 第3棒审阅与交接（LQ，基线61fed41）
+
+确认ZQO PR #4已合入develop且checks成功。修改前27项统一模式测试通过；完整复跑ZQO的10/100/1000版实验，14项事务回归及共享/全量历史摘要一致。结果见[LQ独立审阅](../modules/lq/v2/experiments/results/zqo-review-before.json)。存储结论支持81.7%空间减少，未推定稳定的读取加速。
+
+- **LQ-V2-01**：新增模型不可变触发器、独立启停表和新ID修订/历史重开测试；模型原地UPDATE/DELETE拒绝，旧发布解释保持。证据见[治理实验](../modules/lq/v2/experiments/results/governance.json)。后续ZC按下一棒审阅流程复核，本记录不代写其认可。
+- **ZQO-V2-01（ZQO，P2，待负责人修复）**：catalog.publish只核对source_versions键集合，空版本值或空compiler_version仍可发布。复现命令`python3 -B docs/modules/lq/v2/experiments/review_zqo.py --output /tmp/zqo-provenance.json`；两项当前accepted、退出码1，见[原始结果](../modules/lq/v2/experiments/results/zqo-provenance-review.json)。请ZQO要求上游版本值与编译器为有效非空字符串，并补无效类型/空白值及正常发布回归；保留失败审计与幂等语义。LQ未代改其代码。当前正常实验使用非空合成标识，因此这不是对既有事务结果的反证。
+- **ZC-V2-C01（接口需求，非缺陷）**：正式query_run需含query_id、release_id、actor_id、window_lo/hi；route_segment_source需含query_id、segment_no、component_id、zone_rid、dataset_id，并索引query_id。LQ以TEMP表验证操作C，SQL见[op_c.sql](../modules/lq/v2/experiments/op_c.sql)。ZC下一棒在正式表上落实外键、版本一致和访问校验，并复跑SQL；不能把TEMP夹具写成已部署结果服务。
+- **保留其他责任**：YHT-V2-05/06仍由YHT修复。LQ新增派生质量、访问及审计约束不覆盖源表的已知旁路，不以本棒测试通过关闭这些项。
+
+## v2 第4棒审阅与交接（ZC，基线 ca2bf58）
+
+确认 LQ PR #6 已合入 develop 且 checks 成功。修改前统一模式45项、LQ 18项、ZQO 事务回归通过；LQ `run.py` 与 ZQO `run.py --counts 10` 复跑一致。12项独立探针见 [lq-review.json](../modules/zc/v2/experiments/results/lq-review.json)，11项通过。
+
+| 编号 | 负责人 | 问题与复现 | 完成判据 | 状态 |
+| --- | --- | --- | --- | --- |
+| LQ-V2-02 | LQ | （已修复，见“v2 第6棒整合”）`docs/modules/lq/v2/experiments/op_c.sql` 要求 `q.window = dataset.window`。数据集窗口按 LQ 触发器等于发布有效期（2026全年），规划任务是10分钟窗口；同一条已写入正式表的航线，LQ 版追溯0行，ZC 正式版 [op_c.sql](../v2/schema/op_c.sql) 2行。复现：`python3 -B docs/modules/zc/v2/experiments/review_lq.py --output /tmp/zc-lq.json`，探针 `op_c_task_window` | LQ 版改为任务窗口落在数据集窗口内，或说明保留相等合同的理由并与正式表约束一致；复跑探针为通过 | 待 LQ 确认 |
+| ZQO-V2-01 | ZQO | 空上游版本值与空 compiler_version 仍可发布 | 见上节 LQ 记录 | 已修复，见“v2 第6棒整合” |
+| YHT-V2-05/06 | YHT | 见上节 | YHT PR #5 已开，checks 成功 | PR #5 已于 2026-11-07 合入 develop；ZC 整合时复跑 ZC 9 项与统一模式全部测试通过 |
+
+**ZC-V2-C01 已落实**：`query_run`（query_id、release_id、actor_id、window_lo/hi 等）与 `route_segment_source`（query_id、segment_no、component_id、zone_rid、dataset_id，含 zone 索引）为正式表，外键与发布、窗口、数据集一致性由触发器在写入时校验。
+
+## v2 第6棒整合（ZC，基线 1500683 + LJ）
+
+整合前五棒均已完成：YHT PR #1/#5、ZQO PR #4、LQ PR #6、ZC PR #7、LJ 见下。全量复核脚本 `docs/integration/v2_verify.py` 重跑全部测试、实验与审阅脚本，20/20 组命令符合预期，231 项测试通过；修复 LQ-V2-02、ZQO-V2-01、ZC-V2-02 后于发布前重跑为 233 项（[verification-v2.json](../final/evidence/verification-v2.json)）。
+
+| 编号 | 负责人 | 记录 | 状态 |
+| --- | --- | --- | --- |
+| INT-V2-01 | ZC | LJ 的 PR #8 以 `main` 为目标，ZC 整合时未核对目标分支即合并，`main` 一度包含未完成的 v2。经用户确认后将 `main` 以 `--force-with-lease` 恢复到 `5d4034b`（临时放开 force push，完成后恢复保护：须 PR、须 `checks`、禁止 force push 与删除）；同一分支经 PR #9 合入 `develop`。CI 新增检查：发往 `main` 的 PR 只能来自 `develop` 或 `hotfix/*`。GitHub 上 PR #8 仍显示为已合并，其内容只存在于 `develop` | 已处理 |
+| ZC-V2-02 | ZC | 读取 `op_c.sql` 与 LQ SQL 时显式使用 UTF-8；`review_lq.py` 的授权连接在 `finally` 中关闭；ZQO `catalog.initialize()` 读取 `schema.sql` 时显式使用 UTF-8（一行兼容修订，行为不变，所有成员实验都经此入口） | **已关闭（2026-11-07）**：关闭 UTF-8 模式、C 语言环境（默认编码 US-ASCII，严于 Windows 代码页）下全量复核 20/20、233 项测试通过；同类写入问题在 v1 ZC/ZQO/LQ 脚本与 `audit.py`、`five_module.py` 中一并修复 |
+| LQ-V2-02 | LQ | 整合复跑 `review_lq.py`：`op_c_task_window` 仍为 LQ 版 0 行、ZC 正式版 2 行 | **已修复（2026-11-07，ZC 按用户指示代修，记在 LQ 名下）**：LQ `op_c.sql` 改为数据集窗口包含任务窗口；`run.py` 以 10 分钟任务窗验证 2 行、超窗 0 行；`governance.json` 重跑；探针 12/12。待 LQ 复核 |
+| ZQO-V2-01 | ZQO | 整合复跑 `review_zqo.py` 退出码 1，空上游版本值与空编译器版本仍可发布 | **已修复（2026-11-07，ZC 按用户指示代修，记在 ZQO 名下）**：`catalog.publish` 在事务内拒绝空/空白/非字符串来源版本与编译器版本并留失败审计；新增 7 种无效输入回归；`review_zqo.py` 退出码 0。待 ZQO 复核 |
+
 ## 最新状态（2026-11-06，整合基线2850d89）
 
-ZC读取全部成员修复并独立复测，131项回归、原7项审查、11项整链路和25项风险专项均通过，见[最终证据](../final/evidence/verification.json)。报告与PPT已整合。YHT-05为生产候选文档问题，已由YHT修订并提交待复核。下文保留历次问题触发与修复证据，当前状态以总表及最新复核为准。
+ZC读取全部成员修复并独立复测，131项回归、原7项审查、11项整链路和25项风险专项均通过，见[最终证据](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/evidence/verification.json)。报告与PPT已整合。YHT-05为生产候选文档问题，已由YHT修订并提交待复核。下文保留历次问题触发与修复证据，当前状态以总表及最新复核为准。
 
 日期：2026-11-05。检查基线：`cc20db8a6c3d2c92f030c8322cdf067ece249f91`，叠加 ZC 输入校验修复。记录中的“实际”均来自 [审查脚本](audit.py) 与 [原始输出](results/audit.json)。源码 SHA-256 随结果保存，便于核对修复前后版本。
 
@@ -189,3 +245,20 @@ YHT修复（提交`1862ab44ca094bc493fab6fc7ce0cd6f51f2e2db`，`fix(data): verif
 - **验收**：模块全文不再出现未经核实的操作符类名称；区分包围盒过滤与精确几何语义；更新本人交接并提交。整合方读取提交后复核、关闭本项。本轮未代改YHT文件或代写其认可。
 - **修复（YHT，2026-11-06）**：提交`c4ed005`（`docs(data): correct PostGIS 3D index operator class`）。[storage.md](../modules/yht/storage.md)比较表与生产建议均改为`gist_geometry_ops_nd`，明确默认二维GiST包围盒、n维候选过滤和`ST_3DIntersects`精确判定三者的区别；示例按PostGIS 3.5官方说明标注，未在本机执行。[references.md](../modules/yht/references.md)补充第14条官方出处。
 - **修复验证**：YHT模块全文不再出现`gist_geometry_ops_3d`；42项原型测试通过，`audit.py --owner YHT`三项PASS，SQLite原型和既有131/7/11/25验证不受影响。当前状态：已修订待复核。
+
+## ZC-V2-02：Windows 实验复现与资源清理（2026-11-07）
+
+- **负责人／优先级**：ZC，P2。LJ 第5棒审阅，不修改 ZC 的查询或性能结论。
+- **复现**：在 Windows Python 3.14、默认系统编码下运行
+  `python -B docs/modules/zc/v2/experiments/test_query.py -v`，ZC 的
+  `catalog.initialize()` 对 `schema.sql` 调用未指定编码的 `Path.read_text()`，
+  因 UTF-8 字节触发 `UnicodeDecodeError`；`review_lq.py` 随后因数据库连接未及时
+  关闭，在临时目录清理时触发 `PermissionError`。
+- **整合修复（ZC，2026-11-07）**：见上方“v2 第6棒整合”中 ZC-V2-02 一行，已在非 UTF-8 语言环境下全量复核后关闭。
+- **当前处理**：使用 `python -X utf8` 后，统一模式 18 项和 ZC 查询回归 9 项通过；
+  取数实验的正确性检查为 0 不一致。该环境开关是本轮 LJ 实验的复现前提，但不关闭
+  ZC-V2-02。
+- **完成判据**：实验源码显式按 UTF-8 读取仓库 SQL，所有打开的 SQLite 连接在临时
+  目录退出前关闭；在 Windows 默认编码下重新运行相关测试和审阅脚本通过。
+- **影响**：不改变 ZC 的访问路径、缓存失效或性能数值；只影响 Windows 的可复现性和
+  清理可靠性。LJ 恢复脚本已显式使用 UTF-8，并独立通过正常恢复与截断故障检测。

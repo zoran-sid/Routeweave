@@ -1,6 +1,20 @@
 # LQ 的工作与交接记录
 
-项目：SkyRoute。最后更新：2026-11-06（Asia/Shanghai）。
+项目：SkyRoute。最后更新：2026-11-07（Asia/Shanghai）。
+
+## v2 任务（2026-11-06 重组，第3棒，待开始）
+
+| 项目 | 内容 |
+| --- | --- |
+| v2 数据库重点 | 风险数据治理与数据库访问控制 |
+| 报告章节 | 7 |
+| PPT | 第5–6页 |
+| 开工条件 | ZQO 的 v2 PR 已合入 `develop`；第一步审阅 ZQO |
+| 分支 | `lq/v2-governance`，从 `develop` 创建，PR 到 `develop`，checks 通过后自行合入 |
+| 交付位置 | `docs/modules/lq/v2/`：`section.md`、`slides.md`、`references.md`、`experiments/`；`docs/v2/schema/` 中本人表组 |
+| 提示词 | [v2 提示词](../v2-prompts.md) |
+
+具体任务与验收见[任务安排](../team-tasks.md)第4–10节。以下 v1 记录保留为证据。
 
 ## 当前概况
 
@@ -68,3 +82,21 @@
 - **实际验证**：原风险专项25/25通过；原先单独缺E/C且保留旧q的两个用例均抛`ValueError:unknown_or_invalid_exposure:G-001`。LQ19、YHT42、ZC24、ZQO31、LJ15，共131项测试通过。原7项审查及五模块整链路11项通过，来源、窗口、失败审计和数据库重开验证保持通过。
 - **状态与成果**：YHT-04由LQ独立复测后标为复核通过。[修复后风险原始证据](../modules/lq/results/integration-review-post-yht04-20261106.json)、[模块日志与链路摘要](../modules/lq/results/integration-checks-post-yht04-20261106.json)均绑定本轮基线和源码摘要。修复前23/25的JSON不覆盖；本人集成说明、模块入口和共享集成入口同步更新。未修改其他成员代码或代写其个人认可。
 - **后续条件**：当前没有等待YHT-04修复的事项。导出门禁、E/C/q含义、编译窗、聚合或发布来源变化时复跑专项和受影响链路；总体报告/PPT合稿、实际贡献确认及生产部署不因本轮测试通过自动完成。
+
+## 2026-11-07：v2第3棒数据库治理交付
+
+- **开工条件与分支**：工作区干净，fetch后切换develop并ff-only同步。实际基线`61fed41bbcea5b40495d8de37d13f19a0b0ba4ed`，ZQO PR #4已合入且GitHub checks SUCCESS；按v2-prompts第3段创建`lq/v2-governance`，不直接写main/develop。
+- **读取**：AGENTS、任务安排全文、课程/共同约定、五人交接、YHT v2数据字典与章节、统一模式、ZQO v2原型/章节/证据及LQ v1门禁。沿用发布→组件→物理owner合同，v1代码和成果保留。
+- **审阅ZQO**：修改前27项模式测试通过，完整复跑14项事务测试与10/100/1000版共享/全量存储实验，配对历史内容一致，1000版6,500,352/35,553,280字节，支持81.7%空间收益。发布表可承载来源、风险窗口与审计。独立发现空source_versions值/空compiler_version仍可发布，记为ZQO-V2-01并交原作者；两条accepted失败证据保留，未代改ZQO代码。
+- **本人成果**：[v2入口](../modules/lq/v2/README.md)、[第7章](../modules/lq/v2/section.md)、[展示文字/讲稿](../modules/lq/v2/slides.md)、[引用](../modules/lq/v2/references.md)、[实验与操作C](../modules/lq/v2/experiments/)、[对接说明](../modules/lq/v2/integration.md)。统一模式增加7个治理实体共30表；补模型不可变、独立启停、细时段风险输入/派生/质量、角色受限视图及审批，更新字典第9节与ER/决定。
+- **实际验证**：最终统一模式45项（原27+本棒18）通过，v1五模块131项、原审查7项、整链路11项和风险专项25项通过；治理run输出2段实际追溯结果与2个受影响派生层，integrity_check=ok且外键错误0。已引用模型原地修改拒绝，新ID修订后旧发布及数据库重开解释保持。证据均记录环境、规模、SQL、执行计划和源码摘要，见[validation](../modules/lq/v2/experiments/results/validation.json)。
+- **边界与责任**：模型公式仅附录，不重写v1算法；权限实测基于可信服务的固定查询/SQLite连接，未声称文件管理员隔离或PostgreSQL已部署。操作C用TEMP查询结果夹具，向ZC登记真实query_run/route_segment_source字段需求。YHT-V2-05/06继续由YHT修复，ZQO-V2-01继续由ZQO修复；本棒未代写认可。
+- **保留与后续**：90日热审计、365日归档为内部参数，依赖对象与历史结果共同保留，交LJ设计归档恢复；ZC下一棒先复跑本棒实验，在正式结果表上执行操作C。提交/PR/checks/合并状态以GitHub实际记录为准，检查通过后按提示词自行合入develop，再告知用户通知ZC。
+
+## 2026-11-07：ZC 按用户指示代修 LQ-V2-02 与编码问题
+
+用户指示由 ZC 修复全部成员的未关闭问题并记在各成员名下。以下修改由 ZC 完成，不代表 LQ 已审阅认可，请 LQ 复核：
+
+- **LQ-V2-02（已修复）**：[`op_c.sql`](../modules/lq/v2/experiments/op_c.sql) 由“查询窗口等于数据集窗口”改为“数据集窗口包含任务窗口”。[`run.py`](../modules/lq/v2/experiments/run.py) 用 10 分钟任务窗口验证追溯（2 段航线均返回来源），并以超出数据集窗口的查询验证过滤（0 行）。[governance.json](../modules/lq/v2/experiments/results/governance.json) 已用修订代码重跑，新增 `trace_window_rule` 记录；18 项测试通过。ZC 的独立探针 `op_c_task_window` 转为通过（12/12）。对接说明第“ZC操作C合同”节已注明修订。
+- **编码（ZC-V2-02 同类）**：`prototype/evaluate.py`、`prototype/review_integration.py`、`v2/experiments/run.py`、`v2/experiments/review_zqo.py` 的文本读写显式使用 UTF-8；行为在 UTF-8 系统上不变，非 UTF-8 系统（含 Windows 默认代码页）不再失败。
+- **ZQO-V2-01 探针结果**：LQ 的 [`review_zqo.py`](../modules/lq/v2/experiments/review_zqo.py) 在 ZQO 修复后退出码 0，两项无效输入均被拒绝，结果已写入 [zqo-provenance-review.json](../modules/lq/v2/experiments/results/zqo-provenance-review.json)。

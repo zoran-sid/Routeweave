@@ -1,32 +1,37 @@
-# 整合材料构建来源
+# v2 整合材料构建来源
 
-正文以[report.md](../report.md)为准；汇报内容和讲稿以[build_slides.mjs](build_slides.mjs)为构建源，同时提供[slides.md](../slides.md)供所有 agent 直接阅读。
+| 文件 | 用途 |
+| --- | --- |
+| [report/report.tex](report/report.tex) | 报告唯一源稿（ctexart，XeLaTeX）；7 张图为 TikZ / pgfplots |
+| [report/cover-info.example.tex](report/cover-info.example.tex) | 封面成员信息模板；复制为 `cover-info.tex` 填写，该文件不入库 |
+| [build_report.py](build_report.py) | 从成员结果 JSON 生成图表数据（`report/data/*.dat`），编译 PDF，生成 Markdown 镜像，统计正文汉字 |
+| [build_slides.cjs](build_slides.cjs) | 用 pptxgenjs 3.12 构建 12 页 PPTX；图表数值从成员结果 JSON 读取，每页写入讲稿 |
+| [extract_slides.py](extract_slides.py) | 从 PPTX 提取文字、表格、图表数值与讲稿到 `../slides.md`，只依赖 Python 标准库 |
 
 ## 构建
 
-- `render_assets.mjs`：使用 Node.js 与 `sharp` 生成架构及数据关系图的 SVG/PNG。SVG保留在 `../assets/`。
-- `build_report.py`：使用 Python、`python-docx` 和 Pillow，将 Markdown、表格和图转换为 `../SkyRoute-report.docx`。
-- `build_slides.mjs`：在 Artifact Session 的 `presentation` 回调中调用 `buildDeck(presentation)`；或传入 `@oai/artifact-tool` 的 `Presentation.create({slideSize:{width:1280,height:720}})`。完成后显式对原生图表设置 `Heiti SC` 字体，再导出 PPTX。
-
-在安装相应依赖的环境中，从仓库根目录构建图和报告：
+在仓库根目录执行：
 
 ```bash
-node docs/final/source/render_assets.mjs
 python3 docs/final/source/build_report.py
 ```
 
-Word使用 Arial/Songti SC/Heiti SC，PPT使用 Heiti SC。其他系统应安装支持中文的字体或统一替换后重新渲染检查。Linux或无桌面环境通过LibreOffice转PDF时，需让fontconfig能够发现所用中文字库。
-
-`extract_slides.py` 从最终PPTX提取展示文字、表格、图表数值及备注到 `../slides.md`，只依赖Python标准库。
+需要 TeX Live 2024 及以上（ctex、xeCJK、TikZ、pgfplots、latexmk）与 pandoc；页数统计使用 Ghostscript。字体由 ctex 按操作系统自动选择。
 
 ```bash
+npm install --prefix /tmp/pptx pptxgenjs@3.12.0
+NODE_PATH=/tmp/pptx/node_modules node docs/final/source/build_slides.cjs
 python3 docs/final/source/extract_slides.py
 ```
 
+PPT 使用 Microsoft YaHei，Windows 与 Office for Mac 均自带。
+
+## 修改规则
+
+- 改报告：编辑 `report/report.tex`，运行 `build_report.py`；PDF、`report.md` 与图表数据同时更新。不要直接编辑 `report.md`。
+- 改 PPT：编辑 `build_slides.cjs`，重新构建并运行 `extract_slides.py`；不要手工编辑 `slides.md`。
+- 涉及实验数值时，从成员结果 JSON 读取，注明原实验条件；只调整排版无需重跑实验。
+
 ## 本次检查
 
-Word经过实际渲染与13页逐页目视检查，确认中文字形、分页、表格和图可读。PPT经过10页逐页渲染检查、OOXML关系和版面检查，以及导出文件重新导入验证。第8页为原生可编辑柱状图，包含与缓存数值一致的内嵌工作簿；7张表为原生表格。发布的PPT含10页讲稿。
-
-构建、结构和渲染检查摘要及交付文件SHA-256见[文档检查记录](../evidence/artifact-checks.json)。渲染预览、字体缓存和临时工作簿处理文件留在构建临时目录，不作为项目成果提交。
-
-修改后同步四项：正文与图、Word、PPT、逐页讲稿。涉及实验数值时从原始JSON读取，注明原始基线；仅调整排版无需重新运行性能实验。
+报告经 XeLaTeX 编译无错误、无溢出盒；逐页渲染检查图、表与分页。PPT 通过 OOXML 结构校验（pptx 技能 `validate.py`），逐页渲染检查版面与文字溢出；三张原生图表的系列与数值从文件读回核对，对数轴设置正确。检查记录与文件摘要见 [artifact-checks-v2.json](../evidence/artifact-checks-v2.json)。

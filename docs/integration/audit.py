@@ -161,7 +161,7 @@ def main():
                 for p in sorted((ROOT/'docs/modules').rglob('*.py'))}}
     text=json.dumps(output,ensure_ascii=False,indent=2,allow_nan=False)+'\n'
     if args.output:
-        args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(text)
+        args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(text, encoding="utf-8")
     for r in records:
         print(r['id'], 'PASS' if r['passed'] else 'FAIL', json.dumps(r['observed'],ensure_ascii=False))
     raise SystemExit(1 if output['failed_cases'] else 0)

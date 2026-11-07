@@ -1,49 +1,49 @@
-# SkyRoute 整合交付
+# SkyRoute v2 整合交付
 
-整合日期：2026-11-06。技术与验证基线：`2850d89cea68221bbe6a8cf1161bd1d3ab220c2c`。本目录汇总五个成员的已提交成果，提供报告、汇报稿、课程覆盖关系和可追溯证据。
+整合日期：2026-11-07。整合方：ZC（第6棒）。v2 以数据库为中心重组，五名成员按串行顺序完成各自章节后在此整合；v1（算法方向）的报告、PPT 与证据保留在标签 `v1.0-algorithm-baseline`。
 
 ## 交付文件
 
-| 文件 | 用途 |
+| 文件 | 内容 |
 | --- | --- |
-| [SkyRoute-report.docx](SkyRoute-report.docx) | 13页整合报告，含架构图、数据关系图、评估、贡献说明及参考文献 |
-| [report.md](report.md) | 报告正文源稿，供所有成员及 agent 直接读取和修订 |
-| [SkyRoute-presentation.pptx](SkyRoute-presentation.pptx) | 10页可编辑汇报稿，包含原生表格、图表及每页讲稿 |
-| [slides.md](slides.md) | 逐页展示文字、数据和讲稿，便于异步协作 |
-| [course-coverage.md](course-coverage.md) | 课程要求、报告章节、PPT页码与证据的逐项映射 |
-| [contributions.md](contributions.md) | 五名成员实际成果依据及正式贡献表填写准备 |
-| [evidence/verification.json](evidence/verification.json) | 本轮测试命令、完整日志、环境、源代码摘要 |
-| [source/README.md](source/README.md) | 文档、图和汇报稿的构建来源与排版检查说明 |
+| [SkyRoute-report.pdf](SkyRoute-report.pdf) | 21 页小组报告（XeLaTeX），7 张图、17 张表、26 条 IEEE 参考文献 |
+| [report.md](report.md) | 报告的 Markdown 镜像，由 LaTeX 源自动生成，图、表与引用编号与 PDF 一致 |
+| [SkyRoute-presentation.pptx](SkyRoute-presentation.pptx) | 12 页可编辑汇报稿，原生图表与表格，每页附讲稿与来源 |
+| [slides.md](slides.md) | 逐页展示文字、表格、图表数值与讲稿，由 PPTX 自动提取 |
+| [course-coverage.md](course-coverage.md) | 课程要求（PDF 页码）→ 报告章节与页码 → PPT 页 → 证据 |
+| [contributions.md](contributions.md) | 成员实际成果依据与贡献表填写步骤 |
+| [evidence/verification-v2.json](evidence/verification-v2.json) | 整合复核：20 组命令的命令行、退出码、日志尾部、环境与全部源码摘要 |
+| [evidence/artifact-checks-v2.json](evidence/artifact-checks-v2.json) | 报告与 PPT 的构建、校验与文件摘要 |
+| [source/](source/README.md) | 报告 LaTeX 源、PPT 构建脚本与提取脚本 |
 
-报告正文、摘要及贡献说明共计6,451个汉字（按 Unicode 汉字计数，不含参考文献和附录），覆盖课程建议的2,500中文字篇幅。10页及每人2页属于本组内部安排。
+报告正文（摘要至第 9 章，不含参考文献与附录）9,887 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
 
 ## 验证状态
 
-| 检查组 | 本轮结果 | 原始证据 |
-| --- | --- | --- |
-| 五模块单元测试 | 131/131，YHT42、LQ19、ZC24、ZQO31、LJ15 | [verification.json](evidence/verification.json) |
-| 原问题审查 | 7/7 | [audit.json](evidence/audit.json) |
-| 五模块实际链路 | 11/11 | [five-module.json](evidence/five-module.json) |
-| 风险专项 | 25/25，覆盖两个独立导出入口 | [risk-review.json](evidence/risk-review.json) |
+| 检查 | 结果 |
+| --- | --- |
+| 整合复核（`docs/integration/v2_verify.py`） | 20/20 组命令符合预期，233 项测试通过；关闭 UTF-8 模式的 ASCII 语言环境下同样 20/20 |
+| 统一模式测试（含 ZQO、LQ、ZC 回归） | 全部通过 |
+| 五名成员 v2 实验与审阅脚本 | 全部重跑通过；逐棒审阅发现的 10 个问题均已修复 |
+| v1 模块测试与集成脚本 | 全部通过 |
+| PPTX 结构校验 | 通过；无多余 ZIP 目录项 |
 
-空间索引与算法性能引用各模块保存的历史实验；本轮重新运行正确性与集成检查，不覆盖历史计时。原型验证范围是合成平地、固定任务窗口、有限三维网格及本地 SQLite。报告分别说明实际运行的功能和后续部署设计。
+逐棒审阅共发现 10 个问题，发布前全部修复并复核；其中 LQ-V2-02、ZQO-V2-01 由 ZC 在整合阶段按用户指示代修，记在原负责人名下并待其复核，详见[问题清单](../integration/issues.md)。
 
-## 后续维护
-
-每次修改先读取五名成员的最新交接、Git提交和[集成问题清单](../integration/issues.md)，再修改自己的模块及受影响的整合材料。修改结论时同步 Markdown、Word、PPT、讲稿和证据引用；原始实验结果保留其执行基线。
-
-当前有一项成员文档待修：**YHT-05，PostGIS n维索引操作符类名称**。由 YHT 核对并修订原模块文档，整合稿采用已核实的技术范围，不复用有问题的SQL名称。其他成员原模块及个人交接未由本轮整合代改。
-
-正式提交前由成员确认：姓名和学号、实际贡献比例合计100%、各行全体成员签字、正式提交负责人，以及 Moodle/教师通知中的截止时间、汇报时长、AI使用声明和提交格式。材料中的AI使用说明记录了本组实际工作方式；课程的具体声明要求仍以正式通知为准。
-
-## 复核命令
-
-在仓库根目录执行各模块 README 中的 unittest 命令，以及：
+## 构建与复核
 
 ```bash
-python3 -B docs/integration/audit.py --output /tmp/skyroute-audit.json
-python3 -B docs/integration/five_module.py --output /tmp/skyroute-five-module.json
-python3 -B docs/modules/lq/prototype/review_integration.py --output /tmp/skyroute-risk-review.json
+python3 -B docs/integration/v2_verify.py --output /tmp/verify.json
+python3 docs/final/source/build_report.py
+NODE_PATH=<pptxgenjs 所在 node_modules> node docs/final/source/build_slides.cjs
+python3 docs/final/source/extract_slides.py
 ```
 
-输出使用临时路径，避免覆盖已归档证据。发布前检查新结果的版本、源码摘要、失败项和实际输入输出。
+报告需要 TeX Live（ctex、xeCJK、TikZ、pgfplots，XeLaTeX）与 pandoc；PPT 需要 `pptxgenjs@3.12.0`。报告图表与 PPT 图表的数值都从成员结果文件读取，不手工抄写。
+
+## 提交前由成员确认
+
+- 封面姓名与学号：复制 `source/report/cover-info.example.tex` 为 `cover-info.tex` 填写后重新构建；该文件已被 `.gitignore` 排除，不进入公开仓库。
+- 实际贡献比例（合计 100%）与《团队项目贡献度确认表》逐行签字。
+- 正式提交负责人、截止时间、汇报时长、上传格式与 AI 使用声明格式（以 Moodle 或教师通知为准）。
+- 本版本已发布到 `main`（标签 `v2.0-submission`）；正式提交前若有修改，从 `develop` 修订后再发布。

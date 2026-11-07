@@ -167,7 +167,7 @@ def main():
               'failed_cases': sum(not x['passed'] for x in cases),
               'source_sha256': {str(p.relative_to(ROOT)):sha256(p.read_bytes()).hexdigest() for p in files}}
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)+'\n')
+    args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)+'\n', encoding="utf-8")
     for c in cases:
         print(c['id'], 'PASS' if c['passed'] else 'FAIL', c['owner'])
     print('total:', len(cases), 'failed:', report['failed_cases'])

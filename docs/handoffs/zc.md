@@ -1,6 +1,6 @@
 # ZC 的工作记录
 
-项目：SkyRoute。最后更新：2026-11-06（Asia/Hong_Kong）。
+项目：SkyRoute。最后更新：2026-11-07（Asia/Hong_Kong）。
 
 | 项目 | 当前状态 |
 | --- | --- |
@@ -10,19 +10,44 @@
 | 技术成果状态 | 模块可交付 |
 | 集成状态 | 131项回归、7项审查、11项整链路及25项风险专项通过；报告与10页PPT已整合，YHT-05文档问题已分派 |
 
-## v2 任务（2026-11-06 重组，第4棒，待开始）
+## v2 任务（第4棒，2026-11-07 完成）
 
 | 项目 | 内容 |
 | --- | --- |
-| v2 数据库重点 | 面向规划的查询负载与性能；v2 整合与发布（第6棒） |
-| 报告章节 | 6、8.1、9 |
+| v2 数据库重点 | 面向规划的查询负载与性能；v2 整合与发布（第6棒，另行进行） |
+| 报告章节 | 6、8.1、附录 A（第9章与整合在第6棒完成） |
 | PPT | 第7–8页 |
-| 开工条件 | LQ 的 v2 PR 已合入 `develop`；第一步审阅 LQ |
-| 分支 | `zc/v2-query-workload`，从 `develop` 创建，PR 到 `develop`，checks 通过后自行合入 |
-| 交付位置 | `docs/modules/zc/v2/`：`section.md`、`slides.md`、`references.md`、`experiments/`；`docs/v2/schema/` 中本人表组 |
-| 提示词 | [v2 提示词](../v2-prompts.md) |
+| 开工基线 | `ca2bf58`：YHT PR #1、ZQO PR #4、LQ PR #6 已合入 `develop` |
+| 分支 | `zc/v2-query-workload` |
+| 成果入口 | [ZC v2](../modules/zc/v2/README.md) |
 
-具体任务与验收见[任务安排](../team-tasks.md)第4–10节。以下 v1 记录保留为证据。
+### 审阅上一棒（LQ）
+
+复跑统一模式45项、LQ 18项测试与 `run.py`、ZQO `run.py --counts 10`、`review_zqo.py`，并写 [12项独立探针](../modules/zc/v2/experiments/results/lq-review.json)：
+
+- 11项通过：LQ-V2-01 已修复（已批准模型的参数更新与删除被拒）；封存的派生值与数据集不可改写或回退；作者自审被拒；时段缺口无法封存；固定端点与 authorizer 都拒绝原表与内部 `resolved_feature` 视图；调度员读不到暴露明细。我原先怀疑 authorizer 放行 `resolved_feature`，探针显示外层查询对视图列的读取被拒，该控制成立。
+- 1项不通过，记为 **LQ-V2-02**：LQ 的 `op_c.sql` 要求查询窗口等于数据集窗口（发布有效期一年），规划任务是10分钟窗口，同一条航线 LQ 版追溯0行、ZC 正式版2行。正式表与 `docs/v2/schema/op_c.sql` 已采用“任务窗口落在数据集窗口内”，LQ 版由 LQ 确认或对齐。
+- ZQO-V2-01 仍未修复：`review_zqo.py` 退出码1，空上游版本与空编译器版本仍可发布。YHT-V2-05/06 的修复在 PR #5，尚未合入 `develop`。
+
+### 已完成
+
+- 统一模式 ZC 分节：`query_run`、`route_result`、`route_segment_source`、`route_graph_cache`，12个触发器校验发布、窗口、角色、新鲜度、数据集与缓存父子关系，结果表只追加；[操作 C 正式版](../v2/schema/op_c.sql)；ER 与决定 ZC-DV2 同步。
+- [规划服务适配](../modules/zc/v2/experiments/planner_io.py)：读事务固定发布、经组件解析物理 owner、绑定覆盖任务窗口的封存数据集；四种取数路径；派生图构建、修补与搜索；结果写入。v1 规划器未修改。
+- [取数路径实验](../modules/zc/v2/experiments/results/access_paths.json)：200/2,400/10,000 栋各12任务。R*Tree 取数中位数 0.04–0.17 ms，JSON 全量 1.4–33.6 ms，SQL 全量 0.54–14.5 ms；v1 A* 搜索 22–45 ms；派生图构建 49–129 ms、命中 0.31–0.58 ms。输入摘要、算法结果、Dijkstra 代价与航段追溯 36/36 一致。
+- [缓存失效实验](../modules/zc/v2/experiments/results/invalidation.json)：2,400 栋、24 张图、两次真实发布。按变更沿用/修补比全部重建快 6.9× 与 16.2×，48 张图与重建结果0处不一致，旧发布历史查询 24/24 命中。
+- [第6章、第8.1节与附录 A](../modules/zc/v2/section.md)、[第7–8页](../modules/zc/v2/slides.md)、[引用](../modules/zc/v2/references.md)。
+
+### 验证
+
+`python3 -B -m unittest discover -s docs/v2/schema`：54项通过（含 ZC 9项、ZQO 与 LQ 回归）；五个 v1 模块测试、`audit.py`、`five_module.py`、`review_integration.py`、LQ 与 ZQO v2 实验均通过。环境：Python 3.15.0、SQLite 3.54.1、macOS arm64。
+
+### 跨成员影响
+
+- **LJ（第5棒）**：第8.1节给出规划查询指标与建议告警；备份恢复须同时核验 ZC 四张表的外键与只追加约束；`route_graph_cache` 图本体在内存中，恢复后按发布重建。
+- **LQ**：LQ-V2-02 待确认；正式结果表已满足 ZC-V2-C01 字段合同。
+- **ZQO**：查询适配按 S-04 解析 owner；缓存沿用以 `airspace_event` 为变更来源，依赖发布事务为每个改动的限制写事件。
+
+以下 v1 记录保留为证据。
 
 ## 已完成成果
 

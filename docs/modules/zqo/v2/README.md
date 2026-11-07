@@ -1,6 +1,6 @@
 # ZQO v2：统一模式上的发布事务与历史版本
 
-基线 `5ee1a19`，YHT PR #1 已通过 merge commit `f05459c` 合入 `develop`。本目录承接 [v2 第2棒](../../../v2-prompts.md#2-zqo第2棒)；v1 原型、结果和最终材料保留。
+基线 `5ee1a19`，YHT PR #1 已通过 merge commit `f05459c` 合入 `develop`。本目录承接 [v2 第2棒](https://github.com/zoran-sid/Routeweave/blob/develop/docs/v2-prompts.md#2-zqo第2棒)；v1 原型、结果和最终材料保留。
 
 | 材料 | 用途 |
 | --- | --- |

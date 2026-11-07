@@ -28,7 +28,7 @@
 | v1 模块测试与集成脚本 | 全部通过 |
 | PPTX 结构校验 | 通过；无多余 ZIP 目录项 |
 
-逐棒审阅共发现 10 个问题，发布前全部修复并复核；其中 LQ-V2-02、ZQO-V2-01 由 ZC 在整合阶段按用户指示代修，修复日志记在 LQ、ZQO 各自的交接文件中，详见[问题清单](../integration/issues.md)。
+逐棒审阅共发现 10 个问题，发布前全部修复并复核；其中 LQ-V2-02、ZQO-V2-01 由 ZC 在整合阶段按用户指示代修，修复日志记在 LQ、ZQO 各自的交接文件中，详见[问题清单](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/issues.md)。
 
 ## 构建与复核
 
@@ -46,4 +46,4 @@ python3 docs/final/source/extract_slides.py
 - 封面姓名与学号：在 `source/report/report.tex` 开头的成员表中填写，再运行 `build_report.py` 生成 PDF。
 - 贡献比例已按交接记录评分填入本地《团队项目贡献度确认表》（`docs/final/团队项目贡献度确认表.docx`，不入库，依据见 [contributions.md](contributions.md)）；成员填写姓名、学号并逐行签字。
 - 正式提交负责人、截止时间、汇报时长、上传格式与 AI 使用声明格式（以 Moodle 或教师通知为准）。
-- 本版本已发布到 `main`（标签 `v2.0-submission`）；正式提交前若有修改，从 `develop` 修订后再发布。
+- 本版本已发布到 `main`（标签 `v2.1-submission`）。`main` 只保存项目成果；协作说明、交接记录与问题清单在 `develop` 分支。正式提交前若有修改，先在 `develop` 修订，再经 `hotfix/*` 同步到 `main`。

@@ -4,7 +4,7 @@
 
 ## v2 定位（2026-11-06）
 
-v1（`main`，标签 `v1.0-algorithm-baseline`）以航线算法为主线。课程要求的是数据管理系统设计，v2 以数据库为中心：统一模式、时空查询与索引、事务与版本、治理与访问控制、恢复验收是主线；航线规划是验证数据库设计的业务场景。以下背景、用户、功能与范围继续有效；技术研究方向和核心研究问题按 v2 更新。分工见[任务安排](team-tasks.md)。
+v1（标签 `v1.0-algorithm-baseline`）以航线算法为主线。课程要求的是数据管理系统设计，v2 以数据库为中心：统一模式、时空查询与索引、事务与版本、治理与访问控制、恢复验收是主线；航线规划是验证数据库设计的业务场景。以下背景、用户、功能与范围继续有效；技术研究方向和核心研究问题按 v2 更新。分工见[任务安排](https://github.com/zoran-sid/Routeweave/blob/develop/docs/team-tasks.md)。
 
 ## 一、项目背景
 
@@ -63,6 +63,6 @@ SkyRoute 旨在探索如何结合城市三维空间数据、动态空域信息�
 ## 协作入口
 
 - [共同场景与查询约定](scenario-contract.md)：统一空间、时间、风险和查询输出的含义。
-- [五人任务清单](team-tasks.md)：具体责任、交付物、验收方式和成员记录。
-- [作业要求与交付对照](requirements-audit.md)：课程要求及对应成果。
-- [AI 协作指南](../AGENTS.md)：协作、记录和提交规范。
+- [五人任务清单](https://github.com/zoran-sid/Routeweave/blob/develop/docs/team-tasks.md)：具体责任、交付物、验收方式和成员记录。
+- [作业要求与交付对照](https://github.com/zoran-sid/Routeweave/blob/develop/docs/requirements-audit.md)：课程要求及对应成果。
+- [AI 协作指南](https://github.com/zoran-sid/Routeweave/blob/develop/AGENTS.md)：协作、记录和提交规范。

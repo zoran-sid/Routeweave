@@ -20,7 +20,7 @@ flowchart LR
   E --> L[历史重开与源清单核对]
 ```
 
-图示链路已实际消费五个模块的输出，使用YHT完整零基面平地合成场景、固定任务窗口和SQLite目录。[本轮集成证据](../../integration/zqo-evidence.md)保存输入、版本映射和结果。生产源存储、身份认证、外部通知及监控服务另按部署设计实现。
+图示链路已实际消费五个模块的输出，使用YHT完整零基面平地合成场景、固定任务窗口和SQLite目录。[本轮集成证据](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/zqo-evidence.md)保存输入、版本映射和结果。生产源存储、身份认证、外部通知及监控服务另按部署设计实现。
 
 ## 数据发布与查询交错
 

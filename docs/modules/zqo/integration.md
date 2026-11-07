@@ -2,7 +2,7 @@
 
 ## 当前集成状态（2026-11-05）
 
-在远程 `508ca3e` 上完成ZQO-01与I-01。真实链路为YHT质量检查/导出 → LQ风险编译 → ZQO发布 → ZC Q1/Q2 → LJ验收。11项整链路检查、7项缺陷审查及126项模块回归通过。字段映射、输入/结果、异常语义和复现命令见[集成证据](../../integration/zqo-evidence.md)。
+在远程 `508ca3e` 上完成ZQO-01与I-01。真实链路为YHT质量检查/导出 → LQ风险编译 → ZQO发布 → ZC Q1/Q2 → LJ验收。11项整链路检查、7项缺陷审查及126项模块回归通过。字段映射、输入/结果、异常语义和复现命令见[集成证据](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/zqo-evidence.md)。
 
 新增 `prepare_source` 保存源快照、源版本与清单、五类查询版本映射和风险编译窗口。`Catalog.status` 无论正常或已知快照校验失败都保留来源；发布不存在时标记 `provenance_state=unavailable`。`failed_attempts`在回滚后独立记账，`failures()`可查询，原`counts()`继续统计成功发布事务的四张表。
 

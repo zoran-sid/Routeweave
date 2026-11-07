@@ -10,7 +10,7 @@ YHT-05生产候选文档的索引名称问题已分派给YHT，未改其模块�
 
 2026-11-05 已读取五个模块在 `cc20db8a6c3d2c92f030c8322cdf067ece249f91` 的成果及交接，实际检查 YHT 导出、LQ 风险编译、ZQO 发布和 LJ 验收。ZC 已修复 Q2 实际端点及非字符串时间校验，新增 3 项测试；五模块共 102 项通过。
 
-新增审查复现 7 项跨模块问题，已按用户要求分派给所属成员，见[问题清单](../../integration/issues.md)。当前状态为**问题已分派、整链路待验证**；成对接入和模块回归证据分别解释，最终链路按 I-01 补齐。完整命令和结果见[复核入口](../../integration/README.md)。
+新增审查复现 7 项跨模块问题，已按用户要求分派给所属成员，见[问题清单](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/issues.md)。当前状态为**问题已分派、整链路待验证**；成对接入和模块回归证据分别解释，最终链路按 I-01 补齐。完整命令和结果见[复核入口](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/README.md)。
 
 ## 首次交付基线（历史记录）
 

@@ -2,7 +2,7 @@
 
 状态：**模块已交付，五模块整链路复核通过，最终材料已整合**。日期：2026-11-06（Asia/Hong_Kong）。共同起始基线：`starter-v0`；最新技术复核提交：`2850d89cea68221bbe6a8cf1161bd1d3ab220c2c`。
 
-此前已修复 Q2 实际航段端点及非字符串时间校验，当前 24 项测试通过。本轮五模块131项回归、7项审查、11项整链路及25项风险专项均通过，报告与10页PPT见[最终交付](../../final/README.md)。首次交付的性能实验、21 项测试记录与 PPT 保留原始基线；本轮证据见 [集成复核](../../integration/README.md) 与 [ZC 交接](../../handoffs/zc.md)。
+此前已修复 Q2 实际航段端点及非字符串时间校验，当前 24 项测试通过。本轮五模块131项回归、7项审查、11项整链路及25项风险专项均通过，报告与10页PPT见[最终交付](../../final/README.md)。首次交付的性能实验、21 项测试记录与 PPT 保留原始基线；本轮证据见 [集成复核](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/README.md) 与 [ZC 交接](https://github.com/zoran-sid/Routeweave/blob/develop/docs/handoffs/zc.md)。
 
 本模块采用有限三维网格与完整航段约束检查，以 Dijkstra 为对照、3D A* 为查询方案。一次查询固定场景、空域、风险数据、风险模型及规划配置版本；更新后重新校验旧路线并在新版本上搜索。D* Lite 保留为有明确适用条件的增量候选。
 

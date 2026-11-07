@@ -123,7 +123,7 @@ def main():
         'regressions':{'run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'log':stream.getvalue()},
         'storage':shared+full,'paired_semantic_hashes_equal':sd==fd,'sampled_semantic_hashes':sd,
         'known_other_owner_defects':review_yht()}
-    args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+    args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n', encoding="utf-8")
     print('wrote',args.output)
 
 

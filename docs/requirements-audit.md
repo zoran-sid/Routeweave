@@ -4,7 +4,7 @@
 
 ## 交付状态
 
-v2 报告（21 页 PDF，正文 9,833 个汉字）、12 页 PPT 与证据已整合，入口见[最终材料](final/README.md)；逐项的报告章节、页码、PPT 页与证据见[课程覆盖对照](final/course-coverage.md)。整合复核 20/20 组命令符合预期，231 项测试通过，见 [verification-v2.json](final/evidence/verification-v2.json)。
+v2 报告（21 页 PDF，正文 9,887 个汉字）、12 页 PPT 与证据已整合，入口见[最终材料](final/README.md)；逐项的报告章节、页码、PPT 页与证据见[课程覆盖对照](final/course-coverage.md)。整合复核 20/20 组命令符合预期，233 项测试通过，见 [verification-v2.json](final/evidence/verification-v2.json)。
 
 ## 评分关注点与本组回应
 
@@ -15,7 +15,7 @@ v2 报告（21 页 PDF，正文 9,833 个汉字）、12 页 PPT 与证据已整�
 | 探索过程 | v1 以算法为主线，v2 按课程结构重组；重组原因与分工见[任务安排](team-tasks.md)第1节 |
 | 证据质量 | 主要结论来自可复跑的数据库实验，结果文件记录环境与源码摘要；成员之间逐棒独立审阅 |
 | 技术判断 | 实测与设计论证分开标注：SQLite 实测，PostgreSQL、图数据库与 pgRouting 为设计论证 |
-| 反思深度 | 五项设计权衡（§8.3）与局限、未关闭问题（§8.4） |
+| 反思深度 | 五项设计权衡（§8.3）、局限与逐棒审阅发现的问题（§8.4） |
 
 ## 课程要求与本组安排的区分
 

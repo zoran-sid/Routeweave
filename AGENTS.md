@@ -2,7 +2,7 @@
 
 本文件适用于整个仓库。开始工作前阅读当前项目说明、共同口径与成员职责，按实际成果记录进度。
 
-**当前版本状态（2026-11-07）**：`main` 保存 v1 交付（标签 `v1.0-algorithm-baseline`，算法方向）。v2 以数据库为中心重组，五棒均已合入 `develop`，ZC 已完成整合：21 页 PDF 报告、12 页 PPT 与证据见[最终交付](docs/final/README.md)，候选版本 `v2.0-rc.1`。全员通读、确认贡献比例后由 ZC 开 `develop` → `main` 的发布 PR。分工、顺序与验收见[任务安排](docs/team-tasks.md)；新的修改仍从 `develop` 创建个人分支，规则见第6节。
+**当前版本状态（2026-11-07）**：v2 已发布到 `main`（标签 `v2.0-submission`）；v1（算法方向）保留在标签 `v1.0-algorithm-baseline`。v2 以数据库为中心，五棒完成后由 ZC 整合：21 页 PDF 报告、12 页 PPT 与证据见[最终交付](docs/final/README.md)，逐棒审阅发现的问题见[问题清单](docs/integration/issues.md)。正式提交前的修改仍从 `develop` 创建个人分支，再经发布 PR 进入 `main`，规则见第6节。
 
 ## 1. 开始工作
 

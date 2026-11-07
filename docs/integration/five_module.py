@@ -206,7 +206,7 @@ def main():
                   str(p.relative_to(ROOT)): sha256(p.read_bytes()).hexdigest() for p in paths}}
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False)+'\n')
+        args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False)+'\n', encoding="utf-8")
     for x in records: print(x['id'], 'PASS' if x['passed'] else 'FAIL')
     raise SystemExit(bool(result['failed_cases']))
 

@@ -37,6 +37,6 @@ if __name__=='__main__':
        'environment':{'python':platform.python_version(),'sqlite':sqlite3.sqlite_version,'platform':platform.platform(),
        'git_head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=cat.ROOT,text=True).strip(),
        'source_sha256':{str(p.relative_to(cat.ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}}}
-    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n', encoding="utf-8")
     for c in cases: print(c['case'],c['actual'])
     raise SystemExit(any(not c['passed'] for c in cases))

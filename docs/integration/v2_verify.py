@@ -34,8 +34,8 @@ def commands(tmp):
         ("zc_access", "ZC access paths (quick grid)", py + ["docs/modules/zc/v2/experiments/access_paths.py", "--quick", "--output", out("access.json")], 0),
         ("zc_invalidation", "ZC cache invalidation (6 graphs, 600 buildings)", py + ["docs/modules/zc/v2/experiments/invalidation.py", "--graphs", "6", "--buildings", "600", "--output", out("inval.json")], 0),
         ("lj_recovery", "LJ backup, restore checks and truncation detection", py + ["docs/modules/lj/v2/experiments/recovery.py", "--output", out("recovery.json")], 0),
-        ("zc_review_lq", "ZC probes of LQ (LQ-V2-02 open: exit 0, 11/12 expected)", py + ["docs/modules/zc/v2/experiments/review_lq.py", "--output", out("review_lq.json")], 0),
-        ("lq_review_zqo", "LQ probe of ZQO-V2-01 (open: exit 1 expected)", py + ["docs/modules/lq/v2/experiments/review_zqo.py", "--output", out("review_zqo.json")], 1),
+        ("zc_review_lq", "ZC probes of LQ (12/12 after LQ-V2-02 fix)", py + ["docs/modules/zc/v2/experiments/review_lq.py", "--output", out("review_lq.json")], 0),
+        ("lq_review_zqo", "LQ probe of ZQO-V2-01 (fixed: both invalid inputs rejected)", py + ["docs/modules/lq/v2/experiments/review_zqo.py", "--output", out("review_zqo.json")], 0),
         *[(f"v1_{m}", f"v1 {m.upper()} module tests", py + ["-m", "unittest", "discover", "-s", f"docs/modules/{m}/prototype"], 0)
           for m in ("yht", "lq", "zc", "zqo", "lj")],
         ("v1_audit", "v1 issue audit", py + ["docs/integration/audit.py", "--output", out("audit.json")], 0),
@@ -52,7 +52,7 @@ def main():
     with tempfile.TemporaryDirectory(prefix="skyroute-v2-verify-") as tmp:
         for key, label, cmd, expected in commands(tmp):
             t = time.perf_counter()
-            p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, encoding="utf-8")
+            p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace")
             log = (p.stdout + p.stderr).strip()
             tests = re.findall(r"Ran (\d+) tests?", log)
             runs.append({"key": key, "label": label, "command": " ".join(["python3"] + cmd[1:]),

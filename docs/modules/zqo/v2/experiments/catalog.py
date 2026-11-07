@@ -250,6 +250,13 @@ def publish(c, payload, *, request_id, release_id, expected, scene='syn-district
             raise ValueError('explicit provenance required')
         if set(provenance['source_versions']) != set(LAYERS):
             raise ValueError('five upstream versions required')
+        # ZQO-V2-01 (fixed by ZC on the user's instruction): versions identify upstream deliveries,
+        # so empty, blank or non-string values are rejected inside the transaction (failure audited).
+        blank = sorted(k for k, v in provenance['source_versions'].items() if not isinstance(v, str) or not v.strip())
+        if blank:
+            raise ValueError('upstream source versions must be non-empty strings: ' + ','.join(blank))
+        if not isinstance(provenance['compiler_version'], str) or not provenance['compiler_version'].strip():
+            raise ValueError('compiler_version must be a non-empty string')
         if provenance['risk_window'] != list(window):
             raise ValueError('risk compilation window mismatch')
         models = {r['risk_model_id'] for r in payload['exposure']['risk_model']}

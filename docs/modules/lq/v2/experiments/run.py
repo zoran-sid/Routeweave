@@ -45,17 +45,20 @@ def execute():
         CREATE TEMP TABLE route_segment_source(query_id TEXT NOT NULL,segment_no INTEGER NOT NULL,
              component_id TEXT NOT NULL,zone_rid INTEGER NOT NULL,dataset_id TEXT NOT NULL,
              PRIMARY KEY(query_id,segment_no,zone_rid));''')
-        c.execute('INSERT INTO query_run VALUES(?,?,?,?,?)',('Q1','R1','DISPATCH',*cat.WIN))
+        task=('2026-11-05T08:05:00Z','2026-11-05T08:15:00Z')  # 10-minute task inside the dataset window
+        c.execute('INSERT INTO query_run VALUES(?,?,?,?,?)',('Q1','R1','DISPATCH',*task))
         for i,z in enumerate(zones[:2]): c.execute('INSERT INTO route_segment_source VALUES(?,?,?,?,?)',('Q1',i+1,'R0:exposure',z['rid'],'D1'))
-        sql=(HERE/'op_c.sql').read_text()
+        sql=(HERE/'op_c.sql').read_text(encoding="utf-8")
         result=cat.rows(c,sql,{'query_id':'Q1'})
         plan=cat.rows(c,'EXPLAIN QUERY PLAN '+sql,{'query_id':'Q1'})
         assert len(result)==2 and all(r['release_id']=='R1' and r['owner_release_id']=='R0' and r['risk_model_id']=='lq-risk-v1' for r in result)
-        c.execute("UPDATE query_run SET window_hi='2026-12-01T00:00:00Z' WHERE query_id='Q1'")
+        c.execute("UPDATE query_run SET window_hi='2027-06-01T00:00:00Z' WHERE query_id='Q1'")  # beyond dataset window
         mismatched=cat.rows(c,sql,{'query_id':'Q1'})
         assert mismatched==[]
-        c.execute('UPDATE query_run SET window_hi=? WHERE query_id=?',(cat.WIN[1],'Q1'))
+        c.execute('UPDATE query_run SET window_hi=? WHERE query_id=?',(task[1],'Q1'))
         records['trace_window_mismatch_filtered']=True
+        records['trace_window_rule']={'task_window':list(task),'dataset_window':list(cat.WIN),
+            'rule':'dataset window contains task window (LQ-V2-02)','outside_window_rows':0}
         records['operation_C']={'sql':sql,'query_fixture':cat.rows(c,'SELECT * FROM query_run'),
             'segment_fixture':cat.rows(c,'SELECT * FROM route_segment_source'),
             'result':result,'explain_query_plan':plan,'passed':True,
@@ -109,7 +112,7 @@ def main():
         'source_sha256':{str(f.relative_to(cat.ROOT)):hashlib.sha256(f.read_bytes()).hexdigest() for f in paths}},
         synthetic=True,parameters={'buildings':25,'terrain_posts':121,'exposure_zones':6,'published_releases':2,
                                    'risk_datasets':2,'temporary_queries':1,'temporary_segments':2})
-    args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(evidence,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
+    args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(evidence,ensure_ascii=False,indent=2,allow_nan=False)+'\n', encoding="utf-8")
     print(json.dumps({'tests':evidence['tests']['run'],'operation_C_rows':len(evidence['operation_C']['result']),
           'invalidation_datasets':len(evidence['invalidation']['result']),'integrity':evidence['integrity']},ensure_ascii=False))
 

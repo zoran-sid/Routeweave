@@ -3,57 +3,27 @@
   "cases": [
     {
       "case": "empty_upstream_versions",
-      "expected": "reject invalid provenance",
-      "actual": "accepted",
-      "provenance": {
-        "compiler_version": "synthetic-fixture-1",
-        "risk_model_id": "lq-risk-v1",
-        "risk_window": [
-          "2026-01-01T00:00:00Z",
-          "2027-01-01T00:00:00Z"
-        ],
-        "source_versions": {
-          "airspace": "",
-          "exposure": "",
-          "scene": "",
-          "sources": "",
-          "terrain": ""
-        }
-      },
-      "passed": false
+      "actual": "rejected",
+      "reason": "upstream source versions must be non-empty strings: airspace,exposure,scene,sources,terrain",
+      "passed": true
     },
     {
       "case": "empty_compiler_version",
-      "expected": "reject invalid provenance",
-      "actual": "accepted",
-      "provenance": {
-        "compiler_version": "",
-        "risk_model_id": "lq-risk-v1",
-        "risk_window": [
-          "2026-01-01T00:00:00Z",
-          "2027-01-01T00:00:00Z"
-        ],
-        "source_versions": {
-          "airspace": "synthetic-v2-1",
-          "exposure": "synthetic-v2-1",
-          "scene": "synthetic-v2-1",
-          "sources": "synthetic-v2-1",
-          "terrain": "synthetic-v2-1"
-        }
-      },
-      "passed": false
+      "actual": "rejected",
+      "reason": "compiler_version must be a non-empty string",
+      "passed": true
     }
   ],
   "synthetic": true,
   "environment": {
-    "python": "3.13.9",
-    "sqlite": "3.50.4",
+    "python": "3.15.0",
+    "sqlite": "3.54.1",
     "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
-    "git_head": "61fed41bbcea5b40495d8de37d13f19a0b0ba4ed",
+    "git_head": "5fdf18aa5d2746873e954ddb106b169f30b3282f",
     "source_sha256": {
       "docs/modules/lq/v2/experiments/review_zqo.py": "c2cf02fd48ee46801a31eb94a588007983c303b961b1bc3251b4878eb8dd4cda",
-      "docs/modules/zqo/v2/experiments/catalog.py": "9853e35cda807341844c7eada6ef193e1f05542f4a79002c7844b0121cda4865",
-      "docs/v2/schema/schema.sql": "ce4b5054f919a15e0ede1c5b476280956ca8ab8a78a8f8fde439249c36c0b7b5"
+      "docs/modules/zqo/v2/experiments/catalog.py": "2667b1b0da504cc96e6b6338786124a0bfb18a223dc08759b15f972ad07f07df",
+      "docs/v2/schema/schema.sql": "51f8e39739e145149a53476a1e57f4a8a471ae6e3c0e06a7b53181a234e01615"
     }
   }
 }

@@ -16,19 +16,19 @@
 | [evidence/artifact-checks-v2.json](evidence/artifact-checks-v2.json) | 报告与 PPT 的构建、校验与文件摘要 |
 | [source/](source/README.md) | 报告 LaTeX 源、PPT 构建脚本与提取脚本 |
 
-报告正文（摘要至第 9 章，不含参考文献与附录）9,833 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
+报告正文（摘要至第 9 章，不含参考文献与附录）9,887 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
 
 ## 验证状态
 
 | 检查 | 结果 |
 | --- | --- |
-| 整合复核（`docs/integration/v2_verify.py`） | 20/20 组命令符合预期，231 项测试通过 |
+| 整合复核（`docs/integration/v2_verify.py`） | 20/20 组命令符合预期，233 项测试通过；关闭 UTF-8 模式的 ASCII 语言环境下同样 20/20 |
 | 统一模式测试（含 ZQO、LQ、ZC 回归） | 全部通过 |
-| 五名成员 v2 实验与审阅脚本 | 全部重跑通过；两项已知未关闭问题按预期复现 |
+| 五名成员 v2 实验与审阅脚本 | 全部重跑通过；逐棒审阅发现的 10 个问题均已修复 |
 | v1 模块测试与集成脚本 | 全部通过 |
 | PPTX 结构校验 | 通过；无多余 ZIP 目录项 |
 
-已知未关闭问题（不影响报告结论，详见[问题清单](../integration/issues.md)）：LQ-V2-02（LQ 临时追溯 SQL 的窗口合同）、ZQO-V2-01（发布服务未拒绝空上游版本值）、ZC-V2-02（Windows 默认编码复现，已修复，待 LJ 在 Windows 复跑确认）。
+逐棒审阅共发现 10 个问题，发布前全部修复并复核；其中 LQ-V2-02、ZQO-V2-01 由 ZC 在整合阶段按用户指示代修，记在原负责人名下并待其复核，详见[问题清单](../integration/issues.md)。
 
 ## 构建与复核
 
@@ -46,4 +46,4 @@ python3 docs/final/source/extract_slides.py
 - 封面姓名与学号：复制 `source/report/cover-info.example.tex` 为 `cover-info.tex` 填写后重新构建；该文件已被 `.gitignore` 排除，不进入公开仓库。
 - 实际贡献比例（合计 100%）与《团队项目贡献度确认表》逐行签字。
 - 正式提交负责人、截止时间、汇报时长、上传格式与 AI 使用声明格式（以 Moodle 或教师通知为准）。
-- 全员通读本版本后，由 ZC 开 `develop` → `main` 的发布 PR 并打 `v2.0-submission` 标签。
+- 本版本已发布到 `main`（标签 `v2.0-submission`）；正式提交前若有修改，从 `develop` 修订后再发布。

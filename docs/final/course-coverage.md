@@ -52,7 +52,7 @@
 
 ## 篇幅与形式
 
-- 报告正文（摘要至第 9 章，不含参考文献与附录）9,833 个汉字，满足“不少于 2,500 中文字”的建议（PDF 第4页）。统计方法见 `docs/final/source/build_report.py` 的 `hanzi()`。
+- 报告正文（摘要至第 9 章，不含参考文献与附录）9,887 个汉字，满足“不少于 2,500 中文字”的建议（PDF 第4页）。统计方法见 `docs/final/source/build_report.py` 的 `hanzi()`。
 - PPT 共 12 页，按 ZQO、YHT、ZQO、LQ、ZC、LJ 的顺序讲述，每页附讲稿与来源；汇报时长由课程另行通知，届时按时长增删页面（[任务安排](../team-tasks.md)第9节）。
 - 原型、实验与证据（PDF 第6页加分材料）见报告附录 B 与 [verification-v2.json](evidence/verification-v2.json)。
 

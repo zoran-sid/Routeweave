@@ -1,7 +1,7 @@
 {
  "verification": "SkyRoute v2 integration",
- "started_at": "2026-11-07T07:02:48Z",
- "git_head": "77ce289411f1aaaa48523515698a8da77c04d2db",
+ "started_at": "2026-11-07T07:17:13Z",
+ "git_head": "f7c99914787228e90e82923cc04f02d3a1a352d8",
  "git_dirty": false,
  "environment": {
   "python": "3.15.0",
@@ -11,7 +11,7 @@
  "summary": {
   "commands": 20,
   "passed": 20,
-  "tests_ran": 231
+  "tests_ran": 233
  },
  "runs": [
   {
@@ -21,13 +21,13 @@
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
-   "tests_ran": 59,
-   "seconds": 6.01,
+   "tests_ran": 60,
+   "seconds": 5.83,
    "log_tail": [
     "test_valid_fixture_passes_foreign_key_check (test_schema.SchemaTest.test_valid_fixture_passes_foreign_key_check) ... ok",
     "",
     "----------------------------------------------------------------------",
-    "Ran 59 tests in 5.920s",
+    "Ran 60 tests in 5.740s",
     "",
     "OK"
    ]
@@ -39,13 +39,13 @@
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
-   "tests_ran": 14,
-   "seconds": 0.6,
+   "tests_ran": 15,
+   "seconds": 0.84,
    "log_tail": [
     "test_wal_reader_and_new_reader_visibility (test_catalog.CatalogTest.test_wal_reader_and_new_reader_visibility) ... ok",
     "",
     "----------------------------------------------------------------------",
-    "Ran 14 tests in 0.530s",
+    "Ran 15 tests in 0.768s",
     "",
     "OK"
    ]
@@ -58,12 +58,12 @@
    "expected_exit": 0,
    "pass": true,
    "tests_ran": 18,
-   "seconds": 0.83,
+   "seconds": 0.97,
    "log_tail": [
     "test_unknown_quality_does_not_become_validated_risk (test_governance.GovernanceTest.test_unknown_quality_does_not_become_validated_risk) ... ok",
     "",
     "----------------------------------------------------------------------",
-    "Ran 18 tests in 0.754s",
+    "Ran 18 tests in 0.895s",
     "",
     "OK"
    ]
@@ -76,12 +76,12 @@
    "expected_exit": 0,
    "pass": true,
    "tests_ran": 9,
-   "seconds": 3.94,
+   "seconds": 4.69,
    "log_tail": [
     "test_segment_sources_must_match_release_window_and_dataset (test_query.QueryTablesTest.test_segment_sources_must_match_release_window_and_dataset) ... ok",
     "",
     "----------------------------------------------------------------------",
-    "Ran 9 tests in 3.851s",
+    "Ran 9 tests in 4.454s",
     "",
     "OK"
    ]
@@ -89,44 +89,44 @@
   {
    "key": "yht_op_a",
    "label": "YHT operation A access paths (quick grid)",
-   "command": "python3 -B docs/modules/yht/v2/experiments/op_a_index_comparison.py --quick --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/op_a.json",
+   "command": "python3 -B docs/modules/yht/v2/experiments/op_a_index_comparison.py --quick --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/op_a.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 0.53,
+   "seconds": 0.47,
    "log_tail": [
     "N=   100 K=  1 built in 0.01s",
     "N=  1000 K=  1 built in 0.04s",
     "N=   100 K=  5 built in 0.02s",
-    "N=  1000 K=  5 built in 0.18s",
-    "wrote /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/op_a.json and /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/op_a.csv"
+    "N=  1000 K=  5 built in 0.16s",
+    "wrote /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/op_a.json and /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/op_a.csv"
    ]
   },
   {
    "key": "zqo_run",
    "label": "ZQO publish/rollback/storage (10 releases)",
-   "command": "python3 -B docs/modules/zqo/v2/experiments/run.py --counts 10 --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/zqo.json",
+   "command": "python3 -B docs/modules/zqo/v2/experiments/run.py --counts 10 --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/zqo.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 1.37,
+   "seconds": 1.06,
    "log_tail": [
-    "{\"mode\": \"shared\", \"releases\": 10, \"db_bytes\": 561152, \"wal_bytes_after_checkpoint\": 0, \"components\": 14, \"feature_rows\": 61, \"terrain_posts\": 121, \"publish_elapsed_seconds\": 0.0614, \"read_samples\": 30, \"historical_release_ids\": [\"r0000\", \"r0004\", \"r0009\"], \"history_export_median_us\": 1619.9, \"history_export_p95_us\": 1650.88, \"export_bytes_mean\": 40234, \"integrity_check\": \"ok\", \"foreign_key_violations\": 0}",
-    "{\"mode\": \"full\", \"releases\": 10, \"db_bytes\": 876544, \"wal_bytes_after_checkpoint\": 0, \"components\": 50, \"feature_rows\": 340, \"terrain_posts\": 1210, \"publish_elapsed_seconds\": 0.0962, \"read_samples\": 30, \"historical_release_ids\": [\"r0000\", \"r0004\", \"r0009\"], \"history_export_median_us\": 1625.0, \"history_export_p95_us\": 1682.42, \"export_bytes_mean\": 40234, \"integrity_check\": \"ok\", \"foreign_key_violations\": 0}",
-    "wrote /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/zqo.json"
+    "{\"mode\": \"shared\", \"releases\": 10, \"db_bytes\": 561152, \"wal_bytes_after_checkpoint\": 0, \"components\": 14, \"feature_rows\": 61, \"terrain_posts\": 121, \"publish_elapsed_seconds\": 0.0558, \"read_samples\": 30, \"historical_release_ids\": [\"r0000\", \"r0004\", \"r0009\"], \"history_export_median_us\": 1541.08, \"history_export_p95_us\": 1921.58, \"export_bytes_mean\": 40234, \"integrity_check\": \"ok\", \"foreign_key_violations\": 0}",
+    "{\"mode\": \"full\", \"releases\": 10, \"db_bytes\": 876544, \"wal_bytes_after_checkpoint\": 0, \"components\": 50, \"feature_rows\": 340, \"terrain_posts\": 1210, \"publish_elapsed_seconds\": 0.0943, \"read_samples\": 30, \"historical_release_ids\": [\"r0000\", \"r0004\", \"r0009\"], \"history_export_median_us\": 1800.12, \"history_export_p95_us\": 1877.88, \"export_bytes_mean\": 40234, \"integrity_check\": \"ok\", \"foreign_key_violations\": 0}",
+    "wrote /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/zqo.json"
    ]
   },
   {
    "key": "lq_run",
    "label": "LQ governance, operation C, invalidation",
-   "command": "python3 -B docs/modules/lq/v2/experiments/run.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/lq.json",
+   "command": "python3 -B docs/modules/lq/v2/experiments/run.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/lq.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 1.11,
+   "seconds": 0.92,
    "log_tail": [
     "{\"tests\": 18, \"operation_C_rows\": 2, \"invalidation_datasets\": 2, \"integrity\": {\"check\": \"ok\", \"foreign_key_violations\": 0, \"history_reopen_unchanged\": true}}"
    ]
@@ -134,77 +134,77 @@
   {
    "key": "zc_access",
    "label": "ZC access paths (quick grid)",
-   "command": "python3 -B docs/modules/zc/v2/experiments/access_paths.py --quick --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/access.json",
+   "command": "python3 -B docs/modules/zc/v2/experiments/access_paths.py --quick --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/access.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 5.94,
+   "seconds": 4.9,
    "log_tail": [
-    "{\"n\": 200, \"json_snapshot\": {\"data_ms\": 2.263, \"io_ms\": 0.058, \"db_ms\": 0.0, \"load_ms\": 2.171, \"search_ms\": 21.176, \"total_ms\": 23.744}, \"sql_full\": {\"data_ms\": 0.924, \"io_ms\": 0.0, \"db_ms\": 0.506, \"load_ms\": 0.355, \"search_ms\": 21.176, \"total_ms\": 22.099, \"rows_returned\": 400.0}, \"sql_rtree\": {\"data_ms\": 0.077, \"io_ms\": 0.0, \"db_ms\": 0.042, \"load_ms\": 0.011, \"search_ms\": 21.176, \"total_ms\": 21.341, \"rows_returned\": 4.5}, \"graph_cache\": {\"miss_build_ms\": 65.749, \"astar_on_graph_ms\": 0.679, \"dijkstra_on_graph_ms\": 2.306, \"hit_total_ms\": 0.519, \"nodes\": 789.0, \"edges\": 15743.0}, \"search\": {\"expanded_astar\": 135.5, \"expanded_dijkstra\": 640.0, \"edge_checks_lazy\": 3173.0, \"objects_in_domain\": 4.5, \"statuses\": {\"feasible\": 4, \"infeasible\": 0, \"unknown\": 0}}}",
-    "{\"n\": 1000, \"json_snapshot\": {\"data_ms\": 4.422, \"io_ms\": 0.083, \"db_ms\": 0.0, \"load_ms\": 4.325, \"search_ms\": 24.042, \"total_ms\": 28.469}, \"sql_full\": {\"data_ms\": 1.933, \"io_ms\": 0.0, \"db_ms\": 1.05, \"load_ms\": 0.854, \"search_ms\": 24.042, \"total_ms\": 26.038, \"rows_returned\": 1200.0}, \"sql_rtree\": {\"data_ms\": 0.076, \"io_ms\": 0.0, \"db_ms\": 0.04, \"load_ms\": 0.013, \"search_ms\": 24.042, \"total_ms\": 24.13, \"rows_returned\": 8.5}, \"graph_cache\": {\"miss_build_ms\": 55.208, \"astar_on_graph_ms\": 0.544, \"dijkstra_on_graph_ms\": 1.442, \"hit_total_ms\": 0.59, \"nodes\": 789.0, \"edges\": 15227.0}, \"search\": {\"expanded_astar\": 167.5, \"expanded_dijkstra\": 620.0, \"edge_checks_lazy\": 3897.0, \"objects_in_domain\": 8.5, \"statuses\": {\"feasible\": 4, \"infeasible\": 0, \"unknown\": 0}}}",
-    "N=200 done in 4.7s checks={'input_mismatch': 0, 'lazy_vs_graph_mismatch': 0, 'dijkstra_cost_mismatch': 0, 'trace_segments_missing': 0}",
+    "{\"n\": 200, \"json_snapshot\": {\"data_ms\": 1.771, \"io_ms\": 0.042, \"db_ms\": 0.0, \"load_ms\": 1.709, \"search_ms\": 16.74, \"total_ms\": 18.832}, \"sql_full\": {\"data_ms\": 0.699, \"io_ms\": 0.0, \"db_ms\": 0.392, \"load_ms\": 0.278, \"search_ms\": 16.74, \"total_ms\": 17.446, \"rows_returned\": 400.0}, \"sql_rtree\": {\"data_ms\": 0.059, \"io_ms\": 0.0, \"db_ms\": 0.032, \"load_ms\": 0.009, \"search_ms\": 16.74, \"total_ms\": 16.82, \"rows_returned\": 4.5}, \"graph_cache\": {\"miss_build_ms\": 50.894, \"astar_on_graph_ms\": 0.492, \"dijkstra_on_graph_ms\": 1.7, \"hit_total_ms\": 0.514, \"nodes\": 789.0, \"edges\": 15743.0}, \"search\": {\"expanded_astar\": 135.5, \"expanded_dijkstra\": 640.0, \"edge_checks_lazy\": 3173.0, \"objects_in_domain\": 4.5, \"statuses\": {\"feasible\": 4, \"infeasible\": 0, \"unknown\": 0}}}",
+    "{\"n\": 1000, \"json_snapshot\": {\"data_ms\": 4.349, \"io_ms\": 0.072, \"db_ms\": 0.0, \"load_ms\": 4.258, \"search_ms\": 24.294, \"total_ms\": 28.657}, \"sql_full\": {\"data_ms\": 1.892, \"io_ms\": 0.0, \"db_ms\": 1.02, \"load_ms\": 0.818, \"search_ms\": 24.294, \"total_ms\": 26.319, \"rows_returned\": 1200.0}, \"sql_rtree\": {\"data_ms\": 0.071, \"io_ms\": 0.0, \"db_ms\": 0.038, \"load_ms\": 0.013, \"search_ms\": 24.294, \"total_ms\": 24.383, \"rows_returned\": 8.5}, \"graph_cache\": {\"miss_build_ms\": 55.01, \"astar_on_graph_ms\": 0.569, \"dijkstra_on_graph_ms\": 1.55, \"hit_total_ms\": 0.575, \"nodes\": 789.0, \"edges\": 15227.0}, \"search\": {\"expanded_astar\": 167.5, \"expanded_dijkstra\": 620.0, \"edge_checks_lazy\": 3897.0, \"objects_in_domain\": 8.5, \"statuses\": {\"feasible\": 4, \"infeasible\": 0, \"unknown\": 0}}}",
+    "N=200 done in 3.7s checks={'input_mismatch': 0, 'lazy_vs_graph_mismatch': 0, 'dijkstra_cost_mismatch': 0, 'trace_segments_missing': 0}",
     "N=1000 done in 1.1s checks={'input_mismatch': 0, 'lazy_vs_graph_mismatch': 0, 'dijkstra_cost_mismatch': 0, 'trace_segments_missing': 0}"
    ]
   },
   {
    "key": "zc_invalidation",
    "label": "ZC cache invalidation (6 graphs, 600 buildings)",
-   "command": "python3 -B docs/modules/zc/v2/experiments/invalidation.py --graphs 6 --buildings 600 --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/inval.json",
+   "command": "python3 -B docs/modules/zc/v2/experiments/invalidation.py --graphs 6 --buildings 600 --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/inval.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 2.51,
+   "seconds": 2.47,
    "log_tail": [
-    "{\"from\": \"R0\", \"to\": \"R1\", \"graphs\": 6, \"changed_restrictions\": [\"NF-NEW\"], \"change_boxes\": 1, \"carried\": 6, \"patched\": 0, \"rebuilt\": 0, \"full_rebuild_ms\": 657.797542, \"targeted_ms\": 21.911834, \"detect_ms\": 0.144416, \"targeted_vs_full_mismatches\": 0, \"historical_cache_hits_prev\": 6, \"routes_changed\": 0, \"patched_median_ms\": null, \"rebuilt_median_ms\": null, \"carried_median_ms\": 0.13916699999999999, \"full_median_ms_per_graph\": 109.63292366666667}",
-    "{\"from\": \"R1\", \"to\": \"R2\", \"graphs\": 6, \"changed_restrictions\": [\"NF-OLD\"], \"change_boxes\": 2, \"carried\": 5, \"patched\": 1, \"rebuilt\": 0, \"full_rebuild_ms\": 658.210584, \"targeted_ms\": 87.988291, \"detect_ms\": 0.085542, \"targeted_vs_full_mismatches\": 0, \"historical_cache_hits_prev\": 6, \"routes_changed\": 0, \"patched_median_ms\": 65.562708, \"rebuilt_median_ms\": null, \"carried_median_ms\": 0.175584, \"full_median_ms_per_graph\": 109.70176400000001}",
+    "{\"from\": \"R0\", \"to\": \"R1\", \"graphs\": 6, \"changed_restrictions\": [\"NF-NEW\"], \"change_boxes\": 1, \"carried\": 6, \"patched\": 0, \"rebuilt\": 0, \"full_rebuild_ms\": 643.048792, \"targeted_ms\": 21.081208, \"detect_ms\": 0.147834, \"targeted_vs_full_mismatches\": 0, \"historical_cache_hits_prev\": 6, \"routes_changed\": 0, \"patched_median_ms\": null, \"rebuilt_median_ms\": null, \"carried_median_ms\": 0.1456665, \"full_median_ms_per_graph\": 107.17479866666667}",
+    "{\"from\": \"R1\", \"to\": \"R2\", \"graphs\": 6, \"changed_restrictions\": [\"NF-OLD\"], \"change_boxes\": 2, \"carried\": 5, \"patched\": 1, \"rebuilt\": 0, \"full_rebuild_ms\": 644.034416, \"targeted_ms\": 85.86075, \"detect_ms\": 0.085667, \"targeted_vs_full_mismatches\": 0, \"historical_cache_hits_prev\": 6, \"routes_changed\": 0, \"patched_median_ms\": 63.824125, \"rebuilt_median_ms\": null, \"carried_median_ms\": 0.14775, \"full_median_ms_per_graph\": 107.33906933333333}",
     "{\"check\": \"ok\", \"foreign_key_violations\": 0, \"cache_rows_by_origin\": {\"built\": 6, \"carried\": 11, \"patched\": 1}}"
    ]
   },
   {
    "key": "lj_recovery",
    "label": "LJ backup, restore checks and truncation detection",
-   "command": "python3 -B docs/modules/lj/v2/experiments/recovery.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/recovery.json",
+   "command": "python3 -B docs/modules/lj/v2/experiments/recovery.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/recovery.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 0.13,
+   "seconds": 0.11,
    "log_tail": [
-    "{\"passed\": true, \"backup_ms\": 1.558}"
+    "{\"passed\": true, \"backup_ms\": 1.585}"
    ]
   },
   {
    "key": "zc_review_lq",
-   "label": "ZC probes of LQ (LQ-V2-02 open: exit 0, 11/12 expected)",
-   "command": "python3 -B docs/modules/zc/v2/experiments/review_lq.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/review_lq.json",
+   "label": "ZC probes of LQ (12/12 after LQ-V2-02 fix)",
+   "command": "python3 -B docs/modules/zc/v2/experiments/review_lq.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/review_lq.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 0.13,
+   "seconds": 0.12,
    "log_tail": [
     "PASS endpoint_raw_table: expected rejected, actual rejected",
     "PASS endpoint_helper_view: expected rejected, actual rejected",
     "PASS authorizer_raw_table: expected rejected, actual rejected",
     "PASS authorizer_helper_view: expected rejected, actual rejected",
     "PASS dispatcher_detail_rows: expected 0, actual 0",
-    "FAIL op_c_task_window: expected 2, actual 0"
+    "PASS op_c_task_window: expected 2, actual 2"
    ]
   },
   {
    "key": "lq_review_zqo",
-   "label": "LQ probe of ZQO-V2-01 (open: exit 1 expected)",
-   "command": "python3 -B docs/modules/lq/v2/experiments/review_zqo.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/review_zqo.json",
-   "exit_code": 1,
-   "expected_exit": 1,
+   "label": "LQ probe of ZQO-V2-01 (fixed: both invalid inputs rejected)",
+   "command": "python3 -B docs/modules/lq/v2/experiments/review_zqo.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/review_zqo.json",
+   "exit_code": 0,
+   "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 0.16,
+   "seconds": 0.13,
    "log_tail": [
-    "empty_upstream_versions accepted",
-    "empty_compiler_version accepted"
+    "empty_upstream_versions rejected",
+    "empty_compiler_version rejected"
    ]
   },
   {
@@ -215,11 +215,11 @@
    "expected_exit": 0,
    "pass": true,
    "tests_ran": 42,
-   "seconds": 0.53,
+   "seconds": 0.52,
    "log_tail": [
     "..........................................",
     "----------------------------------------------------------------------",
-    "Ran 42 tests in 0.448s",
+    "Ran 42 tests in 0.441s",
     "",
     "OK"
    ]
@@ -249,11 +249,11 @@
    "expected_exit": 0,
    "pass": true,
    "tests_ran": 24,
-   "seconds": 0.85,
+   "seconds": 0.82,
    "log_tail": [
     "........................",
     "----------------------------------------------------------------------",
-    "Ran 24 tests in 0.779s",
+    "Ran 24 tests in 0.755s",
     "",
     "OK"
    ]
@@ -266,11 +266,11 @@
    "expected_exit": 0,
    "pass": true,
    "tests_ran": 31,
-   "seconds": 0.41,
+   "seconds": 0.36,
    "log_tail": [
     "...............................",
     "----------------------------------------------------------------------",
-    "Ran 31 tests in 0.321s",
+    "Ran 31 tests in 0.280s",
     "",
     "OK"
    ]
@@ -283,11 +283,11 @@
    "expected_exit": 0,
    "pass": true,
    "tests_ran": 15,
-   "seconds": 0.07,
+   "seconds": 0.06,
    "log_tail": [
     "...............",
     "----------------------------------------------------------------------",
-    "Ran 15 tests in 0.001s",
+    "Ran 15 tests in 0.000s",
     "",
     "OK"
    ]
@@ -295,30 +295,30 @@
   {
    "key": "v1_audit",
    "label": "v1 issue audit",
-   "command": "python3 -B docs/integration/audit.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/audit.json",
+   "command": "python3 -B docs/integration/audit.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/audit.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 0.13,
+   "seconds": 0.11,
    "log_tail": [
     "YHT-02 PASS {\"incomplete_coverage\": {\"rejected\": \"ValueError\", \"reason\": \"incomplete_coverage:T-00-00\"}, \"nonflat_terrain\": {\"rejected\": \"ValueError\", \"reason\": \"unsupported_terrain:only_flat_supported\"}}",
     "YHT-03 PASS {\"yht_status\": \"blocked\", \"zc_state\": \"forbidden\", \"altitude_m\": 58, \"radius_m\": 5, \"ceiling_m\": 60}",
     "LJ-01 PASS {\"status\": \"fail\", \"failures\": [{\"code\": \"invalid_versions\", \"message\": \"both results must contain five non-empty version strings\"}]}",
     "LJ-02 PASS {\"freshness\": \"stale\", \"release_id\": 1, \"observed_head\": 2, \"same_versions\": true, \"acceptance\": {\"status\": \"fail\", \"failures\": [{\"code\": \"stale_release\", \"message\": \"a stale release cannot be accepted as the current recommendation\"}]}}",
     "LJ-03 PASS {\"risk_nan\": {\"status\": \"fail\", \"failures\": [{\"code\": \"invalid_metric\", \"message\": \"risk_proxy must be a finite non-negative number\"}]}, \"risk_inf\": {\"status\": \"fail\", \"failures\": [{\"code\": \"invalid_metric\", \"message\": \"risk_proxy must be a finite non-negative number\"}]}, \"risk_boolean\": {\"status\": \"fail\", \"failures\": [{\"code\": \"invalid_metric\", \"message\": \"risk_proxy must be a finite non-negative number\"}]}, \"elapsed_nan\": {\"status\": \"fail\", \"failures\": [{\"code\": \"invalid_elapsed\", \"message\": \"elapsed_ms must be a finite non-negative number\"}]}}",
-    "ZQO-01 PASS {\"state\": \"unknown\", \"reason\": \"risk_window_mismatch\", \"release_id\": 1, \"versions\": {\"airspace\": \"mock-zc-airspace-aae542499e2d\", \"planner_config\": \"mock-zc-planner_config-d9e44530e5c3\", \"risk_data\": \"mock-zc-risk_data-2ad7d02183c8\", \"risk_model\": \"mock-zc-risk_model-9885a50c0862\", \"scene\": \"mock-zc-scene-7400e7d5b4d8\"}, \"provenance_state\": \"available\", \"published_at\": \"2026-11-07T07:03:13.930426+00:00\", \"received_at\": \"2026-11-04T00:00:00Z\", \"component_sources\": {\"scene\": \"synthetic-zc-v1\", \"airspace\": \"synthetic-zc-v1\", \"risk_data\": \"synthetic-lq-v1\", \"risk_model\": \"LQ: q=E*C, whole-window maximum, synthetic-lq-v1\", \"planner_config\": null}, \"source_release\": null, \"version_mapping\": null, \"source_sha256\": null, \"compiled_window\": [\"2026-11-04T00:00:00Z\", \"2026-11-04T00:10:00Z\"], \"restrictions\": []}"
+    "ZQO-01 PASS {\"state\": \"unknown\", \"reason\": \"risk_window_mismatch\", \"release_id\": 1, \"versions\": {\"airspace\": \"mock-zc-airspace-aae542499e2d\", \"planner_config\": \"mock-zc-planner_config-d9e44530e5c3\", \"risk_data\": \"mock-zc-risk_data-2ad7d02183c8\", \"risk_model\": \"mock-zc-risk_model-9885a50c0862\", \"scene\": \"mock-zc-scene-7400e7d5b4d8\"}, \"provenance_state\": \"available\", \"published_at\": \"2026-11-07T07:17:38.082692+00:00\", \"received_at\": \"2026-11-04T00:00:00Z\", \"component_sources\": {\"scene\": \"synthetic-zc-v1\", \"airspace\": \"synthetic-zc-v1\", \"risk_data\": \"synthetic-lq-v1\", \"risk_model\": \"LQ: q=E*C, whole-window maximum, synthetic-lq-v1\", \"planner_config\": null}, \"source_release\": null, \"version_mapping\": null, \"source_sha256\": null, \"compiled_window\": [\"2026-11-04T00:00:00Z\", \"2026-11-04T00:10:00Z\"], \"restrictions\": []}"
    ]
   },
   {
    "key": "v1_five_module",
    "label": "v1 five-module chain",
-   "command": "python3 -B docs/integration/five_module.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/five.json",
+   "command": "python3 -B docs/integration/five_module.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/five.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 1.5,
+   "seconds": 1.21,
    "log_tail": [
     "same_versions_stale_rejected PASS",
     "window_trace PASS",
@@ -331,12 +331,12 @@
   {
    "key": "v1_risk_review",
    "label": "v1 risk review",
-   "command": "python3 -B docs/modules/lq/prototype/review_integration.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-srh1glna/risk.json",
+   "command": "python3 -B docs/modules/lq/prototype/review_integration.py --output /var/folders/ws/nm_pc10s0597mwgdmjwwsx0r0000gn/T/skyroute-v2-verify-fa20px51/risk.json",
    "exit_code": 0,
    "expected_exit": 0,
    "pass": true,
    "tests_ran": null,
-   "seconds": 0.2,
+   "seconds": 0.15,
    "log_tail": [
     "source_mapping_and_reopen PASS ZQO",
     "published_window_matching PASS ZQO",
@@ -351,20 +351,20 @@
   "docs/final/source/build_report.py": "16915caa1ca1f0b8a8e1d20c9b6d6b9726d66ca870e7861785d0d32a1998e238",
   "docs/final/source/extract_slides.py": "18abf308f03f717d5256a9761f87e8fc5e34bad18990b4987033891e334718f1",
   "docs/final/source/record_artifacts.py": "8159557a7e1dd7d699800708c75e3f804576df5f5ede81726f41209361be5390",
-  "docs/integration/audit.py": "c757562dd9e6d57968e175866e6d719569cbeb960df8b0ab1268324618a4052f",
-  "docs/integration/five_module.py": "a7b93134020a42c34a86448678245ee85e9d720c7fe9430c9c890f2f20dc5b52",
-  "docs/integration/v2_verify.py": "b7c072781e0a2608f965138013459b4dc77bc030352c0d581b8403d3620b912c",
+  "docs/integration/audit.py": "22aaf9c2a96f5b7b4fdabe974117474abb514aba6df3d055e36f4c63e0c00179",
+  "docs/integration/five_module.py": "b7cdfafd59430871a8ae71e33cb0a9077c15676950b58737683891540983cea7",
+  "docs/integration/v2_verify.py": "c806aafec43c382bfbdf61acbf81260dcd0ea10524cf9cffa8465b7153b2ea08",
   "docs/modules/lj/prototype/acceptance.py": "559d0612a74d096280bd290c38e8bed1153d0c95cfa1bad5eb6a2f4e6163c42e",
   "docs/modules/lj/prototype/test_acceptance.py": "0bb7f306fe04604c6e67d9f5536bd83b422f805ff36aea8b8b9fb5e6ef05d068",
   "docs/modules/lj/v2/experiments/recovery.py": "4e0ae5900c4b0332857bd25e54043bc71132ea461ddc997c35cba9bf72ea571a",
-  "docs/modules/lq/prototype/evaluate.py": "4873d2c2d917fe47e5f687265cc155b15832f11a6ae15cc2dd04b7ed382617d3",
-  "docs/modules/lq/prototype/review_integration.py": "1e5b4353600b70998a74313924e8eba652f5d00e1fa40bb05a22e392c427a4c4",
+  "docs/modules/lq/prototype/evaluate.py": "9c65da49ec8eab78d09f3d761208bcaae6dad12d5fd32f359df275751f1db49d",
+  "docs/modules/lq/prototype/review_integration.py": "86ba2c8700151fb93ec43bb371185d44414e6274e99a007d3391a19cfeab5aca",
   "docs/modules/lq/prototype/risk.py": "22ab69531cbfb992482a11ab0ae9811613745ab6a895728806f3db988852737f",
   "docs/modules/lq/prototype/test_risk.py": "242c53a07cfe0f36d99e60499da2058ec89e8d2e5b52d3e15f1d25c295d63f8c",
   "docs/modules/lq/v2/experiments/governance.py": "09718255d4fd8bd1b418f616b950cc8b9d9837bc9086a2746227d16cb8d1c00a",
-  "docs/modules/lq/v2/experiments/op_c.sql": "998404b6b4a1e94abf6e81bc8b019bb55b57a2028fd56598faab27a9f0d20b4b",
-  "docs/modules/lq/v2/experiments/review_zqo.py": "c2cf02fd48ee46801a31eb94a588007983c303b961b1bc3251b4878eb8dd4cda",
-  "docs/modules/lq/v2/experiments/run.py": "0e05946a1fb5cc195900ea841b49ae2d4bd7dab194381a2df5fe84cb1829b3bd",
+  "docs/modules/lq/v2/experiments/op_c.sql": "aa291938a1714a1d8240be9b94f9706e52dd5dfca2b130c612668c5a938f1d46",
+  "docs/modules/lq/v2/experiments/review_zqo.py": "2baff5548df3540c1bd2c44a281a4aa1525cd6d210de2829daf809c6f7e0457f",
+  "docs/modules/lq/v2/experiments/run.py": "9814c4e6db935ca5c756c00c6b5d71c14945203ac07bbd9da20af0323ad698ba",
   "docs/modules/lq/v2/experiments/test_governance.py": "7f5ba25d327bfe04ff19390ed63bb90d1cfce508f28c45f706f8d4cfaf66e192",
   "docs/modules/yht/prototype/cache.py": "59535d50c41b4f9f17b798ee54f7226f3b31ff7728b47fe02d15537272f08d78",
   "docs/modules/yht/prototype/evaluate.py": "03e5319bea62901fb4516b95d595bf1a06e28c6dd8004f992f435862b1fe2d2b",
@@ -376,9 +376,9 @@
   "docs/modules/yht/prototype/test_yht.py": "ca228a604eab1b8f7c698c185dbadf8093d61ced2c3a3bb4c5deee6d840deefc",
   "docs/modules/yht/prototype/yht_model.py": "36bd3b87e5ca0a1f28534f981f3c6046060faade2e58a16d1517dcf34f54b6c6",
   "docs/modules/yht/v2/experiments/op_a_index_comparison.py": "e2092d8830d096efb8b0d178260fc0aa02bd5ce990d54e4bccdef14e3b277a2d",
-  "docs/modules/zc/prototype/evaluate.py": "d3e4d92ee670b0d44b1f1b025b77ae95b6e1ee8e8d532868b110bf93e2917c54",
+  "docs/modules/zc/prototype/evaluate.py": "d46cbdd9835ad8cda84394a0bd3c0af1a326b3ece1574707fd919310b4d144d1",
   "docs/modules/zc/prototype/planner.py": "ddd425e4d5a8b58d293cfb5681554ac4d63476b210d892be302f964233c178d5",
-  "docs/modules/zc/prototype/scenarios.py": "fe5332bef2482827958738064ae55ba5650b267ca0fa0b372d1d252a96266ffe",
+  "docs/modules/zc/prototype/scenarios.py": "7493cc4dfbea8b97f7770c2b20a404b549c5935b89e9ada06047efc05830d8f0",
   "docs/modules/zc/prototype/test_planner.py": "36bf0dcbeb067046263a80f5450df5b248f4d739502014f9a1b0b2c72fb1c67a",
   "docs/modules/zc/v2/experiments/access_paths.py": "69d3428fed609480df97e7271249b34011f837970faa9ce852d7aecae15cae9f",
   "docs/modules/zc/v2/experiments/city.py": "8802101865b5002153a14a94ae989fa73b5173e64f170fbe302b542a8c57a8bc",
@@ -386,14 +386,14 @@
   "docs/modules/zc/v2/experiments/planner_io.py": "82e16b1f908b7081442a5377defe5e97ad3dfe8e951bd1dacb9ba85d9f94e55a",
   "docs/modules/zc/v2/experiments/review_lq.py": "8401d3213eb830c174eabd6040c2244e1c0f03a16b14c266ffbdbbfab6852783",
   "docs/modules/zc/v2/experiments/test_query.py": "087802b9a328303d159bcb70b34b5fc026adf0f33dbd5420903ca23dfe18b72d",
-  "docs/modules/zqo/prototype/evaluate.py": "8d7c6a87dd716dd25f72b04e196ff060f052600bbdbd1768c5ccca69e861e089",
+  "docs/modules/zqo/prototype/evaluate.py": "eb668482371c400203fc7eb7996ea5236adf476261ad34e6c08044fe77378a80",
   "docs/modules/zqo/prototype/publication.py": "f720022f1d6806c4ea5110495c5c96c92f17c30e8dae3e465552ddbfa2938297",
   "docs/modules/zqo/prototype/source_adapter.py": "55ecb43a64b01857c60496247a187c2bc2ef42635b61a8aee08fd2433145295f",
   "docs/modules/zqo/prototype/test_publication.py": "35e19aae2a1508eb15472b986dfb1c161cae1b872e77cc4d8e14c8201903a931",
   "docs/modules/zqo/prototype/test_source_adapter.py": "3f91d36a8a3f2cd7361a891254c473a4e132e07a353a1571d14577b3e161e659",
-  "docs/modules/zqo/v2/experiments/catalog.py": "df0b0f9e1a39efdd22243078c5b009b85a822fcbffd69b83bf9f9b4ec931bad5",
-  "docs/modules/zqo/v2/experiments/run.py": "4123006b6dd45e9dabdb26b655ec5422261141ade1b00273f29843b8a2e650bc",
-  "docs/modules/zqo/v2/experiments/test_catalog.py": "05a2655e2cf6cfb7203492a104489c234f9ed97c0407b03e9df248ac70fd683a",
+  "docs/modules/zqo/v2/experiments/catalog.py": "2667b1b0da504cc96e6b6338786124a0bfb18a223dc08759b15f972ad07f07df",
+  "docs/modules/zqo/v2/experiments/run.py": "e978b77c092464af2139928e974862017ce18f687193a9cbe38e840a32dd06db",
+  "docs/modules/zqo/v2/experiments/test_catalog.py": "8645bf8537c516d97003c027ea70c0c082a3ac7d163a57387d4019fc263049c6",
   "docs/v2/schema/fixtures.py": "cf7e3ae5130c0444306d8582b24b35bf80f02f97e4bbb55507cf3822131e0727",
   "docs/v2/schema/op_a.sql": "8636abd28d99211096ec4f1f28c92e5265cb297c1ec28d8d69145b1b7b5a722d",
   "docs/v2/schema/op_c.sql": "17c6fce372cc3de8fa8c40b0859e0d920c3a50af71a851aff347e37373be2c5f",

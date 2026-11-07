@@ -31,7 +31,7 @@ payload={'executed_at':datetime.now(timezone.utc).isoformat(),'scenario':'synthe
          'governance_policy_simulation':{'self_publish_denied':not can_publish('lq','lq','safety_reviewer'),
                                        'dispatcher_publish_denied':not can_publish('dispatcher','lq','dispatcher'),
                                        'independent_review_allowed':can_publish('reviewer','lq','safety_reviewer')}}
-(out/'evaluation.json').write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n')
+(out/'evaluation.json').write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n', encoding="utf-8")
 with (out/'tradeoffs.csv').open('w') as f:
     w=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator="\n"); w.writeheader(); w.writerows(rows)
 print(json.dumps({'tradeoffs':rows,'states':{k:v.get('state',v.get('status')) for k,v in checks.items()}},indent=2))

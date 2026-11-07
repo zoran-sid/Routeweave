@@ -23,7 +23,7 @@ class QueryTablesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = tempfile.mkdtemp(prefix="zc-test-")
-        cls.pl, cls.boxes = city.payload(150, seed=5)
+        cls.pl, cls.boxes, _ = city.payload("S", seed=5)
         cls.c = city.database(str(Path(cls.tmp) / "t.db"), cls.pl)
         cls.tasks = city.tasks(3, cls.boxes, seed=9)
 
@@ -148,9 +148,9 @@ class CacheAcrossReleasesTest(unittest.TestCase):
     def test_carry_and_patch_equal_full_rebuild(self):
         tmp = tempfile.mkdtemp(prefix="zc-inval-test-")
         try:
-            pl, boxes = city.payload(300, seed=21, extra_air=[inv.OLD])
+            pl, boxes, _ = city.payload("M", seed=21, extra_air=[inv.OLD])
             c = city.database(str(Path(tmp) / "i.db"), pl)
-            tasks = city.tasks(6, boxes, seed=22, region=(900.0, 2100.0), day=10, hours=(6, 18))
+            tasks = city.tasks(6, boxes, seed=22, region=inv.REGION, day=10, hours=(6, 18))
             cache = {}
             for t in tasks:
                 io.plan_route(c, "R0", t["window"], t["start"], t["goal"], "graph_cache", cache=cache)

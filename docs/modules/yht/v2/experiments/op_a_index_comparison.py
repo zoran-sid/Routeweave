@@ -8,6 +8,10 @@ kept in the same table (K, full-copy history)?
 All variants run the same exact predicate on base-table columns over identical
 data; only the access path differs. Results must be identical across variants.
 
+Data: Kowloon area L (3.3 km around Mong Kok, HK1980 Grid; docs/v2/data/hk). Each release holds the real
+gazetted restricted flying zones (CAD, G.N. 8002) plus N - (real zones) scenario temporary restrictions
+centred on real building locations; the scenario rows are not real notices.
+
 Run from the repository root:
     python3 -B docs/modules/yht/v2/experiments/op_a_index_comparison.py
     python3 -B docs/modules/yht/v2/experiments/op_a_index_comparison.py --quick --output /tmp/op_a.json
@@ -33,7 +37,12 @@ sys.path.insert(0, str(SCHEMA_DIR))
 
 import fixtures as fx  # noqa: E402
 
-AREA = 3000.0                 # m, square synthetic area
+sys.path.insert(0, str(ROOT / "docs" / "v2" / "data" / "hk"))
+import hk  # noqa: E402
+
+AREA_BOX = hk.AREAS["L"]      # HK1980 Grid, 3.3 km square around Mong Kok
+REAL_ZONES = hk.rfz_boxes("L")
+CENTRES = hk.building_centres("L")
 T0 = 26265600                 # 2026-11-01T00:00:00Z in seconds after 2026-01-01
 SPAN = 30 * 86400             # restrictions start within 30 days
 WINDOW = 600                  # 10-minute task window
@@ -102,10 +111,13 @@ def sha_file(path):
 
 
 def make_restrictions(n, rng):
-    rows = []
-    for i in range(n):
+    """Real gazetted zones (in force for the whole study year) + scenario rows on real building locations."""
+    rows = [(f"RFZ-{i:02d}", "no_fly", box, 0.0, None, hk.STUDY[0], hk.STUDY[1], "published", "SRC-HK-RFZ", "CAD",
+             "derived") for i, (_, box) in enumerate(REAL_ZONES[:n])]
+    for i in range(n - len(rows)):
         w, h = rng.uniform(20, 200), rng.uniform(20, 200)
-        x0, y0 = rng.uniform(0, AREA - w), rng.uniform(0, AREA - h)
+        cx, cy = rng.choice(CENTRES)
+        x0, y0 = cx - w / 2, cy - h / 2
         lo = T0 + rng.uniform(0, SPAN)
         dur = math.exp(rng.uniform(math.log(900), math.log(43200)))
         if rng.random() < 0.7:
@@ -114,29 +126,30 @@ def make_restrictions(n, rng):
         else:
             kind, floor_z, ceiling = "height_limit", 0.0, rng.uniform(60, 150)
         state = "revoked" if rng.random() < 0.05 else "published"
-        rows.append((f"NF-{i:06d}", kind, (x0, y0, x0 + w, y0 + h), floor_z, ceiling,
-                     fx.at(int(lo)), fx.at(int(lo + dur)), state))
+        rows.append((f"SC-{i:06d}", kind, (x0, y0, x0 + w, y0 + h), floor_z, ceiling,
+                     fx.at(int(lo)), fx.at(int(lo + dur)), state, "SRC-SCENARIO", "scenario", "assumed"))
     return rows
 
 
 def build_db(n, k, rng):
     conn = fx.connect()
     fx.base(conn)
+    hk.add_sources(conn)
     restrictions = make_restrictions(n, rng)
     rid = 0
     for r in range(k):
         rel = f"rel-{r:03d}"
         fx.create_release(conn, rel)
         feats, airs = [], []
-        for fid, kind, (x0, y0, x1, y1), floor_z, ceiling, lo, hi, state in restrictions:
+        for fid, kind, (x0, y0, x1, y1), floor_z, ceiling, lo, hi, state, src, authority, quality in restrictions:
             rid += 1
-            feats.append((rid, rel, fid, "airspace", "airspace", "SRC-SYN", "assumed",
+            feats.append((rid, rel, fid, "airspace", "airspace", src, quality,
                           "2026-01-01T00:00:00Z", "2027-01-01T00:00:00Z",
                           "2026-11-01T00:00:00Z", "restricted", "polyhedral"))
             airs.append((rid, fid, kind, fx.box_wkt(x0, y0, x1, y1), x0, y0, x1, y1, floor_z,
-                         ceiling, lo, hi, state, "synthetic", "SRC-SYN", "2026-11-01T00:00:00Z",
+                         ceiling, lo, hi, state, authority, src, "2026-11-01T00:00:00Z",
                          "2026-11-01T00:10:00Z" if state == "revoked" else None,
-                         "assumed", "restricted"))
+                         quality, "restricted"))
         conn.executemany(
             "INSERT INTO feature (rid, release_id, feature_id, layer, feature_type, source_id,"
             " quality, valid_lo, valid_hi, recorded_at, sensitivity, geom_kind)"
@@ -163,7 +176,7 @@ def build_db(n, k, rng):
 def make_queries(q, rng, release_id):
     out = []
     for _ in range(q):
-        sx, sy = rng.uniform(200, AREA - 200), rng.uniform(200, AREA - 200)
+        sx, sy = rng.uniform(AREA_BOX[0] + 200, AREA_BOX[2] - 200), rng.uniform(AREA_BOX[1] + 200, AREA_BOX[3] - 200)
         a = rng.uniform(0, 2 * math.pi)
         ex, ey = sx + CORRIDOR_LEN * math.cos(a), sy + CORRIDOR_LEN * math.sin(a)
         ws = int(T0 + rng.uniform(0, SPAN - WINDOW))
@@ -266,20 +279,24 @@ def main():
         },
         "parameters": {
             "seed": args.seed, "queries_per_config": q, "repeats_per_query": repeats,
-            "area_m": AREA, "start_span_days": SPAN // 86400, "window_s": WINDOW,
+            "area_hk1980": AREA_BOX, "real_zones": [z for z, _ in REAL_ZONES],
+            "data": "Kowloon area L (docs/v2/data/hk/manifest.json); real CAD restricted flying zones + scenario rows",
+            "start_span_days": SPAN // 86400, "window_s": WINDOW,
             "corridor": {"length_m": CORRIDOR_LEN, "buffer_m": CORRIDOR_BUF, "z_band_m": Z_BAND},
             "history_model": "each release is a full copy of the same restriction set",
-            "restriction_mix": "70% no_fly (half open-topped), 30% height_limit, 5% revoked",
+            "restriction_mix": "real zones: no_fly all altitudes, whole study year; scenario rows: 70% no_fly (half open-topped), 30% height_limit, 5% revoked, centred on real building locations",
         },
         "source_sha256": {
             "script": sha_file(__file__),
             "schema.sql": sha_file(SCHEMA_DIR / "schema.sql"),
             "op_a.sql": sha_file(SCHEMA_DIR / "op_a.sql"),
             "fixtures.py": sha_file(SCHEMA_DIR / "fixtures.py"),
+            "hk.py": sha_file(ROOT / "docs/v2/data/hk/hk.py"),
+            "manifest.json": sha_file(ROOT / "docs/v2/data/hk/manifest.json"),
         },
         "builds": builds,
         "results": results,
-        "synthetic": True,
+        "synthetic": False,
     }
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     Path(args.output).write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")

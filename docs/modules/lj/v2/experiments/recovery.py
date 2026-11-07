@@ -1,4 +1,7 @@
-"""Synthetic SQLite backup, fault injection, and restore verification.
+"""SQLite backup, fault injection, and restore verification on real Hong Kong data.
+
+Two releases of Kowloon area S (docs/v2/data/hk): every building, terrain post, census/school/hospital exposure
+zone of the Mong Kok core, plus one scenario no-fly restriction per release placed over a real street.
 
 Run from the repository root:
     python -X utf8 -B docs/modules/lj/v2/experiments/recovery.py \
@@ -22,6 +25,14 @@ import sys
 sys.path.insert(0, str(SCHEMA))
 import fixtures as fx  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "docs" / "v2" / "data" / "hk"))
+import hk  # noqa: E402
+
+SCENARIO = [{"id": "NF-001", "box": (835380.0, 819980.0, 835460.0, 820060.0),
+             "effective": ("2026-11-05T08:00:00Z", "2026-11-05T09:00:00Z")},
+            {"id": "NF-002", "box": (835460.0, 820060.0, 835540.0, 820140.0),
+             "effective": ("2026-11-05T08:00:00Z", "2026-11-05T09:00:00Z")}]
+
 
 def canonical(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
@@ -35,24 +46,17 @@ def make_database(path):
     conn = fx.connect(str(path))
     conn.execute("PRAGMA journal_mode=WAL")
     fx.base(conn)
+    hk.add_sources(conn)
     fx.create_release(conn, "R0")
     fx.add_layers(conn, "R0")
-    fx.add_building(conn, 1, "R0", "B-001", (0, 0, 50, 50), 0.0, 60.0)
-    fx.add_airspace(
-        conn, 2, "R0", "NF-001", (100, 100, 200, 200),
-        ("2026-11-05T08:00:00Z", "2026-11-05T09:00:00Z"),
-    )
-    fx.add_exposure(conn, 3, "R0", "GZ-001", (0, 0, 600, 600), 0.5, 0.4)
+    _, stats, rid = hk.build(conn, "S", "R0", extra_air=SCENARIO[:1])
     fx.publish(conn, "R0", "2026-11-05T00:05:00Z")
     fx.create_release(conn, "R1", base_release_id="R0")
     fx.add_layers(conn, "R1")
-    fx.add_building(conn, 4, "R1", "B-002", (300, 300, 350, 350), 0.0, 80.0)
-    fx.add_airspace(
-        conn, 5, "R1", "NF-002", (400, 400, 500, 500),
-        ("2026-11-05T08:00:00Z", "2026-11-05T09:00:00Z"),
-    )
-    fx.add_exposure(conn, 6, "R1", "GZ-002", (0, 0, 600, 600), 0.4, 0.3)
+    hk.build(conn, "S", "R1", extra_air=SCENARIO, first_rid=rid)
     fx.publish(conn, "R1", "2026-11-05T00:10:00Z")
+    conn.execute("CREATE TEMP TABLE _stats(v TEXT)")
+    conn.execute("INSERT INTO _stats VALUES (?)", (json.dumps(stats),))
     conn.commit()
     return conn
 
@@ -149,12 +153,15 @@ def run():
         expected = historical_query(conn, "R0")
         expected_hash = digest(expected)
         source_checks = checks(conn)
+        data_stats = json.loads(conn.execute("SELECT v FROM _stats").fetchone()[0])
         conn.close()
         backup_ms = backup(source_path, backup_path)
         restore = verify_restore(backup_path, expected, expected_hash)
         truncation = verify_truncation(backup_path)
         return {
-            "synthetic": True,
+            "synthetic": False,
+            "data": "Hong Kong open data, Kowloon area S (docs/v2/data/hk/manifest.json); NF-001/NF-002 are scenario rows",
+            "data_stats": data_stats,
             "operation": "SQLite Connection.backup",
             "source_checks": source_checks,
             "historical_query": {

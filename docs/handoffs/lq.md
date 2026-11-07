@@ -100,3 +100,9 @@ ZC 指示 AI 助手（Claude Code）修复全部成员的未关闭问题并记�
 - **LQ-V2-02（已修复）**：[`op_c.sql`](../modules/lq/v2/experiments/op_c.sql) 由“查询窗口等于数据集窗口”改为“数据集窗口包含任务窗口”。[`run.py`](../modules/lq/v2/experiments/run.py) 用 10 分钟任务窗口验证追溯（2 段航线均返回来源），并以超出数据集窗口的查询验证过滤（0 行）。[governance.json](../modules/lq/v2/experiments/results/governance.json) 已用修订代码重跑，新增 `trace_window_rule` 记录；18 项测试通过。ZC 的独立探针 `op_c_task_window` 转为通过（12/12）。对接说明第“ZC操作C合同”节已注明修订。
 - **编码（ZC-V2-02 同类）**：`prototype/evaluate.py`、`prototype/review_integration.py`、`v2/experiments/run.py`、`v2/experiments/review_zqo.py` 的文本读写显式使用 UTF-8；行为在 UTF-8 系统上不变，非 UTF-8 系统（含 Windows 默认代码页）不再失败。
 - **ZQO-V2-01 探针结果**：LQ 的 [`review_zqo.py`](../modules/lq/v2/experiments/review_zqo.py) 在 ZQO 修复后退出码 0，两项无效输入均被拒绝，结果已写入 [zqo-provenance-review.json](../modules/lq/v2/experiments/results/zqo-provenance-review.json)。
+
+## 2026-11-07：实验改用香港九龙开放数据（AI 按 ZC 指示完成）
+
+- `run.py` 改用旺角 S 区的普查区组、学校与医院暴露分区；E 由 2021 年普查密度归一化得到，C 与阈值仍是演示参数。来源失效查询从 `SRC-SYN` 改为 `SRC-HK-CENSUS`。
+- 香港来源的 `owner_org` 记为平台机构代码 `SYN`（持有许可副本的机构），提供部门写在来源名称与备注中，受限视图的机构过滤因此保持原语义。
+- 新结果：18 项测试通过；操作 C 两段航线分别追溯到一所学校与一个普查区组；时段缺口、模型原地修改与自审仍被拒绝。

@@ -1,8 +1,9 @@
 """Derived-graph cache across releases: full rebuild vs change-driven carry/patch.
 
 Release-keyed caches never become wrong for their own release (releases are immutable);
-the question is what a NEW release can reuse. Two real publications through
-catalog.publish change the airspace layer only:
+the question is what a NEW release can reuse. Data: real Kowloon area M (docs/v2/data/hk). Two real
+publications through catalog.publish change the airspace layer only; both changes are scenario restrictions
+placed over real Mong Kok streets (not real notices):
 
   R0 -> R1  publish a new no-fly volume over part of the task area
   R1 -> R2  revoke an existing no-fly volume
@@ -37,9 +38,10 @@ import city  # noqa: E402
 cat = io.cat
 BUF = io.CONFIG["buffer_m"]
 FOOT = io.RISK_MODEL["footprint_m"]
-OLD = {"id": "NF-OLD", "box": (1000.0, 1000.0, 1250.0, 1250.0),
+REGION = (835150.0, 819750.0, 835750.0, 820350.0)   # 600 m around Mong Kok MTR (HK1980 Grid)
+OLD = {"id": "NF-OLD", "box": (835200.0, 819800.0, 835450.0, 820050.0),
        "effective": ("2026-11-10T06:00:00Z", "2026-11-10T18:00:00Z")}
-NEW_ROWS = {"id": "NF-NEW", "box": (1400.0, 1500.0, 1800.0, 1800.0),
+NEW_ROWS = {"id": "NF-NEW", "box": (835500.0, 820100.0, 835900.0, 820400.0),
             "effective": ("2026-11-10T08:00:00Z", "2026-11-10T14:00:00Z")}
 
 
@@ -214,14 +216,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", default=str(HERE / "results" / "invalidation.json"))
     ap.add_argument("--graphs", type=int, default=24)
-    ap.add_argument("--buildings", type=int, default=2400)
+    ap.add_argument("--area", default="M", choices=sorted(city.AREAS))
     ap.add_argument("--seed", type=int, default=20261107)
     args = ap.parse_args()
     started = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     with tempfile.TemporaryDirectory(prefix="zc-inval-") as tmp:
-        pl0, boxes = city.payload(args.buildings, seed=args.seed, extra_air=[OLD])
+        pl0, boxes, stats = city.payload(args.area, seed=args.seed, extra_air=[OLD])
         c = city.database(str(Path(tmp) / "inval.db"), pl0)
-        tasks = city.tasks(args.graphs, boxes, seed=args.seed + 3, region=(900.0, 2100.0), day=10, hours=(6, 18))
+        tasks = city.tasks(args.graphs, boxes, seed=args.seed + 3, region=REGION, day=10, hours=(6, 18))
         cache = {}
         for t in tasks:
             io.plan_route(c, "R0", t["window"], t["start"], t["goal"], "graph_cache", cache=cache)
@@ -236,14 +238,16 @@ def main():
                      "cache_rows_by_origin": {r[0]: r[1] for r in c.execute(
                          "SELECT origin, count(*) FROM route_graph_cache GROUP BY origin")}}
         c.close()
-    files = [HERE / f for f in ("invalidation.py", "planner_io.py", "city.py")] + [io.ROOT / "docs/v2/schema/schema.sql"]
-    out = {"experiment": "zc_v2_cache_invalidation", "started_at": started, "synthetic": True,
+    files = [HERE / f for f in ("invalidation.py", "planner_io.py", "city.py")] + [io.ROOT / "docs/v2/schema/schema.sql",
+             io.ROOT / "docs/v2/data/hk/hk.py", io.ROOT / "docs/v2/data/hk/manifest.json"]
+    out = {"experiment": "zc_v2_cache_invalidation", "started_at": started, "synthetic": False,
+           "data": "Hong Kong open data, Kowloon area " + args.area + "; NF-OLD/NF-NEW and 100 restrictions are scenario rows",
            "environment": {"python": platform.python_version(), "sqlite": sqlite3.sqlite_version,
                            "platform": platform.platform(),
                            "git_head": subprocess.run(["git", "rev-parse", "HEAD"], cwd=io.ROOT, text=True,
                                                       capture_output=True).stdout.strip()},
-           "parameters": {"buildings": args.buildings, "graphs": args.graphs, "seed": args.seed,
-                          "task_region_m": [900, 2100], "task_day": "2026-11-10 06:00-18:00 UTC",
+           "parameters": {"area": args.area, "data_stats": stats, "graphs": args.graphs, "seed": args.seed,
+                          "task_region_hk1980": REGION, "task_day": "2026-11-10 06:00-18:00 UTC",
                           "changes": {"R1": {"publish": NEW_ROWS}, "R2": {"revoke": OLD["id"]}},
                           "planner_config": io.CONFIG},
            "source_sha256": {str(f.relative_to(io.ROOT)): hashlib.sha256(f.read_bytes()).hexdigest() for f in files},

@@ -17,9 +17,9 @@
 | 项目 | 约定 |
 | --- | --- |
 | 坐标参考系 | 局部直角坐标 `x/y/z`，单位米；`x` 向东、`y` 向北、`z` 向上 |
-| 原点与范围 | 合成片区原点在西南角地面；基线范围 `x∈[0,600]`、`y∈[0,600]`、`z∈[0,160]` |
-| 垂直基准 | `z=0` 是片区共同参考平面；地形高度另用 `terrain_post.z` 表示；真实接入时记录高程基准与转换参数 |
-| SRID | PostGIS 使用 `0` 表示无单位局部坐标；禁止把局部米制几何标成 WGS-84 的 `4326` |
+| 原点与范围 | starter-v0 合成片区原点在西南角地面（`x∈[0,600]`、`y∈[0,600]`、`z∈[0,160]`，单元测试仍使用）；v2 实验使用九龙实测数据，范围见 [香港数据快照](../../../v2/data/hk/README.md) |
+| 垂直基准 | 合成片区以 `z=0` 为共同参考平面；香港实测数据为香港主水平基准（mPD），`terrain_surface.vertical_datum` 记为 `HKPD`；地形高度另用 `terrain_post.z` 表示 |
+| SRID | 香港实测数据为 HK1980 Grid（EPSG:2326，米）；合成片区用 `0` 表示局部坐标；禁止把投影坐标标成 WGS-84 的 `4326` |
 | 精度 | 平面精度 `accuracy_xy_m`、垂直精度 `accuracy_z_m` 以米记录；未知时写 `NULL` 并将 `quality` 标为 `unknown` |
 | 几何类型 | 建筑和空域用三维体 `PolyhedralSurfaceZ`；地面分区和建筑轮廓用二维面 `Polygon`；地形格网用点或 TIN |
 | 边界语义 | 面边界包含在内；三维体表面视为实体边界；查询缓冲距离另加，不把“接触”自动当成安全 |
@@ -484,7 +484,7 @@ airspace_restriction 1 ── N airspace_event
 
 ### 6.2 几何与空间
 
-- 所有几何 `SRID=0`；`ST_IsValid` 必须为真；三维体必须是封闭、简单、非自交的 `PolyhedralSurfaceZ`。
+- 实测几何 `SRID=2326`（合成片区为 `0`）；`ST_IsValid` 必须为真；三维体必须是封闭、简单、非自交的 `PolyhedralSurfaceZ`。
 - 建筑和暴露分区必须落在场景边界内；地形点必须落在地形边界内。
 - 建筑 `top_z > base_z`；`height_m` 与 `top_z-base_z` 一致；`solid` 的二维投影与 `footprint` 一致。
 - 空域体的 `floor_z`、`ceiling_m`、`effective` 三者共同定义可飞行判断；仅检查二维范围不充分。
@@ -516,9 +516,9 @@ airspace_restriction 1 ── N airspace_event
 | `tstzrange` | `tstzrange` | 半开区间 |
 | `double precision` | `double precision` | 米或无量纲 |
 | `jsonb` | `jsonb` | 清单、参数、扩展属性 |
-| `geometry(Polygon,0)` | `geometry(Polygon,0)` | 局部米制 |
-| `geometry(PolyhedralSurfaceZ,0)` | `geometry(PolyhedralSurfaceZ,0)` | 三维体 |
-| `geometry(TIN,0)` | `geometry(TIN,0)` | 地形三角网 |
+| `geometry(Polygon,2326)` | `geometry(Polygon,2326)` | HK1980 Grid，米（合成片区为 SRID 0） |
+| `geometry(PolyhedralSurfaceZ,2326)` | `geometry(PolyhedralSurfaceZ,2326)` | 三维体，高度 mPD |
+| `geometry(TIN,2326)` | `geometry(TIN,2326)` | 地形三角网 |
 
 ### 7.2 索引选择
 

@@ -18,7 +18,7 @@ YHT PR #1（`f05459c`）已合入，GitHub `checks` 为 SUCCESS。修改前13项
 | --- | --- | --- | --- | --- |
 | YHT-V2-05 | YHT | draft 的 feature 可 UPDATE 到已发布 release；已发布 feature 可后补子类型；已发布版本可新增地形。原 immutable 触发器未覆盖所有 INSERT / NEW 所属版本检查 | 源空间表检查旧/新 owner 和新增子行；拒绝全部已发布内容变更；增加覆盖 feature、子类型、coverage、terrain 的回归，保持合法 draft 写入和原索引实验 | 待 YHT 修复 |
 | YHT-V2-06 | YHT | `source.license` 在发布后仍可原地修改；历史来源跟着改变 | 已引用 source 采用不可变版本编号或真正的历史源表；测试旧发布可重开且来源不变、新来源可合法入库；更新字典与迁移约定 | 待 YHT 修复 |
-| LQ-V2-01 | LQ | 已引用 `risk_model.formula` 仍可原地修改，历史 exposure 的模型解释漂移 | 模型版本不可变或独立版本表；审批/状态调整与计算参数历史分开；测试旧发布模型参数稳定、修订使用新版本 | LQ第3棒已修复，待下一棒复核 |
+| LQ-V2-01 | LQ | 已引用 `risk_model.formula` 仍可原地修改，历史 exposure 的模型解释漂移 | 模型版本不可变或独立版本表；审批/状态调整与计算参数历史分开；测试旧发布模型参数稳定、修订使用新版本 | LQ第3棒已修复；ZC第4棒复核通过（[探针](../modules/zc/v2/experiments/results/lq-review.json)） |
 
 复现脚本：`python3 -B docs/modules/zqo/v2/experiments/run.py --counts 10 --output /tmp/zqo-v2-review.json`。`known_other_owner_defects` 保存5条原始SQL、预期 rejected、实际 accepted 和 `pass=false`，不把这些结果计作通过。完整证据在 [transactions-storage.json](../modules/zqo/v2/experiments/results/transactions-storage.json)。ZQO 的 `snapshot()` 检查关系行摘要，漂移明确报错，不能恢复已被原地改写的数据；该检测不关闭问题。
 
@@ -32,6 +32,18 @@ YHT PR #1（`f05459c`）已合入，GitHub `checks` 为 SUCCESS。修改前13项
 - **ZQO-V2-01（ZQO，P2，待负责人修复）**：catalog.publish只核对source_versions键集合，空版本值或空compiler_version仍可发布。复现命令`python3 -B docs/modules/lq/v2/experiments/review_zqo.py --output /tmp/zqo-provenance.json`；两项当前accepted、退出码1，见[原始结果](../modules/lq/v2/experiments/results/zqo-provenance-review.json)。请ZQO要求上游版本值与编译器为有效非空字符串，并补无效类型/空白值及正常发布回归；保留失败审计与幂等语义。LQ未代改其代码。当前正常实验使用非空合成标识，因此这不是对既有事务结果的反证。
 - **ZC-V2-C01（接口需求，非缺陷）**：正式query_run需含query_id、release_id、actor_id、window_lo/hi；route_segment_source需含query_id、segment_no、component_id、zone_rid、dataset_id，并索引query_id。LQ以TEMP表验证操作C，SQL见[op_c.sql](../modules/lq/v2/experiments/op_c.sql)。ZC下一棒在正式表上落实外键、版本一致和访问校验，并复跑SQL；不能把TEMP夹具写成已部署结果服务。
 - **保留其他责任**：YHT-V2-05/06仍由YHT修复。LQ新增派生质量、访问及审计约束不覆盖源表的已知旁路，不以本棒测试通过关闭这些项。
+
+## v2 第4棒审阅与交接（ZC，基线 ca2bf58）
+
+确认 LQ PR #6 已合入 develop 且 checks 成功。修改前统一模式45项、LQ 18项、ZQO 事务回归通过；LQ `run.py` 与 ZQO `run.py --counts 10` 复跑一致。12项独立探针见 [lq-review.json](../modules/zc/v2/experiments/results/lq-review.json)，11项通过。
+
+| 编号 | 负责人 | 问题与复现 | 完成判据 | 状态 |
+| --- | --- | --- | --- | --- |
+| LQ-V2-02 | LQ | `docs/modules/lq/v2/experiments/op_c.sql` 要求 `q.window = dataset.window`。数据集窗口按 LQ 触发器等于发布有效期（2026全年），规划任务是10分钟窗口；同一条已写入正式表的航线，LQ 版追溯0行，ZC 正式版 [op_c.sql](../v2/schema/op_c.sql) 2行。复现：`python3 -B docs/modules/zc/v2/experiments/review_lq.py --output /tmp/zc-lq.json`，探针 `op_c_task_window` | LQ 版改为任务窗口落在数据集窗口内，或说明保留相等合同的理由并与正式表约束一致；复跑探针为通过 | 待 LQ 确认 |
+| ZQO-V2-01 | ZQO | 空上游版本值与空 compiler_version 仍可发布 | 见上节 LQ 记录 | ZC 复跑 `review_zqo.py` 退出码1，仍待 ZQO 修复 |
+| YHT-V2-05/06 | YHT | 见上节 | YHT PR #5 已开，checks 成功 | PR #5 未合入 develop；ZC 本棒未依赖其行为，合入后复跑 ZC 测试 |
+
+**ZC-V2-C01 已落实**：`query_run`（query_id、release_id、actor_id、window_lo/hi 等）与 `route_segment_source`（query_id、segment_no、component_id、zone_rid、dataset_id，含 zone 索引）为正式表，外键与发布、窗口、数据集一致性由触发器在写入时校验。
 
 ## 最新状态（2026-11-06，整合基线2850d89）
 

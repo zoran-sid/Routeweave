@@ -22,7 +22,7 @@
 | 隐私、合规与伦理 | 2、5 | §7.4（16） | 8 | — |
 | 至少两项关键设计权衡 | 2、6 | §4.5、§5.4、§6.5、§7.5，汇总于 §8.3（18） | 12 | — |
 | 评估指标、实验或基准方案 | 2、5 | §8.1（17）表 13–14；§4.4、§5.2、§6.2–6.3 | 5–6、9–11 | [verification-v2.json](evidence/verification-v2.json) |
-| 风险、局限与改进方向 | 5–6 | §8.4（18） | 12 | [问题清单](../integration/issues.md) |
+| 风险、局限与改进方向 | 5–6 | §8.4（18） | 12 | [问题清单](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/issues.md) |
 | 小组分工说明 | 5 | §9（19） | — | [contributions.md](contributions.md) |
 | 参考文献（统一格式） | 5 | 参考文献（19–21），IEEE，26 条 | 讲稿注明来源 | — |
 | AI 在数据管理与治理中的应用；本组 AI 使用过程 | 1（声明格式未定） | §7.4 AI 辅助发现异常与敏感字段（16）；附录 C（21–23）工具、时间线、人与 AI 分工、审阅发现 | 8 | [contributions.md](contributions.md) |
@@ -54,7 +54,7 @@
 ## 篇幅与形式
 
 - 报告正文（摘要至第 9 章，不含参考文献与附录）9,808 个汉字，满足“不少于 2,500 中文字”的建议（PDF 第4页）。统计方法见 `docs/final/source/build_report.py` 的 `hanzi()`。
-- PPT 共 12 页，按 ZQO、YHT、ZQO、LQ、ZC、LJ 的顺序讲述，每页附讲稿与来源；汇报时长由课程另行通知，届时按时长增删页面（[任务安排](../team-tasks.md)第9节）。
+- PPT 共 12 页，按 ZQO、YHT、ZQO、LQ、ZC、LJ 的顺序讲述，每页附讲稿与来源；汇报时长由课程另行通知，届时按时长增删页面（[任务安排](https://github.com/zoran-sid/Routeweave/blob/develop/docs/team-tasks.md)第9节）。
 - 原型、实验与证据（PDF 第6页加分材料）见报告附录 B 与 [verification-v2.json](evidence/verification-v2.json)。
 
 ## 需由成员确认的提交信息

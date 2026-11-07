@@ -7,7 +7,7 @@
 - PDF 中“须”“应”“建议”“鼓励”和“例如”的含义分别保留。示例供选题参考，不是额外必做任务。
 - 课程要求小组报告、路演，以及至少深入讨论一种相关较新技术或新兴趋势。报告字数是建议；每人约2页 PPT 属于本组安排。
 - 第6页“至少两类数据、两个关键决策或权衡、两个查询或服务”列在项目范围建议中，本组将其作为设计覆盖目标。
-- 本文件是课程材料的内容记录。agent 的操作方式遵循 [AGENTS.md](../AGENTS.md)；项目的具体选题、分工和协作见 [项目说明](project-brief.md)、[要求对照](requirements-audit.md) 与 [异步协作](agent-collaboration.md)。
+- 本文件是课程材料的内容记录。agent 的操作方式遵循 [AGENTS.md](https://github.com/zoran-sid/Routeweave/blob/develop/AGENTS.md)；项目的具体选题、分工和协作见 [项目说明](project-brief.md)、[要求对照](https://github.com/zoran-sid/Routeweave/blob/develop/docs/requirements-audit.md) 与 [异步协作](https://github.com/zoran-sid/Routeweave/blob/develop/docs/agent-collaboration.md)。
 
 ## PDF 第1页
 
@@ -344,7 +344,7 @@
 
 ## 本组执行口径与待公布事项
 
-上述原文之外，本组采用五人模块分工、每人约2页 PPT 和基于 Git 提交的异步协作，具体见 [任务安排](team-tasks.md)。分工均衡不等于预先确认每人贡献20%；实际贡献按成果记录核定。
+上述原文之外，本组采用五人模块分工、每人约2页 PPT 和基于 Git 提交的异步协作，具体见 [任务安排](https://github.com/zoran-sid/Routeweave/blob/develop/docs/team-tasks.md)。分工均衡不等于预先确认每人贡献20%；实际贡献按成果记录核定。
 
 仓库使用成员缩写。真实身份、学号和签名在正式贡献表中填写，当前不写入公开协作文档。方案统筹人与正式提交负责人分别确认。
 

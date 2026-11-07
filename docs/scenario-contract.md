@@ -1,6 +1,6 @@
 # SkyRoute 共同场景与查询约定
 
-本文件统一数据、约束和查询的含义，并提供可直接开工的 `starter-v0`。具体技术架构、空间表示、风险模型、数值参数和算法组合由各模块先论证，再按 [异步协作规则](agent-collaboration.md) 对齐。
+本文件统一数据、约束和查询的含义，并提供可直接开工的 `starter-v0`。具体技术架构、空间表示、风险模型、数值参数和算法组合由各模块先论证，再按 [异步协作规则](https://github.com/zoran-sid/Routeweave/blob/develop/docs/agent-collaboration.md) 对齐。
 
 ## 模拟场景与三类数据
 
@@ -68,7 +68,7 @@ YHT 主责数据模型与存储，LQ 主责风险表达，ZQO 主责空域发布
 
 数据版本引用沿用 `starter-v0`。检查用模拟发布版本即可表达一致性要求，无需先获得 ZQO 的系统架构。不同模块的自建样例可不同，引用时记录样例版本与映射；跨方案性能或风险比较必须统一条件。
 
-共享约定的修订由实际开展研究的 AI 按 [协作规则](agent-collaboration.md) 完成影响检查和迁移说明后提交。各工作包主责人维护相应成果，主责不构成审批环节。
+共享约定的修订由实际开展研究的 AI 按 [协作规则](https://github.com/zoran-sid/Routeweave/blob/develop/docs/agent-collaboration.md) 完成影响检查和迁移说明后提交。各工作包主责人维护相应成果，主责不构成审批环节。
 
 ## 算法与验证口径
 

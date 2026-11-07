@@ -1,6 +1,6 @@
 # 验证结果与设计取舍
 
-本页保留首次三模块实验基线。2026-11-05新增的ZQO-01修复、126项回归和11项五模块链路验证见[独立集成证据](../../integration/zqo-evidence.md)，原JSON及PPT未覆盖。
+本页保留首次三模块实验基线。2026-11-05新增的ZQO-01修复、126项回归和11项五模块链路验证见[独立集成证据](https://github.com/zoran-sid/Routeweave/blob/develop/docs/integration/zqo-evidence.md)，原JSON及PPT未覆盖。
 
 ## 执行条件
 

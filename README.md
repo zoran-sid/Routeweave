@@ -10,7 +10,7 @@
 
 ## 版本与分支
 
-`main` 是已完成的正式版本，当前为 v2（标签 `v2.1-submission`，`main` 只含项目成果，协作过程文件在 `develop`）；按课程“数据管理系统设计”要求重组前的 v1（算法方向）保留在标签 `v1.0-algorithm-baseline`。个人工作使用 `<成员缩写>/<主题>` 分支并 PR 到 `develop`，规则见 [AGENTS.md 第6节](AGENTS.md)。
+`main` 是已完成的正式版本，当前为 v2（标签 `v2.2-submission`，`main` 只含项目成果，协作过程文件在 `develop`）；按课程“数据管理系统设计”要求重组前的 v1（算法方向）保留在标签 `v1.0-algorithm-baseline`。个人工作使用 `<成员缩写>/<主题>` 分支并 PR 到 `develop`，规则见 [AGENTS.md 第6节](AGENTS.md)。
 
 ## 项目文档
 

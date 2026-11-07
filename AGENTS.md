@@ -2,7 +2,7 @@
 
 本文件适用于整个仓库。开始工作前阅读当前项目说明、共同口径与成员职责，按实际成果记录进度。
 
-**当前版本状态（2026-11-07）**：v2 已发布到 `main`，最终标签为 `v2.1-submission`，此前的 `v2.0-submission` 保留；v1（算法方向）保留在标签 `v1.0-algorithm-baseline`。`main` 只保存项目成果。本文件、任务安排、提示词、交接记录、问题清单与课程要求对照等协作过程文件只在 `develop`。v2 以数据库为中心，五棒完成后由 ZC 整合：23 页 PDF 报告与 12 页 PPT 由 `docs/final/source/` 在本地构建，不入库，入口见[最终交付](docs/final/README.md)；逐棒审阅发现的问题见[问题清单](docs/integration/issues.md)。修改先从 `develop` 创建个人分支，再经 `hotfix/*` 发布到 `main`，规则见第6节。
+**当前版本状态（2026-11-07）**：v2 已发布到 `main`，最终标签为 `v2.2-submission`（实验改用香港九龙开放数据），此前的 `v2.0-submission`、`v2.1-submission` 保留；v1（算法方向）保留在标签 `v1.0-algorithm-baseline`。`main` 只保存项目成果。本文件、任务安排、提示词、交接记录、问题清单与课程要求对照等协作过程文件只在 `develop`。v2 以数据库为中心，五棒完成后由 ZC 整合：23 页 PDF 报告与 12 页 PPT 由 `docs/final/source/` 在本地构建，不入库，入口见[最终交付](docs/final/README.md)；逐棒审阅发现的问题见[问题清单](docs/integration/issues.md)。修改先从 `develop` 创建个人分支，再经 `hotfix/*` 发布到 `main`，规则见第6节。
 
 ## 1. 开始工作
 
@@ -90,7 +90,7 @@ v2 按课程报告章节分工，详见[任务安排](docs/team-tasks.md)。仓�
 | `<成员缩写小写>/<主题>` | 个人工作，例如 `zc/tech-selection`、`lq/governance` | 从最新 `develop` 创建，完成后 PR 到 `develop`，合并后删除 |
 | `hotfix/<主题>` | 向 `main` 发布或更正 | 从 `main` 创建，带入 `develop` 上已审阅的成果改动（不含过程文件）后 PR 到 `main`；不合回 `develop`，以免删除过程文件 |
 
-版本标签：`v1.0-algorithm-baseline` 为 v1 完整交付；v2 候选版本用 `v2.0-rc.N`，最终提交用 `v2.0-submission`；`main` 精简为只含项目成果后的版本为 `v2.1-submission`。
+版本标签：`v1.0-algorithm-baseline` 为 v1 完整交付；v2 候选版本用 `v2.0-rc.N`，最终提交用 `v2.0-submission`；`main` 精简为只含项目成果后的版本为 `v2.1-submission`；改用香港九龙开放数据重跑实验后的版本为 `v2.2-submission`。
 
 开工流程：
 

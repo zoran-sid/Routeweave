@@ -471,6 +471,7 @@ BEGIN SELECT RAISE(ABORT, 'feature: release is not draft'); END;
 
 CREATE TRIGGER feature_immutable_update BEFORE UPDATE ON feature
 WHEN (SELECT status FROM release WHERE release_id = OLD.release_id) <> 'draft'
+  OR (SELECT status FROM release WHERE release_id = NEW.release_id) <> 'draft'
 BEGIN SELECT RAISE(ABORT, 'feature: published release is immutable'); END;
 
 CREATE TRIGGER feature_immutable_delete BEFORE DELETE ON feature
@@ -523,6 +524,34 @@ BEGIN SELECT RAISE(ABORT, 'terrain_post: published release is immutable'); END;
 
 CREATE TRIGGER terrain_post_immutable_delete BEFORE DELETE ON terrain_post
 WHEN (SELECT status FROM release WHERE release_id = OLD.release_id) <> 'draft'
+BEGIN SELECT RAISE(ABORT, 'terrain_post: published release is immutable'); END;
+
+-- 子表写入也必须检查所属发布状态；只在 feature 头表拦截会留下后补子类型的旁路。
+CREATE TRIGGER building_insert_draft_only BEFORE INSERT ON building
+WHEN (SELECT r.status FROM feature f JOIN release r ON r.release_id = f.release_id
+      WHERE f.rid = NEW.rid) <> 'draft'
+BEGIN SELECT RAISE(ABORT, 'building: published release is immutable'); END;
+
+CREATE TRIGGER airspace_insert_draft_only BEFORE INSERT ON airspace_restriction
+WHEN (SELECT r.status FROM feature f JOIN release r ON r.release_id = f.release_id
+      WHERE f.rid = NEW.rid) <> 'draft'
+BEGIN SELECT RAISE(ABORT, 'airspace_restriction: published release is immutable'); END;
+
+CREATE TRIGGER exposure_insert_draft_only BEFORE INSERT ON exposure_zone
+WHEN (SELECT r.status FROM feature f JOIN release r ON r.release_id = f.release_id
+      WHERE f.rid = NEW.rid) <> 'draft'
+BEGIN SELECT RAISE(ABORT, 'exposure_zone: published release is immutable'); END;
+
+CREATE TRIGGER coverage_insert_draft_only BEFORE INSERT ON coverage_tile
+WHEN (SELECT status FROM release WHERE release_id = NEW.release_id) <> 'draft'
+BEGIN SELECT RAISE(ABORT, 'coverage_tile: published release is immutable'); END;
+
+CREATE TRIGGER terrain_insert_draft_only BEFORE INSERT ON terrain_surface
+WHEN (SELECT status FROM release WHERE release_id = NEW.release_id) <> 'draft'
+BEGIN SELECT RAISE(ABORT, 'terrain_surface: published release is immutable'); END;
+
+CREATE TRIGGER terrain_post_insert_draft_only BEFORE INSERT ON terrain_post
+WHEN (SELECT status FROM release WHERE release_id = NEW.release_id) <> 'draft'
 BEGIN SELECT RAISE(ABORT, 'terrain_post: published release is immutable'); END;
 
 -- R*Tree 候选索引：只做过滤，精确判定在基表列上复核（R*Tree 以 32 位浮点向外取整）。
@@ -687,6 +716,64 @@ BEGIN SELECT RAISE(ABORT, 'audit_event: append-only'); END;
 
 CREATE TRIGGER audit_event_no_delete BEFORE DELETE ON audit_event
 BEGIN SELECT RAISE(ABORT, 'audit_event: append-only'); END;
+
+-- 来源身份即版本身份：一旦被非 draft 发布引用，source 行不得 UPDATE/DELETE；
+-- 许可或精度修订必须登记新的 source_id，旧发布仍解析到旧行。
+CREATE VIEW source_provenance_usage AS
+SELECT f.source_id AS source_id
+FROM feature f JOIN release r ON r.release_id = f.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT b.footprint_source FROM building b
+JOIN feature f ON f.rid = b.rid JOIN release r ON r.release_id = f.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT b.height_source FROM building b
+JOIN feature f ON f.rid = b.rid JOIN release r ON r.release_id = f.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT a.source_id FROM airspace_restriction a
+JOIN feature f ON f.rid = a.rid JOIN release r ON r.release_id = f.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT e.source_id FROM exposure_zone e
+JOIN feature f ON f.rid = e.rid JOIN release r ON r.release_id = f.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT t.source_id FROM terrain_surface t JOIN release r ON r.release_id = t.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT p.source_id FROM terrain_post p JOIN release r ON r.release_id = p.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT c.source_id FROM coverage_tile c JOIN release r ON r.release_id = c.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT ev.source_id FROM airspace_event ev JOIN release r ON r.release_id = ev.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT rm.source_id FROM risk_model rm
+JOIN exposure_zone e ON e.risk_model_id = rm.risk_model_id
+JOIN feature f ON f.rid = e.rid JOIN release r ON r.release_id = f.release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT cs.source_id FROM component_source cs
+JOIN layer_component c ON c.component_id = cs.component_id
+JOIN release r ON r.release_id = c.owner_release_id
+WHERE r.status <> 'draft'
+UNION
+SELECT cs.source_id FROM component_source cs
+JOIN release_component rc ON rc.component_id = cs.component_id
+JOIN release r ON r.release_id = rc.release_id
+WHERE r.status <> 'draft';
+
+CREATE TRIGGER source_immutable_update BEFORE UPDATE ON source
+WHEN EXISTS (SELECT 1 FROM source_provenance_usage u WHERE u.source_id = OLD.source_id)
+BEGIN SELECT RAISE(ABORT, 'source: referenced source is immutable; register a new source_id'); END;
+
+CREATE TRIGGER source_immutable_delete BEFORE DELETE ON source
+WHEN EXISTS (SELECT 1 FROM source_provenance_usage u WHERE u.source_id = OLD.source_id)
+BEGIN SELECT RAISE(ABORT, 'source: referenced source is immutable; register a new source_id'); END;
 
 -- =====================================================================
 -- 6 查询与结果追溯（ZC 预留：query_run、route_result、route_segment_source、派生图缓存）

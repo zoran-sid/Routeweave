@@ -191,3 +191,51 @@ erDiagram
 ```
 
 `failed_attempt.observed_release_id` 可空；候选编号仅为文本，可指向从未提交的发布。历史发布与组件不得删除。完整字段见 schema.sql 第2节；逻辑发布和物理 owner 的查询区别见 [ZQO 接口](../../modules/zqo/v2/integration.md)。
+
+## LQ 治理扩展（v2 第3棒）
+
+```mermaid
+erDiagram
+    release ||--o{ risk_dataset : compiled_for
+    layer_component ||--o{ risk_dataset : exposure_input
+    risk_model ||--o{ risk_dataset : evaluates
+    risk_model ||--o| risk_model_control : activated_separately
+    risk_dataset ||--o{ risk_input_period : preserves
+    risk_dataset ||--o{ derived_risk : produces
+    risk_dataset ||--o{ quality_check : checked
+    exposure_zone ||--o{ derived_risk : spatial_scope
+    source ||--o{ derived_risk : provenance
+    actor ||--o{ governance_request : authors
+    governance_request ||--o| governance_approval : reviewed
+    actor ||--o{ governance_approval : independent_reviewer
+```
+
+`risk_dataset`的window_lo/hi必须等于绑定release窗口，component_id必须解析到同次逻辑发布的exposure层；zone_rid引用物理owner行。时段输入及结果按dataset_id留存，封存后不可变。`risk_model_control`保存enabled/操作者/时间/原因，不改历史模型语义。`quality_check`按checked_at追加。
+
+`governance_request`保存作者和候选内容摘要；审批保存reviewer/decision/at。数据库拒绝作者自审，发布网关核对已批准摘要后调用ZQO事务。lineage_edge新增component/dataset端点，存在性和dataset依赖由触发器校验。现有23实体加7个LQ实体共30个；ZC 正式查询表见下节。
+
+## ZC 查询与结果追溯（v2 第4棒）
+
+```mermaid
+erDiagram
+    release ||--o{ query_run : pinned_by
+    actor ||--o{ query_run : submits
+    route_graph_cache |o--o{ query_run : served
+    query_run ||--o| route_result : feasible_route
+    route_result ||--o{ route_segment_source : segment_risk
+    layer_component ||--o{ route_segment_source : exposure_component
+    exposure_zone ||--o{ route_segment_source : zone
+    risk_dataset ||--o{ route_segment_source : values_from
+    release ||--o{ route_graph_cache : keyed_by
+    risk_dataset ||--o{ route_graph_cache : risk_input
+    route_graph_cache |o--o{ route_graph_cache : carried_or_patched_from
+```
+
+| 表 | 用途 | 时间字段 | 版本关系 | 负责人 |
+| --- | --- | --- | --- | --- |
+| `query_run` | 一次 Q1：发布、提交者、任务窗口、起终点、配置、取数路径、状态 | `requested_at`、`window_lo/hi` | 绑定逻辑发布；`freshness` 由触发器按当前指针判定 | ZC |
+| `route_result` | 可行航线的度量与航点 | — | 随 `query_run`，只追加 | ZC |
+| `route_segment_source` | 航段的风险来源（LQ 操作 C 合同） | — | 组件、分区、数据集须属于查询发布，数据集窗口覆盖任务窗口 | ZC |
+| `route_graph_cache` | 派生图元数据：发布、数据集、搜索域、窗口、配置、内容摘要、来源方式 | `window_lo/hi`、`created_at` | 按发布记账；`carried`/`patched` 指向上一发布同键图 | ZC |
+
+现有30个实体加4个 ZC 实体共34个；`test_schema` 实体清单同步更新。图本体保存在规划服务内存，以 `payload_hash` 索引，可由发布重建。

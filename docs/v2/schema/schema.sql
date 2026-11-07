@@ -671,7 +671,7 @@ CREATE TABLE access_policy (
     policy_id       TEXT PRIMARY KEY,
     role            TEXT NOT NULL CHECK (role IN ('dispatcher','operator','airspace_admin','system_admin','auditor')),
     resource        TEXT NOT NULL,
-    action          TEXT NOT NULL CHECK (action IN ('read','write','publish','export')),
+    action          TEXT NOT NULL CHECK (action IN ('read','write','publish','approve','export')),
     max_sensitivity TEXT NOT NULL CHECK (max_sensitivity IN ('public','internal','restricted','sensitive')),
     condition       TEXT CHECK (condition IS NULL OR json_valid(condition)),
     status          TEXT NOT NULL CHECK (status IN ('active','retired'))
@@ -680,9 +680,9 @@ CREATE TABLE access_policy (
 -- 多态血缘边：端点存在性由发布质检校验，数据库只保证不自环与取值合法。
 CREATE TABLE lineage_edge (
     edge_id      TEXT PRIMARY KEY,
-    from_kind    TEXT NOT NULL CHECK (from_kind IN ('source','feature','release','model')),
+    from_kind    TEXT NOT NULL CHECK (from_kind IN ('source','feature','release','model','component','dataset')),
     from_id      TEXT NOT NULL,
-    to_kind      TEXT NOT NULL CHECK (to_kind IN ('source','feature','release','model')),
+    to_kind      TEXT NOT NULL CHECK (to_kind IN ('source','feature','release','model','component','dataset')),
     to_id        TEXT NOT NULL,
     activity     TEXT NOT NULL CHECK (activity IN ('derived_from','compiled_from','validated_by','published_as')),
     tool_version TEXT NOT NULL,
@@ -699,7 +699,7 @@ CREATE TABLE audit_event (
     event_id    TEXT PRIMARY KEY,
     at          TEXT NOT NULL,
     actor_id    TEXT NOT NULL REFERENCES actor(actor_id),
-    action      TEXT NOT NULL CHECK (action IN ('publish','revoke','query','export','deny')),
+    action      TEXT NOT NULL CHECK (action IN ('publish','revoke','query','export','deny','approve','quality','model_control')),
     object_kind TEXT NOT NULL,
     object_id   TEXT NOT NULL,
     release_id  TEXT REFERENCES release(release_id),
@@ -716,6 +716,219 @@ BEGIN SELECT RAISE(ABORT, 'audit_event: append-only'); END;
 
 CREATE TRIGGER audit_event_no_delete BEFORE DELETE ON audit_event
 BEGIN SELECT RAISE(ABORT, 'audit_event: append-only'); END;
+
+-- LQ v2 extension: immutable model identities, validated derivations, access and approvals.
+CREATE TRIGGER risk_model_identity_update BEFORE UPDATE ON risk_model
+WHEN OLD.status IN ('approved','retired') OR EXISTS(SELECT 1 FROM exposure_zone WHERE risk_model_id=OLD.risk_model_id)
+BEGIN SELECT RAISE(ABORT,'risk_model: immutable version; register a new model id'); END;
+CREATE TRIGGER risk_model_identity_delete BEFORE DELETE ON risk_model
+WHEN OLD.status IN ('approved','retired') OR EXISTS(SELECT 1 FROM exposure_zone WHERE risk_model_id=OLD.risk_model_id)
+BEGIN SELECT RAISE(ABORT,'risk_model: retained version'); END;
+-- Activation/retirement is separate from the immutable formula/version payload.
+CREATE TABLE risk_model_control (
+ risk_model_id TEXT PRIMARY KEY REFERENCES risk_model(risk_model_id),
+ enabled INTEGER NOT NULL CHECK(enabled IN (0,1)),
+ changed_by TEXT NOT NULL REFERENCES actor(actor_id), at TEXT NOT NULL, reason TEXT NOT NULL
+);
+CREATE TRIGGER model_control_role_insert BEFORE INSERT ON risk_model_control
+WHEN NOT EXISTS(SELECT 1 FROM actor WHERE actor_id=NEW.changed_by AND active=1 AND role='airspace_admin')
+BEGIN SELECT RAISE(ABORT,'risk_model_control: safety administrator required'); END;
+CREATE TRIGGER model_control_role_update BEFORE UPDATE ON risk_model_control
+WHEN NEW.risk_model_id<>OLD.risk_model_id OR NOT EXISTS(SELECT 1 FROM actor WHERE actor_id=NEW.changed_by AND active=1 AND role='airspace_admin')
+BEGIN SELECT RAISE(ABORT,'risk_model_control: safety administrator required'); END;
+CREATE TRIGGER exposure_model_coverage BEFORE INSERT ON exposure_zone
+WHEN NOT EXISTS(SELECT 1 FROM risk_model m WHERE m.risk_model_id=NEW.risk_model_id AND m.status='approved'
+ AND m.valid_lo<=NEW.valid_lo AND NEW.valid_hi<=m.valid_hi)
+BEGIN SELECT RAISE(ABORT,'exposure_zone: approved model must cover input period'); END;
+
+CREATE TRIGGER exposure_model_coverage_update BEFORE UPDATE ON exposure_zone
+WHEN NOT EXISTS(SELECT 1 FROM risk_model m WHERE m.risk_model_id=NEW.risk_model_id AND m.status='approved'
+ AND m.valid_lo<=NEW.valid_lo AND NEW.valid_hi<=m.valid_hi)
+BEGIN SELECT RAISE(ABORT,'exposure_zone: approved model must cover input period'); END;
+
+CREATE TABLE risk_dataset (
+ dataset_id TEXT PRIMARY KEY,
+ release_id TEXT NOT NULL REFERENCES release(release_id),
+ component_id TEXT NOT NULL REFERENCES layer_component(component_id),
+ risk_model_id TEXT NOT NULL REFERENCES risk_model(risk_model_id),
+ window_lo TEXT NOT NULL, window_hi TEXT NOT NULL,
+ compiler_version TEXT NOT NULL CHECK(length(trim(compiler_version))>0), created_by TEXT NOT NULL REFERENCES actor(actor_id),
+ created_at TEXT NOT NULL, state TEXT NOT NULL DEFAULT 'draft' CHECK(state IN ('draft','validated')),
+ CHECK(window_lo<window_hi)
+);
+CREATE INDEX risk_dataset_release ON risk_dataset(release_id, risk_model_id);
+CREATE TRIGGER risk_dataset_scope BEFORE INSERT ON risk_dataset BEGIN
+ SELECT CASE WHEN NEW.state<>'draft' OR NOT EXISTS(
+ SELECT 1 FROM release r JOIN release_component rc USING(release_id)
+ JOIN risk_model m ON m.risk_model_id=NEW.risk_model_id
+ WHERE r.release_id=NEW.release_id AND r.status<>'draft' AND rc.layer='exposure'
+ AND rc.component_id=NEW.component_id AND r.valid_lo=NEW.window_lo AND r.valid_hi=NEW.window_hi
+ AND m.status='approved' AND m.valid_lo<=NEW.window_lo AND NEW.window_hi<=m.valid_hi)
+ THEN RAISE(ABORT,'risk_dataset: matching published component/model/window required') END;
+END;
+CREATE TRIGGER risk_dataset_identity BEFORE UPDATE ON risk_dataset
+WHEN OLD.state='validated' OR NEW.dataset_id<>OLD.dataset_id OR NEW.release_id<>OLD.release_id
+ OR NEW.component_id<>OLD.component_id OR NEW.risk_model_id<>OLD.risk_model_id
+ OR NEW.window_lo<>OLD.window_lo OR NEW.window_hi<>OLD.window_hi
+ OR NEW.compiler_version<>OLD.compiler_version OR NEW.created_by<>OLD.created_by OR NEW.created_at<>OLD.created_at
+BEGIN SELECT RAISE(ABORT,'risk_dataset: immutable identity or validated result'); END;
+CREATE TRIGGER risk_dataset_retain BEFORE DELETE ON risk_dataset
+BEGIN SELECT RAISE(ABORT,'risk_dataset: retain derivation evidence'); END;
+CREATE TABLE risk_input_period (
+ dataset_id TEXT NOT NULL REFERENCES risk_dataset(dataset_id),
+ zone_rid INTEGER NOT NULL REFERENCES exposure_zone(rid),
+ valid_lo TEXT NOT NULL, valid_hi TEXT NOT NULL,
+ exposure_e REAL NOT NULL CHECK(exposure_e BETWEEN 0 AND 1),
+ consequence_c REAL NOT NULL CHECK(consequence_c BETWEEN 0 AND 1),
+ PRIMARY KEY(dataset_id,zone_rid,valid_lo), CHECK(valid_lo<valid_hi),
+ CHECK(unixepoch(valid_lo) IS NOT NULL AND unixepoch(valid_hi) IS NOT NULL
+ AND strftime('%Y-%m-%dT%H:%M:%SZ',valid_lo)=valid_lo AND strftime('%Y-%m-%dT%H:%M:%SZ',valid_hi)=valid_hi)
+);
+CREATE TABLE derived_risk (
+ dataset_id TEXT NOT NULL REFERENCES risk_dataset(dataset_id),
+ zone_rid INTEGER NOT NULL REFERENCES exposure_zone(rid),
+ q_max REAL NOT NULL CHECK(q_max BETWEEN 0 AND 1),
+ source_id TEXT NOT NULL REFERENCES source(source_id),
+ PRIMARY KEY(dataset_id,zone_rid)
+);
+CREATE TABLE quality_check (
+ check_id TEXT PRIMARY KEY, dataset_id TEXT NOT NULL REFERENCES risk_dataset(dataset_id),
+ rule TEXT NOT NULL, result TEXT NOT NULL CHECK(result IN ('pass','fail')),
+ checked_at TEXT NOT NULL, actor_id TEXT NOT NULL REFERENCES actor(actor_id),
+ detail TEXT NOT NULL CHECK(json_valid(detail))
+);
+CREATE INDEX quality_dataset ON quality_check(dataset_id,rule,result);
+CREATE TRIGGER period_scope BEFORE INSERT ON risk_input_period BEGIN
+ SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM risk_dataset d JOIN layer_component lc USING(component_id)
+ JOIN feature f ON f.release_id=lc.owner_release_id JOIN exposure_zone e USING(rid)
+ WHERE d.dataset_id=NEW.dataset_id AND d.state='draft' AND e.rid=NEW.zone_rid AND e.risk_model_id=d.risk_model_id
+ AND d.window_lo<=NEW.valid_lo AND NEW.valid_hi<=d.window_hi
+ AND e.quality<>'unknown' AND f.quality<>'unknown'
+ AND e.valid_lo<=NEW.valid_lo AND NEW.valid_hi<=e.valid_hi)
+ THEN RAISE(ABORT,'risk_input_period: invalid component/window/state') END;
+ SELECT CASE WHEN EXISTS(SELECT 1 FROM risk_input_period p WHERE p.dataset_id=NEW.dataset_id
+ AND p.zone_rid=NEW.zone_rid AND p.valid_lo<NEW.valid_hi AND NEW.valid_lo<p.valid_hi)
+ THEN RAISE(ABORT,'risk_input_period: overlap') END;
+END;
+CREATE TRIGGER period_no_update BEFORE UPDATE ON risk_input_period
+BEGIN SELECT RAISE(ABORT,'risk_input_period: append-only'); END;
+CREATE TRIGGER period_no_delete BEFORE DELETE ON risk_input_period
+BEGIN SELECT RAISE(ABORT,'risk_input_period: append-only'); END;
+CREATE TRIGGER derived_scope BEFORE INSERT ON derived_risk
+WHEN NOT EXISTS(SELECT 1 FROM risk_dataset d JOIN layer_component lc USING(component_id)
+ JOIN feature f ON f.release_id=lc.owner_release_id JOIN exposure_zone e USING(rid)
+ WHERE d.dataset_id=NEW.dataset_id AND d.state='draft' AND e.rid=NEW.zone_rid
+ AND e.risk_model_id=d.risk_model_id AND e.source_id=NEW.source_id)
+BEGIN SELECT RAISE(ABORT,'derived_risk: source/component mismatch or sealed dataset'); END;
+CREATE TRIGGER derived_no_update BEFORE UPDATE ON derived_risk
+BEGIN SELECT RAISE(ABORT,'derived_risk: append-only'); END;
+CREATE TRIGGER derived_no_delete BEFORE DELETE ON derived_risk
+BEGIN SELECT RAISE(ABORT,'derived_risk: append-only'); END;
+CREATE TRIGGER quality_no_update BEFORE UPDATE ON quality_check
+BEGIN SELECT RAISE(ABORT,'quality_check: append-only'); END;
+CREATE TRIGGER quality_no_delete BEFORE DELETE ON quality_check
+BEGIN SELECT RAISE(ABORT,'quality_check: append-only'); END;
+CREATE TRIGGER dataset_validate BEFORE UPDATE OF state ON risk_dataset
+WHEN NEW.state='validated' BEGIN
+ SELECT CASE WHEN NOT EXISTS(SELECT 1 FROM quality_check WHERE dataset_id=NEW.dataset_id
+ AND rule='coverage_and_max' AND result='pass') THEN RAISE(ABORT,'risk_dataset: quality evidence required') END;
+ SELECT CASE WHEN EXISTS(
+ SELECT 1 FROM layer_component lc JOIN feature f ON f.release_id=lc.owner_release_id
+ JOIN exposure_zone e USING(rid) WHERE lc.component_id=NEW.component_id AND (
+ NOT EXISTS(SELECT 1 FROM derived_risk dr WHERE dr.dataset_id=NEW.dataset_id AND dr.zone_rid=e.rid)
+ OR (SELECT coalesce(sum(unixepoch(p.valid_hi)-unixepoch(p.valid_lo)),0) FROM risk_input_period p
+ WHERE p.dataset_id=NEW.dataset_id AND p.zone_rid=e.rid)<>unixepoch(NEW.window_hi)-unixepoch(NEW.window_lo)
+ OR abs((SELECT dr.q_max FROM derived_risk dr WHERE dr.dataset_id=NEW.dataset_id AND dr.zone_rid=e.rid)
+ -(SELECT max(p.exposure_e*p.consequence_c) FROM risk_input_period p WHERE p.dataset_id=NEW.dataset_id AND p.zone_rid=e.rid))>1e-9))
+ THEN RAISE(ABORT,'risk_dataset: gap/missing result/incorrect maximum') END;
+END;
+
+CREATE TABLE governance_request (
+ request_id TEXT PRIMARY KEY,
+ object_kind TEXT NOT NULL CHECK(object_kind IN ('release','model','dataset')),
+ object_id TEXT NOT NULL, author_id TEXT NOT NULL REFERENCES actor(actor_id),
+ payload_hash TEXT NOT NULL CHECK(length(payload_hash)=64 AND payload_hash NOT GLOB '*[^0-9a-f]*'),
+ created_at TEXT NOT NULL, UNIQUE(object_kind,object_id)
+);
+CREATE TABLE governance_approval (
+ request_id TEXT PRIMARY KEY REFERENCES governance_request(request_id),
+ reviewer_id TEXT NOT NULL REFERENCES actor(actor_id),
+ decision TEXT NOT NULL CHECK(decision IN ('approved','rejected')),
+ at TEXT NOT NULL, reason TEXT NOT NULL CHECK(length(reason)>0)
+);
+CREATE TRIGGER request_author BEFORE INSERT ON governance_request
+WHEN NOT EXISTS(SELECT 1 FROM actor WHERE actor_id=NEW.author_id AND active=1 AND role='airspace_admin')
+BEGIN SELECT RAISE(ABORT,'governance_request: active author required'); END;
+CREATE TRIGGER approval_separation BEFORE INSERT ON governance_approval
+WHEN NOT EXISTS(SELECT 1 FROM governance_request r JOIN actor author ON author.actor_id=r.author_id
+ JOIN actor reviewer ON reviewer.actor_id=NEW.reviewer_id
+ WHERE r.request_id=NEW.request_id AND author.active=1 AND reviewer.active=1
+ AND reviewer.org=author.org AND reviewer.role='airspace_admin' AND reviewer.actor_id<>r.author_id)
+BEGIN SELECT RAISE(ABORT,'governance_approval: independent active safety reviewer required'); END;
+CREATE TRIGGER governance_request_no_update BEFORE UPDATE ON governance_request
+BEGIN SELECT RAISE(ABORT,'governance_request: immutable'); END;
+CREATE TRIGGER governance_request_no_delete BEFORE DELETE ON governance_request
+BEGIN SELECT RAISE(ABORT,'governance_request: retained'); END;
+CREATE TRIGGER approval_no_update BEFORE UPDATE ON governance_approval
+BEGIN SELECT RAISE(ABORT,'governance_approval: immutable decision'); END;
+CREATE TRIGGER approval_no_delete BEFORE DELETE ON governance_approval
+BEGIN SELECT RAISE(ABORT,'governance_approval: retained'); END;
+
+-- Service connection registers current_actor(); no client-supplied role parameter.
+CREATE VIEW v_exposure_summary AS
+SELECT rf.query_release_id AS release_id,
+ CAST(e.bbox_min_x/200 AS INTEGER)*200 AS cell_x,
+ CAST(e.bbox_min_y/200 AS INTEGER)*200 AS cell_y,
+ count(*) AS zone_count, round(max(e.q),1) AS display_proxy
+FROM resolved_feature rf JOIN exposure_zone e USING(rid) JOIN source s ON s.source_id=e.source_id
+JOIN actor a ON a.actor_id=current_actor() AND a.active=1 AND a.org=s.owner_org
+WHERE EXISTS(SELECT 1 FROM access_policy p WHERE p.role=a.role AND p.resource='v_exposure_summary'
+ AND p.action='read' AND p.status='active'
+ AND (CASE e.sensitivity WHEN 'public' THEN 0 WHEN 'internal' THEN 1 WHEN 'restricted' THEN 2 ELSE 3 END)
+ <= (CASE p.max_sensitivity WHEN 'public' THEN 0 WHEN 'internal' THEN 1 WHEN 'restricted' THEN 2 ELSE 3 END)
+ AND (CASE s.sensitivity WHEN 'public' THEN 0 WHEN 'internal' THEN 1 WHEN 'restricted' THEN 2 ELSE 3 END)
+ <= (CASE p.max_sensitivity WHEN 'public' THEN 0 WHEN 'internal' THEN 1 WHEN 'restricted' THEN 2 ELSE 3 END))
+GROUP BY rf.query_release_id,cell_x,cell_y HAVING count(*)>=2;
+CREATE VIEW v_exposure_detail AS
+SELECT rf.query_release_id AS release_id,e.* FROM resolved_feature rf JOIN exposure_zone e USING(rid)
+JOIN source s ON s.source_id=e.source_id JOIN actor a ON a.actor_id=current_actor() AND a.active=1 AND a.org=s.owner_org
+WHERE a.role='airspace_admin' AND EXISTS(SELECT 1 FROM access_policy p WHERE p.role=a.role
+ AND p.resource='v_exposure_detail' AND p.action='read' AND p.status='active'
+ AND (CASE e.sensitivity WHEN 'public' THEN 0 WHEN 'internal' THEN 1 WHEN 'restricted' THEN 2 ELSE 3 END)
+ <= (CASE p.max_sensitivity WHEN 'public' THEN 0 WHEN 'internal' THEN 1 WHEN 'restricted' THEN 2 ELSE 3 END)
+ AND (CASE s.sensitivity WHEN 'public' THEN 0 WHEN 'internal' THEN 1 WHEN 'restricted' THEN 2 ELSE 3 END)
+ <= (CASE p.max_sensitivity WHEN 'public' THEN 0 WHEN 'internal' THEN 1 WHEN 'restricted' THEN 2 ELSE 3 END));
+
+CREATE TRIGGER lineage_from_exists BEFORE INSERT ON lineage_edge
+WHEN NOT ((NEW.from_kind='source' AND EXISTS(SELECT 1 FROM source WHERE CAST(source_id AS TEXT)=NEW.from_id)) OR (NEW.from_kind='feature' AND EXISTS(SELECT 1 FROM feature WHERE CAST(rid AS TEXT)=NEW.from_id)) OR (NEW.from_kind='release' AND EXISTS(SELECT 1 FROM release WHERE CAST(release_id AS TEXT)=NEW.from_id)) OR (NEW.from_kind='model' AND EXISTS(SELECT 1 FROM risk_model WHERE CAST(risk_model_id AS TEXT)=NEW.from_id)) OR (NEW.from_kind='component' AND EXISTS(SELECT 1 FROM layer_component WHERE CAST(component_id AS TEXT)=NEW.from_id)) OR (NEW.from_kind='dataset' AND EXISTS(SELECT 1 FROM risk_dataset WHERE CAST(dataset_id AS TEXT)=NEW.from_id)))
+BEGIN SELECT RAISE(ABORT,'lineage_edge: missing from endpoint'); END;
+CREATE TRIGGER lineage_to_exists BEFORE INSERT ON lineage_edge
+WHEN NOT ((NEW.to_kind='source' AND EXISTS(SELECT 1 FROM source WHERE CAST(source_id AS TEXT)=NEW.to_id)) OR (NEW.to_kind='feature' AND EXISTS(SELECT 1 FROM feature WHERE CAST(rid AS TEXT)=NEW.to_id)) OR (NEW.to_kind='release' AND EXISTS(SELECT 1 FROM release WHERE CAST(release_id AS TEXT)=NEW.to_id)) OR (NEW.to_kind='model' AND EXISTS(SELECT 1 FROM risk_model WHERE CAST(risk_model_id AS TEXT)=NEW.to_id)) OR (NEW.to_kind='component' AND EXISTS(SELECT 1 FROM layer_component WHERE CAST(component_id AS TEXT)=NEW.to_id)) OR (NEW.to_kind='dataset' AND EXISTS(SELECT 1 FROM risk_dataset WHERE CAST(dataset_id AS TEXT)=NEW.to_id)))
+BEGIN SELECT RAISE(ABORT,'lineage_edge: missing to endpoint'); END;
+CREATE TRIGGER lineage_dataset_dependency BEFORE INSERT ON lineage_edge
+WHEN NEW.to_kind='dataset' AND NOT EXISTS(SELECT 1 FROM risk_dataset d WHERE d.dataset_id=NEW.to_id
+ AND NEW.release_id=d.release_id AND (
+ (NEW.from_kind='model' AND NEW.from_id=d.risk_model_id) OR
+ (NEW.from_kind='component' AND NEW.from_id=d.component_id) OR
+ (NEW.from_kind='source' AND EXISTS(SELECT 1 FROM derived_risk r WHERE r.dataset_id=d.dataset_id AND r.source_id=NEW.from_id))))
+BEGIN SELECT RAISE(ABORT,'lineage_edge: dataset dependency mismatch'); END;
+CREATE TRIGGER lineage_no_update BEFORE UPDATE ON lineage_edge
+BEGIN SELECT RAISE(ABORT,'lineage_edge: immutable evidence'); END;
+CREATE TRIGGER lineage_no_delete BEFORE DELETE ON lineage_edge
+BEGIN SELECT RAISE(ABORT,'lineage_edge: retained evidence'); END;
+CREATE TRIGGER approval_audit AFTER INSERT ON governance_approval BEGIN
+ INSERT INTO audit_event(event_id,at,actor_id,action,object_kind,object_id,result,reason,request_id)
+ VALUES('approval:'||NEW.request_id,NEW.at,NEW.reviewer_id,'approve','governance_request',NEW.request_id,
+ CASE WHEN NEW.decision='approved' THEN 'success' ELSE 'denied' END,NEW.reason,NEW.request_id);
+END;
+CREATE TRIGGER model_control_audit_insert AFTER INSERT ON risk_model_control BEGIN
+ INSERT INTO audit_event(event_id,at,actor_id,action,object_kind,object_id,result,reason)
+ VALUES('model-control:'||lower(hex(randomblob(16))),NEW.at,NEW.changed_by,'model_control','model',NEW.risk_model_id,'success',NEW.reason);
+END;
+CREATE TRIGGER model_control_audit_update AFTER UPDATE ON risk_model_control BEGIN
+ INSERT INTO audit_event(event_id,at,actor_id,action,object_kind,object_id,result,reason)
+ VALUES('model-control:'||lower(hex(randomblob(16))),NEW.at,NEW.changed_by,'model_control','model',NEW.risk_model_id,'success',NEW.reason);
+END;
 
 -- 来源身份即版本身份：一旦被非 draft 发布引用，source 行不得 UPDATE/DELETE；
 -- 许可或精度修订必须登记新的 source_id，旧发布仍解析到旧行。
@@ -776,8 +989,166 @@ WHEN EXISTS (SELECT 1 FROM source_provenance_usage u WHERE u.source_id = OLD.sou
 BEGIN SELECT RAISE(ABORT, 'source: referenced source is immutable; register a new source_id'); END;
 
 -- =====================================================================
--- 6 查询与结果追溯（ZC 预留：query_run、route_result、route_segment_source、派生图缓存）
+-- 6 查询与结果追溯（ZC）
+-- 一次规划查询绑定一个逻辑发布与任务窗口；结果、航段来源与派生图缓存都随该发布不可变。
+-- 缓存按发布记账：旧发布的缓存对旧发布永久有效，新发布只能“沿用（carried）/修补（patched）/新建（built）”。
 -- =====================================================================
+
+CREATE TABLE route_graph_cache (
+    graph_id        TEXT PRIMARY KEY,
+    release_id      TEXT NOT NULL REFERENCES release(release_id),
+    dataset_id      TEXT NOT NULL REFERENCES risk_dataset(dataset_id),
+    min_x REAL NOT NULL, min_y REAL NOT NULL, min_z REAL NOT NULL,
+    max_x REAL NOT NULL, max_y REAL NOT NULL, max_z REAL NOT NULL,
+    window_lo       TEXT NOT NULL,
+    window_hi       TEXT NOT NULL,
+    config_hash     TEXT NOT NULL CHECK (length(config_hash) = 64 AND config_hash NOT GLOB '*[^0-9a-f]*'),
+    payload_hash    TEXT NOT NULL CHECK (length(payload_hash) = 64 AND payload_hash NOT GLOB '*[^0-9a-f]*'),
+    node_count      INTEGER NOT NULL CHECK (node_count > 0),
+    edge_count      INTEGER NOT NULL CHECK (edge_count >= 0),
+    origin          TEXT NOT NULL CHECK (origin IN ('built','carried','patched')),
+    parent_graph_id TEXT REFERENCES route_graph_cache(graph_id),
+    created_at      TEXT NOT NULL,
+    build_ms        REAL NOT NULL CHECK (build_ms >= 0),
+    UNIQUE (release_id, min_x, min_y, min_z, max_x, max_y, max_z, window_lo, window_hi, config_hash),
+    CHECK (min_x < max_x AND min_y < max_y AND min_z < max_z),
+    CHECK (window_lo < window_hi),
+    CHECK ((origin = 'built') = (parent_graph_id IS NULL))
+);
+
+CREATE INDEX route_graph_release ON route_graph_cache(release_id, window_lo, window_hi);
+
+CREATE TABLE query_run (
+    query_id     TEXT PRIMARY KEY,
+    release_id   TEXT NOT NULL REFERENCES release(release_id),
+    actor_id     TEXT NOT NULL REFERENCES actor(actor_id),
+    requested_at TEXT NOT NULL,
+    window_lo    TEXT NOT NULL,
+    window_hi    TEXT NOT NULL,
+    start_x REAL NOT NULL, start_y REAL NOT NULL, start_z REAL NOT NULL,
+    goal_x  REAL NOT NULL, goal_y  REAL NOT NULL, goal_z  REAL NOT NULL,
+    planner_config TEXT NOT NULL CHECK (json_valid(planner_config)),
+    config_hash  TEXT NOT NULL CHECK (length(config_hash) = 64 AND config_hash NOT GLOB '*[^0-9a-f]*'),
+    algorithm    TEXT NOT NULL CHECK (algorithm IN ('astar','dijkstra')),
+    access_path  TEXT NOT NULL CHECK (access_path IN ('json_snapshot','sql_full','sql_rtree','graph_cache')),
+    status       TEXT NOT NULL CHECK (status IN ('feasible','infeasible','unknown')),
+    reason       TEXT NOT NULL,
+    freshness    TEXT NOT NULL CHECK (freshness IN ('current','historical')),
+    graph_id     TEXT REFERENCES route_graph_cache(graph_id),
+    CHECK (window_lo < window_hi),
+    CHECK ((access_path = 'graph_cache') = (graph_id IS NOT NULL))
+);
+
+CREATE INDEX query_run_release ON query_run(release_id, requested_at);
+
+CREATE TABLE route_result (
+    query_id   TEXT PRIMARY KEY REFERENCES query_run(query_id),
+    length_m   REAL NOT NULL CHECK (length_m >= 0),
+    time_s     REAL NOT NULL CHECK (time_s >= 0),
+    risk_proxy REAL NOT NULL CHECK (risk_proxy >= 0),
+    cost       REAL NOT NULL CHECK (cost >= 0),
+    waypoints  TEXT NOT NULL CHECK (json_valid(waypoints) AND json_array_length(waypoints) >= 2)
+);
+
+-- 航段的风险来源（满足 LQ 操作 C 合同）：一个航段可有多个分区来源。
+CREATE TABLE route_segment_source (
+    query_id     TEXT NOT NULL REFERENCES route_result(query_id),
+    segment_no   INTEGER NOT NULL CHECK (segment_no >= 1),
+    component_id TEXT NOT NULL REFERENCES layer_component(component_id),
+    zone_rid     INTEGER NOT NULL REFERENCES exposure_zone(rid),
+    dataset_id   TEXT NOT NULL REFERENCES risk_dataset(dataset_id),
+    PRIMARY KEY (query_id, segment_no, zone_rid)
+);
+
+CREATE INDEX route_segment_source_zone ON route_segment_source(zone_rid);
+
+-- 查询只能绑定已发布且五层映射完整的发布；任务窗口必须落在发布有效期内；
+-- freshness 由数据库按当前指针判定；只有业务角色可提交查询。
+CREATE TRIGGER query_run_scope BEFORE INSERT ON query_run BEGIN
+    SELECT CASE WHEN NOT EXISTS (
+        SELECT 1 FROM release r WHERE r.release_id = NEW.release_id AND r.status <> 'draft'
+          AND r.valid_lo <= NEW.window_lo AND NEW.window_hi <= r.valid_hi
+          AND (SELECT count(*) FROM release_component rc WHERE rc.release_id = r.release_id) = 5)
+    THEN RAISE(ABORT, 'query_run: published mapped release covering the window required') END;
+    SELECT CASE WHEN NOT EXISTS (
+        SELECT 1 FROM actor a WHERE a.actor_id = NEW.actor_id AND a.active = 1
+          AND a.role IN ('dispatcher','operator','airspace_admin'))
+    THEN RAISE(ABORT, 'query_run: active business actor required') END;
+    SELECT CASE WHEN NEW.freshness IS NOT (
+        CASE WHEN EXISTS (SELECT 1 FROM current_release h JOIN release r ON r.scene_id = h.scene_id
+                          WHERE r.release_id = NEW.release_id AND h.release_id = NEW.release_id)
+             THEN 'current' ELSE 'historical' END)
+    THEN RAISE(ABORT, 'query_run: freshness must match the current release pointer') END;
+    SELECT CASE WHEN NEW.graph_id IS NOT NULL AND NOT EXISTS (
+        SELECT 1 FROM route_graph_cache g WHERE g.graph_id = NEW.graph_id
+          AND g.release_id = NEW.release_id AND g.config_hash = NEW.config_hash
+          AND g.window_lo = NEW.window_lo AND g.window_hi = NEW.window_hi
+          AND NEW.start_x BETWEEN g.min_x AND g.max_x AND NEW.start_y BETWEEN g.min_y AND g.max_y
+          AND NEW.start_z BETWEEN g.min_z AND g.max_z AND NEW.goal_x BETWEEN g.min_x AND g.max_x
+          AND NEW.goal_y BETWEEN g.min_y AND g.max_y AND NEW.goal_z BETWEEN g.min_z AND g.max_z)
+    THEN RAISE(ABORT, 'query_run: graph must match release, window, config and endpoints') END;
+END;
+
+CREATE TRIGGER route_result_feasible BEFORE INSERT ON route_result
+WHEN (SELECT status FROM query_run WHERE query_id = NEW.query_id) IS NOT 'feasible'
+BEGIN SELECT RAISE(ABORT, 'route_result: only feasible queries have a route'); END;
+
+-- 来源必须是该查询发布的暴露组件、该组件物理 owner 下的分区，以及覆盖任务窗口的已封存风险数据集。
+CREATE TRIGGER route_segment_source_scope BEFORE INSERT ON route_segment_source BEGIN
+    SELECT CASE WHEN NOT EXISTS (
+        SELECT 1 FROM query_run q
+        JOIN release_component rc ON rc.release_id = q.release_id AND rc.layer = 'exposure'
+                                 AND rc.component_id = NEW.component_id
+        JOIN layer_component lc ON lc.component_id = rc.component_id
+        JOIN feature f ON f.rid = NEW.zone_rid AND f.release_id = lc.owner_release_id
+                      AND f.feature_type = 'exposure'
+        JOIN risk_dataset d ON d.dataset_id = NEW.dataset_id AND d.release_id = q.release_id
+                           AND d.component_id = rc.component_id AND d.state = 'validated'
+                           AND d.window_lo <= q.window_lo AND q.window_hi <= d.window_hi
+        WHERE q.query_id = NEW.query_id)
+    THEN RAISE(ABORT, 'route_segment_source: component/zone/dataset must match the query release and window') END;
+    SELECT CASE WHEN NEW.segment_no > (
+        SELECT json_array_length(waypoints) - 1 FROM route_result WHERE query_id = NEW.query_id)
+    THEN RAISE(ABORT, 'route_segment_source: segment_no beyond route') END;
+END;
+
+-- 缓存行绑定已发布版本、匹配的风险数据集；沿用/修补必须继承同一域、窗口与配置。
+CREATE TRIGGER route_graph_cache_scope BEFORE INSERT ON route_graph_cache BEGIN
+    SELECT CASE WHEN NOT EXISTS (
+        SELECT 1 FROM release r JOIN risk_dataset d ON d.dataset_id = NEW.dataset_id
+        JOIN release_component rc ON rc.release_id = r.release_id AND rc.layer = 'exposure'
+                                 AND rc.component_id = d.component_id
+        WHERE r.release_id = NEW.release_id AND r.status <> 'draft' AND d.release_id = r.release_id
+          AND d.state = 'validated' AND d.window_lo <= NEW.window_lo AND NEW.window_hi <= d.window_hi
+          AND r.valid_lo <= NEW.window_lo AND NEW.window_hi <= r.valid_hi)
+    THEN RAISE(ABORT, 'route_graph_cache: published release and covering validated dataset required') END;
+    SELECT CASE WHEN NEW.parent_graph_id IS NOT NULL AND NOT EXISTS (
+        SELECT 1 FROM route_graph_cache p WHERE p.graph_id = NEW.parent_graph_id
+          AND p.release_id <> NEW.release_id
+          AND p.min_x = NEW.min_x AND p.min_y = NEW.min_y AND p.min_z = NEW.min_z
+          AND p.max_x = NEW.max_x AND p.max_y = NEW.max_y AND p.max_z = NEW.max_z
+          AND p.window_lo = NEW.window_lo AND p.window_hi = NEW.window_hi
+          AND p.config_hash = NEW.config_hash
+          AND (NEW.origin <> 'carried' OR p.payload_hash = NEW.payload_hash))
+    THEN RAISE(ABORT, 'route_graph_cache: parent must share domain, window and config') END;
+END;
+
+CREATE TRIGGER route_graph_cache_no_update BEFORE UPDATE ON route_graph_cache
+BEGIN SELECT RAISE(ABORT, 'route_graph_cache: append-only'); END;
+CREATE TRIGGER route_graph_cache_no_delete BEFORE DELETE ON route_graph_cache
+BEGIN SELECT RAISE(ABORT, 'route_graph_cache: append-only'); END;
+CREATE TRIGGER query_run_no_update BEFORE UPDATE ON query_run
+BEGIN SELECT RAISE(ABORT, 'query_run: append-only'); END;
+CREATE TRIGGER query_run_no_delete BEFORE DELETE ON query_run
+BEGIN SELECT RAISE(ABORT, 'query_run: append-only'); END;
+CREATE TRIGGER route_result_no_update BEFORE UPDATE ON route_result
+BEGIN SELECT RAISE(ABORT, 'route_result: append-only'); END;
+CREATE TRIGGER route_result_no_delete BEFORE DELETE ON route_result
+BEGIN SELECT RAISE(ABORT, 'route_result: append-only'); END;
+CREATE TRIGGER route_segment_source_no_update BEFORE UPDATE ON route_segment_source
+BEGIN SELECT RAISE(ABORT, 'route_segment_source: append-only'); END;
+CREATE TRIGGER route_segment_source_no_delete BEFORE DELETE ON route_segment_source
+BEGIN SELECT RAISE(ABORT, 'route_segment_source: append-only'); END;
 
 -- =====================================================================
 -- 7 运行与恢复（LJ 预留：备份记录、恢复核验结果）

@@ -234,3 +234,19 @@ YHT修复（提交`1862ab44ca094bc493fab6fc7ce0cd6f51f2e2db`，`fix(data): verif
 - **验收**：模块全文不再出现未经核实的操作符类名称；区分包围盒过滤与精确几何语义；更新本人交接并提交。整合方读取提交后复核、关闭本项。本轮未代改YHT文件或代写其认可。
 - **修复（YHT，2026-11-06）**：提交`c4ed005`（`docs(data): correct PostGIS 3D index operator class`）。[storage.md](../modules/yht/storage.md)比较表与生产建议均改为`gist_geometry_ops_nd`，明确默认二维GiST包围盒、n维候选过滤和`ST_3DIntersects`精确判定三者的区别；示例按PostGIS 3.5官方说明标注，未在本机执行。[references.md](../modules/yht/references.md)补充第14条官方出处。
 - **修复验证**：YHT模块全文不再出现`gist_geometry_ops_3d`；42项原型测试通过，`audit.py --owner YHT`三项PASS，SQLite原型和既有131/7/11/25验证不受影响。当前状态：已修订待复核。
+
+## ZC-V2-02：Windows 实验复现与资源清理（2026-11-07）
+
+- **负责人／优先级**：ZC，P2。LJ 第5棒审阅，不修改 ZC 的查询或性能结论。
+- **复现**：在 Windows Python 3.14、默认系统编码下运行
+  `python -B docs/modules/zc/v2/experiments/test_query.py -v`，ZC 的
+  `catalog.initialize()` 对 `schema.sql` 调用未指定编码的 `Path.read_text()`，
+  因 UTF-8 字节触发 `UnicodeDecodeError`；`review_lq.py` 随后因数据库连接未及时
+  关闭，在临时目录清理时触发 `PermissionError`。
+- **当前处理**：使用 `python -X utf8` 后，统一模式 18 项和 ZC 查询回归 9 项通过；
+  取数实验的正确性检查为 0 不一致。该环境开关是本轮 LJ 实验的复现前提，但不关闭
+  ZC-V2-02。
+- **完成判据**：实验源码显式按 UTF-8 读取仓库 SQL，所有打开的 SQLite 连接在临时
+  目录退出前关闭；在 Windows 默认编码下重新运行相关测试和审阅脚本通过。
+- **影响**：不改变 ZC 的访问路径、缓存失效或性能数值；只影响 Windows 的可复现性和
+  清理可靠性。LJ 恢复脚本已显式使用 UTF-8，并独立通过正常恢复与截断故障检测。

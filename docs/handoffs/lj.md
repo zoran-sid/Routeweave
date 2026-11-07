@@ -1,13 +1,13 @@
 # LJ 的工作记录
 
-项目：SkyRoute。最后更新：2026-11-05（Asia/Hong_Kong）。
+项目：SkyRoute。最后更新：2026-11-07（Asia/Hong_Kong）。
 
 | 项目 | 当前安排 |
 | --- | --- |
 | 成员 | LJ，成员1 |
 | 负责方向 | 运维保障与验收支持 |
 | 展示安排 | PPT 第9–10页 |
-| 技术成果状态 | 模块可交付，LJ-01/02/03 已修复待复核 |
+| 技术成果状态 | v1 模块可交付；v2 恢复与验收交付完成 |
 
 ## v2 任务（2026-11-06 重组，第5棒，待开始）
 
@@ -82,5 +82,23 @@
 - LJ-03：三个指标和耗时拒绝负数、布尔值、NaN、正负无穷，并按有限耗时执行预算。
 - 实际命令：`python3 -B -m unittest discover -s docs/modules/lj/prototype -v`；
   `python3 -B docs/integration/audit.py --owner LJ`。两者均通过。
+
+### 2026-11-07：v2 第5棒恢复交付
+
+- **开工条件**：远程 `develop` 已包含 ZC 合入提交 `0f1dfcb`/`d5685c0`；在
+  `lj/v2-recovery` 分支完成本棒工作。
+- **ZC 审阅**：统一模式测试 18 项通过；ZC 查询回归 9 项通过。Windows 默认编码
+  运行暴露 ZC-V2-02（SQL UTF-8 读取与临时连接清理），已记入
+  [集成问题清单](../integration/issues.md)，未修改 ZC 结论。
+- **v2 交付**：[章节稿](../modules/lj/v2/section.md)、[展示文字](../modules/lj/v2/slides.md)、
+  [参考文献](../modules/lj/v2/references.md)、[恢复实验](../modules/lj/v2/experiments/recovery.py)
+  和[结果](../modules/lj/v2/experiments/results/recovery.json)。
+- **实测**：合成 R0/R1 发布经 SQLite `Connection.backup()` 恢复后，
+  `integrity_check=ok`、外键违规为0、发布父链通过、历史查询摘要一致；截断备份被
+  检测为损坏。环境为 Python 3.14.7、SQLite 3.50.4、Windows 11；命令：
+  `python -X utf8 -B docs/modules/lj/v2/experiments/recovery.py --output docs/modules/lj/v2/experiments/results/recovery.json`。
+- **跨模块影响**：恢复后丢弃并按发布重建 ZC `route_graph_cache`；保留 ZQO 不可变
+  发布和 LQ 审计/保留约束；成本估算采用 YHT 的 2,400 栋、三年约2 GB 假设，未
+  声称生产部署或云端性能。
 
 任务依据：[项目说明](../project-brief.md)、[共同场景约定](../scenario-contract.md)、[五人分工](../team-tasks.md)、[课程要求全文](../course-requirements.md)、[异步协作](../agent-collaboration.md)、[AI 协作指南](../../AGENTS.md)。

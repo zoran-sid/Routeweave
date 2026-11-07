@@ -4,7 +4,7 @@
  "environment": {
   "python": "3.15.0",
   "sqlite": "3.54.1",
-  "git_head": "ca2bf58189e2b0bf67fbaac56b88319964f94a74"
+  "git_head": "5fdf18aa5d2746873e954ddb106b169f30b3282f"
  },
  "probes": [
   {
@@ -98,8 +98,8 @@
    "probe": "op_c_task_window",
    "claim": "LQ op_c.sql traces a route planned for a task window",
    "expected": 2,
-   "actual": 0,
-   "pass": false,
+   "actual": 2,
+   "pass": true,
    "detail": {
     "task_window": [
      "2026-11-05T08:05:00Z",
@@ -110,12 +110,12 @@
      "2027-01-01T00:00:00Z"
     ],
     "zc_op_c_rows": 2,
-    "lq_op_c_rows": 0,
+    "lq_op_c_rows": 2,
     "cause": "LQ requires q.window == dataset window; tasks are sub-windows"
    }
   }
  ],
- "passed": 11,
+ "passed": 12,
  "total": 12,
  "integrity": {
   "check": "ok",

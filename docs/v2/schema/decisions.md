@@ -79,3 +79,12 @@ PostgreSQL 一列尚未部署实测，属于设计映射；性能结论只引用
 写事务使用 BEGIN IMMEDIATE、expected head 校验和 CAS。组件、事件、发布指针、成功审计、outbox、幂等凭据同次提交；异常回滚后独立写 failed_attempt。持久成功凭据先于 head 校验，允许已成功请求在后续发布之后重试。发布期间旧读事务继续读旧快照，最终采用查询结果前用新事务复核 head。
 
 本轮修复本表组直接 INSERT published 绕过五层检查、未完成层发布、release_layer UPDATE 迁移到已发布版本问题。失败审计的二次提交崩溃窗口、outbox 消费与备份恢复交 LJ；角色矩阵和作者/审批人分离交 LQ。本轮不把基础角色检查称作完整权限系统。证据见 [实验与架构](../../modules/zqo/v2/README.md)。
+
+## LQ-DV2：模型、派生数据与访问（第3棒）
+
+1. 已批准或引用的risk_model参数/公式/版本行不可更新、删除；启停通过risk_model_control，不改变组件哈希。新模型用新ID，旧发布保留原解释，修复LQ-V2-01。原approved记录视为可信初始化兼容输入，新业务发布采用独立审批网关。
+2. risk_dataset/window/component/model确定一次编译；risk_input_period保留细时段输入，derived_risk保存全窗最大值，quality_check存检查证据。NOT NULL/CHECK处理单行，触发器处理重叠、完整覆盖、模型有效期及封存。JSON“pass”不能取代关系规则。
+3. 新实体通过CREATE脚本初始化新实验库，不是在线迁移脚本。旧库需备份、迁移和重算摘要；原有表列未扩展，ZQO夹具与payload保持兼容。test_schema实体清单更新为30个，并增加LQ回归入口。
+4. SQLite没有GRANT/RLS；固定服务查询、current_actor视图及authorizer构成演示访问边界，数据库文件/写连接仅供可信服务。敏感等级和机构是实际SQL条件，access_policy.condition JSON不作为已执行的通用条件语言。PostgreSQL候选采用GRANT、非拥有者应用角色及RLS，尚未部署。
+5. 显示层200米摘要、至少两个合格分区是共享/隐私取舍参数，不改变内部规划精度，也不构成匿名证明。派生表、审计与血缘均可按ID追溯，append-only归档清理由LJ设计受控流程；本棒没有自动清理。
+6. 风险派生涉及细时段，因此它是源暴露层之后的新增关系资产；不把它直接塞入ZQO已发布的五层或修改历史manifest。ZC结果表保存dataset_id及component_id，操作C从逻辑发布解析物理owner，见LQ临时合同和SQL。源/model变更通过lineage_edge查候选重建范围。

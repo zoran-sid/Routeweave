@@ -191,3 +191,25 @@ erDiagram
 ```
 
 `failed_attempt.observed_release_id` 可空；候选编号仅为文本，可指向从未提交的发布。历史发布与组件不得删除。完整字段见 schema.sql 第2节；逻辑发布和物理 owner 的查询区别见 [ZQO 接口](../../modules/zqo/v2/integration.md)。
+
+## LQ 治理扩展（v2 第3棒）
+
+```mermaid
+erDiagram
+    release ||--o{ risk_dataset : compiled_for
+    layer_component ||--o{ risk_dataset : exposure_input
+    risk_model ||--o{ risk_dataset : evaluates
+    risk_model ||--o| risk_model_control : activated_separately
+    risk_dataset ||--o{ risk_input_period : preserves
+    risk_dataset ||--o{ derived_risk : produces
+    risk_dataset ||--o{ quality_check : checked
+    exposure_zone ||--o{ derived_risk : spatial_scope
+    source ||--o{ derived_risk : provenance
+    actor ||--o{ governance_request : authors
+    governance_request ||--o| governance_approval : reviewed
+    actor ||--o{ governance_approval : independent_reviewer
+```
+
+`risk_dataset`的window_lo/hi必须等于绑定release窗口，component_id必须解析到同次逻辑发布的exposure层；zone_rid引用物理owner行。时段输入及结果按dataset_id留存，封存后不可变。`risk_model_control`保存enabled/操作者/时间/原因，不改历史模型语义。`quality_check`按checked_at追加。
+
+`governance_request`保存作者和候选内容摘要；审批保存reviewer/decision/at。数据库拒绝作者自审，发布网关核对已批准摘要后调用ZQO事务。lineage_edge新增component/dataset端点，存在性和dataset依赖由触发器校验。现有23实体加7个LQ实体共30个，ZC正式查询表仍预留。

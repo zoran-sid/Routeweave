@@ -126,3 +126,4 @@ YHT可复用几何反例和规划访问需求；LQ可替换风险输入与聚合
 - **贡献表**：按 [contributions.md](../final/contributions.md) 的评分（YHT 22%、ZQO 21%、LQ 19%、ZC 26%、LJ 12%）填入本地 `docs/final/团队项目贡献度确认表.docx`，姓名列暂填缩写；学号与签名留空，由成员填写。文件不入库。
 - **AI 使用过程**：报告新增附录 C，含工具与工作方式、过程时间线、人与 AI 分工、审阅发现。§9 改为引用附录 C。报告现为 23 页，正文 9,808 个汉字。
 - **本地交付物**：PDF 与 PPTX 按用户指示只在本地构建，不入库（`.gitignore`）。`main` 只保留项目成果；协作说明、交接记录与问题清单保留在 `develop`。
+- **发布**：收尾改动经 [zoran-sid/Routeweave#13](https://github.com/zoran-sid/Routeweave/pull/13) 合入 `develop`，经 [#14](https://github.com/zoran-sid/Routeweave/pull/14) 发布到 `main`。随后用 `hotfix/main-project-only`（[#15](https://github.com/zoran-sid/Routeweave/pull/15)）从 `main` 删除过程文件，指向这些文件的 40 个链接改为 `develop` 地址，并打标签 `v2.1-submission`（`deeb524`）。该 hotfix 不合回 `develop`。`main` 上复核 20/20 组、233 项测试通过。AGENTS.md 第6节已改为：发布一律经 `hotfix/*`。

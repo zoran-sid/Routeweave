@@ -124,7 +124,7 @@ YHT可复用几何反例和规划访问需求；LQ可替换风险输入与聚合
 - **PPT 图表**：用 dataviz 技能的 `validate_palette.js` 检查配色。原配色中灰色与青色低于色度下限，蓝青两色难以区分，均未通过；改为五色有效配色（相邻色对全部通过，琥珀色对比度不足 3:1，因此直接标注数值）。颜色按对象固定：全量读取用蓝色，所选方案用青色。第 9 页原为对数轴柱图，柱长不能表示数值，改为折线图。三张图只在关键点标数值，标签用 OOXML 逐点数据标签写入。验证：`validate.py` 通过；LibreOffice 配中文字体逐页渲染，无溢出。
 - **封面**：成员信息改为在 `report.tex` 开头的表格中填写，删除 `cover-info` 文件机制。
 - **贡献表**：按 [contributions.md](../final/contributions.md) 的评分（YHT 22%、ZQO 21%、LQ 19%、ZC 26%、LJ 12%）填入本地 `docs/final/团队项目贡献度确认表.docx`，姓名列暂填缩写；学号与签名留空，由成员填写。文件不入库。
-- **AI 使用过程**：报告新增附录 C，含工具与工作方式、过程时间线、人与 AI 分工、审阅发现。§9 改为引用附录 C。报告现为 23 页，正文 9,808 个汉字。
+- **AI 使用过程**：报告新增附录 C，含工具与工作方式、过程时间线、人与 AI 分工、审阅发现。§9 改为引用附录 C。报告现为 23 页，正文 9,855 个汉字。
 - **本地交付物**：PDF 与 PPTX 按用户指示只在本地构建，不入库（`.gitignore`）。`main` 只保留项目成果；协作说明、交接记录与问题清单保留在 `develop`。
 - **发布**：收尾改动经 [zoran-sid/Routeweave#13](https://github.com/zoran-sid/Routeweave/pull/13) 合入 `develop`，经 [#14](https://github.com/zoran-sid/Routeweave/pull/14) 发布到 `main`。随后用 `hotfix/main-project-only`（[#15](https://github.com/zoran-sid/Routeweave/pull/15)）从 `main` 删除过程文件，指向这些文件的 40 个链接改为 `develop` 地址，并打标签 `v2.1-submission`（`deeb524`）。该 hotfix 不合回 `develop`。`main` 上复核 20/20 组、233 项测试通过。AGENTS.md 第6节已改为：发布一律经 `hotfix/*`。
 

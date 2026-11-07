@@ -16,7 +16,7 @@
 | [evidence/artifact-checks-v2.json](evidence/artifact-checks-v2.json) | 报告与 PPT 的构建、校验与文件摘要 |
 | [source/](source/README.md) | 报告 LaTeX 源、PPT 构建脚本与提取脚本 |
 
-报告正文（摘要至第 9 章，不含参考文献与附录）9,808 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
+报告正文（摘要至第 9 章，不含参考文献与附录）9,855 个汉字。PPT 共 12 页，按 ZQO（1–3、6）、YHT（4–5）、LQ（7–8）、ZC（9–10）、LJ（11–12）的顺序讲述；页数按课程公布的汇报时长再调整。
 
 ## 验证状态
 

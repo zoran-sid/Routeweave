@@ -71,14 +71,22 @@ def main():
               lambda: gov.read_audited(path, "DISPATCH", "SELECT * FROM exposure_zone"), "rejected")
         probe(results, "endpoint_helper_view", "fixed endpoint denies the internal resolved_feature view",
               lambda: gov.read_audited(path, "DISPATCH", "SELECT * FROM resolved_feature"), "rejected")
+        def raw_table_via_authorizer():
+            r = gov.reader(path, "DISPATCH")
+            try:
+                return r.execute("SELECT * FROM exposure_zone").fetchall()
+            finally:
+                r.close()
         probe(results, "authorizer_raw_table", "reader() authorizer alone denies raw exposure_zone",
-              lambda: gov.reader(path, "DISPATCH").execute("SELECT * FROM exposure_zone").fetchall(), "rejected")
+              raw_table_via_authorizer, "rejected")
 
         def helper_view_via_authorizer():
             r = gov.reader(path, "DISPATCH")
-            rows = r.execute("SELECT feature_id, layer, sensitivity FROM resolved_feature "
-                             "WHERE sensitivity='restricted'").fetchall()
-            r.close()
+            try:
+                rows = r.execute("SELECT feature_id, layer, sensitivity FROM resolved_feature "
+                                 "WHERE sensitivity='restricted'").fetchall()
+            finally:
+                r.close()
             return {"rows": len(rows), "layers": sorted({x[1] for x in rows})}
         probe(results, "authorizer_helper_view",
               "reader() authorizer alone confines a dispatcher to the two restricted views", helper_view_via_authorizer,
@@ -100,7 +108,7 @@ def main():
         qid = io.record_query(c, p, "DISPATCH", task, (0, 0, 100), (40, 0, 100), result, "sql_rtree",
                               {z["feature_id"]: z["rid"] for z in zones})
         zc_rows = io.trace(c, qid)
-        lq_sql = (io.ROOT / "docs/modules/lq/v2/experiments/op_c.sql").read_text()
+        lq_sql = (io.ROOT / "docs/modules/lq/v2/experiments/op_c.sql").read_text(encoding="utf-8")
         lq_rows = cat.rows(c, lq_sql, {"query_id": qid})
         results.append({"probe": "op_c_task_window", "claim": "LQ op_c.sql traces a route planned for a task window",
                         "expected": len(zc_rows), "actual": len(lq_rows), "pass": len(lq_rows) == len(zc_rows),

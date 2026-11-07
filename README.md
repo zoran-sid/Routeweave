@@ -1,6 +1,6 @@
 # SkyRoute
 
-## 面向城市无人机配送的时空数据管理系统设计（v2，开发中）
+## 面向城市无人机配送的时空数据管理系统设计（v2）
 
 **SkyRoute: Spatio-temporal Data Management for Urban UAV Delivery**
 
@@ -10,12 +10,13 @@
 
 ## 版本与分支
 
-`main` 是已完成的正式版本；当前为 v1（标签 `v1.0-algorithm-baseline`，算法方向）。按课程“数据管理系统设计”要求重组的 v2 在 `develop` 分支开发，个人工作使用 `<成员缩写>/<主题>` 分支并 PR 到 `develop`。规则见 [AGENTS.md 第6节](AGENTS.md)。
+`main` 是已完成的正式版本，发布 v2 前为 v1（标签 `v1.0-algorithm-baseline`，算法方向）。按课程“数据管理系统设计”要求重组的 v2 已在 `develop` 完成整合（候选版本 `v2.0-rc.1`），全员确认后合入 `main` 并打 `v2.0-submission`。个人工作使用 `<成员缩写>/<主题>` 分支并 PR 到 `develop`，规则见 [AGENTS.md 第6节](AGENTS.md)。
 
 ## 项目文档
 
-- [v1 最终整合交付](docs/final/README.md)：v1（算法方向）的13页报告、10页可编辑PPT、Markdown正文与讲稿、课程覆盖表及贡献依据。
-- [v1 集成复核与成员修复清单](docs/integration/README.md)：131项回归、7项问题审查、11项整链路和25项风险专项通过。
+- [v2 最终交付](docs/final/README.md)：21 页 PDF 报告（LaTeX）、12 页可编辑 PPT、Markdown 镜像与讲稿、课程覆盖对照、贡献依据与整合证据。
+- [问题清单](docs/integration/issues.md)：v2 各棒审阅发现与修复状态，以及 v1 历次集成记录。
+- [统一数据库模式](docs/v2/schema/schema.sql)：34 个实体、约束、触发器与时空索引，含 [ER 图](docs/v2/schema/er.md) 与 [设计决定](docs/v2/schema/decisions.md)。
 - [完整项目说明](docs/project-brief.md)：背景、目标、用户、功能、技术方向和研究范围。
 - [共同场景与查询约定](docs/scenario-contract.md)：三维空间、时间有效性、风险约束和一致性口径。
 - [v2 五人任务安排](docs/team-tasks.md)：重组原因、统一模式、核心业务操作、串行顺序与验收清单。
@@ -29,11 +30,11 @@
 
 | 棒次 | 成员 | v2 数据库重点 | 报告章节 | PPT | 个人记录 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | YHT | 三维时空数据模型与物理设计；统一模式 | 2、4 | 第3–4页 | [YHT](docs/handoffs/yht.md) |
-| 2 | ZQO | 事务、并发控制与版本管理；新兴技术；总体架构 | 摘要、1、3.1–3.2、5 | 第1–2页 | [ZQO](docs/handoffs/zqo.md) |
-| 3 | LQ | 风险数据治理与数据库访问控制 | 7 | 第5–6页 | [LQ](docs/handoffs/lq.md) |
-| 4 | ZC | 面向规划的查询负载与性能；v2 整合与发布 | 6、8.1、9 | 第7–8页 | [ZC](docs/handoffs/zc.md) |
-| 5 | LJ | 运行保障与恢复验收；权衡汇总 | 3.3、8.2–8.3 | 第9–10页 | [LJ](docs/handoffs/lj.md) |
+| 1 | YHT | 三维时空数据模型与物理设计；统一模式 | 2、4 | 第4–5页 | [YHT](docs/handoffs/yht.md) |
+| 2 | ZQO | 事务、并发控制与版本管理；新兴技术；总体架构 | 摘要、1、3.1–3.2、5 | 第1–3、6页 | [ZQO](docs/handoffs/zqo.md) |
+| 3 | LQ | 风险数据治理与数据库访问控制 | 7 | 第7–8页 | [LQ](docs/handoffs/lq.md) |
+| 4 | ZC | 面向规划的查询负载与性能；v2 整合与发布 | 6、8.1、9、附录 | 第9–10页 | [ZC](docs/handoffs/zc.md) |
+| 5 | LJ | 运行保障与恢复验收；权衡汇总 | 3.3、8.2–8.4 | 第11–12页 | [LJ](docs/handoffs/lj.md) |
 
 具体任务、串行顺序与验收清单见[五人任务安排](docs/team-tasks.md)，各成员提示词见[v2 提示词](docs/v2-prompts.md)。
 
@@ -47,4 +48,4 @@ v1 五个模块的成果（保留为证据）：
 | ZC | [三维航线算法与评估](docs/modules/zc/README.md) | 算法设计、合成场景验证、原型及第7–8页PPT |
 | LJ | [运维保障与验收支持](docs/modules/lj/README.md) | 运行规则、异常恢复、验收原型及第9–10页展示材料 |
 
-已实测的衔接包括YHT与ZC/LQ的导出接口、LQ与ZC的风险接口，以及ZQO与LQ/ZC的事务发布与查询。五模块实际链路与来源映射已完成验证，本轮复核证据见[整合验证记录](docs/final/evidence/verification.json)，原链路设计见[ZQO集成记录](docs/integration/zqo-evidence.md)；生产部署联调仍属后续设计。
+已实测的衔接包括YHT与ZC/LQ的导出接口、LQ与ZC的风险接口，以及ZQO与LQ/ZC的事务发布与查询。五模块实际链路与来源映射已完成验证，本轮复核证据见[整合验证记录](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/evidence/verification.json)，原链路设计见[ZQO集成记录](docs/integration/zqo-evidence.md)；生产部署联调仍属后续设计。

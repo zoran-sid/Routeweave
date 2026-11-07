@@ -13,6 +13,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Release PR source
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: |
+          case "${{ github.head_ref }}" in
+            develop|hotfix/*) echo "release source ok: ${{ github.head_ref }}" ;;
+            *) echo "PRs into main must come from develop or hotfix/*, got ${{ github.head_ref }}"; exit 1 ;;
+          esac
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

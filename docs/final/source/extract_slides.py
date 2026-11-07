@@ -1,60 +1,97 @@
-"""Export native slide text, tables, chart caches, and notes to Markdown."""
+"""Export slide text, native tables, chart values and speaker notes from the deck to slides.md.
+
+Standard library only. Run from the repository root:
+    python3 docs/final/source/extract_slides.py
+"""
 from pathlib import Path
 import posixpath
+import re
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
-ROOT = Path(__file__).resolve().parents[1]
+FINAL = Path(__file__).resolve().parents[1]
 NS = {'a': 'http://schemas.openxmlformats.org/drawingml/2006/main',
       'p': 'http://schemas.openxmlformats.org/presentationml/2006/main',
       'c': 'http://schemas.openxmlformats.org/drawingml/2006/chart',
       'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'}
+FOOTER = ('SkyRoute v2 · 合成数据实验',)
+
 
 def text(element):
-    paragraphs = []
+    out = []
     for paragraph in element.findall('.//a:p', NS):
-        parts = []
-        for node in paragraph.iter():
-            if node.tag == '{'+NS['a']+'}t': parts.append(node.text or '')
-            if node.tag == '{'+NS['a']+'}br': parts.append('\n')
-        paragraphs.append(''.join(parts))
-    return '\n'.join(paragraphs).strip()
+        out.append(''.join(node.text or '' for node in paragraph.iter('{%s}t' % NS['a'])))
+    return '\n'.join(p for p in out if p.strip()).strip()
+
 
 def table(rows):
-    rows = [[value.replace('|', '\\|').replace('\n', '<br>') for value in row] for row in rows]
-    return '\n'.join(['| '+' | '.join(rows[0])+' |',
-                      '| '+' | '.join(['---']*len(rows[0]))+' |']+
-                     ['| '+' | '.join(row)+' |' for row in rows[1:]])
+    rows = [[v.replace('|', '\\|').replace('\n', '<br>') for v in row] for row in rows]
+    return '\n'.join(['| ' + ' | '.join(rows[0]) + ' |', '| ' + ' | '.join(['---'] * len(rows[0])) + ' |'] +
+                     ['| ' + ' | '.join(r) + ' |' for r in rows[1:]])
 
-lines = ['# SkyRoute 逐页展示文字与讲稿',
-         '2026-11-06整合稿。内容从本目录PPTX的可编辑对象及备注提取，图表列出实际缓存数值。展示顺序为ZQO、YHT、LQ、ZC、LJ，每人2页。']
-with ZipFile(ROOT/'SkyRoute-presentation.pptx') as z:
-    for i in range(1, 11):
-        slide = ET.fromstring(z.read(f'ppt/slides/slide{i}.xml'))
-        shapes = slide.findall('.//p:spTree/p:sp', NS)
-        title = text(shapes[0])
-        owner = ['ZQO','YHT','LQ','ZC','LJ'][(i-1)//2]
-        lines.extend([f'## 第{i}页 · {owner} · {title}', '### 展示文字'])
-        for shape in shapes[1:]:
-            value = text(shape)
-            if value and not value.startswith('SkyRoute   ') and value != str(i):
-                lines.append(value.replace('\n', '\n\n'))
-        for native_table in slide.findall('.//a:tbl', NS):
-            lines.append(table([[text(cell) for cell in row.findall('a:tc',NS)]
-                                for row in native_table.findall('a:tr',NS)]))
-        relationships = ET.fromstring(z.read(f'ppt/slides/_rels/slide{i}.xml.rels'))
-        targets = {rel.attrib['Id']: rel.attrib['Target'] for rel in relationships}
-        for chart_ref in slide.findall('.//c:chart', NS):
-            target = targets[chart_ref.attrib['{'+NS['r']+'}id']]
-            chart_path = posixpath.normpath(posixpath.join('ppt/slides',target)).lstrip('/')
-            chart = ET.fromstring(z.read(chart_path))
-            series = chart.findall('.//c:ser',NS)
-            labels = [node.text for node in series[0].findall('c:cat//c:pt/c:v',NS)]
-            names = [node.find('c:tx/c:v',NS).text for node in series]
-            values = [[node.text for node in item.findall('c:val//c:pt/c:v',NS)] for item in series]
-            lines.append(table([['场景／扩展节点数']+names]+
-                               [[label]+[v[j] for v in values] for j,label in enumerate(labels)]))
-        notes = ET.fromstring(z.read(f'ppt/notesSlides/notesSlide{i}.xml'))
-        lines.extend(['### 讲稿与来源', text(notes)])
-(ROOT/'slides.md').write_text('\n\n'.join(lines)+'\n')
-print(ROOT/'slides.md')
+
+def slide_order(z):
+    pres = ET.fromstring(z.read('ppt/presentation.xml'))
+    rels = ET.fromstring(z.read('ppt/_rels/presentation.xml.rels'))
+    targets = {r.attrib['Id']: r.attrib['Target'] for r in rels}
+    return [posixpath.basename(targets[s.attrib['{%s}id' % NS['r']]])
+            for s in pres.find('p:sldIdLst', NS)]
+
+
+def main():
+    lines = ['# SkyRoute v2 逐页展示文字与讲稿',
+             '由 `docs/final/source/extract_slides.py` 从 `SkyRoute-presentation.pptx` 的可编辑对象与备注生成；'
+             '图表列出实际数值。修改请编辑 `build_slides.cjs` 后重新构建。']
+    with ZipFile(FINAL / 'SkyRoute-presentation.pptx') as z:
+        for n, name in enumerate(slide_order(z), start=1):
+            slide = ET.fromstring(z.read('ppt/slides/' + name))
+            shapes = slide.findall('.//p:spTree/p:sp', NS)
+            title, presenter, body = None, '', []
+            for sh in shapes:
+                ph = sh.find('.//p:nvPr/p:ph', NS)
+                value = text(sh)
+                named = sh.find('.//p:cNvPr', NS)
+                if (ph is not None and ph.attrib.get('type') == 'title') or (
+                        named is not None and named.attrib.get('name') == 'slide-title'):
+                    title = value
+                elif ph is not None and ph.attrib.get('type') == 'body':
+                    presenter = value
+                elif ph is not None and ph.attrib.get('type') == 'sldNum':
+                    continue
+                elif value and value not in FOOTER and not re.fullmatch(r'\d+', value):
+                    body.append(value)
+            if title is None and body:
+                title = body.pop(0)
+            lines.append(f'## 第{n}页 · {title}' + (f'（{presenter}）' if presenter else ''))
+            lines.append('### 展示文字')
+            lines.extend(b.replace('\n', '\n\n') for b in body)
+            for t in slide.findall('.//a:tbl', NS):
+                lines.append(table([[text(c) for c in r.findall('a:tc', NS)] for r in t.findall('a:tr', NS)]))
+            rels = ET.fromstring(z.read(f'ppt/slides/_rels/{name}.rels'))
+            targets = {r.attrib['Id']: r.attrib['Target'] for r in rels}
+            for ref in slide.findall('.//c:chart', NS):
+                target = targets[ref.attrib['{%s}id' % NS['r']]]
+                path = target.lstrip('/') if target.startswith('/') else posixpath.normpath(posixpath.join('ppt/slides', target))
+                chart = ET.fromstring(z.read(path))
+                series = chart.findall('.//c:ser', NS)
+                labels = [v.text for v in series[0].findall('c:cat//c:pt/c:v', NS)]
+                names = [(s.find('c:tx//c:v', NS).text if s.find('c:tx//c:v', NS) is not None else '') for s in series]
+                values = [[v.text for v in s.findall('c:val//c:pt/c:v', NS)] for s in series]
+                lines.append('图表数据：\n\n' + table([['类别'] + names] + [[lab] + [v[j] for v in values]
+                                                                       for j, lab in enumerate(labels)]))
+            notes_name = None
+            for r in rels:
+                if r.attrib['Type'].endswith('/notesSlide'):
+                    notes_name = posixpath.basename(r.attrib['Target'])
+            if notes_name:
+                notes = ET.fromstring(z.read('ppt/notesSlides/' + notes_name))
+                body_text = [text(sh) for sh in notes.findall('.//p:sp', NS)
+                             if (sh.find('.//p:nvPr/p:ph', NS) is not None
+                                 and sh.find('.//p:nvPr/p:ph', NS).attrib.get('type') == 'body')]
+                lines.extend(['### 讲稿与来源', '\n\n'.join(b for b in body_text if b)])
+    (FINAL / 'slides.md').write_text('\n\n'.join(lines) + '\n', encoding='utf-8')
+    print(FINAL / 'slides.md')
+
+
+if __name__ == '__main__':
+    main()

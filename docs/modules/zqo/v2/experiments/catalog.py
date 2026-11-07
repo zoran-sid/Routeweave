@@ -51,7 +51,7 @@ def connect(path):
 def initialize(path):
     c = connect(path)
     c.execute('PRAGMA journal_mode=WAL')
-    c.executescript((SCHEMA / 'schema.sql').read_text())
+    c.executescript((SCHEMA / 'schema.sql').read_text(encoding='utf-8'))
     with c:
         fx.base(c)
     c.close()

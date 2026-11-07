@@ -47,6 +47,15 @@
 - **LQ**：LQ-V2-02 待确认；正式结果表已满足 ZC-V2-C01 字段合同。
 - **ZQO**：查询适配按 S-04 解析 owner；缓存沿用以 `airspace_event` 为变更来源，依赖发布事务为每个改动的限制写事件。
 
+## v2 第6棒：整合（2026-11-07）
+
+- **开工检查**：YHT PR #1/#5、ZQO PR #4、LQ PR #6、ZC PR #7 已在 `develop`。LJ 的 PR #8 以 `main` 为目标，我未核对目标分支即合并，`main` 一度包含未完成的 v2；经用户确认以 `--force-with-lease` 恢复到 `5d4034b` 并恢复分支保护，LJ 成果经 PR #9 合入 `develop`，CI 增加发往 `main` 的来源检查（INT-V2-01）。
+- **全量复核**：新增 [`v2_verify.py`](../integration/v2_verify.py)，20/20 组命令符合预期，231 项测试通过；LJ 恢复实验在 macOS 复现。修复本人 ZC-V2-02（UTF-8 读取、连接关闭），并对 ZQO `catalog.initialize()` 做一行 UTF-8 兼容修订。LQ-V2-02、ZQO-V2-01 复跑仍未关闭，已记录。
+- **报告**：LaTeX 源 [`report.tex`](../final/source/report/report.tex)，21 页 PDF，正文 9,833 个汉字；7 张图（TikZ / pgfplots，数据由成员结果 JSON 生成）、17 张表、26 条 IEEE 引用；Markdown 镜像自动生成，编号与 PDF 一致。逐页渲染检查版面，无溢出盒。
+- **PPT**：[`build_slides.cjs`](../final/source/build_slides.cjs) 构建 12 页，原生图表与表格、每页讲稿；OOXML 校验通过，逐页渲染检查版面，图表数值从文件读回核对。PowerPoint 导出 PDF 因沙盒文件权限未完成，原生图表的最终外观请在 PowerPoint 中目视确认。
+- **文档**：重写课程覆盖对照、要求对照、贡献依据与最终交付说明；v1 交付文件从 `docs/final/` 移除，历史记录中的链接改指向 `v1.0-algorithm-baseline` 标签。
+- **下一步**：全员通读 `v2.0-rc.1`，确认贡献比例、封面信息与提交要求后，由 ZC 开 `develop` → `main` 的发布 PR 并打 `v2.0-submission`。
+
 以下 v1 记录保留为证据。
 
 ## 已完成成果
@@ -95,8 +104,8 @@ YHT可复用几何反例和规划访问需求；LQ可替换风险输入与聚合
 ## 2026-11-06：最终材料整合与独立复核
 
 - 已读取远程主线`2850d89cea68221bbe6a8cf1161bd1d3ab220c2c`、五名成员全部交接、课程要求及模块设计和证据。关键修复包括YHT `1862ab4`，LQ独立确认`2850d89`；历史提交标识保持原记录，当前验证另存源码摘要。
-- 重新运行YHT42、LQ19、ZC24、ZQO31、LJ15，共131项单元测试；原问题审查7/7、整链路11/11、风险专项25/25通过。证据见[verification.json](../final/evidence/verification.json)及同目录三个完整JSON。
-- 整合[报告正文](../final/report.md)、[13页Word](../final/SkyRoute-report.docx)、[10页PPT](../final/SkyRoute-presentation.pptx)、[讲稿](../final/slides.md)、[课程覆盖](../final/course-coverage.md)及[贡献依据](../final/contributions.md)。图、可编辑表格／图表和源码随交付保存。
+- 重新运行YHT42、LQ19、ZC24、ZQO31、LJ15，共131项单元测试；原问题审查7/7、整链路11/11、风险专项25/25通过。证据见[verification.json](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/evidence/verification.json)及同目录三个完整JSON。
+- 整合[报告正文](../final/report.md)、[13页Word](https://github.com/zoran-sid/Routeweave/blob/v1.0-algorithm-baseline/docs/final/SkyRoute-report.docx)、[10页PPT](../final/SkyRoute-presentation.pptx)、[讲稿](../final/slides.md)、[课程覆盖](../final/course-coverage.md)及[贡献依据](../final/contributions.md)。图、可编辑表格／图表和源码随交付保存。
 - 内容处理：区分源五版与查询五版、YHT走廊预检与系统Q1、风险代理与概率、历史性能实验与本轮正确性检查。更新实例按实际JSON记录为等长绕行，未把路径变化写成距离增加。D* Lite、真实权限及跨机恢复按候选／部署设计说明。
 - 发现YHT-05文档问题，已写入[分派清单](../integration/issues.md)。按用户边界，未改YHT/LQ/ZQO/LJ的模块文件及个人交接；ZC仅维护自身状态与共享整合材料。
 - Word逐页渲染检查，PPT完成逐页检查、原生对象及结构验证。正式比例、身份、签字和课程平台上传由成员按通知处理，未代写认可。

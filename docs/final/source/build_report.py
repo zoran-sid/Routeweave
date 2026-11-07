@@ -1,114 +1,132 @@
-"""Build the report from its Markdown source. Requires python-docx and Pillow."""
-from pathlib import Path
+"""Build the SkyRoute v2 report: chart data from member results -> XeLaTeX PDF -> Markdown mirror.
+
+Requirements: TeX Live with ctex/xeCJK, TikZ and pgfplots (XeLaTeX via latexmk); pandoc for the mirror.
+
+python3 docs/final/source/build_report.py            # data + PDF + report.md + character count
+python3 docs/final/source/build_report.py --data     # chart data only
+"""
+import argparse
+import json
 import re
-from docx import Document
-from docx.shared import Inches, Pt, RGBColor
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
+import shutil
+import subprocess
+import sys
+from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-doc = Document()
-sec=doc.sections[0]
-sec.page_width=Inches(8.5); sec.page_height=Inches(11)
-sec.top_margin=sec.bottom_margin=Inches(.72)
-sec.left_margin=sec.right_margin=Inches(.8)
-sec.header_distance=sec.footer_distance=Inches(.32)
-for name in ['Normal','Title','Subtitle','Heading 1','Heading 2','Heading 3','Caption']:
-    st=doc.styles[name];st.font.name='Arial';st.font.color.rgb=RGBColor(0,0,0)
-    st.element.get_or_add_rPr().append(OxmlElement('w:rFonts')) if st.element.rPr.rFonts is None else None
-    fonts=st.element.rPr.rFonts
-    for key in list(fonts.attrib):
-        if 'theme' in key.lower(): del fonts.attrib[key]
-    for key in ('ascii','hAnsi','cs'): fonts.set(qn('w:'+key),'Arial')
-    fonts.set(qn('w:eastAsia'),'Songti SC' if name in ['Normal','Caption'] else 'Heiti SC')
-    for border in list(st.element.xpath('.//w:pBdr')): border.getparent().remove(border)
-    st.paragraph_format.space_after=Pt(6)
-    st.paragraph_format.line_spacing=1.25
-doc.styles['Normal'].font.size=Pt(11)
-doc.styles['Title'].font.size=Pt(22)
-doc.styles['Title'].paragraph_format.space_after=Pt(12)
-doc.styles['Subtitle'].font.size=Pt(10.5)
-doc.styles['Subtitle'].font.italic=False
-for name,size in [('Heading 1',16),('Heading 2',12.5),('Heading 3',11.5)]:
-    doc.styles[name].font.size=Pt(size)
-    doc.styles[name].font.bold=True
-    doc.styles[name].paragraph_format.space_before=Pt(14)
-    doc.styles[name].paragraph_format.keep_with_next=True
-doc.styles['Caption'].font.size=Pt(9)
-doc.styles['Caption'].paragraph_format.space_after=Pt(9)
-head=sec.header.paragraphs[0];head.text='SkyRoute  城市三维航线规划与数据管理'
-head.style=doc.styles['Caption']
-foot=sec.footer.paragraphs[0];foot.alignment=WD_ALIGN_PARAGRAPH.CENTER
-r=foot.add_run();f=OxmlElement('w:fldSimple');f.set(qn('w:instr'),'PAGE');r._r.addnext(f)
+ROOT = Path(__file__).resolve().parents[3]
+SRC = Path(__file__).resolve().parent / "report"
+DATA = SRC / "data"
+FINAL = ROOT / "docs/final"
+RES = {
+    "op_a": ROOT / "docs/modules/yht/v2/experiments/results/op_a_index_comparison.json",
+    "storage": ROOT / "docs/modules/zqo/v2/experiments/results/transactions-storage.json",
+    "access": ROOT / "docs/modules/zc/v2/experiments/results/access_paths.json",
+    "inval": ROOT / "docs/modules/zc/v2/experiments/results/invalidation.json",
+}
 
-def clean(s):
-    s=re.sub(r'\[([^\]]+)\]\(([^)]+)\)',r'\1',s)
-    return s.replace('**','').replace('`','').replace('  ',' ')
 
-def table(rows):
-    t=doc.add_table(rows=1,cols=len(rows[0]));t.alignment=WD_TABLE_ALIGNMENT.CENTER
-    t.autofit=False
-    available=6.9
-    n=len(rows[0]); widths=([1.3,2.7,2.9] if n==3 else [1.25,1.85,1.85,1.95]) if n in (3,4) else [available/n]*n
-    for c,w in zip(t.columns,widths):c.width=Inches(w)
-    for i,row in enumerate(rows):
-        cells=t.rows[0].cells if i==0 else t.add_row().cells
-        for j,val in enumerate(row):
-            c=cells[j];c.width=Inches(widths[j]);c.vertical_alignment=WD_CELL_VERTICAL_ALIGNMENT.CENTER
-            p=c.paragraphs[0];p.paragraph_format.space_after=Pt(3);p.paragraph_format.space_before=Pt(3);p.paragraph_format.line_spacing=1.15
-            r=p.add_run(clean(val));r.font.size=Pt(10);r.bold=i==0
-            r._element.get_or_add_rPr().rFonts.set(qn('w:eastAsia'),'Heiti SC') if r._element.rPr.rFonts is not None else None
-            pr=c._tc.get_or_add_tcPr()
-            shade=OxmlElement('w:shd');shade.set(qn('w:fill'),'DDE8F0' if i==0 else ('F6F8FA' if i%2==0 else 'FFFFFF'));pr.append(shade)
-            margins=OxmlElement('w:tcMar')
-            for edge,v in [('top',75),('bottom',75),('left',90),('right',90)]:
-                el=OxmlElement('w:'+edge);el.set(qn('w:w'),str(v));el.set(qn('w:type'),'dxa');margins.append(el)
-            pr.append(margins)
-            borders=OxmlElement('w:tcBorders')
-            for edge in ['top','left','bottom','right']:
-                el=OxmlElement('w:'+edge);el.set(qn('w:val'),'single');el.set(qn('w:sz'),'4');el.set(qn('w:color'),'D9D9D9');borders.append(el)
-            pr.append(borders)
-        trpr=t.rows[i]._tr.get_or_add_trPr();trpr.append(OxmlElement('w:cantSplit'))
-        if i==0:trpr.append(OxmlElement('w:tblHeader'))
-    doc.add_paragraph().paragraph_format.space_after=Pt(0)
+def load(key):
+    return json.loads(RES[key].read_text(encoding="utf-8"))
 
-lines=(ROOT/'report.md').read_text().splitlines();i=0;code=False
-while i<len(lines):
-    line=lines[i]
-    if line.startswith('```'):code=not code;i+=1;continue
-    if not line.strip():i+=1;continue
-    if code:
-        p=doc.add_paragraph();r=p.add_run(line);r.font.name='Courier New';r.font.size=Pt(8)
-        p.paragraph_format.space_after=Pt(1);i+=1;continue
-    if line.startswith('|'):
-        rows=[]
-        while i<len(lines) and lines[i].startswith('|'):
-            row=[x.strip() for x in lines[i].strip().strip('|').split('|')]
-            if not all(re.fullmatch(r'[-: ]+',x) for x in row):rows.append(row)
-            i+=1
-        table(rows);continue
-    image=re.fullmatch(r'!\[.*?\]\((.*?)\)',line)
-    if image:
-        p=doc.add_paragraph();p.alignment=WD_ALIGN_PARAGRAPH.CENTER;p.paragraph_format.keep_with_next=True
-        p.add_run().add_picture(str(ROOT/image[1]),width=Inches(6.8));i+=1;continue
-    if line.startswith('# '):
-        p=doc.add_paragraph(style='Title')
-        p.add_run('SkyRoute\n').font.size=Pt(26)
-        p.add_run(clean(line[2:]).removeprefix('SkyRoute ').replace('无人机物流配送', '无人机物流配送\n')).font.size=Pt(18)
-    elif line.startswith('### '):doc.add_paragraph(clean(line[4:]),'Heading 2')
-    elif line.startswith('## '):doc.add_paragraph(clean(line[3:]),'Heading 1')
-    elif line.startswith('图') and re.match(r'图\d',line):doc.add_paragraph(clean(line),'Caption')
-    else:
-        p=doc.add_paragraph(clean(line))
-        if line.startswith('SkyRoute Urban'):p.style='Subtitle'
-        if re.match(r'^\[\d+\]',line):
-            p.paragraph_format.line_spacing=1.1
-            for r in p.runs:r.font.size=Pt(9)
-    i+=1
-doc.core_properties.title='SkyRoute 面向城市复杂三维环境的无人机物流配送航线规划与数据管理设计'
-doc.core_properties.author='SkyRoute Team'
-doc.core_properties.subject='Database systems group project'
-out=ROOT/'SkyRoute-report.docx';doc.save(out)
-print(out)
+
+def write(name, header, rows):
+    DATA.mkdir(parents=True, exist_ok=True)
+    lines = [" ".join(header)] + [" ".join(str(v) for v in r) for r in rows]
+    (DATA / name).write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def chart_data():
+    # YHT operation A: median us per access path, by restrictions per release (K = 1 and 20)
+    op = load("op_a")["results"]
+    for k in (1, 20):
+        rows = []
+        for n in (100, 1000, 10000):
+            v = {r["variant"]: r["median_us"] for r in op if r["n_per_release"] == n and r["releases"] == k}
+            rows.append([n, v["V0_full_scan"], v["V1_release_btree"], v["V2_time_btree"], v["V3_rtree_3d"], v["V4_rtree_4d"]])
+        write(f"op_a_k{k}.dat", ["n", "full", "release", "time", "rtree3", "rtree4"], rows)
+    # ZQO storage: MiB by number of releases
+    st = load("storage")["storage"]
+    rows = []
+    for n in (10, 100, 1000):
+        sh = next(s for s in st if s["mode"] == "shared" and s["releases"] == n)["db_bytes"] / 2**20
+        fu = next(s for s in st if s["mode"] == "full" and s["releases"] == n)["db_bytes"] / 2**20
+        rows.append([n, round(sh, 2), round(fu, 2)])
+    write("storage.dat", ["n", "shared", "full"], rows)
+    # ZC access paths: median ms per stage
+    rows = []
+    for s in load("access")["scales"]:
+        m = s["summary"]
+        rows.append([s["n_buildings"], m["json_snapshot"]["data_ms"], m["sql_full"]["data_ms"], m["sql_rtree"]["data_ms"],
+                     m["sql_rtree"]["search_ms"], m["graph_cache"]["miss_build_ms"], m["graph_cache"]["hit_total_ms"]])
+    write("access.dat", ["n", "json", "full", "rtree", "search", "build", "hit"], rows)
+    # ZC invalidation: total ms, full vs targeted
+    rows = [[i, round(t["full_rebuild_ms"], 1), round(t["targeted_ms"], 1)]
+            for i, t in enumerate(load("inval")["transitions"])]
+    write("inval.dat", ["i", "full", "targeted"], rows)
+
+
+def hanzi(tex):
+    """Count Han characters in the body: abstract through chapter 9, without references and appendices."""
+    body = tex.split(r"\begin{abstract}", 1)[1]
+    body = body.split(r"\begin{thebibliography}", 1)[0]
+    body = re.sub(r"(?s)\\begin\{(tikzpicture|axis)\}.*?\\end\{\1\}", "", body)
+    return len(re.findall(r"[一-鿿]", body))
+
+
+def labels():
+    aux = (SRC / "report.aux").read_text(encoding="utf-8")
+    return {k: v for k, v in re.findall(r"\\newlabel\{([^}]+)\}\{\{([^}]*)\}", aux)}
+
+
+def for_pandoc(tex):
+    """Make the LaTeX source digestible for pandoc: real numbers, plain tables, no cover block."""
+    lab = labels()
+    tex = re.sub(r"~?\\ref\{([^}]+)\}", lambda m: lab.get(m.group(1), "?"), tex)
+    aux = (SRC / "report.aux").read_text(encoding="utf-8")
+    bib = dict(re.findall(r"\\bibcite\{([^}]+)\}\{(\d+)\}", aux))
+    tex = re.sub(r"\s?\\cite\{([^}]+)\}",
+                 lambda m: "[" + ", ".join(bib.get(k.strip(), "?") for k in m.group(1).split(",")) + "]", tex)
+    start = tex.index(r"\maketitle")
+    tex = tex[:start] + tex[tex.index(r"\clearpage", start) + len(r"\clearpage"):]
+    tex = tex.replace(r"\begin{abstract}", r"\section*{摘要}").replace(r"\end{abstract}", "")
+    tex = tex.replace(r"\tableofcontents", "")
+
+    def plain(m):
+        spec = m.group(1)
+        cols = len(re.findall(r"[LpY]\{?|(?<![a-z])[lcrX](?![a-z])", re.sub(r"\{[^{}]*\}", "", spec)))
+        return r"\begin{tabular}{" + "l" * cols + "}"
+    tex = re.sub(r"\\begin\{tabularx\}\{\\textwidth\}\{([^\n]*)\}\s*$", plain, tex, flags=re.M)
+    tex = tex.replace(r"\end{tabularx}", r"\end{tabular}")
+    tex = re.sub(r"(?s)\\resizebox\{\\textwidth\}\{!\}\{%.*?\\end\{tikzpicture\}\}", "（图形见 PDF）", tex)
+    tex = re.sub(r"(?s)\\begin\{tikzpicture\}.*?\\end\{tikzpicture\}", "（图形见 PDF）", tex)
+    tex = re.sub(r"\\caption\{", lambda m: m.group(0), tex)
+    return tex
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--data", action="store_true")
+    args = ap.parse_args()
+    chart_data()
+    if args.data:
+        return
+    tex = (SRC / "report.tex").read_text(encoding="utf-8")
+    subprocess.run(["latexmk", "-xelatex", "-interaction=nonstopmode", "-halt-on-error", "-quiet", "report.tex"],
+                   cwd=SRC, check=True)
+    shutil.copy2(SRC / "report.pdf", FINAL / "SkyRoute-report.pdf")
+    md = subprocess.run(["pandoc", "-f", "latex", "-t", "gfm", "--wrap=none"], input=for_pandoc(tex), cwd=SRC,
+                        capture_output=True, text=True, check=True).stdout
+    header = ("<!-- 由 docs/final/source/report/report.tex 自动生成，供阅读和检索；图、表编号与 PDF 一致，"
+              "图形见 SkyRoute-report.pdf。修改请编辑 report.tex 后运行 python3 docs/final/source/build_report.py。 -->\n\n"
+              "# SkyRoute：面向城市无人机配送的时空数据管理系统设计\n\n"
+              "**SkyRoute: Spatio-temporal Data Management for Urban UAV Delivery**　INT6164 课程大作业小组报告，v2.0\n\n")
+    (FINAL / "report.md").write_text(header + md, encoding="utf-8")
+    pdf = FINAL / "SkyRoute-report.pdf"
+    pages = subprocess.run(["gs", "-q", "-dNODISPLAY", "-dNOSAFER", "-c",
+                            f"({pdf}) (r) file runpdfbegin pdfpagecount = quit"],
+                           capture_output=True, text=True).stdout.strip()
+    print(json.dumps({"hanzi_body": hanzi(tex), "pages": pages}, ensure_ascii=False), file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

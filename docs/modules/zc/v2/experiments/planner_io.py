@@ -424,7 +424,7 @@ def record_query(c, p, actor, window, start, goal, result, access_path, zone_rid
 
 
 def trace(c, query_id):
-    return cat.rows(c, (ROOT / "docs/v2/schema/op_c.sql").read_text(), {"query_id": query_id})
+    return cat.rows(c, (ROOT / "docs/v2/schema/op_c.sql").read_text(encoding="utf-8"), {"query_id": query_id})
 
 
 class Timer:

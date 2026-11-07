@@ -19,7 +19,7 @@
 | PPT | 第3–4页 |
 | 分支 | `yht/v2-data-model`，从 `develop` 的 `4b60453` 创建 |
 | 修复分支 | `yht/v2-immutability`，从 `develop` 的 `61fed41` 创建；YHT-V2-05/06 修复 `0748f2d`，模型文档 `4e501c3` |
-| PR | [#1](https://github.com/zoran-sid/Routeweave/pull/1)，目标 `develop`；数据字典先单独提交 |
+| PR | [#1](https://github.com/zoran-sid/Routeweave/pull/1)（已合入）；本轮修复 [#5](https://github.com/zoran-sid/Routeweave/pull/5)，目标 `develop` |
 | 交付位置 | `docs/modules/yht/v2/`：`data-dictionary.md`、`section.md`、`slides.md`、`references.md` |
 | 当前状态 | 数据字典 `a35aeac`；第2、4章、两页讲稿与引用 `50f109c`，字段对齐与引用编号 `fcccbce`/`4aee9d2`，交接记录 `ec460b2`；均已推送；GitHub Actions `checks` 成功；YHT-V2-05/06 已修复待复核（见下） |
 

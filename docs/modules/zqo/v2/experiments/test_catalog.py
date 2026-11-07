@@ -128,6 +128,28 @@ class CatalogTest(unittest.TestCase):
         self.assertEqual(self.count('release'),1)
         self.assertEqual(cat.snapshot(self.c)['manifest']['provenance'],cat.provenance())
 
+    def test_provenance_values_must_be_nonempty_strings(self):
+        # ZQO-V2-01: empty, blank or non-string upstream versions / compiler_version are rejected.
+        cases = [('source_versions', {k: '' for k in cat.LAYERS}), ('source_versions', {**cat.provenance()['source_versions'], 'scene': '  '}),
+                 ('source_versions', {**cat.provenance()['source_versions'], 'airspace': None}),
+                 ('source_versions', {**cat.provenance()['source_versions'], 'exposure': 1}),
+                 ('compiler_version', ''), ('compiler_version', '   '), ('compiler_version', None)]
+        failed = self.count('failed_attempt')
+        for i, (field, value) in enumerate(cases):
+            prov = cat.provenance()
+            prov[field] = value
+            with self.assertRaises(ValueError):
+                cat.publish(self.c, cat.changed(self.payload), request_id=f'bad-{i}', release_id=f'bad-{i}',
+                            expected='r0', provenance=prov)
+            self.assertIsNone(self.c.execute('SELECT 1 FROM release WHERE release_id=?', (f'bad-{i}',)).fetchone())
+            self.assertEqual(cat.head(self.c), 'r0')
+        self.assertEqual(self.count('failed_attempt'), failed + len(cases))
+        # the same request id succeeds once valid provenance is supplied; nothing was half-written
+        out = cat.publish(self.c, cat.changed(self.payload), request_id='bad-0', release_id='good',
+                          expected='r0', provenance=cat.provenance())
+        self.assertEqual(out, {'release_id': 'good', 'replayed': False})
+        self.assertEqual(self.c.execute('PRAGMA foreign_key_check').fetchall(), [])
+
     def test_invalid_rows_rollback_and_source_coverage(self):
         bad = copy.deepcopy(self.payload)
         bad['exposure']['exposure_zone'][0]['q']=0.9

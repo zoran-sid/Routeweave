@@ -106,3 +106,11 @@ YHT/LJ实际接入已在下方本轮记录完成。若需要多任务窗服务�
 - 当前没有仍需其他成员修复的已登记阻塞代码项；各成员可引用本轮证据补充自己的最新集成记录。最终报告、PPT、参考资料整合及成员确认在整体内容复核后处理。
 
 本轮实质修复提交：`1630c27`（`fix(integration): preserve provenance and verify five-module releases`）。分支入口：[codex/zqo-traceability-integration](https://github.com/zoran-sid/Routeweave/tree/codex/zqo-traceability-integration)。提交前再次fetch，远程仍为 `508ca3e`；随后按用户要求快进合入共享 `main`，包含修复 `1630c27` 和交付索引 `0571aa5`。合入前远程仍为 `508ca3e`，没有新增冲突；代码与已验证版本一致。
+
+## 2026-11-07：ZC 按用户指示代修 ZQO-V2-01 与编码问题
+
+用户指示由 ZC 修复全部成员的未关闭问题并记在各成员名下。以下修改由 ZC 完成，不代表 ZQO 已审阅认可，请 ZQO 复核：
+
+- **ZQO-V2-01（已修复）**：[`catalog.publish`](../modules/zqo/v2/experiments/catalog.py) 在写事务内要求五层上游版本值与 `compiler_version` 均为非空字符串；空值、空白、`None` 或非字符串直接 `ValueError`，回滚后照常追加 `failed_attempt`。新增回归 `test_provenance_values_must_be_nonempty_strings`：7 种无效输入均被拒绝、不产生发布、head 不变、每次留失败记录，同一请求号改用合法来源后正常发布。ZQO 测试由 14 项增至 15 项，全部通过；LQ 的 `review_zqo.py` 退出码 0。
+- **兼容修订**：`catalog.initialize()` 读取 `schema.sql`、`prototype/evaluate.py` 与 `v2/experiments/run.py` 写结果时显式使用 UTF-8（ZC-V2-02 同类问题）。
+- **证据范围**：[transactions-storage.json](../modules/zqo/v2/experiments/results/transactions-storage.json) 保留原实验基线未重跑；本次修改只拒绝空来源值，不改变合法发布的写入路径，存储与读取结论不受影响。修订后的全量复核见 [verification-v2.json](../final/evidence/verification-v2.json)。
